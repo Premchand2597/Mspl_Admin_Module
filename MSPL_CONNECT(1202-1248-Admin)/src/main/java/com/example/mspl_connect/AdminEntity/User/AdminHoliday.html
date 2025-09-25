@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Holiday</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <!-- =======================================================
+  * Template Name: NiceAdmin
+  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+  * Updated: Apr 20 2024 with Bootstrap v5.3.3
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+  <style>
+  
+	  .main{
+	  	font-size: 14px;
+	  }
+  
+  .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+  .info-card {
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        #attendence-chart{
+            width: 100%;
+            height: 190px; /* Adjust the height as needed */
+        }
+        /* Example CSS to style disabled items */
+		.activity-item .disabled {
+		    pointer-events: none; /* Disable interactions */
+		    opacity: 0.5; /* Make the item appear grayed out */
+		}                
+  </style>
+</head>
+
+<body>
+
+<!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center" th:if="${empDetailsByEmpId.deptId>0}">
+
+   <!--  <div class="app-branding" style="width:100%; margin:0 0 0 10px; padding:5px;">
+				    <a class="app-logo" th:href=@{/dashboard}>
+				        <img class="logo-icon" src="assets/img/logo.png" alt="logo" style="width:200px; height:50px; max-width:100%; padding:0 2px 0 10px; margin:0;">
+				    </a>
+				</div> --><!-- End Logo -->
+	
+		   <div class="d-flex align-items-center" style="width:100%; margin:0 0 0 10px; padding:5px;">
+				    <a class="app-logo" th:href=@{/dashboard}>
+				        <img class="d-none d-lg-block" src="assets/img/logo.png" alt="logo" style="width:200px; height:50px; max-width:100%; padding:0 2px 0 10px; margin:0;">
+				    </a>
+				    <!-- <i class="bi bi-chevron-double-left toggle-sidebar-btn" onclick="toggleIconRotation()"></i> -->
+			</div>
+				
+   <!--  <div class="search-bar">
+      <form class="search-form d-flex align-items-center" method="POST" action="#">
+        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+      </form>
+    </div> --><!-- End Search Bar -->
+
+	<div th:replace="fragments/header :: header" ></div>
+	
+  </header><!-- End Header -->
+  
+  <!-- =======Super Admin Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center" th:if="${empDetailsByEmpId.deptId == 0}">
+
+    <div class="d-flex align-items-center" style="width:100%; margin:0 0 0 10px; padding:5px;">
+				    <a class="app-logo" th:href=@{/dashboard}>
+				        <img class="d-none d-lg-block" src="assets/img/logo.png" alt="logo" style="width:200px; height:50px; max-width:100%; padding:0 2px 0 10px; margin:0;">
+				    </a>
+				    <!-- <i class="bi bi-chevron-double-left toggle-sidebar-btn" onclick="toggleIconRotation()"></i> -->
+	</div><!-- End Logo -->
+
+    <!-- <div class="search-bar">
+      <form class="search-form d-flex align-items-center" method="POST" action="#">
+        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+      </form>
+    </div> --><!-- End Search Bar -->
+
+    <div th:replace="fragments/superAdminHeader :: header"></div>
+
+  </header><!-- End Header -->
+
+
+  <!-- ======= Sidebar ======= -->
+  
+<aside id="sidebar" class="sidebar">
+<input type="hidden" id="employee-id" th:value="${empDetailsByEmpId.deptId}">
+    <ul class="sidebar-nav" id="sidebar-nav">
+		 
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/userDashboard}">
+                <i class="bi bi-grid"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+         <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/viewAdminProfile(empid=${empDetailsByEmpId.empid})}">
+                <i class="bi bi-person"></i>
+                 <span>My Profile</span>
+            </a>
+        </li>  
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/attendanceLive(email=${empDetailsByEmpId.email})}">
+                <i class="bi bi-calendar3"></i>
+                <span>Attendence</span>
+            </a> 
+        </li>      
+       <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/groupMailId}">
+                <i class="bi bi-telephone"></i>
+                <span>Employee Contacts</span>
+            </a>
+        </li>
+       <!--  <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link " th:href="@{/InterCommDetails}">
+                <i class="bi bi-telephone"></i>
+                <span>InterComm Details</span>
+            </a>
+        </li> -->
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link active" th:href="@{/adminHoliday}">
+                <i class="bi bi-calendar4-week"></i>
+                <span>Holiday List</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+		    <a class="nav-link" th:href="@{/employee}">
+		        <i class="bi bi-people"></i>	
+		        <span>Employee</span>
+		    </a>
+	   </li> 
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/viewAdminLeaves(empid=${empDetailsByEmpId.empid})}">
+                <i class="bi bi-card-text"></i>
+                <span>Team Leaves</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/events}">
+                <i class="bi bi-megaphone"></i>
+                <span>Announcement</span>
+            </a>
+        </li>               
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/asset}">
+                <i class="bi bi-wallet"></i>
+                <span>Assets</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/ongoingProject}">
+                <i class="bi bi-card-heading"></i>
+                <span>Projects</span>
+            </a>
+        </li>   
+         <!-- <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/viewAdminPayslip(empid=${empDetailsByEmpId.empid})}">
+                <i class="bi bi-file-text"></i>
+                <span>Payslip</span>
+            </a>
+        </li>     --> 
+         <!-- Loop through the permissions map -->
+       <li class="nav-item" th:if="${permissions.interviewAccess && empDetailsByEmpId.deptId>0}" >
+            <a class="nav-link" th:href="@{/moatIframe}">
+                <i class="bi bi-vector-pen"></i>
+                <span>Interview</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.sales && empDetailsByEmpId.deptId>0}" >
+            <a class="nav-link" th:href="@{/sales}">
+                <i class="bi bi-cart3"></i>
+                <span>Sales</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.accountsAccess && empDetailsByEmpId.deptId>0}" >
+            <a class="nav-link" th:href="@{/accounts}">
+                <i class="bi bi-person-vcard"></i>
+                <span>Accounts</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.storeAccess && empDetailsByEmpId.deptId>0}" >
+            <a class="nav-link" th:href="@{/store}">
+                <i class="bi bi-shop-window"></i>
+                <span>Store</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.apprisalAccess && empDetailsByEmpId.deptId>0}" >
+            <a class="nav-link" id="apprisalLink" th:href="@{/apprisal(empid=${empDetailsByEmpId.empid})}">
+		        <i class="bi bi-file-text"></i>
+		        <span>Appraisal</span>
+		    </a>
+        </li>
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+		    <a class="nav-link" id="apprisalLink" th:href="@{/employeeApprisal(empid=${empDetailsByEmpId.empid})}">
+		        <i class="bi bi-file-text"></i>
+		        <span>Employee Appraisal</span>
+		    </a>
+		</li>
+		<li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+				<a class="nav-link" th:href="@{/my-favorites}">
+					<i class="bi bi-layout-text-window-reverse"></i>
+					<span>To-Chat & Remind</span>
+				</a>
+		</li>
+       
+        
+        
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link " th:href="@{/navbar}">
+		        <i class="bi bi-grid"></i>
+		        <span>Dashboard</span>
+		    </a>
+	    </li>
+	    <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+            <a class="nav-link" th:href="@{/attendanceLive(email=${empDetailsByEmpId.email})}">
+                <i class="bi bi-calendar3"></i>
+                <span>Attendence</span>
+            </a>
+        </li> 
+         <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link" th:classappend="${empDetailsByEmpId.deptId==0} ? ' active'" th:href="@{/adminHoliday}">
+		        <i class="bi bi-calendar4-week"></i>
+		        <span>Holiday List</span>
+		    </a>
+	 </li>	
+	 
+	<li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link" th:href="@{/groupMailId}">
+		        <i class="bi bi-telephone"></i>
+		        <span>Employee Contacts</span>
+		    </a>
+	 </li>
+	 <!--  <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+            <a class="nav-link"  th:href="@{/InterCommDetails}">
+                <i class="bi bi-telephone"></i>
+                <span>InterComm Details</span>
+            </a>
+      </li> -->
+      <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link"  th:href="@{/viewAdminLeaves(empid=${empDetailsByEmpId.empid})}">
+		        <i class="bi bi-calendar4-week"></i>
+		        <span>Team Leaves</span>
+		    </a>
+	 </li>
+	 <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link" th:href="@{/events}">
+		        <i class="bi bi-megaphone"></i>
+		        <span>Announcement</span>
+		    </a>
+	 </li> 
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link" th:href="@{/addDepartment}">
+		        <i class="bi bi-calendar4-week"></i>
+		        <span>Department</span>
+		    </a>
+	   </li>
+	 <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link"  th:href="@{/addRole}">
+		        <i class="bi bi-receipt"></i>
+		        <span>Role</span>
+		    </a>
+	 </li>
+	 
+	 <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link" th:href="@{/employee}">
+		        <i class="bi bi-people"></i>
+		        <span>Employee</span>
+		    </a>
+	 </li> 
+	
+       
+      <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+            <a class="nav-link"  th:href="@{/ongoingProject}">
+                <i class="bi bi-calendar3"></i>
+                <span>Projects</span>
+            </a>
+      </li>  
+      <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+            <a class="nav-link"  th:href="@{/asset}">
+                <i class="bi bi-wallet"></i>
+                <span>Assets</span>
+            </a>
+      </li>  
+      <li class="nav-item" th:if="${permissions.interviewAccess && empDetailsByEmpId.deptId==0}" >
+            <a class="nav-link" th:href="@{/moatIframe}">
+                <i class="bi bi-vector-pen"></i>
+                <span>Interview</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.sales && empDetailsByEmpId.deptId==0}" >
+            <a class="nav-link" th:href="@{/sales}">
+                <i class="bi bi-cart3"></i>
+                <span>Sales</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.accountsAccess && empDetailsByEmpId.deptId==0}" >
+            <a class="nav-link" th:href="@{/accounts}">
+                <i class="bi bi-person-vcard"></i>
+                <span>Accounts</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.storeAccess && empDetailsByEmpId.deptId==0}" >
+            <a class="nav-link" th:href="@{/store}">
+                <i class="bi bi-shop-window"></i>
+                <span>Store</span>
+            </a>
+        </li>  
+        
+        <li class="nav-item" th:if="${permissions.storeAccess && empDetailsByEmpId.deptId==0}">
+				<a class="nav-link" th:href="@{/my-favorites}">
+					<i class="bi bi-layout-text-window-reverse"></i>
+					<span>To-Chat & Remind</span>
+				</a>
+		</li>
+    </ul>
+</aside>
+
+<main id="main" class="main">
+
+<input type="hidden" id="emp_idSessionValue" th:value="${empDetailsByEmpId.empid}">
+
+		<div class="pagetitle d-flex justify-content-between"
+			th:if="${empDetailsByEmpId.deptId>0}">
+			<div class="d-flex">
+			    <i class="bi bi-chevron-double-left toggle-sidebar-btn mb-1" onclick="toggleIconRotation()" style="font-size:24px;color:#2F73B9;padding:0 10px;margin-left:-10px;margin-top:-10px;cursor:pointer;"></i>
+     
+				<nav>
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a th:href="@{/userDashboard}">Home</a></li>
+						<li class="breadcrumb-item active">Holiday List</li>
+					</ol>
+				</nav>
+			</div>
+			<div class="text-end">
+				<!-- Align the container to the right -->
+				<label for="yearSelect" class="form-label me-2">Select Year:</label>
+				<select id="yearSelect" class="form-select d-inline-block"
+					style="width: auto;" onchange="fetchHolidaysByYear()">
+					<option th:each="year : ${years}" th:value="${year}"
+						th:text="${year}" th:selected="${year.toString() == currentYear}"></option>
+				</select>
+			</div>
+
+
+		</div>
+		<!-- End Page Title -->
+		
+	    <div class="pagetitle adjust-up d-flex justify-content-between" th:if="${empDetailsByEmpId.deptId==0}">
+	       <div class="d-flex">
+		       <i class="bi bi-chevron-double-left toggle-sidebar-btn mb-1" onclick="toggleIconRotation()" style="font-size:24px;color:#2F73B9;padding:0 10px;margin-left:-10px;margin-top:-10px"></i>
+		       <nav>
+		        <ol class="breadcrumb">
+		          	<li class="breadcrumb-item"><a th:href="@{/navbar}">Home</a></li>
+		          <li class="breadcrumb-item active">Attendance</li>
+		        </ol>
+		      </nav>
+	      </div>
+	      <div class="text-end">
+				<!-- Align the container to the right -->
+				<label for="yearSelect" class="form-label me-2">Select Year:</label>
+				<select id="yearSelect" class="form-select d-inline-block"
+					style="width: auto;" onchange="fetchHolidaysByYear()">
+					<option th:each="year : ${years}" th:value="${year}"
+						th:text="${year}" th:selected="${year.toString() == currentYear}"></option>
+				</select>
+		 </div>
+	    </div><!-- End Page Title --><!-- End Page Title -->
+    
+    <input type="hidden" id="roleValue" th:value="${session.role_name}">
+    
+    <section class="section dashboard">
+      <div class="row">
+
+            <!-- <div class="col-lg-4" id="groupMailIdForm">
+					<div class="card">
+						<div class="card-body">
+							<h5 class="card-title">Group Mail Id Form</h5>
+
+						<form class="addCompProjectForm addEmployeeFormWithValidation" action="saveGroupMailIdList" method="post">
+							<input type="date" style="display: none;" name="announced_date" id="assignedSubmitDate">
+							<div class="row jumbotron box8">
+							
+								   <div class="col-sm-12 form-group mb-4">
+										<input type="email"
+											class="form-control eventCustom_textfield"
+											name="main_mail_id" id="main_mail_id" placeholder="Main mail id"
+											required>
+									</div>
+									<div class="col-sm-12 form-group mb-4">
+										<input type="email" name="sub_mail_id"
+													class="form-control eventCustom_textfield" id="sub_mail_id"
+													placeholder="Sub mail id">
+									</div>
+									<div class="col-sm-12 form-group mb-4">
+										<textarea
+												class="form-control compProjectCustom_textArea2 groupMailIdCustom_textArea"
+												placeholder="Group mail id with comma seperated" id="group_mail_id"
+												name="group_mail_id" required></textarea>
+									</div>
+
+									<div class="col-sm-12 form-group mb-4 customize_btn_div">
+										<button type="submit" class="btn btn-outline-primary">Add</button>
+										<button type="reset" class="btn btn-outline-secondary">Clear</button>
+									</div>
+							</div>
+						</form>
+
+						</div>
+					</div>
+				</div> -->
+
+
+				
+				<div class="col-lg-12" id="groupMailIdTable">
+					<div class="row">
+						<div class="col-lg-12">	
+							<div class="card">
+								<div class="card-body table-responsive pt-0">
+									<h5 class="card-title pt-0">Holiday List</h5>
+									<table id="holidayTable2" class="table table-hover holidayTable">
+									    <thead>
+									        <tr>
+									            <th>Id</th>
+									            <th>Date</th>
+									            <th>Name</th>
+									            <th>Day</th>
+									        </tr>
+									    </thead>
+									    <tbody>
+								    	   <tr th:if="${#lists.isEmpty(holidayList)}">
+										        <td colspan="8" class="text-center">No data available</td>
+										   </tr>
+									        <!-- Loop through holidayList list and display each row -->
+									       <tr th:each="holidayList, stat : ${holidayList}" th:unless="${#lists.isEmpty(holidayList)}">
+											    <td th:text="${stat.count}"></td> <!-- Serial number (starts from 1) -->
+											    <td th:text="${holidayList.date}"></td>
+											    <td th:text="${holidayList.name}"></td>
+											    <td th:text="${holidayList.day}"></td>
+											</tr>
+
+									    </tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div><!-- End Left side columns -->
+							<!-- Feedback Modal -->
+			<div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+			    <div class="modal-dialog">
+			        <div class="modal-content rounded-4 shadow-lg">
+			            <div class="modal-header border-0">
+			                <h5 class="modal-title" id="feedbackModalLabel">Feedback Form</h5>
+			                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			            </div>
+			            <div class="modal-body">
+			                <form id="feedbackForm" method="post" enctype="multipart/form-data">
+			                    <div class="mb-3" style="display: none;">
+			                        <label for="feedbackName" class="form-label fw-bold">Your Name</label>
+			                        <input type="text" class="form-control" id="feedbackName" name="name" th:value="${empDetailsByEmpId.fullName}" readonly>
+			                    </div>
+			                    <div class="mb-3" style="display: none;">
+			                        <label for="feedbackEmail" class="form-label fw-bold">Your Email</label>
+			                        <input type="email" class="form-control" id="feedbackEmail" name="email" th:value="${empDetailsByEmpId.email}" readonly>
+			                    </div>
+			                    <div class="mb-3">
+			                        <label for="feedbackEmailyy" class="form-label fw-bold">To</label>
+			                        <div class="to-field-container">
+			                            <span class="to-field rounded-pill px-3 py-2 shadow-sm">bugs_msplconnect@melangesystems.com</span>
+			                        </div>
+			                    </div>
+								<div class="mb-3">
+								    <label for="bugType" class="form-label fw-bold">Bug Type</label>
+								    <select class="form-control" id="bugType" name="bugType" required>
+								        <option value="About Application">About Application</option>
+								        <option value="New Feature">New Feature</option>
+								    </select>
+								</div>
+
+			                    <div class="mb-3">
+			                        <label for="feedbackMessage" class="form-label fw-bold">Message</label>
+			                        <textarea class="form-control" id="feedbackMessage" name="message" rows="4" placeholder="Enter your feedback here..." required></textarea>
+			                    </div>
+			                    <div class="mb-3">
+			                        <label for="feedbackAttachment" class="form-label fw-bold">Attachment (optional)</label>
+			                        <input type="file" class="form-control" id="feedbackAttachment" name="attachment" accept=".png, .jpg, .jpeg" multiple>
+			                        <small class="text-muted">Max size: 5MB. You can upload multiple images.</small>
+			                    </div>
+			                    <button type="submit" class="btn btn-primary w-100 mt-3 py-2 shadow-sm" id="submitFeedbackBtn">Submit Feedback</button>
+			                </form>
+			            </div>
+			        </div>
+			    </div>
+			</div>
+    </section>
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+    <div class="copyright">
+       Copyright &copy; <span id="currentYear"></span> <strong><span>Melange Systems Private Limited</span></strong>. All Rights Reserved
+    </div>
+  </footer>
+  
+  <script>
+      var currentYear = new Date().getFullYear();
+      document.getElementById("currentYear").innerHTML = currentYear;
+  </script>
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/chart.js/chart.umd.js"></script>
+  <script src="assets/vendor/echarts/echarts.min.js"></script>
+  <script src="assets/vendor/quill/quill.js"></script>
+  <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+  <script src="assets/vendor/tinymce/tinymce.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+<script>
+
+var formattedDate;
+
+$.ajax({
+    type: 'GET', 
+    url: 'fetchGroupMailIdData', 
+    success: function(data) {
+		console.log(JSON.stringify(data));
+		updateGroupMailIdDetails(data);
+		},
+    error: function(xhr, status, error) {
+        console.error('Error fetching data:', error);
+        console.log('Error fetching data. Please try again.');
+    }
+});
+  
+function updateGroupMailIdDetails(data) {
+    const tbody = $('#viewEmpDetailsTBody');
+    tbody.empty();
+
+    let currentMainMailId = null;
+    let mainMailIdRowSpan = 0;
+    let mainMailIdIndex = 0;
+
+    data.forEach((item, index) => {
+        if (item.main_mail_id !== currentMainMailId) {
+            if (mainMailIdRowSpan > 1) {
+                tbody.find(`tr:eq(${mainMailIdIndex}) td:eq(1)`).attr('rowspan', mainMailIdRowSpan);
+            }
+
+            currentMainMailId = item.main_mail_id;
+            mainMailIdRowSpan = 1;
+            mainMailIdIndex = tbody.children().length;
+
+            tbody.append(`
+                <tr>
+                    <td class="cell border">${index + 1}</td>
+                    <td class="cell border">${item._mail_id}</td>
+                    <td class="cell border">${item.sub_mail_id || '-'}</td>
+                    <td class="cell border">${formatGroupMailIds(item.group_mail_id)}</td>
+                </tr>
+            `);
+        } else {
+            MailIdRowSpan++;
+            tbody.append(`
+                <tr>
+                    <td class="cell border">${index + 1}</td>
+                    <td class="cell border" style="display: none;"></td>
+                    <td class="cell border">${item.sub_mail_id || '-'}</td>
+                    <td class="cell border">${formatGroupMailIds(item.group_mail_id)}</td>
+                </tr>
+            `);
+        }
+    });
+
+    if (MailIdRowSpan > 1) {
+        tbody.find(`tr:eq(${MailIdIndex}) td:eq(1)`).attr('rowspan', mainMailIdRowSpan);
+    } 
+}
+
+function formatGroupMailIds(groupMailIds) {
+    if (!groupMailIds) return '';
+    const ids = groupMailIds.split(',');
+    let formatted = '<ul>';
+    ids.forEach(id => {
+        formatted += `<li>${id}</li>`;
+    });
+    formatted += '</ul>';
+    return formatted;
+}  
+</script>
+
+<script>
+	var loggedInRole = document.getElementById('roleValue').value;
+	
+	if(loggedInRole === "HR"){
+		document.getElementById('employeeLink').style.display="block";
+		document.getElementById('groupMailIdForm').style.display="block";
+		//document.getElementById('compProjectLink').style.display="none";
+		//document.getElementById('addEmployeeLink').style.display="block";
+	}else if(loggedInRole === "Super Admin"){
+		document.getElementById('employeeLink').style.display="none";
+		document.getElementById('groupMailIdForm').style.display="none";
+		document.getElementById('groupMailIdTable').style.width="100%";
+		//document.getElementById('addEmployeeLink').style.display="none";
+	}
+</script>  
+
+<!-- script to notification -->
+<script>
+//Function to fetch flag value from the backend
+function fetchFlag() {
+    $.get("/flag", function(response) {
+    	console.log("admin");
+        var leaveRequestCountValue = response;
+        console.log(leaveRequestCountValue);
+       // If total notification count is greater than 0, show the bell icon
+        if (leaveRequestCountValue.totalNotificationCount > 0) {
+            $("#notificationBellIcon").show();  // Show bell icon
+        } else {
+            $("#notificationBellIcon").hide();  // Hide bell icon if no notifications
+        }
+
+        if (leaveRequestCountValue.leaveRequestFlagCount > 0) {
+            $("#notificationBellIcon").show();  // Show bell icon
+            $("#leaveRequestNotification").show();  // Show specific notification
+            
+            $("#leaveRequestMessage").text(leaveRequestCountValue.leaveRequestFlagCount + " leave request(s)");
+            $(".badge-number").text(leaveRequestCountValue.leaveRequestFlagCount);
+            $("#leaveRequestFlagCount").text(leaveRequestCountValue.leaveRequestFlagCount);
+        }
+        //display the asset notifu=ication based on asset count value
+        if(leaveRequestCountValue.asseteRequestFlagCount>0){
+        	 
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#assetRequestNotification").show();  // Show specific notification
+              
+             $("#assetRequestMessage").text(leaveRequestCountValue.asseteRequestFlagCount + " asset request(s)");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+             $("#asseteRequestFlagCount").text(leaveRequestCountValue.asseteRequestFlagCount);
+        	 	
+        }
+        
+        //display the new project notification based on asset count value
+        if(leaveRequestCountValue.newPrjectValueCount>0){
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#newProjectNotification").show();  // Show specific notification
+             
+             $("#newProjectMessage").text(leaveRequestCountValue.newPrjectValueCount + " project request(s)");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+             $("#newPrjectValueCount").text(leaveRequestCountValue.asseteRequestFlagCount);
+        }
+        //display the appraisal from HR notification ]
+        if(leaveRequestCountValue.appraisalCount>0){
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#hrAppraisal").show();  // Show specific notification
+             
+             $("#newProjectMessage").text(leaveRequestCountValue.appraisalCount + " Appraisal Form");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+             $("#newPrjectValueCount").text(leaveRequestCountValue.asseteRequestFlagCount);
+        }
+      //display the appraisal from employee notification 
+        if(leaveRequestCountValue.empAppraisalflag>0){
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#empAppraisal").show();  // Show specific notification
+             
+             $("#apprisalempNotification").text(leaveRequestCountValue.empAppraisalflag + " employees sent appraisal");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+             $("#newPrjectValueCount").text(leaveRequestCountValue.asseteRequestFlagCount);
+        }
+        
+        //display the appraisal Due date notification 
+        if(leaveRequestCountValue.adminAppraisalDuedate>0){
+        	 $("#dueAppraisal").show();  // Show bell icon
+             $("#empAppraisal").show();  // Show specific notification
+             
+             $("#apprisalDueNotification").text("Tomorrow is the due date for submit appraisal");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+             $("#newPrjectValueCount").text(leaveRequestCountValue.asseteRequestFlagCount);
+        }
+      //display the announcement notification based on asset count value
+        if(leaveRequestCountValue.announcementNotification>0){
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#newAnnouncementNotification").show();  // Show specific notification
+             
+             $("#newannouncement").text(leaveRequestCountValue.announcementNotification + " announcement(s)");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+        }
+        //display the leave request status change notification
+        if(leaveRequestCountValue.leaveRequestStatusChangeValue > 0){
+        	 
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#leaveRequestSatusChangeNotification").show();  // Show specific notification
+             
+             $("#leaveRequestSatusChangeMessage").text("Your leave request status has been");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);             
+        	 	
+        } 
+       
+    });
+}
+
+// Periodically fetch flag value every second (adjust as needed)
+setInterval(fetchFlag, 1000);
+
+//Function to fetch flag value from the backend
+function fetchsuperAdminFlag() {
+    $.get("/flag", function(response) {
+    	console.log("Super admin");
+        var requestCount = response;
+         
+        // If total notification count is greater than 0, show the bell icon and notifications
+        if (requestCount.totalNotificationCount > 0) {
+            $("#notificationBellIcon").show();  // Show bell icon
+            $("#leaveRequestNotification").show();  // Show specific notification
+            
+            $("#leaveRequestMessage").text(requestCount.leaveRequestFlagCount + " leave request(s)");
+            $(".badge-number").text(requestCount.totalNotificationCount);
+            $("#leaveRequestFlagCount").text(requestCount.leaveRequestFlagCount);
+        } else {
+            // If total notification count is 0, hide the bell icon and notification
+            $("#notificationBellIcon").hide();
+        }
+        //display the asset notifu=ication based on asset count value
+        if(requestCount.asseteRequestFlagCount>0){
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#assetRequestNotification").show();  // Show specific notification
+             
+             $("#assetRequestMessage").text(requestCount.asseteRequestFlagCount + " asset request(s)");
+             $(".badge-number").text(requestCount.totalNotificationCount);
+             $("#asseteRequestFlagCount").text(requestCount.asseteRequestFlagCount);
+        		
+        }
+        else {
+            // If total notification count is 0, hide the bell icon and notification
+            $("#assetRequestNotification").hide();
+        }
+        
+    });
+}
+
+// Periodically fetch flag value every second (adjust as needed)
+const employeeId = document.getElementById('employee-id').value; // This is a string
+console.log(employeeId);
+
+if(employeeId === "0") {
+	//alert("hii");
+	setInterval(fetchsuperAdminFlag, 1000);
+}
+else{
+	setInterval(fetchFlag, 1000);
+}
+
+
+</script>
+
+<script>
+//Function to fetch flag value from the backend
+function fetchFlag() {
+    $.get("/flag", function(response) {
+    	console.log("admin");
+        var leaveRequestCountValue = response;
+        console.log(leaveRequestCountValue);
+       // If total notification count is greater than 0, show the bell icon
+        if (leaveRequestCountValue.totalNotificationCount > 0) {
+            $("#notificationBellIcon").show();  // Show bell icon
+        } else {
+            $("#notificationBellIcon").hide();  // Hide bell icon if no notifications
+        }
+
+        if (leaveRequestCountValue.leaveRequestFlagCount > 0) {
+            $("#notificationBellIcon").show();  // Show bell icon
+            $("#leaveRequestNotification").show();  // Show specific notification
+            
+            $("#leaveRequestMessage").text(leaveRequestCountValue.leaveRequestFlagCount + " leave request(s)");
+            $(".badge-number").text(leaveRequestCountValue.leaveRequestFlagCount);
+            $("#leaveRequestFlagCount").text(leaveRequestCountValue.leaveRequestFlagCount);
+        }
+        //display the asset notifu=ication based on asset count value
+        if(leaveRequestCountValue.asseteRequestFlagCount>0){
+        	 
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#assetRequestNotification").show();  // Show specific notification
+              
+             $("#assetRequestMessage").text(leaveRequestCountValue.asseteRequestFlagCount + " asset request(s)");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+             $("#asseteRequestFlagCount").text(leaveRequestCountValue.asseteRequestFlagCount);
+        	 	
+        }
+        
+        //display the new project notification based on asset count value
+        if(leaveRequestCountValue.newPrjectValueCount>0){
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#newProjectNotification").show();  // Show specific notification
+             
+             $("#newProjectMessage").text(leaveRequestCountValue.newPrjectValueCount + " project request(s)");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+             $("#newPrjectValueCount").text(leaveRequestCountValue.asseteRequestFlagCount);
+        }
+        //display the appraisal from HR notification ]
+        if(leaveRequestCountValue.appraisalCount>0){
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#hrAppraisal").show();  // Show specific notification
+             
+             $("#newProjectMessage").text(leaveRequestCountValue.appraisalCount + " Appraisal Form");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+             $("#newPrjectValueCount").text(leaveRequestCountValue.asseteRequestFlagCount);
+        }
+      //display the appraisal from employee notification 
+        if(leaveRequestCountValue.empAppraisalflag>0){
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#empAppraisal").show();  // Show specific notification
+             
+             $("#apprisalempNotification").text(leaveRequestCountValue.empAppraisalflag + " employees sent appraisal");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+             $("#newPrjectValueCount").text(leaveRequestCountValue.asseteRequestFlagCount);
+        }
+        
+        //display the appraisal Due date notification 
+        if(leaveRequestCountValue.adminAppraisalDuedate>0){
+        	 $("#dueAppraisal").show();  // Show bell icon
+             $("#empAppraisal").show();  // Show specific notification
+             
+             $("#apprisalDueNotification").text("Tomorrow is the due date for submit appraisal");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+             $("#newPrjectValueCount").text(leaveRequestCountValue.asseteRequestFlagCount);
+        }
+      //display the announcement notification based on asset count value
+        if(leaveRequestCountValue.announcementNotification>0){
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#newAnnouncementNotification").show();  // Show specific notification
+             
+             $("#newannouncement").text(leaveRequestCountValue.announcementNotification + " announcement(s)");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+        }
+        //display the leave request status change notification
+        if(leaveRequestCountValue.leaveRequestStatusChangeValue > 0){
+        	 
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#leaveRequestSatusChangeNotification").show();  // Show specific notification
+             
+             $("#leaveRequestSatusChangeMessage").text("Your leave request status has been");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);             
+        	 	
+        } 
+       
+    });
+}
+
+// Periodically fetch flag value every second (adjust as needed)
+setInterval(fetchFlag, 1000);
+
+</script>
+<!-- script to notification link redirect -->
+<!-- script to notification link redirect -->
+<script th:inline="javascript">
+    function redirectToLeaveRequest() {
+        var empid = /*[[${empDetailsByEmpId.empid}]]*/ 'defaultEmpId';
+        window.location.href = '/viewAdminLeaves?empid=' + empid;
+    }
+    function redirectToAsset() {
+        //var empid = /*[[${empDetailsByEmpId.empid}]]*/ 'defaultEmpId';
+        window.location.href = '/asset';
+    }
+    function redirectToProject() {
+        //var empid = /*[[${empDetailsByEmpId.empid}]]*/ 'defaultEmpId';
+        window.location.href = '/ongoingProject';
+    }    
+    function redirectToAppraisal() {
+    	var empid = /*[[${empDetailsByEmpId.empid}]]*/ 'defaultEmpId';
+    	window.location.href = '/apprisal?empid=' + empid;
+    }    
+    function redirectToemployeeAppraisal() {
+    	var empid = /*[[${empDetailsByEmpId.empid}]]*/ 'defaultEmpId';
+    	window.location.href = '/employeeApprisal?empid=' + empid;
+    }    
+    function redirectToAnnouncement() {
+    	var empid = /*[[${empDetailsByEmpId.empid}]]*/ 'defaultEmpId';
+    	window.location.href = '/events';
+    }
+    
+    function redirectToAttendence() {
+    	var email = /*[[${empDetailsByEmpId.email}]]*/ 'defaultEmpId';
+    	window.location.href = '/attendanceLive?email=' +email;
+    }
+</script>
+
+<!-- script for profile pic -->
+<script>
+$.ajax({
+    type: "GET",
+    url: "fetchEmployeeDocumentDetailsOnlyByEmpId",
+    data: {
+        "emp_id": $('#emp_idSessionValue').val()
+    },
+    success: function(data) {
+    	console.log("++++data"+JSON.stringify(data));
+        $('#dynamicProfilePic').attr('src', `${data.profilePicPath}`);
+    },
+    error: function(xhr, status, error) {
+        console.error("Error invoking data:", error);
+    }
+});
+</script>
+
+<!-- script to reload the page when user select the year -->
+<script>
+    function fetchHolidaysByYear() {
+        const year = document.getElementById("yearSelect").value;
+        window.location.href = `/adminHoliday?year=` + year;
+    }
+</script>
+
+</body>
+</html>

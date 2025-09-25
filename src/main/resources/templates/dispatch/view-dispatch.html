@@ -1,0 +1,3279 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Master</title>
+    
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+	
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.70/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.70/vfs_fonts.js"></script>
+<style>
+/* Navbar container */
+	.navbar {
+		    position: fixed;
+		    top: 0;
+		    right: 0;
+		    background-color: #EBECF0; /* Darker shade for a professional look */
+		    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+		    z-index: 1000;
+		    width: 100%; /* Full width navbar */
+		    padding: 12px 4px;
+		    display: flex;
+		    align-items: center;
+		    justify-content: flex-start; /* Align entire content to the right */
+		    box-sizing: border-box;
+		}
+
+/* Navbar list style */
+.navbar ul {
+    display: flex;
+    justify-content: flex-end; /* Align items to the right */
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    gap: 5px;
+}
+
+/* Navbar item */
+.navbar li {
+    padding: 10px 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    color: black; /* Light color text */
+    font-size: 14px;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.navbar li a{
+			text-decoration:none;
+			color:black;
+		}
+		/* Hover effect */
+		.navbar li:hover {
+		    background-color: #F8F8FF; /* Bright blue for hover effect */
+		    color: white;
+		    transform: translateY(-2px); /* Slightly lift on hover */
+		}
+
+/* Active link style */
+.navbar li.active {
+    background-color: #F8F8FF; /* Bright blue for hover effect */
+	font-weight: bold;
+}
+
+/* Navbar icons */
+.navbar li i {
+    margin-right: 8px;
+}
+
+/* Optional: Add a little space between the navbar and the top of the page */
+body {
+    margin-top: 70px; /* Adjust based on navbar height */
+}
+
+/* Mobile responsiveness (optional) */
+@media (max-width: 768px) {
+    .navbar {
+        width: 100%;
+        border-radius: 0;
+    }
+
+    .navbar ul {
+        justify-content: center; /* Center content on smaller screens */
+    }
+
+    .navbar li {
+        margin: 0 10px;
+    }
+}
+
+	  .tables-container {
+	    width: 96%;
+	    margin: 2px auto; 
+	    padding: 20px;
+	    overflow-x: auto;
+	}
+	
+	.table-box {
+	    background: white;
+	    padding: 10px;
+	    box-sizing: border-box;
+	    border: 1px solid #ccc;
+	}
+	
+	table th,td{
+		font-size: 14px;
+	}
+	
+	.form-section h4{
+		font-size: 18px;
+	}
+	
+	.form-section label,input,textarea,a{
+		font-size: 14px;
+	}
+	
+	.modal-header h5{
+		font-size: 18px;
+	}
+	
+	.modal-header button{
+		font-size: 14px;
+	}
+	
+   .emailPasswordOuterDiv{
+   	width: 100%;
+   	height: 100%;
+   	position: fixed;
+   	background: rgba(0,0,0,0.5);
+   	top: 0;
+   	left: 0;
+   	z-index: 101;
+   	display: none;
+   	pointer-events: auto;
+   }
+   
+.emailPasswordInnerBox{
+	width: 30%;
+   	height: auto;
+   	background: rgb(255,255,255);
+   	margin: 6% auto 0 auto;
+   	border-radius: 5px;
+   	overflow: auto;
+   	pointer-events: auto;
+   	padding: 10px;
+}
+
+  .sendEmailForCustomerOuterDiv{
+   	width: 100%;
+   	height: 100%;
+   	position: fixed;
+   	background: rgba(0,0,0,0.5);
+   	top: 0;
+   	left: 0;
+   	z-index: 100;
+   	display: none;
+   	pointer-events: auto;
+   }
+   
+  .sendEmailForCustomerInnerBox{
+	width: 40%;
+   	height: 80%;
+   	background: rgb(255,255,255);
+   	margin: 6% auto 0 auto;
+   	border-radius: 5px;
+   	overflow: auto;
+   	pointer-events: auto;
+   	padding: 10px;
+}
+   
+   .sendEmailForCustomerBodyBox{
+   	width: 100%;
+   	height: 90%;
+   	background: #fff;
+   	overflow: auto;
+   }
+   
+   #loadingPopup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Dim background */
+    z-index: 9999;
+    font-family: Arial, sans-serif;
+    color: white; /* Text color for better contrast */
+    display: none;
+}
+
+#loadingPopup p {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+}
+
+.spinnerAndParaMerger{
+	display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* background: red; */
+    margin: 18% auto;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 6px solid rgba(255, 255, 255, 0.3); /* Semi-transparent border */
+    border-top-color: white; /* Bright top border */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.user-dropdown {
+    position: absolute;
+    top: 50px; /* adjust as needed */
+    left: 10px;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    border-radius: 8px;
+    z-index: 1000;
+    width: auto;
+}
+
+.user-dropdown ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+     display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.user-dropdown ul li {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.user-dropdown ul li:hover {
+    background-color: #F8F8FF; /* Bright blue for hover effect */
+    color: #000;
+}
+
+.user-dropdown ul li:last-child {
+    border-bottom: none;
+}
+
+.user-dropdown ul li a {
+    text-decoration: none;
+    color: #333;
+}
+
+.user-dropdown ul li a i {
+    margin-right: 10px;
+}
+
+.dispatch_subDropDown {
+    display: none;
+    position: absolute;
+    background-color: #EBECF0;
+    width: auto;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    z-index: 1000;
+    top: 50px; /* adjust as needed */
+}
+
+.dispatch_subDropDown ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.dispatch_subDropDown ul li {
+    padding: 5px;
+    border-bottom: 1px solid #eee;
+}
+
+.dispatch_subDropDown ul li:hover {
+    background-color: #F8F8FF; /* Bright blue for hover effect */
+    color: #000;
+}
+
+.dispatch_subDropDown ul li:last-child {
+    border-bottom: none;
+}
+
+.dispatch_subDropDown ul li a {
+    text-decoration: none;
+    color: #333;
+}
+   
+</style>
+</head>
+<body>
+
+<div id="loadingPopup">
+	<div class="spinnerAndParaMerger">
+	    <div class="spinner"></div>
+	    <p id="loadingPopupPara"></p>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="dispatchModal" tabindex="-1" aria-labelledby="dispatchModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content" style="overflow-y: auto;">
+      <form th:action="@{/editDispatch}" th:object="${dispatch}" method="post" enctype="multipart/form-data">
+        <div class="modal-header">
+          <h5 class="modal-title" id="dispatchModalLabel">Edit Dispatch Details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+		<input type="hidden" name="id" th:field="*{id}"> 
+        <div class="modal-body">
+
+          <!-- User Details -->
+          <div class="form-section">
+            <h4>User Details</h4>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">User Name:<span style="padding-left: 5px; color: red;">*</span></label>
+                <div class="d-flex">
+                  <!-- <input type="text" class="form-control" th:field="*{userName}" required> -->
+                  <select class="form-select" th:field="*{userName}" required>
+				        <option value="">Select User Name</option>
+				        <option th:each="un : ${distinctUserNames}" th:value="${un.emp_full_name}" th:text="${un.emp_full_name}"></option>
+				    </select>
+                  <!-- <a href="#" class="ms-2 mt-1 action-link" data-bs-toggle="modal" data-bs-target="#userModal">Add User</a> -->
+                </div>
+              </div>
+
+              <!-- <div class="col-md-6">
+                <label class="form-label">Transport Mode:</label>
+                <select class="form-select" th:field="*{transportMode}" required>
+                  <option value="">Select Transport Mode</option>
+                  <option th:each="mode : ${transportModes}" th:value="${mode}" th:text="${mode}"></option>
+                </select>
+              </div> -->
+              
+              <div class="col-md-6">
+				    <label class="form-label">Transport Mode:<span style="padding-left: 5px; color: red;">*</span></label>
+				    <div class="d-flex" style="gap: 10px;">
+				    <select class="form-select" th:field="*{transportMode}" id="transportModeDropDown" onchange="toggleTransportModeDeleteIcon();" required></select>
+				    	<!-- <div style="display: flex; justify-content: space-around;">
+						    <a href="#" style="text-decoration: none;" class="action-link">
+						    	<i data-bs-toggle="modal" data-bs-target="#userModal" title="Add new" style="font-size: 18px;" class="fas fa-plus"></i>
+						    </a>
+						    <a id="transportDeleteDropDownDataIcon" href="#" style="text-decoration: none; display: none;" class="action-link">
+						    	<i title="Delete" onclick="deleteTransportModeData($('#transportModeDropDown').val())" style="font-size: 14px; color: red;" class="fas fa-trash"></i>
+						    </a>
+					    </div> -->
+				    </div>
+				</div>
+
+              <div class="col-md-6">
+                <label class="form-label">Invoice No:</label>
+                <input type="text" class="form-control" th:field="*{invoiceNo}" autocomplete="off">
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Date:<span style="padding-left: 5px; color: red;">*</span></label>
+                <input type="date" class="form-control" th:field="*{date}" autocomplete="off" required>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Dc No:</label>
+                <input type="text" class="form-control" th:field="*{dcNo}" autocomplete="off">
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">eWay Bill No:</label>
+                <input type="text" class="form-control" th:field="*{eWayBillNo}" autocomplete="off">
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Quantity:<span style="padding-left: 5px; color: red;">*</span></label>
+                <input type="number" class="form-control" th:field="*{quantity}" autocomplete="off" required>
+              </div>
+            </div>
+          </div>
+          
+          <input type="hidden" id="sessionLoggedInUsername" th:value="${session.username}">
+
+          <!-- Customer Details -->
+          <div class="form-section mt-4">
+            <h4>Customer Details</h4>
+            <div class="row g-3">
+              
+              <!-- <div class="col-md-6">
+                <label class="form-label">Customer Name:</label>
+                <div class="d-flex">
+                  <select class="form-select me-2" id="customerNameDropdown" name="customerNameDropdown" onchange="fetchCustomerDetails()">
+                    <option value="">Select Customer</option>
+                    <option th:each="customer : ${customers}" th:value="${customer.customerName}" th:text="${customer.customerName}"></option>
+                  </select>
+                  <a href="#" class="action-link" data-bs-toggle="modal" data-bs-target="#customerModal">Add Customer</a>
+                </div>
+                <input type="hidden" id="customerName" th:field="*{customerName}">
+              </div> -->
+              
+              <div class="col-md-6">
+                <label class="form-label">Contact Name:<span style="padding-left: 5px; color: red;">*</span></label>
+	              <div class="d-flex" style="gap: 10px;">
+				    <select class="form-select me-2" id="customerNameDropdown" onchange="fetchCustomerDetails()" required>
+			            <option value="">Select Contact Name</option>
+			            <option th:each="customer : ${customers}" th:value="${customer.customerName}" th:text="${customer.customerName}"></option>
+			        </select>
+			    	<!-- <div style="display: flex; justify-content: space-around;">
+					    <a href="#" style="text-decoration: none;" class="action-link">
+					    	<i data-bs-toggle="modal" data-bs-target="#customerModal" title="Add new" style="font-size: 18px;" class="fas fa-plus"></i>
+					    </a>
+					    <a id="contactNameDeleteDropDownDataIcon" href="#" style="text-decoration: none; display: none;" class="action-link">
+					    	<i title="Delete" onclick="deleteContactNameData($('#customerNameDropdown').val(), $('#emailId').val())" style="font-size: 14px; color: red;" class="fas fa-trash"></i>
+					    </a>
+				    </div> -->
+				</div>
+				<input type="hidden" id="customerName" th:field="*{customerName}">
+			</div>
+
+              <div class="col-md-6">
+                <label class="form-label">Company Name:</label>
+                <input type="text" class="form-control" th:field="*{companyName}" autocomplete="off">
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Contact No:<span style="padding-left: 5px; color: red;">*</span></label>
+                <input type="number" class="form-control" th:field="*{contactNo}" autocomplete="off" required>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Email ID:</label>
+                <input type="email" class="form-control" th:field="*{emailId}" autocomplete="off">
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Company Address:</label>
+                <textarea class="form-control" rows="1" th:field="*{companyAddress}" autocomplete="off"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Details -->
+          <div class="form-section mt-4">
+            <h4>Product Details</h4>
+            <div class="row g-3">
+              
+              <!-- <div class="col-md-6">
+                <label class="form-label">Product Name:</label>
+                <div class="d-flex">
+                  <select class="form-select me-2" id="productNameDropdown" name="productNameDropdown" onchange="fetchProductDetails()">
+                    <option value="">Select Product</option>
+                    <option th:each="product : ${products}" th:value="${product.productName}" th:text="${product.productName}"></option>
+                  </select>
+                  <a href="#" class="action-link" data-bs-toggle="modal" data-bs-target="#productModal">Add New</a>
+                </div>
+                <input type="hidden" id="productName" th:field="*{productName}">
+              </div> -->
+              
+              <div class="col-md-6">
+		    	<label class="form-label" for="productName">Product Name with Model No:<span style="padding-left: 5px; color: red;">*</span></label>
+	              <div class="d-flex" style="gap: 10px;">
+				    <select class="form-select" id="productNameDropdown" onchange="fetchProductDetails()" required>
+					    <option value="">Select Product name with model no</option>
+					    <option th:each="product : ${products}" th:if="${product.moduleNo != null and !#strings.isEmpty(product.moduleNo)}" th:value="${product.productName}" th:text="${product.productName+' ['+product.moduleNo+']'}"></option>
+					</select>
+			    	<!-- <div style="display: flex; justify-content: space-around;">
+					    <a href="#" style="text-decoration: none;" class="action-link">
+					    	<i data-bs-toggle="modal" data-bs-target="#productModal" title="Add new" style="font-size: 18px;" class="fas fa-plus"></i>
+					    </a>
+					    <a id="productNameDeleteDropDownDataIcon" href="#" style="text-decoration: none; display: none;" class="action-link">
+					    	<i title="Delete" onclick="deleteProductDetailsData($('#productNameDropdown').val(), $('#moduleNo').val())" style="font-size: 14px; color: red;" class="fas fa-trash"></i>
+					    </a>
+				    </div> -->
+				</div>
+				<input type="hidden" id="productName" th:field="*{productName}">
+			</div>
+			
+			  <div class="col-md-6">
+                <label class="form-label">Model No:<span style="padding-left: 5px; color: red;">*</span></label>
+                <input type="text" class="form-control" id="moduleNo" name="moduleNo" autocomplete="off" required>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Root Firmware (External):</label>
+                <input type="text" class="form-control" id="rootFirmwareExternal" name="rootFirmwareExternal" autocomplete="off">
+              </div>
+              
+               <div class="col-md-6">
+                <label class="form-label">Root Firmware (Internal):</label>
+                <input type="text" class="form-control" id="rootFirmwareInternal" name="rootFirmwareInternal" autocomplete="off">
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Router Firmware (External):</label>
+                <input type="text" class="form-control" id="routerFirmwareExternal" name="routerFirmwareExternal" autocomplete="off">
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Router Firmware (Internal):</label>
+                <input type="text" class="form-control" id="routerFirmwareInternal" name="routerFirmwareInternal" autocomplete="off">
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Antenna Type:</label>
+                <input type="text" class="form-control" id="antennaType" name="antennaType" autocomplete="off">
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Firmware Hardware Version:</label>
+                <input type="text" class="form-control" id="firmwareHardwareVersion" name="firmwareHardwareVersion" autocomplete="off">
+              </div>
+
+              <!-- <div class="col-md-6">
+                <label class="form-label">Upload File:</label>
+                <input type="file" class="form-control" name="file" accept="image/*">
+              </div> -->
+              
+              <div class="col-md-6 col-sm-12">
+			        <!-- <label class="form-label" for="uploadFile">Upload File:</label> -->
+			        
+			        <div class="mb-2" id="productImageBox" style="width: 100%; height: 200px; display: none;">
+			        	<label class="form-label">Uploaded File:</label>
+			        	<img src="" id="productImageTag" width="100%" height="100%">
+			        </div>
+			        
+			        <input type="hidden" class="form-control" id="uploadedFilePath" name="uploadFile">
+			        
+			        <!-- <input type="file" class="form-control" id="uploadFile" name="file" accept=".png,.jpg,.jpeg"> -->
+			    </div>
+              
+            </div>
+          </div>
+
+          <!-- Configuration Details -->
+          <div class="form-section mt-5">
+            <h4>Configuration Details</h4>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">AppSKey:</label>
+                <input type="text" class="form-control" th:field="*{appSKey}" autocomplete="off">
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">NwkSKey:</label>
+                <input type="text" class="form-control" th:field="*{nwkSKey}" autocomplete="off">
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">App EUI:</label>
+                <input type="text" class="form-control" th:field="*{appEUI}" autocomplete="off">
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Device Address:</label>
+                <textarea class="form-control" rows="1" th:field="*{deviceAddress}" autocomplete="off"></textarea>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Remarks:</label>
+                <textarea class="form-control" rows="1" th:field="*{remarks}" autocomplete="off"></textarea>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit" style="font-size: 14px;" class="btn btn-success">Submit</button>
+          <button type="button" style="font-size: 14px;" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="dispatchReturnModal" tabindex="-1" aria-labelledby="dispatchModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-md modal-dialog-scrollable">
+    <div class="modal-content" style="overflow-y: auto;">
+        <div class="modal-header">
+          <h5 class="modal-title" id="dispatchReturnModalLabel">Customer Return Form</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+          <div class="form-section">
+            <div class="row g-3">
+
+			  <input type="hidden" id="auto_id_value_return_popup">
+              <div class="col-md-6">
+                <label class="form-label">Customer Name:</label>
+                <input type="text" class="form-control" readonly id="customerNameReturnPopup">
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Company Name:</label>
+                <input type="text" class="form-control" readonly id="companyNameReturnPopup">
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Product Name:</label>
+                <input type="text" class="form-control" readonly id="productNameReturnPopup">
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Module No:</label>
+                <input type="text" class="form-control" readonly id="moduleNoReturnPopup">
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Dispatched Date:</label>
+                <input type="date" class="form-control" readonly id="dispatchedDateReturnPopup">
+              </div>
+              
+              <div class="col-md-6">
+                <label class="form-label">Dispatched Quantity:</label>
+                <input type="number" class="form-control" readonly id="dispatchedQtyReturnPopup">
+              </div>
+              
+              <div class="col-md-6">
+                <label class="form-label">Returned Date:</label>
+                <input type="date" class="form-control" id="returnedDateReturnPopup">
+              </div>
+              
+              <div class="col-md-6">
+                <label class="form-label">Returned Quantity:</label>
+                <input type="number" min="0" class="form-control" id="returnedQtyReturnPopup">
+              </div>
+              
+            </div>
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit" style="font-size: 14px;" onclick="insertCustomerDispatchReturn();" class="btn btn-success">Submit</button>
+          <button type="button" style="font-size: 14px;" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+    </div>
+  </div>
+</div>
+
+
+    <div class="content">
+     <div class="navbar">
+     <!-- <i class="fa-solid fa-circle-user text-primary" style="font-size: 24px; padding-right: 15px; cursor: pointer;"></i> -->
+     <div class="user-dropdown" id="userDropdown" style="display: none;">
+			<ul>
+			        <li><a><i class="fas fa-user"></i><span id="loggedInSessionEmpName" th:text="${session.empDetailsByEmpId.fullName}"></span></a></li>
+			        <li><a href="/logout"><i class="fas fa-sign-out-alt"></i> Sign Out</a></li>
+			    </ul>
+			</div>
+		   <ul>
+		    <li>
+		        <a th:href="@{/dashboard}">
+		            <i class="fas fa-home"></i> Home
+		        </a>
+		    </li>
+		    <li>
+		        <a href="#" id="dispatchMenu">
+		            <i class="fas fa-file-import"></i> Dispatch <i style="padding-left: 5px;" class="fa-solid fa-caret-down"></i>
+		        </a>
+		        <div class="dropdown-menu dispatch_subDropDown">
+			      <ul>
+			        <li><a class="dropdown-item" th:href="@{/form}">Add</a></li>
+			        <li><a class="dropdown-item" th:href="@{/view-dispatch}">View</a></li>
+			      </ul>
+			    </div>
+		    </li>
+		    <li>
+		         <a th:href="@{/import}">
+		            <i class="fas fa-arrow-down"></i> Import
+		        </a>
+		    </li>
+		    <!-- <li>
+		         <a th:href="@{/view-dispatch}">
+		            <i class="fas fa-eye"></i> View Dispatch
+		        </a>
+		    </li> -->
+		    <li>
+		        <a th:href="@{/calendar}">
+		            <i class="fas fa-calendar"></i> Calendar
+		        </a>
+		    </li>
+		    
+		    <li>
+		        <a href="#" id="masterMenu">
+		            <i class="fas fa-building"></i> Master <i style="padding-left: 5px;" class="fa-solid fa-caret-down"></i>
+		        </a>
+		        <div class="dropdown-menu dispatch_subDropDown master_subDropDown">
+			      <ul>
+			        <!-- <li><a class="dropdown-item" th:href="@{/adduser}">User Master</a></li> -->
+			        <li><a class="dropdown-item" th:href="@{/product}">Product Master</a></li>
+			        <li><a class="dropdown-item" th:href="@{/customer}">Customer Master</a></li>
+			      </ul>
+			    </div>
+		    </li>
+		    
+		    <!-- <li>
+		        <a th:href="@{/adduser}">
+		            <i class="fas fa-users"></i> Add Users
+		        </a>
+		    </li>
+		    <li>
+		        <a th:href="@{/product}">
+		            <i class="fas fa-box"></i> Product Master
+		        </a>
+		    </li>
+		    <li>
+		        <a th:href="@{/customer}">
+		            <i class="fas fa-building"></i> Customer Master
+		        </a>
+		    </li> -->
+		    <li>
+		        <a th:href="@{/dcDispatchData}">
+		            <i class="fa-solid fa-file"></i> Generated DC
+		        </a>
+		    </li>
+		    <li>
+		        <a th:href="@{/audit-log}">
+		            <i class="fas fa-cogs"></i> Track Info
+		        </a>
+		    </li>
+		</ul>
+
+</div>
+
+<input type="hidden" th:value="${email}" id="emailFromAddress">
+<input type="hidden" id="clickedDispatchDataAutoId">
+
+<div class="emailPasswordOuterDiv" id="emailPasswordOuterDiv">
+	 <div class="emailPasswordInnerBox">
+		<div class="d-flex justify-content-between align-items-center m-0" style="position: sticky; top: 0; background: #fff;">
+			<p class="candidatePrfoilesHeading m-0" style="font-size: 14px; padding-left: 10px; font-weight: bold;">Please Enter Email Password</p>
+			<p class="emailFormInnerBoxCloser m-0"><span onclick="closeEmailPasswordOuterDiv();" style="font-size: 20px; cursor: pointer; font-weight: bold;">&times;</span></p>		               	  
+		</div>
+		<div class="card-body mt-1" style="padding-bottom: 10px;">
+			<div class="table-responsive mb-2" style="width: 96%; margin-left: auto; margin-right: auto;">
+				<div class="col-sm-12 form-group mb-1" style="padding-left: 3px; padding-right: 3px;">
+					<input type="password" class="form-control mt-2" id="ionos_password" autocomplete="off">
+				</div>
+				<div class="form-check d-flex align-items-center" style="gap: 5px;">
+				  <input class="form-check-input" type="checkbox" onchange="togglePasswordView(this)" id="viewEmailPasswordCheckBox" style="margin-left: -20px; border-color: #6bb0fa;">
+				  <label class="form-check-label" style="font-size: 14px; padding-top: 3px;">Show Password</label>
+				</div>
+			</div>
+			<div class="table-responsive" style="width: 96%; margin-left: auto; margin-right: auto;">
+				<div class="col-sm-12 form-group p-2">
+					<button type="button" class="btn btn-primary" id="emailSendBtn" onclick="sendDataToEmailToTheParticularCustomer();" style="font-size: 14px; float: right;">Validate</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="sendEmailForCustomerOuterDiv" id="sendEmailForCustomerOuterDiv">
+	 <div class="sendEmailForCustomerInnerBox">
+			<div class="d-flex justify-content-between align-items-center m-0" style="position: sticky; top: 0; background: #fff;">
+				<p class="candidatePrfoilesHeading m-0" style="font-size: 14px; padding-left: 10px; font-weight: bold;">Compose Mail</p>
+				<p class="emailFormInnerBoxCloser m-0"><span onclick="closeSendEmailForCustomerOuterDiv();" style="font-size: 20px; cursor: pointer; font-weight: bold;">&times;</span></p>		               	  
+			</div>
+			<div class="card-body sendEmailForCustomerBodyBox mt-1">
+			
+				<div class="table-responsive" style="width: 96%; margin-left: auto; margin-right: auto;">
+					<table style="width: 100%; font-size: 14px;">
+						<tr>
+							<th style="text-align: left; margin-bottom: 10px; margin-top: 10px;">From</th>
+							<td><input type="text" th:value="${session.email}" readonly style="font-size: 14px; margin-bottom: 10px; margin-top: 10px;" class="form-control" id="emailFromAddress"></td>
+						</tr>
+						<tr>
+							<th style="text-align: left; margin-bottom: 10px;">To</th>
+							<td><input type="text" style="font-size: 14px; margin-bottom: 10px;" placeholder="Comma seperated emails" class="form-control" id="emailToAddress" autocomplete="off"></td>
+						</tr>
+						<tr>
+							<th style="text-align: left; margin-bottom: 10px;">CC</th>
+							<td><input type="text" style="font-size: 14px; margin-bottom: 10px;" placeholder="Comma seperated emails" class="form-control" id="emailCCAddress" autocomplete="off"></td>
+						</tr>
+						<tr>
+							<th style="text-align: left; margin-bottom: 10px;">Subject</th>
+							<td><input type="text" style="font-size: 14px; margin-bottom: 20px;" class="form-control" id="emailSubject"></td>
+						</tr>
+						<tr>
+							<td style="padding-left: 3px; padding-right: 3px;" colspan="2">
+								<textarea class="form-control" placeholder="Body" style="font-size: 14px; margin-bottom: 10px;" id="emailBody" rows="4"></textarea>
+							</td>
+						</tr>
+					</table>
+				</div>
+				
+			<div style="width: 96%; margin-left: auto; margin-right: auto;">
+				<div class="col-sm-12 form-group mt-4 modal-footer table-responsive p-2">
+					<button type="button" id="email_send_button" class="btn btn-primary" onclick="openEmailPasswordOuterDiv()" style="font-size: 14px; float: right;">Send</button>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+</div>
+
+
+ <div class="tables-container">
+    <div class="table-box">
+        <div class="table-responsive" style="height: 460px; overflow: auto;">
+      <div class="table-header" style="display: flex; justify-content: space-between; align-items: center;">
+         <div style="display: flex; justify-content: space-around; align-items: center; gap: 10px;">
+         	<i title="Generate Excel" onclick="export_To_Excel();" class="fas fa-file-excel" style="color: green; font-size: 25px; cursor: pointer;"></i>
+         	<i title="Generate PDF" onclick="generateFilteredPDF();" class="fa-solid fa-file-pdf" style="color: red; font-size: 25px; cursor: pointer;"></i>
+         </div>
+         <input type="text" class="form-control" id="searchInput" placeholder="Search..." style="padding: 5px; width: 20%;" />
+     </div>
+        	<table id="holidayTable2" class="table table-hover mb-0 holidayTable text-center">
+	        	<thead style="position: sticky; top: 0; background-color: #f8f9fa; z-index: 10;">
+	        	 <tr>
+	        	 		<th colspan="3">Action</th> <!-- New column for Edit button -->
+	        	 		<th>Sl. No</th>
+	        	 		<th>Return Status</th>
+	        	 		<th>Product Retention</th>
+	        	 		<th>Dispatched Date</th>
+	        	 		<th>Returned Date</th>
+                        <th>Returned Qty</th>
+                        <th>Customer Name</th>
+                        <th>Company Name</th>
+                        <th>Product Name</th> 
+                        <th>Module No</th> 
+                        <th>userName</th>
+                        <th>transportMode</th>
+                        <th>dcNo</th>
+                        <th>eWayBillNo</th>
+                        <th>invoiceNo</th>
+                        <!-- <th>quantity</th> -->
+                        <th>companyAddress</th>
+                        <th>contactNo</th>
+                        <th>emailId</th>
+                        <th>rootFirmwareExternal</th>
+                        <th>antennaType</th>
+                        <th>rootFirmwareInternal</th>
+                        <th>routerFirmwareExternal</th>
+                        <th>routerFirmwareInternal</th>
+                        <th>appSKey</th>
+                        <th>nwkSKey</th>
+                        <th>deviceAddress</th>
+                        <th>appEUI</th>
+                        <th>remarks</th>
+                        <th>HardwareVersion</th>
+                        <th>Product Image</th>
+                    </tr>
+	        	</thead>
+	        	<tbody id="viewDispatchDetailsTBody">
+		        	<!-- Display this row if the events list is empty -->
+			        <!-- <tr th:if="${#lists.isEmpty(dispatches)}">
+			            <td colspan="30" class="text-center">No data available</td>
+			        </tr>
+                    <tr th:each="dispatch, stat : ${dispatches}">
+                    	<td>
+                            <i title="Edit" th:attr="onclick=|editDispatch('${dispatch.id}')|" style="font-size: 14px; cursor: pointer;" class="fas fa-pen text-primary"></i>
+                        </td>
+                        <td><i title="Send Mail" th:attr="onclick=|openEmailBoxDispatch('${dispatch.id}')|" style="font-size: 16px; cursor: pointer;" class="fas fa-envelope text-info"></i></td>
+                        <td><i title="Customer Return" th:attr="onclick=|openReturnBoxDispatch('${dispatch.id}')|" style="font-size: 16px; cursor: pointer;" class="fas fa-rotate-left text-success"></i></td>
+                        <td style="min-width: 80px;" th:text="${#numbers.parseInteger(dispatch.quantity) == 0 ? '-' :
+						             (dispatch.returnedDate == null ?
+						             @dateUtils.daysBetween(dispatch.dispatchDate, T(java.time.LocalDate).now()) + ' days' :
+						             (dispatch.quantity == dispatch.returnedQty ?
+						             @dateUtils.daysBetween(dispatch.dispatchDate, dispatch.returnedDate) + ' days' :
+						             @dateUtils.daysBetween(dispatch.dispatchDate, T(java.time.LocalDate).now()) + ' days'))}">
+						</td>
+                        <td style="min-width: 60px;" th:text="${stat.index + 1}"></td>
+                        <td style="min-width: 80px;" th:text="${dispatch.userName}"></td>
+                        <td style="min-width: 40px;" th:text="${dispatch.transportMode}"></td>
+                        <td id="dispatchDate" style="min-width: 90px;" th:text="${dispatch.date.substring(8,10) + '-' + dispatch.date.substring(5,7) + '-' + dispatch.date.substring(0,4)}"></td>
+                        <td style="min-width: 80px;" th:text="${dispatch.dcNo}"></td>
+                        <td style="min-width: 100px;" th:text="${dispatch.eWayBillNo}"></td>
+                        <td style="min-width: 100px;" th:text="${dispatch.invoiceNo}"></td>
+                        <td style="min-width: 80px;" th:text="${dispatch.quantity}"></td>
+                        <td style="min-width: 120px;" th:text="${dispatch.customerName}"></td>
+                        <td style="min-width: 120px;" th:text="${dispatch.companyName}"></td>
+                        <td style="min-width: 180px;" th:text="${dispatch.companyAddress}"></td>
+                        <td style="min-width: 80px;" th:text="${dispatch.contactNo}"></td>
+                        <td style="min-width: 100px;" th:text="${dispatch.emailId}"></td>
+                        <td style="min-width: 100px;" th:text="${dispatch.productName}"></td>
+                        <td style="min-width: 100px;" th:text="${dispatch.moduleNo}"></td>
+                        <td style="min-width: 180px;" th:text="${dispatch.rootFirmwareExternal}"></td>
+                        <td style="min-width: 80px;" th:text="${dispatch.antennaType}"></td>
+                        <td style="min-width: 180px;" th:text="${dispatch.rootFirmwareInternal}"></td>
+                        <td style="min-width: 180px;" th:text="${dispatch.routerFirmwareExternal}"></td>
+                        <td style="min-width: 180px;" th:text="${dispatch.routerFirmwareInternal}"></td>
+                        <td style="min-width: 80px;" th:text="${dispatch.appSKey}"></td>
+                        <td style="min-width: 80px;" th:text="${dispatch.nwkSKey}"></td>
+                        <td style="min-width: 140px;" th:text="${dispatch.deviceAddress}"></td>
+                        <td style="min-width: 80px;" th:text="${dispatch.appEUI}"></td>
+                        <td style="min-width: 200px;" th:text="${dispatch.remarks}"></td>
+                        <td style="min-width: 100px;" th:text="${dispatch.firmwareHardwareVersion}"></td>
+				        <td style="min-width: 200px;">
+					  	  <img th:if="${dispatch.uploadFile != null}" 
+					         th:src="@{'dispatchDocs/' + ${dispatch.uploadFile.replace('\\', '/')}}" 
+					         alt="Image" 
+					         width="100%" height="100%">
+					    </td>
+                    </tr> -->
+                </tbody>
+        	</table> 
+        </div>
+    </div>
+</div>
+
+</div>
+  	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  	
+  <!-- 	script to edit  -->
+  <script>
+  
+  $.ajax({
+      url: '/getAllDispatchedDetails', // Your backend URL for saving the CTC offer
+      type: 'GET',
+      success: function (response) {
+    	  updateDispatchDetailsData(response);
+      },
+      error: function (xhr, status, error) {
+          alert('Failed to fetch dispatch Lists: ' + error);
+      }
+  });
+  
+  function updateDispatchDetailsData(data) {
+	  var viewEmpDetailsTBody = document.getElementById('viewDispatchDetailsTBody');
+	  
+	  viewEmpDetailsTBody.innerHTML = ''; 
+	  
+	  if (data && data.length > 0) {
+	      for (var i = 0; i < data.length; i++) {
+	    	  
+	    	  var quantity = parseInt(data[i].quantity) || 0;
+	    	  var returnedQty = parseInt(data[i].returnedQty) || 0;
+	    	  var returnedDate = data[i].returnedDate;
+	    	  var dispatchDate = data[i].date;
+	    	  var remarkColumnText = '-', productReturnStatus = '-';
+	    	  var diffInMs, diffInDays, qtyDisplay = '0', productImage = '-';
+
+	    	  if (quantity > 0 && dispatchDate) {
+	    	      var startDate = new Date(dispatchDate);
+	    	      var endDate = returnedDate ? new Date(returnedDate) : new Date();
+	    	      var endDate2 = new Date();
+	    	      
+	    	      if(returnedQty === quantity){
+	    	    	  diffInMs = endDate - startDate;
+		    	      diffInDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
+		    	      remarkColumnText = diffInDays + " day(s)";
+	    	      }else if(returnedQty !== quantity){
+	    	    	  diffInMs = endDate2 - startDate;
+		    	      diffInDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
+		    	      remarkColumnText = diffInDays + " day(s)";
+	    	      }
+	    	  }
+	    	  
+	    	  if(quantity > 0){
+	    		  if(quantity === returnedQty){
+	    			  productReturnStatus = "<p style='margin: 0; padding: 2px 5px; background: green; color: #fff; border-radius: 12px;'>Full Return</p>";
+	    		  }else if(returnedQty > 0 && quantity !== returnedQty){
+	    			  productReturnStatus = "<p style='margin: 0; padding: 2px 5px; background: #f39c12; color: #fff; border-radius: 12px;'>Partial Return</p>";
+	    		  }else if(returnedQty == 0){
+	    			  productReturnStatus = "<p style='margin: 0; padding: 2px 5px; background: red; color: #fff; border-radius: 12px;'>No Return</p>";
+	    		  }
+	    	  }
+	    	  
+	    	  if(data[i].quantity){
+	    		  var returnQtyValue = '0';
+	    		  if(data[i].returnedQty){
+	    			  returnQtyValue = data[i].returnedQty;
+	    		  }
+	    		  qtyDisplay = returnQtyValue+'/'+data[i].quantity;
+	    	  }
+	    	  
+	    	  if (data[i].uploadFile) {
+	    		    productImage = "<img src='" + data[i].uploadFile + "' alt='Image' width='100%' height='100%'>";
+	    		}
+	    	  
+	    	  var editFilter = data[i].userName == $('#sessionLoggedInUsername').val() ? "<i title='Edit' onclick='editDispatch(\"" + data[i].id + "\")' style='font-size: 14px; cursor: pointer;' class='fas fa-pen text-primary'></i>" : "";
+	    	  
+	          var row = "<tr class='custom_tr'>" +
+	          			"<td>"+editFilter+"</td>" +
+	          			"<td><i title='Send Mail' onclick='openEmailBoxDispatch(\"" + data[i].id + "\",\"" + data[i].companyName + "\")' style='font-size: 16px; cursor: pointer;' class='fas fa-envelope text-info'></i></td>" +
+	          			"<td><i title='Customer Return' onclick='openReturnBoxDispatch(\"" + data[i].id + "\")' style='font-size: 16px; cursor: pointer;' class='fas fa-rotate-left text-success'></i></td>" +
+	          			/* "<td><i title='Generate DC' onclick='openGenerateDcBoxDispatch(\"" + data[i].id + "\")' style='font-size: 18px; cursor: pointer;' class='fa-solid fa-file-export text-primary'></i></td>" + */
+	          			"<td style='min-width: 60px;'>" + (i+1) + "</td>" +
+	          			"<td style='min-width: 120px;'>" + productReturnStatus + "</td>" +
+	          			"<td style='min-width: 140px;'>" + remarkColumnText + "</td>" +
+	          			"<td class='dateFormatter dispatchDate' style='min-width: 130px;'>" + (data[i].date || '-') + "</td>" +
+	          			"<td class='dateFormatter returnDate' style='min-width: 120px;'>" + (data[i].returnedDate || '-') + "</td>" +
+                        "<td style='min-width: 120px;'>" + qtyDisplay + "</td>" +
+                        "<td style='min-width: 130px;'>" + (data[i].customerName || '-') + "</td>" +
+                        "<td style='min-width: 130px;'>" + (data[i].companyName || '-') + "</td>" +
+                        "<td style='min-width: 120px;'>" + (data[i].productName || '-') + "</td>" +
+                        "<td style='min-width: 100px;'>" + (data[i].moduleNo || '-') + "</td>" +
+                        "<td style='min-width: 80px;'>" + (data[i].userName || '-') + "</td>" +
+                        "<td style='min-width: 40px;'>" + (data[i].transportMode || '-') + "</td>" +
+                        "<td style='min-width: 80px;'>" + (data[i].dcNo || '-') + "</td>" +
+                        "<td style='min-width: 100px;'>" + (data[i].eWayBillNo || '-') + "</td>" +
+                        "<td style='min-width: 100px;'>" + (data[i].invoiceNo || '-') + "</td>" +
+                        /* "<td style='min-width: 80px;'>" + data[i].quantity + "</td>" + */
+                        "<td style='min-width: 180px;'>" + (data[i].companyAddress || '-') + "</td>" +
+                        "<td style='min-width: 80px;'>" + (data[i].contactNo || '-') + "</td>" +
+                        "<td style='min-width: 100px;'>" + (data[i].emailId || '-') + "</td>" +
+                        "<td style='min-width: 180px;'>" + (data[i].rootFirmwareExternal || '-') + "</td>" +
+                        "<td style='min-width: 80px;'>" + (data[i].antennaType || '-') + "</td>" +
+                        "<td style='min-width: 180px;'>" + (data[i].rootFirmwareInternal || '-') + "</td>" +
+                        "<td style='min-width: 180px;'>" + (data[i].routerFirmwareExternal || '-') + "</td>" +
+                        "<td style='min-width: 180px;'>" + (data[i].routerFirmwareInternal || '-') + "</td>" +
+                        "<td style='min-width: 80px;'>" + (data[i].appSKey || '-') + "</td>" +
+                        "<td style='min-width: 80px;'>" + (data[i].nwkSKey || '-') + "</td>" +
+                        "<td style='min-width: 140px;'>" + (data[i].deviceAddress || '-') + "</td>" +
+                        "<td style='min-width: 80px;'>" + (data[i].appEUI || '-') + "</td>" +
+                        "<td style='min-width: 200px;'>" + (data[i].remarks || '-') + "</td>" +
+                        "<td style='min-width: 100px;'>" + (data[i].firmwareHardwareVersion || '-') + "</td>" +
+                        "<td style='min-width: 120px;'>" + (productImage || '-') + "</td>" +
+		              	"</tr>";
+
+	          viewEmpDetailsTBody.innerHTML += row; //Append row HTML
+	      }
+	      
+	      formatDates2();
+	      
+	  } else {
+	      var noDataRow = "<tr><td colspan='36'>No data available</td></tr>";
+	      viewEmpDetailsTBody.innerHTML = noDataRow; // Display 'No data available'
+	  }
+	}
+  
+  function formatDates2() {
+	    var dateElements = document.querySelectorAll('.dateFormatter');
+	    dateElements.forEach(function(dateElement) {
+	        var dateStr = dateElement.innerText; // Get the date string in yyyy-mm-dd format
+	        var dateParts = dateStr.split('-'); // Split the date string into parts
+	        
+	        // Format the date as dd-mm-yyyy
+	        if(dateParts.length === 3) {
+	            var formattedDate = dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0];
+	            // Update the text of the date element
+	            dateElement.innerText = formattedDate;
+	        }
+	    });
+	}
+  
+  function editDispatch(id) {
+	  //alert(id);
+	    fetch(`/get-dispatch/${id}`)
+	        .then(response => {
+	            if (!response.ok) {
+	                throw new Error('Network response was not OK');
+	            }
+	            return response.json();
+	        })
+	        .then(data => {
+	            //console.log("Fetched Dispatch:", data);
+
+	            // User Details
+	            document.querySelector('[name="id"]').value = data.id || '';
+	            document.querySelector('[name="userName"]').value = data.userName || '';
+	            document.querySelector('[name="transportMode"]').value = data.transportMode || '';
+	            document.querySelector('[name="invoiceNo"]').value = data.invoiceNo || '';
+	            document.querySelector('[name="date"]').value = data.date || '';
+	            document.querySelector('[name="dcNo"]').value = data.dcNo || '';
+	            document.querySelector('[name="eWayBillNo"]').value = data.eWayBillNo || '';
+	            document.querySelector('[name="quantity"]').value = data.quantity || '';
+
+	            // Customer Details
+	            document.getElementById('customerNameDropdown').value = data.customerName || '';
+	            document.getElementById('customerName').value = data.customerName || '';
+	            document.querySelector('[name="companyName"]').value = data.companyName || '';
+	            document.querySelector('[name="contactNo"]').value = data.contactNo || '';
+	            document.querySelector('[name="emailId"]').value = data.emailId || '';
+	            document.querySelector('[name="companyAddress"]').value = data.companyAddress || '';
+
+	            // Product Details
+	            document.getElementById('productNameDropdown').value = data.productName || '';
+	            document.getElementById('productName').value = data.productName || '';
+	            document.querySelector('[name="rootFirmwareExternal"]').value = data.rootFirmwareExternal || '';
+	            document.querySelector('[name="routerFirmwareExternal"]').value = data.routerFirmwareExternal || '';
+	            document.querySelector('[name="moduleNo"]').value = data.moduleNo || '';
+	            document.querySelector('[name="rootFirmwareInternal"]').value = data.rootFirmwareInternal || '';
+	            document.querySelector('[name="routerFirmwareInternal"]').value = data.routerFirmwareInternal || '';
+	            document.querySelector('[name="antennaType"]').value = data.antennaType || '';
+	            document.querySelector('[name="firmwareHardwareVersion"]').value = data.firmwareHardwareVersion || '';
+
+	            // Configuration Details
+	            document.querySelector('[name="appSKey"]').value = data.appSKey || '';
+	            document.querySelector('[name="nwkSKey"]').value = data.nwkSKey || '';
+	            document.querySelector('[name="appEUI"]').value = data.appEUI || '';
+	            document.querySelector('[name="deviceAddress"]').value = data.deviceAddress || '';
+	            document.querySelector('[name="remarks"]').value = data.remarks || '';
+	            
+	            fetchProductDetails();
+
+	            // Show the modal
+	            const dispatchModal = new bootstrap.Modal(document.getElementById('dispatchModal'));
+	            dispatchModal.show();
+	        })
+	        .catch(error => {
+	            console.error('There was a problem with the fetch operation:', error);
+	        });
+	}
+
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const currentPath = window.location.pathname;
+    const navLinks = document.querySelectorAll('.navbar ul li a');
+
+    navLinks.forEach(link => {
+        const linkHref = link.getAttribute('href');
+
+        if (linkHref === currentPath) {
+            // Highlight the current link
+            link.parentElement.classList.add('active');
+
+            // Check if it's a submenu item and activate the main menu as well
+            let parentMenu = link.closest('.dropdown-menu');
+            if (parentMenu) {
+                // Find the parent <li> of the main menu that contains this dropdown
+                let mainMenuLi = parentMenu.parentElement;
+                if (mainMenuLi && mainMenuLi.tagName === 'LI') {
+                    mainMenuLi.classList.add('active');
+                }
+            }
+        }
+    });
+});
+</script>
+
+<script>
+function fetchProductDetails() {
+    //	var selectedProduct = document.getElementById("productNameDropdown").value;
+    
+    var dropdown = document.getElementById("productNameDropdown");
+    var selectedText = dropdown.options[dropdown.selectedIndex].text;
+    var prodName, moduleNo;
+    
+ 	//	Use regex to extract the parts
+    var match = selectedText.match(/^(.*)\s+\[(.*)\]$/);
+
+    if (match) {
+    	prodName = match[1].trim();  // Part before the parentheses
+    	moduleNo = match[2].trim(); // Inside the parentheses
+    }
+    
+    //	alert(selectedProduct);
+    
+    document.getElementById("productName").value = prodName;
+    
+    /* if(prodName){
+    	$('#productNameDeleteDropDownDataIcon').show();
+    }else{
+    	$('#productNameDeleteDropDownDataIcon').hide();
+    } */
+    
+    if (prodName && moduleNo) {
+        fetch(`/getProductDetailsByPrdNameAndModelNo?productName=${encodeURIComponent(prodName)}&modelNo=${encodeURIComponent(moduleNo)}`)
+            .then(response => response.json())
+            .then(data => {
+            	//alert(JSON.stringify(data));
+                document.getElementById("rootFirmwareExternal").value = data.rootFirmwareExternal || "";
+                document.getElementById("routerFirmwareExternal").value = data.routerFirmwareExternal || "";
+                document.getElementById("moduleNo").value = data.moduleNo || "";
+                document.getElementById("rootFirmwareInternal").value = data.rootFirmwareInternal || "";
+                document.getElementById("routerFirmwareInternal").value = data.routerFirmwareInternal || "";
+                document.getElementById("antennaType").value = data.antennaType || "";
+                document.getElementById("firmwareHardwareVersion").value = data.firmwareHardwareVersion || "";
+                if(data.uploadFile){
+                	$('#uploadedFilePath').val(data.uploadFile);
+                	//alert(`dispatchDocs/${data.uploadFile}`);
+                	$('#productImageTag').prop("src", `${data.uploadFile}`);
+                	$('#productImageBox').show();
+                }else{
+                	$('#uploadedFilePath').val("");
+                	$('#productImageBox').hide();
+                }
+            });
+    	}else {
+    		document.getElementById("rootFirmwareExternal").value = "";
+            document.getElementById("routerFirmwareExternal").value = "";
+            document.getElementById("moduleNo").value = "";
+            document.getElementById("rootFirmwareInternal").value = "";
+            document.getElementById("routerFirmwareInternal").value = "";
+            document.getElementById("antennaType").value = "";
+            document.getElementById("firmwareHardwareVersion").value = "";
+            $('#productImageTag').prop("src", "");
+            $('#productImageBox').hide();
+        }
+
+	/* if (selectedProduct) {
+        fetch(`/getProductDetails?productName=${encodeURIComponent(selectedProduct)}`)
+            .then(response => response.json())
+            .then(data => {
+            	//alert(JSON.stringify(data));
+                document.getElementById("rootFirmwareExternal").value = data.rootFirmwareExternal || "";
+                document.getElementById("routerFirmwareExternal").value = data.routerFirmwareExternal || "";
+                document.getElementById("moduleNo").value = data.moduleNo || "";
+                document.getElementById("rootFirmwareInternal").value = data.rootFirmwareInternal || "";
+                document.getElementById("routerFirmwareInternal").value = data.routerFirmwareInternal || "";
+                document.getElementById("antennaType").value = data.antennaType || "";
+                document.getElementById("firmwareHardwareVersion").value = data.firmwareHardwareVersion || "";
+                if(data.uploadFile){
+                	$('#uploadedFilePath').val(data.uploadFile);
+                	//alert(`dispatchDocs/${data.uploadFile}`);
+                	$('#productImageTag').prop("src", `dispatchDocs/${data.uploadFile}`);
+                	$('#productImageBox').show();
+                }else{
+                	$('#uploadedFilePath').val("");
+                	$('#productImageBox').hide();
+                }
+            });
+    	}else {
+    		document.getElementById("rootFirmwareExternal").value = "";
+            document.getElementById("routerFirmwareExternal").value = "";
+            document.getElementById("moduleNo").value = "";
+            document.getElementById("rootFirmwareInternal").value = "";
+            document.getElementById("routerFirmwareInternal").value = "";
+            document.getElementById("antennaType").value = "";
+            document.getElementById("firmwareHardwareVersion").value = "";
+            $('#productImageTag').prop("src", "");
+            $('#productImageBox').hide();
+        } */
+	}
+	
+function fetchCustomerDetails() {
+    var selectedCustomer = document.getElementById("customerNameDropdown").value;
+    document.getElementById("customerName").value = selectedCustomer;
+    
+    /* if(selectedCustomer){
+    	$('#contactNameDeleteDropDownDataIcon').show();
+    }else{
+    	$('#contactNameDeleteDropDownDataIcon').hide();
+    } */
+
+    if (selectedCustomer) {
+        fetch('/getCustomerDetails?customerName=' + encodeURIComponent(selectedCustomer))
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("companyName").value = data.companyName || '';
+                document.getElementById("contactNo").value = data.contactNo || '';
+                document.getElementById("emailId").value = data.emailId || '';
+                document.getElementById("companyAddress").value = data.companyAddress || '';
+            })
+            .catch(error => console.error('Error fetching customer details:', error));
+    } else {
+        document.getElementById("companyName").value = '';
+        document.getElementById("contactNo").value = '';
+        document.getElementById("emailId").value = '';
+        document.getElementById("companyAddress").value = '';
+    }
+}
+</script>
+
+<script>
+$.ajax({
+    type: 'GET', 
+    url: '/fetchAllDistinctTransportModes', 
+    success: function(data) {
+		//alert(JSON.stringify(data));
+		updateTransportModeDetailsDataToDropdown(data);
+			},
+    error: function(xhr, status, error) {
+        console.error('Error fetching data for transport mode:', error);
+        console.log('Error fetching data for  transport mode. Please try again.');
+    }
+});
+
+function updateTransportModeDetailsDataToDropdown(datas) {
+	let transportModeDropdown = document.getElementById("transportModeDropDown");
+	transportModeDropdown.innerHTML = "";
+	
+	let defaultOption = document.createElement("option");
+	defaultOption.value = "";
+	defaultOption.text = "Select Transport Mode";
+	transportModeDropdown.appendChild(defaultOption);
+	
+	datas.forEach(data => {
+		let option = document.createElement("option");
+		option.value = data.name;
+		option.text = data.name;
+		transportModeDropdown.appendChild(option);
+	});
+}
+
+function updateTransportModeDetailsDataToDropdownAfterAdd(datas){
+	let transportModeDropdown = document.getElementById("transportModeDropDown");
+	transportModeDropdown.innerHTML = "";
+	
+	let defaultOption = document.createElement("option");
+	defaultOption.value = "";
+	defaultOption.text = "Select Transport Mode";
+	defaultOption.disabled = true;
+	transportModeDropdown.appendChild(defaultOption);
+	
+	datas.forEach(data => {
+		let option = document.createElement("option");
+		option.value = data.name;
+		option.text = data.name;
+		transportModeDropdown.appendChild(option);
+	});
+}
+
+function validateTransportModeAdd(e){
+	e.preventDefault();
+	
+	const form = document.getElementById("transportModeForm");
+    const formData = new FormData(form);
+
+    fetch("/submitTransportMode", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => {
+    	if (!response.ok) {
+            throw new Error("Failed to add transport mode");
+        }
+        return response.text(); // Extract response body text
+    })
+    .then(data => {
+    	if (data === "data exists") {
+            alert("Entered data already exists!");
+        } else if (data === "successfull") {
+        	
+        	$.ajax({
+        	    type: 'GET', 
+        	    url: '/fetchAllDistinctTransportModes', 
+        	    success: function(data) {
+        			updateTransportModeDetailsDataToDropdownAfterAdd(data);
+        				},
+        	    error: function(xhr, status, error) {
+        	        console.error('Error fetching data for transport mode:', error);
+        	        console.log('Error fetching data for  transport mode. Please try again.');
+        	    }
+        	});
+        	
+            console.log("Transport mode added successfully!");
+            form.reset();
+            $('#userModal').modal('hide');
+        } else {
+            alert("Unexpected response: " + data);
+        }
+    })
+    .catch(error => {
+        alert("Error: " + error.message);
+    });
+}
+
+function validateNewCustomerAdd(e){
+	e.preventDefault();
+	
+	const form = document.getElementById("addCustomerPopup");
+    const formData = new FormData(form);
+
+    fetch("/submitCustomerPopupData", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => {
+    	if (!response.ok) {
+            throw new Error("Failed to add customer details");
+        }
+        return response.text(); // Extract response body text
+    })
+    .then(data => {
+    	
+		$.ajax({
+    	    type: 'GET', 
+    	    url: '/fetchAllCustomerDetails', 
+    	    success: function(data) {
+    	    	updateCustomerNamesToDropdownAfterPopupAdd(data);
+    				},
+    	    error: function(xhr, status, error) {
+    	        console.error('Error fetching data for customer details:', error);
+    	        console.log('Error fetching data for customer details. Please try again.');
+    	    }
+    	});
+    	
+        console.log("New customer details added successfully!");
+        form.reset();
+        $('#customerModal').modal('hide');
+    })
+    .catch(error => {
+        alert("Error: " + error.message);
+    });
+}
+
+function updateCustomerNamesToDropdownAfterPopupAdd(datas){
+	var customerNameDropdown = document.getElementById('customerNameDropdown');
+	customerNameDropdown.innerHTML = "";
+	
+	var defaultOption = document.createElement("option");
+	defaultOption.value = "";
+	defaultOption.text = "Select Contact Name";
+	defaultOption.disabled = true;
+	customerNameDropdown.appendChild(defaultOption);
+	
+	datas.forEach(data =>{
+		var option = document.createElement("option");
+		option.text = data.customerName;
+		option.value = data.customerName;
+		customerNameDropdown.appendChild(option);
+	});
+	
+	populateTheRecentlyInsertedCustomerDetails();
+}
+
+function updateCustomerNamesToDropdown(datas){
+	var customerNameDropdown = document.getElementById('customerNameDropdown');
+	customerNameDropdown.innerHTML = "";
+	
+	var defaultOption = document.createElement("option");
+	defaultOption.value = "";
+	defaultOption.text = "Select Contact Name";
+	customerNameDropdown.appendChild(defaultOption);
+	
+	datas.forEach(data =>{
+		var option = document.createElement("option");
+		option.text = data.customerName;
+		option.value = data.customerName;
+		customerNameDropdown.appendChild(option);
+	});
+}
+
+function populateTheRecentlyInsertedCustomerDetails(){
+	$.ajax({
+	    type: 'GET', 
+	    url: '/fetchRecentCustomerDetails', 
+	    success: function(data) {
+	    	
+	    	const dropdown = $('#customerNameDropdown');
+            const valueToSelect = data.customerName;
+
+            // Check if the option exists
+            if (dropdown.find(`option[value="${valueToSelect}"]`).length > 0) {
+                dropdown.val(valueToSelect); // Set the value if present
+            } else {
+                console.warn('Customer name not found in dropdown options.');
+            }
+            
+			$('#emailId').val(data.emailId);
+			$('#contactNo').val(data.contactNo);
+			$('#companyName').val(data.companyName);
+			$('#companyAddress').val(data.companyAddress);
+				},
+	    error: function(xhr, status, error) {
+	        console.error('Error fetching data for customer details:', error);
+	        console.log('Error fetching data for customer details. Please try again.');
+	    }
+	});
+}
+
+function validateNewProductsAdd(e){
+	e.preventDefault();
+	
+	const form = document.getElementById("addProductsPopup");
+    const formData = new FormData(form);
+
+    fetch("/submitProduct", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => {
+    	if (!response.ok) {
+            throw new Error("Failed to add product details");
+        }
+        return response.text(); // Extract response body text
+    })
+    .then(data => {
+    	
+		$.ajax({
+    	    type: 'GET', 
+    	    url: '/getAllProductDetails', 
+    	    success: function(data) {
+    	    	updateProductNamesToDropdownAfterPopupAdd(data);
+    				},
+    	    error: function(xhr, status, error) {
+    	        console.error('Error fetching data for product details:', error);
+    	        console.log('Error fetching data for product details. Please try again.');
+    	    }
+    	});
+    	
+        console.log("New product details added successfully!");
+        form.reset();
+        $('#productModal').modal('hide');
+    })
+    .catch(error => {
+        alert("Error: " + error.message);
+    });
+}
+
+function updateProductNamesToDropdownAfterPopupAdd(datas){
+	var productNameDropdown = document.getElementById('productNameDropdown');
+	productNameDropdown.innerHTML = "";
+	
+	var defaultOption = document.createElement("option");
+	defaultOption.value = "";
+	defaultOption.text = "Select Product";
+	defaultOption.disabled = true;
+	productNameDropdown.appendChild(defaultOption);
+	
+	datas.forEach(data =>{
+		var option = document.createElement("option");
+		option.text = data.productName;
+		option.value = data.productName;
+		productNameDropdown.appendChild(option);
+	});
+	
+	populateTheRecentlyInsertedProductDetails();
+}
+
+function updateProductNamesToDropdown(datas){
+	var productNameDropdown = document.getElementById('productNameDropdown');
+	productNameDropdown.innerHTML = "";
+	
+	var defaultOption = document.createElement("option");
+	defaultOption.value = "";
+	defaultOption.text = "Select Product";
+	productNameDropdown.appendChild(defaultOption);
+	
+	datas.forEach(data =>{
+		var option = document.createElement("option");
+		option.text = data.productName;
+		option.value = data.productName;
+		productNameDropdown.appendChild(option);
+	});
+}
+
+function populateTheRecentlyInsertedProductDetails(){
+	$.ajax({
+	    type: 'GET', 
+	    url: '/fetchRecentProductDetails', 
+	    success: function(data) {
+	    	
+	    	const dropdown = $('#productNameDropdown');
+            const valueToSelect = data.productName;
+
+            // Check if the option exists
+            if (dropdown.find(`option[value="${valueToSelect}"]`).length > 0) {
+                dropdown.val(valueToSelect); // Set the value if present
+                fetchProductDetails();
+            } else {
+                console.warn('Product name not found in dropdown options.');
+            }
+            
+			/* $('#moduleNo').val(data.moduleNo);
+			$('#rootFirmwareExternal').val(data.rootFirmwareExternal);
+			$('#rootFirmwareInternal').val(data.rootFirmwareInternal);
+			$('#routerFirmwareExternal').val(data.routerFirmwareExternal);
+			$('#routerFirmwareInternal').val(data.routerFirmwareInternal);
+			$('#antennaType').val(data.antennaType);
+			$('#firmwareHardwareVersion').val(data.firmwareHardwareVersion); */
+				},
+	    error: function(xhr, status, error) {
+	        console.error('Error fetching data for customer details:', error);
+	        console.log('Error fetching data for customer details. Please try again.');
+	    }
+	});
+}
+
+function deleteTransportModeData(data){
+	Swal.fire({
+		title: "Are you sure?",
+		text: "You want to delete!",
+		icon: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#007bff",
+		cancelButtonColor: "#EC7063",
+		confirmButtonText: "Yes, delete it!",
+		customClass: {
+            popup: 'custom-swal-font'
+        },
+	}).then((result) => {
+		if (result.isConfirmed) {
+			$.ajax({
+			    type: 'POST', 
+			    url: '/deleteTransportModeBasedOnName', 
+			    data: {
+			    	name: data
+			    },
+			    success: function(data) {
+				    	$.ajax({
+				    	    type: 'GET', 
+				    	    url: '/fetchAllDistinctTransportModes', 
+				    	    success: function(data) {
+				    			updateTransportModeDetailsDataToDropdown(data);
+				    				},
+				    	    error: function(xhr, status, error) {
+				    	        console.error('Error fetching data for transport mode:', error);
+				    	        console.log('Error fetching data for  transport mode. Please try again.');
+				    	    }
+				    	});
+				    	$('#transportDeleteDropDownDataIcon').hide();
+					},
+			    error: function(xhr, status, error) {
+			        console.error('Error deleting transport mode data:', error);
+			        console.log('Error deleting transport mode data. Please try again.');
+			    }
+			});
+		}
+	});
+}
+
+function deleteContactNameData(name, email){
+	Swal.fire({
+		title: "Are you sure?",
+		text: "You want to delete!",
+		icon: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#007bff",
+		cancelButtonColor: "#EC7063",
+		confirmButtonText: "Yes, delete it!",
+		customClass: {
+            popup: 'custom-swal-font'
+        },
+	}).then((result) => {
+		if (result.isConfirmed) {
+			$.ajax({
+			    type: 'POST', 
+			    url: '/deleteCustomerDetailsBasedOnNameAndEmail', 
+			    data: {
+			    	name: name,
+			    	email: email
+			    },
+			    success: function(data) {
+				    	$.ajax({
+				    	    type: 'GET', 
+				    	    url: '/fetchAllCustomerDetails', 
+				    	    success: function(data) {
+				    	    	updateCustomerNamesToDropdown(data);
+				    				},
+				    	    error: function(xhr, status, error) {
+				    	        console.error('Error fetching data for customer details:', error);
+				    	        console.log('Error fetching data for customer details. Please try again.');
+				    	    }
+				    	});
+				    	document.getElementById("companyName").value = '';
+				        document.getElementById("contactNo").value = '';
+				        document.getElementById("emailId").value = '';
+				        document.getElementById("companyAddress").value = '';
+				    	$('#contactNameDeleteDropDownDataIcon').hide();
+					},
+			    error: function(xhr, status, error) {
+			        console.error('Error deleting customer details data:', error);
+			        console.log('Error deleting customer details data. Please try again.');
+			    }
+			});
+		}
+	});
+}
+
+function deleteProductDetailsData(productName, modelNo){
+	Swal.fire({
+		title: "Are you sure?",
+		text: "You want to delete!",
+		icon: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#007bff",
+		cancelButtonColor: "#EC7063",
+		confirmButtonText: "Yes, delete it!",
+		customClass: {
+            popup: 'custom-swal-font'
+        },
+	}).then((result) => {
+		if (result.isConfirmed) {
+			$.ajax({
+			    type: 'POST', 
+			    url: '/deleteProductDetailsBasedOnProdNameAndModelNo', 
+			    data: {
+			    	prodName: productName,
+			    	modelNo: modelNo
+			    },
+			    success: function(data) {
+				    	$.ajax({
+				    	    type: 'GET', 
+				    	    url: '/getAllProductDetails', 
+				    	    success: function(data) {
+				    	    	updateProductNamesToDropdown(data);
+				    				},
+				    	    error: function(xhr, status, error) {
+				    	        console.error('Error fetching data for product details:', error);
+				    	        console.log('Error fetching data for product details. Please try again.');
+				    	    }
+				    	});
+				    	document.getElementById("rootFirmwareExternal").value = "";
+			            document.getElementById("routerFirmwareExternal").value = "";
+			            document.getElementById("moduleNo").value = "";
+			            document.getElementById("rootFirmwareInternal").value = "";
+			            document.getElementById("routerFirmwareInternal").value = "";
+			            document.getElementById("antennaType").value = "";
+			            document.getElementById("firmwareHardwareVersion").value = "";
+			            $('#productImageTag').prop("src", "");
+			            $('#productImageBox').hide();
+				    	$('#productNameDeleteDropDownDataIcon').hide();
+					},
+			    error: function(xhr, status, error) {
+			        console.error('Error deleting product details data:', error);
+			        console.log('Error deleting product details data. Please try again.');
+			    }
+			});
+		}
+	});
+}
+
+function closeSendEmailForCustomerOuterDiv(){
+	document.body.style.overflow = "auto";
+	$('#sendEmailForCustomerOuterDiv').hide();
+}
+
+function openEmailBoxDispatch(id, companyName){
+	//alert(id+" "+companyName);
+	let emailSubject, loggedInName = $('#loggedInSessionEmpName').text();
+	if(companyName){
+		emailSubject = "Dispatched Sample Module: "+companyName;
+	}else{
+		emailSubject = "Dispatched Sample Module";
+	}
+	$('#clickedDispatchDataAutoId').val(id);
+	$('#emailToAddress').val("");
+	$('#emailCCAddress').val("");
+	$('#emailSubject').val(emailSubject);
+	$('#emailBody').html("Dear Sir/Madam,\nPlease find attached the document for the dispatched sample detail.\n\nThanks &amp; Regards\n"+loggedInName);
+	document.body.style.overflow = "none";
+	$('#sendEmailForCustomerOuterDiv').show();
+}
+
+function closeEmailPasswordOuterDiv(){
+	$('#emailPasswordOuterDiv').hide();
+}
+
+function openEmailPasswordOuterDiv(){
+	if($('#emailToAddress').val() === ""){
+		alert("Please enter atleast one to-address to proceed!")
+		return;
+	}
+	
+	if($('#emailSubject').val() === ""){
+		alert("Please enter a subject!")
+		return;
+	}
+	
+	if($('#emailBody').val() === ""){
+		alert("Please fill the email body!")
+		return;
+	}
+	
+	$('#ionos_password').val("");
+	$('#emailPasswordOuterDiv').show();
+}
+
+function sendDataToEmailToTheParticularCustomer(){
+	let fromAddress = $('#emailFromAddress').val().trim();
+	// let fromAddress = "premchand.s@melangesystems.com";
+	let toAddress = $('#emailToAddress').val().trim();
+	//let toAddress = "premsgowda25@gmail.com";
+	let ccAddress = $('#emailCCAddress').val().trim();
+	let subjectName = $('#emailSubject').val().trim();
+	let bodyContent = $('#emailBody').val().trim();
+	let enteredPaswword = $('#ionos_password').val().trim();
+	
+	const submitButton = document.getElementById('emailSendBtn');
+	
+	if (!enteredPaswword) {
+        Swal.fire({ icon: 'warning', title: "Password is required" });
+        return;
+    }
+	
+	if(!fromAddress){
+		Swal.fire({ icon: 'warning', title: "Login session has been expired! Please login again", allowOutsideClick: false, allowEscapeKey: false, });
+        return;
+	}
+	
+	// Store original button text before changing it
+     const originalButtonText = submitButton.innerHTML;
+     
+     // Disable button and show loading state
+     submitButton.disabled = true;
+     submitButton.innerHTML = `Validating...`;
+	
+  	// Validate sender email & password
+     fetch('/api/validateSenderCredentials', {
+         method: 'POST',
+         headers: { 'Content-Type': 'application/json' },
+         body: JSON.stringify({ email: fromAddress, password: enteredPaswword })
+     })
+     .then(response => {
+         if (!response.ok) {
+             return response.text().then(text => { throw new Error(text); });
+         }
+         return response.text();
+     })
+     .then(() => {
+    		// Close password popup
+         closeEmailPasswordOuterDiv();
+    	
+    	 let id = $('#clickedDispatchDataAutoId').val();
+    	 $.ajax({
+    		 url: '/get-dispatch/' + id,
+             type: 'GET',
+             contentType: 'application/json', // Specify content type
+             success: function(data) {
+            	 //alert(JSON.stringify(data));
+            	 // Proceed with sending email sending...
+                 sendEmailToTheCustomerAfterValidation(fromAddress, toAddress, ccAddress, subjectName, bodyContent, enteredPaswword, data);
+             },
+             error: function(xhr, status, error) {
+                 console.error('Failed to get dispatch details for particular data:', error);
+                 console.error('Response text:', xhr.responseText);
+             }
+         });
+     })
+     .catch(error => {
+         Swal.fire({ icon: 'error', title: "Invalid Credentials", text: error.message, allowOutsideClick: false, allowEscapeKey: false, });
+         //alert("Invalid Credentials");
+         submitButton.disabled = false;
+         submitButton.innerHTML = originalButtonText;
+     })
+     .finally(() => {
+     	// Re-enable button and restore original text
+         submitButton.disabled = false;
+         submitButton.innerHTML = originalButtonText;
+     });
+}
+
+function sendEmailToTheCustomerAfterValidation(fromAddress, toAddress, ccAddress, subjectName, bodyContent, enteredPaswword, data) {
+	//console.log("From = "+fromAddress+" To = "+toAddress+" cc = "+ccAddress+" subject = "+subjectName+" Body = "+bodyContent+" password = "+enteredPaswword);
+	//console.log("fetched data === "+JSON.stringify(data));
+    displayOnLoadingPopup();
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(16);
+    doc.text("Dispatched Details", 105, 15, { align: "center" });
+    
+    //console.log("data.date = "+data.date+" data.returnedDate = "+data.returnedDate);
+
+    const dispatchedDate = formatDates(data.date);
+    const returnDate = formatDates(data.returnedDate);
+    
+      var quantity = parseInt(data.quantity) || 0;
+	  var returnedQty = parseInt(data.returnedQty) || 0;
+	  var returnedDate = data.returnedDate;
+	  var dispatchDate = data.date;
+	  var remarkColumnText = '-', productReturnStatus = '-';
+	  var diffInMs, diffInDays, qtyDisplay = '0', productImage = '-';
+
+	  if (quantity > 0 && dispatchDate) {
+	      var startDate = new Date(dispatchDate);
+	      var endDate = returnedDate ? new Date(returnedDate) : new Date();
+	      var endDate2 = new Date();
+	      
+	      if(returnedQty === quantity){
+	    	  diffInMs = endDate - startDate;
+  	      diffInDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
+  	      remarkColumnText = diffInDays + " day(s)";
+	      }else if(returnedQty !== quantity){
+	    	  diffInMs = endDate2 - startDate;
+  	      diffInDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
+  	      remarkColumnText = diffInDays + " day(s)";
+	      }
+	  }
+	  
+	  if(quantity > 0){
+		  if(quantity === returnedQty){
+			  productReturnStatus = "Full Return";
+		  }else if(returnedQty > 0 && quantity !== returnedQty){
+			  productReturnStatus = "Partial Return";
+		  }else if(returnedQty == 0){
+			  productReturnStatus = "No Return";
+		  }
+	  }
+	  
+	  if(data.quantity){
+		  var returnQtyValue = '0';
+		  if(data.returnedQty){
+			  returnQtyValue = data.returnedQty;
+		  }
+		  qtyDisplay = returnQtyValue+'/'+data.quantity;
+	  }
+
+    const tableBody = [
+    	
+    	["Return Status", productReturnStatus],
+        ["Product Retention", remarkColumnText],
+        ["Dispatched Date", dispatchedDate],
+        ["Returned Date", returnDate],
+        ["Quantity", qtyDisplay],
+        ["Contact Name", data.customerName],
+        ["Company Name", data.companyName],
+        ["Product Name", data.productName],
+        ["Module No", data.moduleNo],
+        ["Emp Name", data.userName],
+        ["Transport Mode", data.transportMode],
+        ["DcNo", data.dcNo],
+        ["EWayBill", data.eWayBillNo],
+        ["InvoiceNo", data.invoiceNo],
+        ["Company Address", data.companyAddress],
+        ["Mobile No", data.contactNo],
+        ["Customer Email", data.emailId],
+        ["Root Firm ver External", data.rootFirmwareExternal],
+        ["Antenna Type", data.antennaType],
+        ["Root Firm ver Internal", data.rootFirmwareInternal],
+        ["Router Firm ver External", data.routerFirmwareExternal],
+        ["Router Firm ver Internal", data.routerFirmwareInternal],
+        ["appSKey", data.appSKey],
+        ["nwkSKey", data.nwkSKey],
+        ["Delivery Addr", data.deviceAddress],
+        ["appEUI", data.appEUI],
+        ["Remarks", data.remarks],
+    ];
+
+    doc.autoTable({
+        startY: 25,
+        body: tableBody,
+        styles: { cellPadding: 2, fontSize: 10 },
+        headStyles: { fillColor: [41, 128, 185], textColor: 255 },
+        alternateRowStyles: { fillColor: [245, 245, 245] }
+    });
+
+    let finalY = doc.lastAutoTable.finalY + 5;
+
+    function finalizeAndSendPDF() {
+        const pdfBlob = new Blob([doc.output("arraybuffer")], { type: "application/pdf" });
+
+        const formData = new FormData();
+        formData.append("from", fromAddress);
+        formData.append("to", toAddress);
+        formData.append("cc", ccAddress);
+        formData.append("subject", subjectName);
+        formData.append("message", bodyContent);
+        formData.append("password", enteredPaswword);
+        formData.append("file", pdfBlob, "dispatched_details.pdf");
+
+        $.ajax({
+            type: "POST",
+            url: "/sendEmailToTheSuperiorWithAttachment",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                hideLoadingPopup();
+                closeSendEmailForCustomerOuterDiv();
+                Swal.fire({
+                    icon: 'success',
+                    title: "Delivered",
+                    text: response,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
+                });
+            },
+            error: function(xhr) {
+                alert("Error: " + xhr.responseText);
+                hideLoadingPopup();
+            }
+        });
+    }
+
+    // Check if image exists
+    if (data.uploadFile) {
+        const imageUrl = `${data.uploadFile}`;
+        const img = new Image();
+        img.crossOrigin = "Anonymous";
+        img.onload = function () {
+            const canvas = document.createElement("canvas");
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0);
+            const base64Image = canvas.toDataURL("image/png");
+            doc.addImage(base64Image, "PNG", 10, finalY, 40, 40);
+            finalizeAndSendPDF(); // Proceed after image is added
+        };
+        img.onerror = function () {
+            console.error("Failed to load image.");
+            finalizeAndSendPDF(); // Proceed without image
+        };
+        img.src = imageUrl;
+    } else {
+        finalizeAndSendPDF(); // No image case
+    }
+}
+
+function formatDates(date) {
+	if(date){
+		const dateParts = date.split('-');
+	    if (dateParts.length === 3) {
+	        return `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
+	    }
+	    return date;
+	}
+    return "";
+}
+</script>
+
+<script>
+function displayOnLoadingPopup(){
+	$('#loadingPopup').show();
+	$('#loadingPopupPara').text("Loading, please wait...");
+}
+
+function hideLoadingPopup(){
+	$('#loadingPopup').hide();
+}
+</script>
+
+  	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  	<script>
+    const searchInput = document.getElementById('searchInput');
+    const table = document.getElementById('holidayTable2');
+    const rows = table.getElementsByTagName('tr');
+
+    searchInput.addEventListener('keyup', function () {
+        const filter = searchInput.value.toLowerCase();
+
+        for (let i = 1; i < rows.length; i++) {
+            const cells = rows[i].getElementsByTagName('td');
+            let match = false;
+
+            for (let j = 0; j < cells.length; j++) {
+                const cellText = cells[j].textContent.toLowerCase();
+                if (cellText.includes(filter)) {
+                    match = true;
+                    break;
+                }
+            }
+
+            rows[i].style.display = match ? '' : 'none';
+        }
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const userIcon = document.querySelector(".fa-circle-user");
+        const dropdown = document.getElementById("userDropdown");
+
+        userIcon.addEventListener("click", function () {
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        });
+
+        // Optional: Close dropdown when clicking outside
+        document.addEventListener("click", function (e) {
+            if (!userIcon.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.style.display = "none";
+            }
+        });
+    });
+    
+    document.addEventListener("DOMContentLoaded", function () {
+        const userIcon = document.querySelector("#dispatchMenu");
+        const dropdown = document.querySelector(".dispatch_subDropDown");
+
+        userIcon.addEventListener("click", function () {
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        });
+
+        // Optional: Close dropdown when clicking outside
+        document.addEventListener("click", function (e) {
+            if (!userIcon.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.style.display = "none";
+            }
+        });
+    });
+    
+    document.addEventListener("DOMContentLoaded", function () {
+        const userIcon = document.querySelector("#masterMenu");
+        const dropdown = document.querySelector(".master_subDropDown");
+
+        userIcon.addEventListener("click", function () {
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        });
+
+        // Optional: Close dropdown when clicking outside
+        document.addEventListener("click", function (e) {
+            if (!userIcon.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.style.display = "none";
+            }
+        });
+    });
+</script>
+
+<script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+<!-- sript for download excel -->
+<script>
+/* This code is to generate table data into an Excel sheet */
+function export_To_Excel() {
+    const table = document.getElementById('holidayTable2');
+    const visibleData = [];
+
+    const rows = table.rows;
+
+    for (let i = 0; i < rows.length; i++) {
+        if (rows[i].style.display !== 'none') {
+            const cells = rows[i].cells;
+            const rowData = [];
+
+            if (i === 0) {
+                // Header row: skip first 2 and last column
+                for (let j = 2; j < cells.length - 1; j++) {
+                    rowData.push(cells[j].innerText.trim());
+                }
+            } else {
+                // Data rows: skip first 3 and last column
+            	for (let j = 4; j < cells.length - 1; j++) {
+            	    let cellText = cells[j].innerText.trim();
+
+            	    /* if (cells[j].classList.contains("dispatchDate")) {
+            	        const dateObj = new Date(cellText);
+            	        if (!isNaN(dateObj)) {
+            	            const yyyy = dateObj.getFullYear();
+            	            const mm = String(dateObj.getMonth() + 1).padStart(2, '0');
+            	            const dd = String(dateObj.getDate()).padStart(2, '0');
+            	            cellText = `${yyyy}-${mm}-${dd}`;
+            	        }
+            	    }
+
+            	    if (cells[j].classList.contains("returnDate") && cellText !== '-' && cellText !== '') {
+            	        const dateObj = new Date(cellText);
+            	        if (!isNaN(dateObj)) {
+            	            const yyyy = dateObj.getFullYear();
+            	            const mm = String(dateObj.getMonth() + 1).padStart(2, '0');
+            	            const dd = String(dateObj.getDate()).padStart(2, '0');
+            	            cellText = `${yyyy}-${mm}-${dd}`;
+            	        }
+            	    } */
+
+            	    rowData.push(cellText);
+            	}
+            }
+
+            visibleData.push(rowData);
+        }
+    }
+
+    // Convert to worksheet
+    const worksheet = XLSX.utils.aoa_to_sheet(visibleData);
+
+    // Create workbook
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+
+    // Save to file
+    XLSX.writeFile(workbook, `dispatched_details_${getFormattedDateTime()}.xlsx`);
+}
+
+
+function generateFilteredPDF() {
+    var filteredTable = document.getElementById("holidayTable2");
+    var tableData = [];
+    var headerRow = [];
+    var columnWidths = [];
+
+    var totalColumns = filteredTable.rows[1].cells.length; // Use second row (first data row) for correct count
+
+    var startCol = 4; // Start from actual column index (e.g., skip 3 columns)
+    var endCol = totalColumns - 1; // Exclude last column
+
+    // Build header manually — use textContent and skip logical positions, not just indices
+    var currentColIndex = 0;
+    var headerCells = filteredTable.rows[0].cells;
+
+    for (var h = 0; h < headerCells.length; h++) {
+        var colspan = parseInt(headerCells[h].getAttribute("colspan")) || 1;
+        for (var c = 0; c < colspan; c++) {
+            if (currentColIndex >= startCol && currentColIndex < endCol) {
+                headerRow.push({
+                    text: headerCells[h].textContent,
+                    style: 'tableHeader',
+                });
+                columnWidths.push(12); // adjust as needed
+            }
+            currentColIndex++;
+        }
+    }
+
+    tableData.push(headerRow);
+
+    for (var i = 1; i < filteredTable.rows.length; i++) {
+        if (filteredTable.rows[i].style.display !== "none") {
+            var row = filteredTable.rows[i];
+            var rowData = [];
+
+            for (var j = startCol; j < endCol; j++) {
+                rowData.push({
+                    text: row.cells[j].textContent,
+                    style: 'tableCell',
+                });
+            }
+
+            tableData.push(rowData);
+        }
+    }
+
+    if (tableData.length > 1) {
+        var docDefinition = {
+            content: [
+                {
+                    table: {
+                        headerRows: 1,
+                        widths: columnWidths,
+                        body: tableData,
+                    },
+                },
+            ],
+            styles: {
+                header: {
+                    fontSize: 8,
+                    bold: true,
+                    margin: [0, 0, 0, 10],
+                },
+                tableHeader: {
+                    bold: true,
+                    fontSize: 4,
+                },
+                tableCell: {
+                    fontSize: 4,
+                    margin: [0, 2, 2, 2],
+                },
+            },
+            pageMargins: [0, 0, 0, 0],
+        };
+
+        pdfMake.createPdf(docDefinition).download(`dispatched_details_${getFormattedDateTime()}.pdf`);
+    }
+}
+
+function getFormattedDateTime() {
+    const now = new Date();
+    const yyyy = now.getFullYear();
+    const mm = String(now.getMonth() + 1).padStart(2, '0');
+    const dd = String(now.getDate()).padStart(2, '0');
+    const hh = String(now.getHours()).padStart(2, '0');
+    const min = String(now.getMinutes()).padStart(2, '0');
+    const ss = String(now.getSeconds()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}_${hh}-${min}-${ss}`;
+}
+</script>
+
+<script>
+function openReturnBoxDispatch(id) {
+	  //alert(id);
+	    fetch(`/get-dispatch/${id}`)
+	        .then(response => {
+	            if (!response.ok) {
+	                throw new Error('Network response was not OK');
+	            }
+	            return response.json();
+	        })
+	        .then(data => {
+	        	document.getElementById('auto_id_value_return_popup').value = id;
+	            document.querySelector('#dispatchedDateReturnPopup').value = data.date || '';
+	            document.querySelector('#dispatchedQtyReturnPopup').value = data.quantity || '';
+	            document.getElementById('customerNameReturnPopup').value = data.customerName || '';
+	            document.querySelector('#companyNameReturnPopup').value = data.companyName || '';
+	            document.getElementById('productNameReturnPopup').value = data.productName || '';
+	            document.querySelector('#moduleNoReturnPopup').value = data.moduleNo || '';
+	            document.querySelector('#returnedDateReturnPopup').value = data.returnedDate || '';
+	            document.querySelector('#returnedQtyReturnPopup').value = data.returnedQty || '';
+	            // Show the modal
+	            const dispatchModal = new bootstrap.Modal(document.getElementById('dispatchReturnModal'));
+	            dispatchModal.show();
+	        })
+	        .catch(error => {
+	            console.error('There was a problem with the fetch operation:', error);
+	        });
+	}
+	
+function openGenerateDcBoxDispatch(id) {
+	/* $('#auto_id_dispatch_hidden_text').val(id);
+    fetch(`/get-dispatch/${id}`)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not OK');
+        }
+        return response.json();
+    })
+    .then(data => {
+        //console.log("Fetched Dispatch:", data);
+
+        // User Details
+        document.querySelector('#dcUserName').value = data.userName || '';
+        document.querySelector('#dcTransportMode').value = data.transportMode || '';
+        document.querySelector('#dcInvoiceNo').value = data.invoiceNo || '';
+        document.querySelector('#dcDeliveryDate').value = data.date || '';
+        document.querySelector('#dcDCNo').value = data.dcNo || '';
+        document.querySelector('#dcEWayBillNo').value = data.eWayBillNo || '';
+        document.querySelector('#dcQuantity').value = data.quantity || '';
+
+        // Customer Details
+        document.getElementById('dcCustomerName').value = data.customerName || '';
+        document.querySelector('#dcCompanyName').value = data.companyName || '';
+        document.querySelector('#dcContactNo').value = data.contactNo || '';
+        document.querySelector('#dcEmailId').value = data.emailId || '';
+        document.querySelector('#dcCompanyAddress').value = data.companyAddress || '';
+
+        // Product Details
+        document.getElementById('dcProductName').value = data.productName || '';
+        document.querySelector('#dcRootFirmwareExternal').value = data.rootFirmwareExternal || '';
+        document.querySelector('#dcRouterFirmwareExternal').value = data.routerFirmwareExternal || '';
+        document.querySelector('#dcModuleNo').value = data.moduleNo || '';
+        document.querySelector('#dcRootFirmwareInternal').value = data.rootFirmwareInternal || '';
+        document.querySelector('#dcRouterFirmwareInternal').value = data.routerFirmwareInternal || '';
+        document.querySelector('#dcAntennaType').value = data.antennaType || '';
+        document.querySelector('#dcFirmwareHardwareVersion').value = data.firmwareHardwareVersion || '';
+
+        // Configuration Details
+        document.querySelector('#dcAppSKey').value = data.appSKey || '';
+        document.querySelector('#dcNwkSKey').value = data.nwkSKey || '';
+        document.querySelector('#dcAppEUI').value = data.appEUI || '';
+        document.querySelector('#dcDeviceAddress').value = data.deviceAddress || '';
+        document.querySelector('#dcRemarks').value = data.remarks || '';
+        
+        document.querySelector('#dcUploadedFilePath').value = data.uploadFile || '';
+        
+        document.querySelector('#dcPrice').value = data.price || '';
+        document.querySelector('#dcTotalPrice').value = data.total_price || '';
+        document.querySelector('#dcDescription').value = data.description || '';
+        calculateDcTotalPrice();
+        
+        // Show the modal
+        const dispatchModal = new bootstrap.Modal(document.getElementById('generateDcDispatchModal'));
+        dispatchModal.show();
+    })
+    .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+    }); */
+    
+	const dispatchModal = new bootstrap.Modal(document.getElementById('generateDcDispatchModal'));
+    dispatchModal.show();
+}
+	
+function insertCustomerDispatchReturn() {
+    var returnedDate = document.querySelector('#returnedDateReturnPopup').value;
+    var returnedQtyStr = document.querySelector('#returnedQtyReturnPopup').value;
+    var dispatchedQtyStr = document.querySelector('#dispatchedQtyReturnPopup').value;
+ 	// Convert string values to numbers
+    var returnedQty = parseInt(returnedQtyStr);
+    var dispatchedQty = parseInt(dispatchedQtyStr);
+    
+    if(dispatchedQty == 0){
+    	alert("You can't update the return details because dispatched quantity is 0!");
+        return;
+    }
+
+    if (!returnedDate) {
+        alert("Please select returned date to proceed!");
+        return;
+    }
+
+    if (!returnedQtyStr) {
+        alert("Please enter returned quantity to proceed!");
+        return;
+    }
+
+    // Check if returned quantity is a valid number
+    if (isNaN(returnedQty)) {
+        alert("Returned quantity is not a valid number!");
+        return;
+    }
+
+    // Check if returned quantity is negative
+    if (returnedQty < 0) {
+        alert("Returned quantity cannot be negative!");
+        return;
+    }
+
+    // Check if returned quantity exceeds dispatched quantity
+    if (returnedQty > dispatchedQty) {
+        alert("Returned quantity cannot exceed dispatched quantity!");
+        return;
+    }
+
+    $.ajax({
+		url: 'updateReturnedCustomerData',
+        type: 'POST',
+        data: {
+        	returnedDate: returnedDate,
+        	returnedQty: returnedQty,
+        	auto_id: $('#auto_id_value_return_popup').val()
+        },
+        success: function(data) {
+            if(data === "successfull"){
+            	Swal.fire({
+		   	 		title: "Details Updated successfully",
+		   	 		icon: "success",
+		   	 		showCancelButton: false,
+		   	 		confirmButtonColor: "#007bff",
+		   	 		cancelButtonColor: "#EC7063",
+		   	 		confirmButtonText: "OK",
+			   	 	allowOutsideClick: false,
+					allowEscapeKey: false,
+		   	 	}).then((result) => {
+		   			if (result.isConfirmed) {
+		   				location.reload();
+		   			}
+		   		});
+            }else{
+            	alert("Failed to update customer return details");
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Failed to update cutomer returned details:', error);
+            console.error('Response text:', xhr.responseText);
+        }
+    });
+}
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+<script>
+	function generateDC(){
+		if(!$('#dcPrice').val()){
+			alert("Please enter a price detail!");
+			return;
+		}
+		
+		if(!$('#dcQuantity').val() || $('#dcQuantity').val() === '0'){
+			alert("Please enter a price detail!");
+			return;
+		}
+		
+		var dispatchData = {};
+		
+		dispatchData = {
+				userName: $('#dcUserName').val(),
+				transportMode: $('#dcTransportMode').val(),
+				invoiceNo: $('#dcInvoiceNo').val(),
+				date: $('#dcDeliveryDate').val(),
+				dcNo: $('#dcDcNo').val(),
+				eWayBillNo: $('#dcEWayBillNo').val(),
+				quantity: $('#dcQuantity').val(),
+				//customer details
+				customerName: $('#dcCustomerName').val(),
+				companyName: $('#dcCompanyName').val(),
+				contactNo: $('#dcContactNo').val(),
+				emailId: $('#dcEmailId').val(),
+				companyAddress: $('#dcCompanyAddress').val(),
+				// Product Details
+			    productName: $('#dcProductName').val(),
+			    rootFirmwareExternal: $('#dcRootFirmwareExternal').val(),
+			    routerFirmwareExternal: $('#dcRouterFirmwareExternal').val(),
+			    moduleNo: $('#dcModuleNo').val(),
+			    rootFirmwareInternal: $('#dcRootFirmwareInternal').val(),
+			    routerFirmwareInternal: $('#dcRouterFirmwareInternal').val(),
+			    antennaType: $('#dcAntennaType').val(),
+			    firmwareHardwareVersion: $('#dcFirmwareHardwareVersion').val(),
+			    uploadFile: $('#dcUploadedFilePath').val(),
+			    // Configuration Details
+			    appSKey: $('#dcAppSKey').val(),
+			    nwkSKey: $('#dcNwkSKey').val(),
+			    appEUI: $('#dcAppEUI').val(),
+			    deviceAddress: $('#dcDeviceAddress').val(),
+			    remarks: $('#dcRemarks').val(),
+			    returnedQty: '',
+			    returnedDate: '',
+			    price: $('#dcPrice').val(),
+			    total_price: $('#dcTotalPrice').val(),
+			    description: $('#dcDescription').val(),
+		}
+		
+	     fetch('/insertDispatchDcData?id='+$('#auto_id_dispatch_hidden_text').val(), {
+	         method: 'POST',
+	         headers: {
+	             'Content-Type': 'application/json'
+	         },
+	         body: JSON.stringify(dispatchData)
+	     })
+	     .then(res => res.text())
+	     .then(response => {
+	    	 if(response === "successfull"){
+	    		// now request the PDF
+	    	      /* return fetch('/downloadDispatchDcPdf', {
+	    	        method: 'POST',
+	    	        headers: { 'Content-Type': 'application/json' },
+	    	        body: JSON.stringify(dispatchData)
+	    	      }); */
+	    	      generatePdfDetailsWithFile(dispatchData);
+	    	    } else {
+	    	      throw new Error("Insert failed");
+	    	    }
+	    	  })
+	    	  /* .then(res => {
+	    	    if (!res.ok) throw new Error("PDF generation failed");
+	    	    return res.blob();
+	    	  })
+	    	  .then(blob => {
+	    	    // create an object URL and download it
+	    	    const url = URL.createObjectURL(blob);
+	    	    const a = document.createElement('a');
+	    	    a.href = url;
+	    	    // interpolate the actual company name
+	    	    const company = dispatchData.companyName.replace(/\s+/g, '_');
+	    	    a.download = `DispatchDeliveryChallan_${company}.pdf`;
+	    	    document.body.appendChild(a);
+	    	    a.click();
+	    	    document.body.removeChild(a);
+	    	    URL.revokeObjectURL(url);
+	    	  }) */
+	     .catch(err => {
+	    	 console.error("Error:", err);
+	    	  alert("Sorry, something went wrong. Please try again.");
+	     });
+	}
+	
+	function viewDC(){
+		if(!$('#dcPrice').val()){
+			alert("Please enter a price detail!");
+			return;
+		}
+		
+		var dispatchData = {};
+		
+		dispatchData = {
+				userName: $('#dcUserName').val(),
+				transportMode: $('#dcTransportMode').val(),
+				invoiceNo: $('#dcInvoiceNo').val(),
+				date: $('#dcDeliveryDate').val(),
+				dcNo: $('#dcDcNo').val(),
+				eWayBillNo: $('#dcEWayBillNo').val(),
+				quantity: $('#dcQuantity').val(),
+				//customer details
+				customerName: $('#dcCustomerName').val(),
+				companyName: $('#dcCompanyName').val(),
+				contactNo: $('#dcContactNo').val(),
+				emailId: $('#dcEmailId').val(),
+				companyAddress: $('#dcCompanyAddress').val(),
+				// Product Details
+			    productName: $('#dcProductName').val(),
+			    rootFirmwareExternal: $('#dcRootFirmwareExternal').val(),
+			    routerFirmwareExternal: $('#dcRouterFirmwareExternal').val(),
+			    moduleNo: $('#dcModuleNo').val(),
+			    rootFirmwareInternal: $('#dcRootFirmwareInternal').val(),
+			    routerFirmwareInternal: $('#dcRouterFirmwareInternal').val(),
+			    antennaType: $('#dcAntennaType').val(),
+			    firmwareHardwareVersion: $('#dcFirmwareHardwareVersion').val(),
+			    uploadFile: $('#dcUploadedFilePath').val(),
+			    // Configuration Details
+			    appSKey: $('#dcAppSKey').val(),
+			    nwkSKey: $('#dcNwkSKey').val(),
+			    appEUI: $('#dcAppEUI').val(),
+			    deviceAddress: $('#dcDeviceAddress').val(),
+			    remarks: $('#dcRemarks').val(),
+			    returnedQty: '',
+			    returnedDate: '',
+			    price: $('#dcPrice').val(),
+			    total_price: $('#dcTotalPrice').val(),
+			    description: $('#dcDescription').val(),
+		}
+		
+		
+		setTimeout(function() {
+		    viewPdfDetailsWithFile(dispatchData);
+		}, 500);
+
+	}
+	
+	function generatePdfDetailsWithFile(data) {
+	    const { jsPDF } = window.jspdf;
+	    const doc = new jsPDF();
+
+	    // Page border
+	    doc.setDrawColor(0);
+	    doc.rect(3, 3, 203.5, 291); // Full A4 page
+
+	    let xMargin = 7;
+	    let currentY = 10;
+
+	    // Company Info
+	    doc.setFont("helvetica", "bold");
+	    doc.setFontSize(12);
+	    doc.text("Melange Systems Private Limited.", xMargin, currentY);
+	    currentY += 5;
+
+	    doc.setFont("helvetica", "normal");
+	    doc.setFontSize(10);
+	    doc.text("No. 4/1, 7th Cross, Kumara Park West, Bangalore 560020", xMargin, currentY);
+	    currentY += 5;
+	    doc.text("Tel: 080-2356 1023, Telefax: 080-2346 2175", xMargin, currentY);
+	    currentY += 5;
+
+	    doc.setFont("helvetica", "bold");
+	    doc.setFontSize(9);
+	    doc.text("GSTIN: 29AACCM4737H1ZA, CIN: U72200KA2000PTC027922", xMargin, currentY);
+	    currentY += 5;
+	    doc.text("Udyam Registration Number: UDYAM-KR-03-0101576", xMargin, currentY);
+	    currentY += 8;
+
+	    // Logo (top right)
+	    const logo = new Image();
+	    logo.src = "/assets/img/logo.png"; // Use actual base64 if needed
+
+	    logo.onload = function () {
+	        doc.addImage(logo, "PNG", 162, 10, 40, 15); // top right logo
+
+	        // DELIVERY CHALLAN BOX
+	        const challanBoxTopY = currentY;
+	        const challanBoxHeight = 12;
+	        doc.setFontSize(14);
+	        doc.setFont("helvetica", "bold");
+	        doc.rect(3, challanBoxTopY, 203.5, challanBoxHeight);
+	        doc.text("DELIVERY CHALLAN", 85, challanBoxTopY + 8);
+	        currentY += challanBoxHeight;
+
+	        // Shared Y for both sections starting from bottom border of CHALLAN BOX
+	        const boxTopY = currentY;
+	        let leftY = boxTopY + 7;
+	        let rightY = boxTopY + 7;
+	        const leftX = 3;
+	        const rightX = 104.5;
+	        const boxWidth = 101.5;
+	        const labelSpacing = 30;
+
+	        // ---- CUSTOMER DETAILS
+	        doc.setFont("helvetica", "bold");
+	        doc.setFontSize(10);
+	        doc.text("Customer Details", leftX + 4, leftY);
+	        leftY += 5;
+
+	        doc.setFont("helvetica", "normal");
+	        doc.setFontSize(9);
+
+	        const customerFields = [
+	            { label: "Customer Name:", value: data.customerName || '-' },
+	            { label: "Company Name:", value: data.companyName || '-' },
+	            { label: "Contact No:", value: data.contactNo || '-' },
+	            { label: "Email Id:", value: data.emailId || '-' },
+	        ];
+
+	        let maxLeftY = leftY;
+	        customerFields.forEach(item => {
+	            doc.text(item.label, leftX + 4, maxLeftY);
+	            doc.text(item.value, leftX + labelSpacing + 4, maxLeftY);
+	            maxLeftY += 5;
+	        });
+
+	        // Handle address
+	        doc.text("Company Address:", leftX + 4, maxLeftY);
+	        const wrappedAddress = doc.splitTextToSize(data.companyAddress || '-', 65);
+	        doc.text(wrappedAddress, leftX + labelSpacing + 4, maxLeftY);
+	        maxLeftY += wrappedAddress.length * 5;
+
+	        const customerBottomY = maxLeftY + 2;
+
+	        // ---- EMPLOYEE DETAILS
+	        doc.setFont("helvetica", "bold");
+	        doc.setFontSize(10);
+	        doc.text("Employee Details", rightX + 4, rightY);
+	        rightY += 5;
+
+	        doc.setFont("helvetica", "normal");
+	        doc.setFontSize(9);
+
+	        const employeeFields = [
+	            { label: "Employee Name:", value: data.userName || '-' },
+	            { label: "Invoice No:", value: data.invoiceNo || '-' },
+	            { label: "Dispatched Date:", value: data.date || '-' },
+	            { label: "Transport Mode:", value: data.transportMode || '-' },
+	        ];
+
+	        let maxRightY = rightY;
+	        employeeFields.forEach(item => {
+	            doc.text(item.label, rightX + 4, maxRightY);
+	            doc.text(item.value, rightX + labelSpacing + 4, maxRightY);
+	            maxRightY += 5;
+	        });
+
+	        const employeeBottomY = maxRightY + 2;
+
+	        // Draw aligned boxes (top edge merged with delivery challan bottom)
+	        const sectionHeight = Math.max(customerBottomY, employeeBottomY) - boxTopY;
+	        doc.rect(leftX, boxTopY, boxWidth, sectionHeight);
+	        doc.rect(rightX, boxTopY, boxWidth+0.5, sectionHeight);
+	        
+	     // 📄 Hardcoded sample product
+	        const items = [
+	            {
+	                prodName: data.productName,
+	                antennaType: data.antennaType,
+	                qty: data.quantity,
+	                rate: data.price,
+	                totalPrice: data.total_price
+	            }
+	        ];
+
+	        // 📌 Table structure setup
+	        let startY = boxTopY + sectionHeight;
+	        let rowHeight = 12;
+	        let tableX = 3;
+
+	        // Column widths
+	        const colWidths = {
+	            slNo: 14,
+	            desc: 80,
+	            hsn: 34.5,
+	            qty: 20,
+	            rate: 20,
+	            value: 35
+	        };
+
+	        // Draw table headers
+	        doc.setFont("helvetica", "bold");
+	        doc.setFontSize(10);
+
+	        doc.rect(tableX, startY, colWidths.slNo, rowHeight); // Sl No
+	        doc.text("Sl No.", tableX + 2, startY + 6);
+
+	        doc.rect(tableX + colWidths.slNo, startY, colWidths.desc, rowHeight); // Description
+	        doc.text("Product Name", tableX + colWidths.slNo + 2, startY + 6);
+
+	        doc.rect(tableX + colWidths.slNo + colWidths.desc, startY, colWidths.hsn, rowHeight); // HSN
+	        doc.text("Antenna Type", tableX + colWidths.slNo + colWidths.desc + 2, startY + 6);
+
+	        doc.rect(tableX + colWidths.slNo + colWidths.desc + colWidths.hsn, startY, colWidths.qty, rowHeight); // Quantity
+	        doc.text("Quantity", tableX + colWidths.slNo + colWidths.desc + colWidths.hsn + 2, startY + 6);
+
+	        doc.rect(tableX + colWidths.slNo + colWidths.desc + colWidths.hsn + colWidths.qty, startY, colWidths.rate, rowHeight); // Rate
+	        doc.text("Price", tableX + colWidths.slNo + colWidths.desc + colWidths.hsn + colWidths.qty + 2, startY + 6);
+
+	        doc.rect(tableX + colWidths.slNo + colWidths.desc + colWidths.hsn + colWidths.qty + colWidths.rate, startY, colWidths.value, rowHeight); // Value
+	        doc.text("Total Price", tableX + colWidths.slNo + colWidths.desc + colWidths.hsn + colWidths.qty + colWidths.rate + 2, startY + 6);
+
+	        // Reset font for content
+	        doc.setFont("helvetica", "normal");
+
+	        let currentYY = startY + rowHeight;
+	        let slNo = 1;
+	        let totalTaxable = 0;
+
+	        items.forEach(item => {
+	            const descLines = doc.splitTextToSize((item.prodName||'-'), colWidths.desc + 4); // padding inside desc
+	            const height = 8;
+
+	            // Draw cell rectangles
+	            doc.rect(tableX, currentYY, colWidths.slNo, height);
+	            doc.text(String(slNo++), tableX + 2, currentYY + 5);
+
+	            doc.rect(tableX + colWidths.slNo, currentYY, colWidths.desc, height);
+	            doc.text(descLines, tableX + colWidths.slNo + 2, currentYY + 5);
+
+	            doc.rect(tableX + colWidths.slNo + colWidths.desc, currentYY, colWidths.hsn, height);
+	            doc.text((item.antennaType||'-'), tableX + colWidths.slNo + colWidths.desc + 2, currentYY + 5);
+
+	            doc.rect(tableX + colWidths.slNo + colWidths.desc + colWidths.hsn, currentYY, colWidths.qty, height);
+	            doc.text(String(item.qty), tableX + colWidths.slNo + colWidths.desc + colWidths.hsn + 2, currentYY + 5);
+
+	            doc.rect(tableX + colWidths.slNo + colWidths.desc + colWidths.hsn + colWidths.qty, currentYY, colWidths.rate, height);
+	            doc.text(String(item.rate), tableX + colWidths.slNo + colWidths.desc + colWidths.hsn + colWidths.qty + 2, currentYY + 5);
+
+	            doc.rect(tableX + colWidths.slNo + colWidths.desc + colWidths.hsn + colWidths.qty + colWidths.rate, currentYY, colWidths.value, height);
+	            doc.text(String(item.totalPrice), tableX + colWidths.slNo + colWidths.desc + colWidths.hsn + colWidths.qty + colWidths.rate + 2, currentYY + 5);
+
+	            currentYY += height;
+	            totalTaxable += parseFloat(item.totalPrice);
+	        });
+
+	     	// 🧾 Tax values
+	        const cgst = +(totalTaxable * 0.09).toFixed(2);
+	        const sgst = +(totalTaxable * 0.09).toFixed(2);
+	        const totalTax = +(cgst + sgst).toFixed(2);
+	        const totalAfterTax = +(totalTaxable + totalTax).toFixed(2);
+	        const netAmount = Math.ceil(totalAfterTax);
+
+	        // Tax rows
+	        const taxFields = [
+	            { label: "Amount (Before Tax):", value: totalTaxable },
+	            { label: "CGST (9%):", value: cgst },
+	            { label: "SGST (9%):", value: sgst },
+	            { label: "Total Tax Amount:", value: totalTax },
+	            { label: "Total Amount after GST:", value: totalAfterTax },
+	            { label: "Net Amount:", value: netAmount }
+	        ];
+
+	        // Dimensions
+	        const leftBoxX = tableX;
+	        const leftBoxWidth = colWidths.slNo + colWidths.desc; // similar to Customer box
+	        const rightBoxX = leftBoxX + leftBoxWidth;
+	        const rightBoxWidth = colWidths.rate + colWidths.value + colWidths.hsn + colWidths.qty;
+	        const rowHeightt = 8;
+	        const taxBoxHeight = taxFields.length * rowHeightt;
+	        let taxStartY = currentYY; // merge with product table bottom
+
+	        // Draw Left Box (empty)
+	        doc.rect(leftBoxX, taxStartY, leftBoxWidth, taxBoxHeight);
+
+	        // Draw Right Box (tax table)
+	        doc.setFont("helvetica", "bold");
+	        doc.setFontSize(10);
+
+	        let rowY = taxStartY;
+
+	        taxFields.forEach(field => {
+	            // Label column
+	            doc.rect(rightBoxX, rowY, rightBoxWidth / 2, rowHeightt);
+	            doc.text(field.label, rightBoxX + 2, rowY + 5);
+
+	            // Value column
+	            doc.rect(rightBoxX + rightBoxWidth / 2, rowY, rightBoxWidth / 2, rowHeightt);
+	            doc.text(String(field.value), rightBoxX + rightBoxWidth / 2 + 2, rowY + 5);
+
+	            rowY += rowHeightt;
+	        });
+
+	     // Set font, size, and color
+	        doc.setFont("helvetica", "bold");
+	        doc.setFontSize(10);
+
+	        // Prepare text
+	        const amountWordsText = `TOTAL IN WORDS: ${numberToWords(netAmount)} Rupees Only`;
+
+	        // Get page dimensions
+	        const pageWidth = doc.internal.pageSize.getWidth()-10;
+	        const amountWordsHeight = 10;
+	        const amountWordsY = taxStartY + taxBoxHeight; // Merge with bottom of tax box
+
+	        // Draw full-width rectangle
+	        doc.setDrawColor(0); // Black border
+	        doc.rect(3, amountWordsY, 203.5, amountWordsHeight);
+
+	        // Center text inside the rectangle
+	        const textWidth = doc.getTextWidth(amountWordsText);
+	        const textX = (pageWidth - textWidth) / 2;
+	        const textY = amountWordsY + 7; // Vertically center text in 10px height box
+
+	        doc.text(amountWordsText, textX, textY);
+	        
+	     	// Signature section
+	        let sigY = amountWordsY + 10;
+	        doc.setFont("helvetica", "bold");
+	        doc.text("* This is a computer-generated Delivery Challan, no seal and signature required", 40, sigY + 114);
+	        //doc.line(145, sigY + 12, 200, sigY + 12); // Signature line
+
+	        // Save the PDF
+	        const now = new Date();
+	        const formattedDateTime = now.toLocaleString('en-GB', {
+	          year: 'numeric',
+	          month: '2-digit',
+	          day: '2-digit',
+	          hour: '2-digit',
+	          minute: '2-digit',
+	          second: '2-digit'
+	        }).replace(/[/:]/g, '-').replace(', ', '_');
+
+	        doc.save(`Delivery_Challan_${data.companyName || '001'}_${formattedDateTime}.pdf`);
+
+	    };
+	}
+	
+	function viewPdfDetailsWithFile(data) {
+		//console.log(JSON.stringify(data));
+	    const { jsPDF } = window.jspdf;
+	    const doc = new jsPDF({
+		    orientation: 'portrait',
+		    unit: 'mm',
+		    format: 'a4'
+		});
+
+	    // Page border
+	    doc.setDrawColor(0);
+	    doc.rect(3, 3, 203.5, 291); // Full A4 page
+
+	    let xMargin = 7;
+	    let currentY = 10;
+
+	    // Company Info
+	    doc.setFont("helvetica", "bold");
+	    doc.setFontSize(12);
+	    doc.text("Melange Systems Private Limited.", xMargin, currentY);
+	    currentY += 5;
+
+	    doc.setFont("helvetica", "normal");
+	    doc.setFontSize(10);
+	    doc.text("No. 4/1, 7th Cross, Kumara Park West, Bangalore 560020", xMargin, currentY);
+	    currentY += 5;
+	    doc.text("Tel: 080-2356 1023, Telefax: 080-2346 2175", xMargin, currentY);
+	    currentY += 5;
+
+	    doc.setFont("helvetica", "bold");
+	    doc.setFontSize(9);
+	    doc.text("GSTIN: 29AACCM4737H1ZA, CIN: U72200KA2000PTC027922", xMargin, currentY);
+	    currentY += 5;
+	    doc.text("Udyam Registration Number: UDYAM-KR-03-0101576", xMargin, currentY);
+	    currentY += 8;
+
+	    // Logo (top right)
+	    const logo = new Image();
+	    logo.src = "/assets/img/logo.png"; // Use actual base64 if needed
+
+	    logo.onload = function () {
+	        doc.addImage(logo, "PNG", 162, 10, 40, 15); // top right logo
+
+	        // DELIVERY CHALLAN BOX
+	        const challanBoxTopY = currentY;
+	        const challanBoxHeight = 12;
+	        doc.setFontSize(14);
+	        doc.setFont("helvetica", "bold");
+	        doc.rect(3, challanBoxTopY, 203.5, challanBoxHeight);
+	        doc.text("DELIVERY CHALLAN", 85, challanBoxTopY + 8);
+	        currentY += challanBoxHeight;
+
+	        // Shared Y for both sections starting from bottom border of CHALLAN BOX
+	        const boxTopY = currentY;
+	        let leftY = boxTopY + 7;
+	        let rightY = boxTopY + 7;
+	        const leftX = 3;
+	        const rightX = 104.5;
+	        const boxWidth = 101.5;
+	        const labelSpacing = 30;
+
+	        // ---- CUSTOMER DETAILS
+	        doc.setFont("helvetica", "bold");
+	        doc.setFontSize(10);
+	        doc.text("Customer Details", leftX + 4, leftY);
+	        leftY += 5;
+
+	        doc.setFont("helvetica", "normal");
+	        doc.setFontSize(9);
+
+	        const customerFields = [
+	            { label: "Customer Name:", value: data.customerName || '-' },
+	            { label: "Company Name:", value: data.companyName || '-' },
+	            { label: "Contact No:", value: data.contactNo || '-' },
+	            { label: "Email Id:", value: data.emailId || '-' },
+	        ];
+
+	        let maxLeftY = leftY;
+	        customerFields.forEach(item => {
+	            doc.text(item.label, leftX + 4, maxLeftY);
+	            doc.text(item.value, leftX + labelSpacing + 4, maxLeftY);
+	            maxLeftY += 5;
+	        });
+
+	        // Handle address
+	        doc.text("Company Address:", leftX + 4, maxLeftY);
+	        const wrappedAddress = doc.splitTextToSize(data.companyAddress || '-', 65);
+	        doc.text(wrappedAddress, leftX + labelSpacing + 4, maxLeftY);
+	        maxLeftY += wrappedAddress.length * 5;
+
+	        const customerBottomY = maxLeftY + 2;
+
+	        // ---- EMPLOYEE DETAILS
+	        doc.setFont("helvetica", "bold");
+	        doc.setFontSize(10);
+	        doc.text("Employee Details", rightX + 4, rightY);
+	        rightY += 5;
+
+	        doc.setFont("helvetica", "normal");
+	        doc.setFontSize(9);
+
+	        const employeeFields = [
+	            { label: "Employee Name:", value: data.userName || '-' },
+	            { label: "Invoice No:", value: data.invoiceNo || '-' },
+	            { label: "Dispatched Date:", value: data.date || '-' },
+	            { label: "Transport Mode:", value: data.transportMode || '-' },
+	        ];
+
+	        let maxRightY = rightY;
+	        employeeFields.forEach(item => {
+	            doc.text(item.label, rightX + 4, maxRightY);
+	            doc.text(item.value, rightX + labelSpacing + 4, maxRightY);
+	            maxRightY += 5;
+	        });
+
+	        const employeeBottomY = maxRightY + 2;
+
+	        // Draw aligned boxes (top edge merged with delivery challan bottom)
+	        const sectionHeight = Math.max(customerBottomY, employeeBottomY) - boxTopY;
+	        doc.rect(leftX, boxTopY, boxWidth, sectionHeight);
+	        doc.rect(rightX, boxTopY, boxWidth+0.5, sectionHeight);
+	        
+	     // 📄 Hardcoded sample product
+	        const items = [
+	            {
+	                prodName: data.productName,
+	                antennaType: data.antennaType,
+	                qty: data.quantity,
+	                rate: data.price,
+	                totalPrice: data.total_price
+	            }
+	        ];
+
+	        // 📌 Table structure setup
+	        let startY = boxTopY + sectionHeight;
+	        let rowHeight = 12;
+	        let tableX = 3;
+
+	        // Column widths
+	        const colWidths = {
+	            slNo: 14,
+	            desc: 80,
+	            hsn: 34.5,
+	            qty: 20,
+	            rate: 20,
+	            value: 35
+	        };
+
+	        // Draw table headers
+	        doc.setFont("helvetica", "bold");
+	        doc.setFontSize(10);
+
+	        doc.rect(tableX, startY, colWidths.slNo, rowHeight); // Sl No
+	        doc.text("Sl No.", tableX + 2, startY + 6);
+
+	        doc.rect(tableX + colWidths.slNo, startY, colWidths.desc, rowHeight); // Description
+	        doc.text("Product Name", tableX + colWidths.slNo + 2, startY + 6);
+
+	        doc.rect(tableX + colWidths.slNo + colWidths.desc, startY, colWidths.hsn, rowHeight); // HSN
+	        doc.text("Antenna Type", tableX + colWidths.slNo + colWidths.desc + 2, startY + 6);
+
+	        doc.rect(tableX + colWidths.slNo + colWidths.desc + colWidths.hsn, startY, colWidths.qty, rowHeight); // Quantity
+	        doc.text("Quantity", tableX + colWidths.slNo + colWidths.desc + colWidths.hsn + 2, startY + 6);
+
+	        doc.rect(tableX + colWidths.slNo + colWidths.desc + colWidths.hsn + colWidths.qty, startY, colWidths.rate, rowHeight); // Rate
+	        doc.text("Price", tableX + colWidths.slNo + colWidths.desc + colWidths.hsn + colWidths.qty + 2, startY + 6);
+
+	        doc.rect(tableX + colWidths.slNo + colWidths.desc + colWidths.hsn + colWidths.qty + colWidths.rate, startY, colWidths.value, rowHeight); // Value
+	        doc.text("Total Price", tableX + colWidths.slNo + colWidths.desc + colWidths.hsn + colWidths.qty + colWidths.rate + 2, startY + 6);
+
+	        // Reset font for content
+	        doc.setFont("helvetica", "normal");
+
+	        let currentYY = startY + rowHeight;
+	        let slNo = 1;
+	        let totalTaxable = 0;
+
+	        items.forEach(item => {
+	            const descLines = doc.splitTextToSize(item.prodName, colWidths.desc + 4); // padding inside desc
+	            const height = 8;
+
+	            // Draw cell rectangles
+	            doc.rect(tableX, currentYY, colWidths.slNo, height);
+	            doc.text(String(slNo++), tableX + 2, currentYY + 5);
+
+	            doc.rect(tableX + colWidths.slNo, currentYY, colWidths.desc, height);
+	            doc.text(descLines, tableX + colWidths.slNo + 2, currentYY + 5);
+
+	            doc.rect(tableX + colWidths.slNo + colWidths.desc, currentYY, colWidths.hsn, height);
+	            doc.text(item.antennaType, tableX + colWidths.slNo + colWidths.desc + 2, currentYY + 5);
+
+	            doc.rect(tableX + colWidths.slNo + colWidths.desc + colWidths.hsn, currentYY, colWidths.qty, height);
+	            doc.text(String(item.qty), tableX + colWidths.slNo + colWidths.desc + colWidths.hsn + 2, currentYY + 5);
+
+	            doc.rect(tableX + colWidths.slNo + colWidths.desc + colWidths.hsn + colWidths.qty, currentYY, colWidths.rate, height);
+	            doc.text(String(item.rate), tableX + colWidths.slNo + colWidths.desc + colWidths.hsn + colWidths.qty + 2, currentYY + 5);
+
+	            doc.rect(tableX + colWidths.slNo + colWidths.desc + colWidths.hsn + colWidths.qty + colWidths.rate, currentYY, colWidths.value, height);
+	            doc.text(String(item.totalPrice), tableX + colWidths.slNo + colWidths.desc + colWidths.hsn + colWidths.qty + colWidths.rate + 2, currentYY + 5);
+
+	            currentYY += height;
+	            totalTaxable += parseFloat(item.totalPrice);
+	        });
+
+	     	// 🧾 Tax values
+	        const cgst = +(totalTaxable * 0.09).toFixed(2);
+	        const sgst = +(totalTaxable * 0.09).toFixed(2);
+	        const totalTax = +(cgst + sgst).toFixed(2);
+	        const totalAfterTax = +(totalTaxable + totalTax).toFixed(2);
+	        const netAmount = Math.ceil(totalAfterTax);
+
+	        // Tax rows
+	        const taxFields = [
+	            { label: "Amount (Before Tax):", value: totalTaxable },
+	            { label: "CGST (9%):", value: cgst },
+	            { label: "SGST (9%):", value: sgst },
+	            { label: "Total Tax Amount:", value: totalTax },
+	            { label: "Total Amount after GST:", value: totalAfterTax },
+	            { label: "Net Amount:", value: netAmount }
+	        ];
+
+	        // Dimensions
+	        const leftBoxX = tableX;
+	        const leftBoxWidth = colWidths.slNo + colWidths.desc; // similar to Customer box
+	        const rightBoxX = leftBoxX + leftBoxWidth;
+	        const rightBoxWidth = colWidths.rate + colWidths.value + colWidths.hsn + colWidths.qty;
+	        const rowHeightt = 8;
+	        const taxBoxHeight = taxFields.length * rowHeightt;
+	        let taxStartY = currentYY; // merge with product table bottom
+
+	        // Draw Left Box (empty)
+	        doc.rect(leftBoxX, taxStartY, leftBoxWidth, taxBoxHeight);
+
+	        // Draw Right Box (tax table)
+	        doc.setFont("helvetica", "bold");
+	        doc.setFontSize(10);
+
+	        let rowY = taxStartY;
+
+	        taxFields.forEach(field => {
+	            // Label column
+	            doc.rect(rightBoxX, rowY, rightBoxWidth / 2, rowHeightt);
+	            doc.text(field.label, rightBoxX + 2, rowY + 5);
+
+	            // Value column
+	            doc.rect(rightBoxX + rightBoxWidth / 2, rowY, rightBoxWidth / 2, rowHeightt);
+	            doc.text(String(field.value), rightBoxX + rightBoxWidth / 2 + 2, rowY + 5);
+
+	            rowY += rowHeightt;
+	        });
+
+	     // Set font, size, and color
+	        doc.setFont("helvetica", "bold");
+	        doc.setFontSize(10);
+
+	        // Prepare text
+	        const amountWordsText = `TOTAL IN WORDS: ${numberToWords(netAmount)} Rupees Only`;
+
+	        // Get page dimensions
+	        const pageWidth = doc.internal.pageSize.getWidth()-10;
+	        const amountWordsHeight = 10;
+	        const amountWordsY = taxStartY + taxBoxHeight; // Merge with bottom of tax box
+
+	        // Draw full-width rectangle
+	        doc.setDrawColor(0); // Black border
+	        doc.rect(3, amountWordsY, 203.5, amountWordsHeight);
+
+	        // Center text inside the rectangle
+	        const textWidth = doc.getTextWidth(amountWordsText);
+	        const textX = (pageWidth - textWidth) / 2;
+	        const textY = amountWordsY + 7; // Vertically center text in 10px height box
+
+	        doc.text(amountWordsText, textX, textY);
+	        
+	     	// Signature section
+	        let sigY = amountWordsY + 10;
+	        doc.setFont("helvetica", "bold");
+	        doc.text("* This is a computer-generated Delivery Challan, no seal and signature required", 40, sigY + 114);
+	        //doc.line(145, sigY + 12, 200, sigY + 12); // Signature line
+
+	        // Open the PDF in a new tab
+			window.open(doc.output('bloburl'));  // This will open the generated PDF in a new tab
+	    };
+	}
+	
+	function numberToWords(num) {
+	    const ones = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"];
+	    const teens = ["Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen",
+	                   "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
+	    const tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
+
+	    function twoDigits(n) {
+	        if (n < 10) return ones[n];
+	        if (n < 20) return teens[n - 10];
+	        return tens[Math.floor(n / 10)] + (n % 10 ? " " + ones[n % 10] : "");
+	    }
+
+	    function threeDigits(n) {
+	        if (n < 100) return twoDigits(n);
+	        return ones[Math.floor(n / 100)] + " Hundred" + (n % 100 ? " " + twoDigits(n % 100) : "");
+	    }
+
+	    if (num === 0) return "Zero";
+
+	    let result = "";
+
+	    const crore = Math.floor(num / 10000000);
+	    num %= 10000000;
+	    if (crore) result += threeDigits(crore) + " Crore ";
+
+	    const lakh = Math.floor(num / 100000);
+	    num %= 100000;
+	    if (lakh) result += threeDigits(lakh) + " Lakh ";
+
+	    const thousand = Math.floor(num / 1000);
+	    num %= 1000;
+	    if (thousand) result += threeDigits(thousand) + " Thousand ";
+
+	    if (num > 0) result += (result !== "" ? "and " : "") + threeDigits(num);
+
+	    
+	    return result.trim();
+	}
+
+	function convertNumberToWords(amount) {
+	    const a = [
+	        '', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine',
+	        'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen',
+	        'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'
+	    ];
+	    const b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+
+	    if ((amount = amount.toString()).length > 9) return 'Overflow';
+	    let n = ('000000000' + amount).substr(-9).match(/.{1,2}/g);
+	    let str = '';
+	    str += (n[0] != 0) ? (a[Number(n[0])] || b[n[0][0]] + ' ' + a[n[0][1]]) + ' Crore ' : '';
+	    str += (n[1] != 0) ? (a[Number(n[1])] || b[n[1][0]] + ' ' + a[n[1][1]]) + ' Lakh ' : '';
+	    str += (n[2] != 0) ? (a[Number(n[2])] || b[n[2][0]] + ' ' + a[n[2][1]]) + ' Thousand ' : '';
+	    str += (n[3] != 0) ? (a[Number(n[3])] || b[n[3][0]] + ' ' + a[n[3][1]]) + ' Hundred ' : '';
+	    str += (n[4] != 0) ? ((str != '') ? 'and ' : '') + (a[Number(n[4])] || b[n[4][0]] + ' ' + a[n[4][1]]) + ' ' : '';
+	    return str.trim();
+	}
+</script>
+
+<script>
+	function toggleAddProductBox(number){
+		var parsedNumber = parseInt(number);
+		var icon = 'addRow' + parsedNumber;
+		var incrementedNumber = parsedNumber + 1;
+		var nextProductBox = 'productBox' + incrementedNumber;
+		//alert('productBox'+incrementedNumber);
+		document.querySelectorAll('#'+nextProductBox+' input').forEach(input => input.value = "");
+		$('#'+icon).hide();
+		$('#'+nextProductBox).show();
+	}
+	
+	function toggleDeleteProductBox(number){
+		var parsedNumber = parseInt(number);
+		var decrementedNumber = parsedNumber - 1;
+		var icon = 'addRow' + decrementedNumber;
+		var currentProductBox = 'productBox' + parsedNumber;
+		document.querySelectorAll('#'+currentProductBox+' input').forEach(input => input.value = "");
+		$('#'+icon).show();
+		$('#'+currentProductBox).hide();
+	}
+	
+/* 	function fetchProductDetails(number) {
+		var parsedNumber = parseInt(number);
+	    var selectedProduct = document.getElementById("dcProductName" + parsedNumber).value;
+	    
+	    if (selectedProduct) {
+	        fetch(`/getProductDetails?productName=${encodeURIComponent(selectedProduct)}`)
+	            .then(response => response.json())
+	            .then(data => {
+	                document.getElementById("dcRootFirmwareExternal" + parsedNumber).value = data.rootFirmwareExternal || "";
+	                document.getElementById("dcRouterFirmwareExternal" + parsedNumber).value = data.routerFirmwareExternal || "";
+	                document.getElementById("dcModuleNo" + parsedNumber).value = data.moduleNo || "";
+	                document.getElementById("dcRootFirmwareInternal" + parsedNumber).value = data.rootFirmwareInternal || "";
+	                document.getElementById("dcRouterFirmwareInternal" + parsedNumber).value = data.routerFirmwareInternal || "";
+	                document.getElementById("dcAntennaType" + parsedNumber).value = data.antennaType || "";
+	                document.getElementById("dcFirmwareHardwareVersion" + parsedNumber).value = data.firmwareHardwareVersion || "";
+	                if(data.uploadFile){
+	                	$('#dcUploadedFilePath' + parsedNumber).val(data.uploadFile);
+	                }else{
+	                	$('#dcUploadedFilePath' + parsedNumber).val("");
+	                }
+	            });
+	    	}
+		} */
+	
+	function calculateDcTotalPrice(number){
+		var parsedNumber = parseInt(number);
+		var price = $('#dcPrice' + parsedNumber).val();
+		var qty = $('#dcQuantity' + parsedNumber).val();
+		
+		if(price || qty){
+			var tempTotalPrice = price * qty;
+			$('#dcTotalPrice' + parsedNumber).val(tempTotalPrice);
+		}
+	}
+		
+		function togglePasswordView(checkbox){
+			if(checkbox.checked){
+				$('#ionos_password').attr('type', 'text');
+			}else{
+				$('#ionos_password').attr('type', 'password');
+			}
+		}
+</script>
+</body>
+</html>

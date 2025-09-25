@@ -1,0 +1,1447 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Salary Details</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+  
+  
+  <!-- =======================================================
+  * Template Name: NiceAdmin
+  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+  * Updated: Apr 20 2024 with Bootstrap v5.3.3
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+  <style>
+  html, body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  font-size:13px;
+}
+#main {
+  flex: 1; /* Makes #content take up the available space */
+}
+.footer {
+  background: #f8f9fa; /* Example background color */
+  text-align: center;
+  padding: 10px 0;
+  box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1);
+}
+   .table-container {
+            max-height: 345px; /* Adjust as needed */
+            overflow-y: auto;
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .table-container thead {
+            position: sticky;
+            top: 0;
+            background-color: #f8f9fa; /* Light background for the header */
+            z-index: 1; /* Ensure the header is above the scrolling content */
+        }
+
+        .table-container::-webkit-scrollbar {
+            width: 5px; /* Width of the scrollbar */
+        }
+
+        .table-container::-webkit-scrollbar-track {
+            background:#edeef5; /* Track color */
+        }
+
+        .table-container::-webkit-scrollbar-thumb {
+            background: #888; /* Scrollbar color */
+            border-radius: 4px;
+        }
+
+        .table-container::-webkit-scrollbar-thumb:hover {
+            background: #555; /* Hover color */
+        }
+        .form-label{
+        	font-size: 0.9rem;
+        }
+        .profile-table th{
+        	 font-weight: 600;
+   			 color: rgba(1, 41, 112, 0.6);
+        }
+        
+        .updateEmployeeForm input,
+        .updateEmployeeForm select,
+        .updateEmployeeForm textarea
+        {
+        	font-size:14px;
+        }
+        .changePassword label{
+        	font-size:14px;
+        }
+        	  /* Custom select container */
+		.select-container {
+		  position: relative;
+		  display: inline-block;
+		}
+		
+		/* Hide default arrow */
+		.select-container select {
+		  appearance: none;
+		  -webkit-appearance: none;
+		  -moz-appearance: none;
+		  background: transparent;
+		  padding-right: 2.5rem; /* Adjust based on the size of the arrow */
+		}
+		
+		/* Custom arrow icon */
+		.select-container::after {
+		  content: "";
+		  position: absolute;
+		  top: 50%;
+		  right: 0.5rem; /* Adjust based on the size of the arrow */
+		  transform: translateY(-50%);
+		  width: 2rem; /* Adjust based on the size of the arrow */
+		  height: 0.8rem; /* Adjust based on the size of the arrow */
+		  background: url('assets/img/down-arrow.png') no-repeat center center;
+		  background-size: contain;
+		  pointer-events: none;
+		}
+		
+		/* Optional: Add focus style to the select element */
+		.select-container select:focus {
+		  outline: none;
+		}
+		
+		
+		#loadingPopup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Dim background */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    font-family: Arial, sans-serif;
+    color: white; /* Text color for better contrast */
+}
+
+/* Spinner animation */
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 6px solid rgba(255, 255, 255, 0.3); /* Semi-transparent border */
+    border-top-color: white; /* Bright top border */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Loading text */
+#loadingPopup p {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+}
+
+/* Spinner keyframe animation */
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+ .content-display {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+        
+        
+          .payslip {
+            width: 600px;
+            margin: 20px auto;
+            border: 1px solid black;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .payslip h1, .payslip h2 {
+            text-align: center;
+        }
+        .payslip .section {
+            display: flex;
+            justify-content: space-between;
+        }
+        .payslip .section div {
+            width: 45%;
+        }
+        .payslip table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .payslip table, .payslip th, .payslip td {
+            border: 1px solid black;
+        }
+        .payslip th, .payslip td {
+            padding: 8px;
+            text-align: left;
+        }
+        
+/* Preloader for AJAX */
+#loadingModal {
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    display: none;
+    /*pointer-events: none;*/  /* Allow pointer events to pass through */
+}
+
+#loadingModalContent {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    /* pointer-events: all; */ /* Allow pointer events on the content itself */
+}
+
+.ball-container {
+    position: relative;
+    width: 300px; /* Adjust width as needed */
+    height: 50px; /* Adjust height as needed */
+}
+
+.ball {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: #3498db;
+    border-radius: 50%;
+    animation: ball-animation 2s linear infinite, ball-bounce 2s ease-in-out infinite;
+}
+
+.ball:nth-child(1) {
+    left: -20px; /* Initial position outside the container */
+    animation-delay: 0s; /* No delay for the first ball */
+}
+
+.ball:nth-child(2) {
+    left: 10px; /* Adjust spacing between balls as needed */
+    animation-delay: 0.2s; /* Delay for the second ball */
+}
+
+.ball:nth-child(3) {
+    left: 40px; /* Adjust spacing between balls as needed */
+    animation-delay: 0.4s; /* Delay for the third ball */
+}
+
+@keyframes ball-animation {
+    0% {
+        left: -20px; /* Start position outside the container */
+    }
+    100% {
+        left: calc(100% + 20px); /* Move to the right end of the container */
+    }
+}
+
+@keyframes ball-bounce {
+    0%, 100% {
+        transform: translateY(0); /* Start and end position (no bounce) */
+    }
+    50% {
+        transform: translateY(-20px); /* Bounce position */
+    }
+}
+
+.table_container{
+	height: 360px;
+	width: 98%;
+	margin: 4px auto;
+	overflow: auto;
+	/* pointer-events: auto; */ /* Allow pointer events on table container */
+}
+
+/* .disable-interactions {
+    pointer-events: none; 
+}
+
+.disable-interactions .table_container {
+    pointer-events: auto; 
+    overflow: auto;
+} */
+
+.highlight-row {
+    background-color: #dff0d8 !important; /* Light green background */
+}
+
+.error-row {
+    background-color: #f8d7da !important; /* Light red background */
+}
+
+.navBar_logo{
+	width: 100%;
+	height: auto;
+	background-color: #EBF5FB;
+	padding: 4px;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #d6d5d4;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+}
+
+
+/* Adjust scrollbar width, color, etc. */
+/* You can add more styles as needed */
+::-moz-scrollbar {
+    width: 5px;
+}
+
+::-moz-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 5px;
+}
+
+::-moz-scrollbar-track {
+    background-color: #f1f1f1;
+}
+
+ /* Footer styles */
+        .footer {
+            background-color: #f8f9fa;
+            text-align: center;
+            padding: 10px 0;
+        } 
+        
+	    .swal-custom-title {
+		    font-size: 14px !important;  /* Adjust size as needed */
+		}
+		
+      
+  </style>
+</head>
+
+<body>
+
+ <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center" th:if="${empDetailsByEmpId.deptId > 0}">
+
+   <!--  <div class="app-branding" style="width:100%; margin:0 0 0 10px; padding:5px;">
+				    <a class="app-logo" th:href=@{/dashboard}>
+				        <img class="logo-icon" src="assets/img/logo.png" alt="logo" style="width:200px; height:50px; max-width:100%; padding:0 2px 0 10px; margin:0;">
+				    </a>
+				</div> --><!-- End Logo -->
+	
+		   <div class="d-flex align-items-center" style="width:100%; margin:0 0 0 10px; padding:5px;">
+				    <a class="app-logo" th:href=@{/dashboard}>
+				        <img class="d-none d-lg-block" src="assets/img/logo.png" alt="logo" style="width:200px; height:50px; max-width:100%; padding:0 2px 0 10px; margin:0;">
+				    </a>
+				    <i class="bi bi-list toggle-sidebar-btn"></i>
+			</div>	
+    <!--  <div class="search-bar">
+      <form class="search-form d-flex align-items-center" method="POST" action="#">
+        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+      </form>
+    </div> --><!-- End Search Bar -->
+
+       <!-- Include the header fragment -->
+   <div th:replace="fragments/header :: header"></div>
+
+  </header><!-- End Header -->
+   
+   <!-- =======Super Admin Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center" th:if="${empDetailsByEmpId.deptId == 0}">
+
+    <div class="d-flex align-items-center" style="width:100%; margin:0 0 0 10px; padding:5px;">
+				    <a class="app-logo" th:href=@{/dashboard}>
+				        <img class="d-none d-lg-block" src="assets/img/logo.png" alt="logo" style="width:200px; height:50px; max-width:100%; padding:0 2px 0 10px; margin:0;">
+				    </a>
+				    <i class="bi bi-list toggle-sidebar-btn"></i>
+	</div><!-- End Logo -->
+
+    <!-- <div class="search-bar">
+      <form class="search-form d-flex align-items-center" method="POST" action="#">
+        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+      </form>
+    </div> --><!-- End Search Bar -->
+
+    <div th:replace="fragments/superAdminHeader :: header"></div>
+
+  </header><!-- End Header -->
+
+  <!-- ======= Sidebar ======= -->
+  
+<aside id="sidebar" class="sidebar">
+<input type="hidden" id="employee-id" th:value="${empDetailsByEmpId.deptId}">
+<input type="hidden" id="emp_idSessionValue" th:value="${empDetailsByEmpId.empid}">
+    <ul class="sidebar-nav" id="sidebar-nav">
+		 
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/userDashboard}">
+                <i class="bi bi-grid"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+         <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/viewAdminProfile(empid=${empDetailsByEmpId.empid})}">
+                <i class="bi bi-person"></i>
+                <span>Profile</span>
+            </a>
+        </li>  
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/attendanceLive(email=${empDetailsByEmpId.email})}">
+                <i class="bi bi-calendar3"></i>
+                <span>Attendance</span>
+            </a> 
+        </li>      
+       <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/groupMailId}">
+                <i class="bi bi-telephone"></i>
+                <span>Team Contact</span>
+            </a>
+        </li>
+        <!-- <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link " th:href="@{/InterCommDetails}">
+                <i class="bi bi-telephone"></i>
+                <span>InterComm Details</span>
+            </a>
+        </li> -->
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/adminHoliday}">
+                <i class="bi bi-calendar4-week"></i>
+                <span>Holiday List</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+		    <a class="nav-link" th:href="@{/employee}">
+		        <i class="bi bi-people"></i>	
+		        <span>Employee</span>
+		    </a>
+	   </li> 
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/viewAdminLeaves(empid=${empDetailsByEmpId.empid})}">
+                <i class="bi bi-card-text"></i>
+                <span>Leaves</span>
+            </a>
+        </li>  
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/events}">
+                <i class="bi bi-award"></i>
+                <span>Events</span>
+            </a>
+        </li>             
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/asset}">
+                <i class="bi bi-wallet"></i>
+                <span>Assets</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/ongoingProject}">
+                <i class="bi bi-card-heading"></i>
+                <span>Projects</span>
+            </a>
+        </li>   
+         <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/viewAdminPayslip(empid=${empDetailsByEmpId.empid})}">
+                <i class="bi bi-file-text"></i>
+                <span>Payslip</span>
+            </a>
+        </li>     
+         <!-- Loop through the permissions map -->
+       <li class="nav-item" th:if="${permissions.interviewAccess && empDetailsByEmpId.deptId>0}" >
+            <a class="nav-link" th:href="@{/interview}">
+                <i class="bi bi-vector-pen"></i>
+                <span>Interview</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.sales && empDetailsByEmpId.deptId>0}" >
+            <a class="nav-link" th:href="@{/sales}">
+                <i class="bi bi-cart3"></i>
+                <span>Sales</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.accountsAccess && empDetailsByEmpId.deptId>0}" >
+            <a class="nav-link active" th:href="@{/accounts}">
+                <i class="bi bi-person-vcard"></i>
+                <span>Accounts</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.storeAccess && empDetailsByEmpId.deptId>0}" >
+            <a class="nav-link" th:href="@{/store}">
+                <i class="bi bi-shop-window"></i>
+                <span>Store</span>
+            </a>
+        </li>
+       <li class="nav-item" th:if="${permissions.apprisalAccess && empDetailsByEmpId.deptId>0}" >
+            <a class="nav-link" id="apprisalLink" th:href="@{/apprisal(empid=${empDetailsByEmpId.empid})}">
+		        <i class="bi bi-file-text"></i>
+		        <span>Appraisal</span>
+		    </a>
+        </li> 
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+		    <a class="nav-link" id="apprisalLink" th:href="@{/employeeApprisal(empid=${empDetailsByEmpId.empid})}">
+		        <i class="bi bi-file-text"></i>
+		        <span>Employee Appraisal</span>
+		    </a>
+		</li>
+        
+        
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link " th:href="@{/navbar}">
+		        <i class="bi bi-grid"></i>
+		        <span>Dashboard</span>
+		    </a>
+	    </li>
+	    <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+            <a class="nav-link" th:href="@{/attendanceLive(email=${empDetailsByEmpId.email})}">
+                <i class="bi bi-calendar3"></i>
+                <span>Attendance</span>
+            </a>
+        </li> 
+         <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link"  th:href="@{/adminHoliday}">
+		        <i class="bi bi-calendar4-week"></i>
+		        <span>Holiday List</span>
+		    </a>
+	 </li>	
+	 
+	 <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link" th:href="@{/groupMailId}">
+		        <i class="bi bi-telephone"></i>
+		        <span>Team Contact</span>
+		    </a>
+	 </li>
+	 <!--  <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+            <a class="nav-link"  th:href="@{/InterCommDetails}">
+                <i class="bi bi-telephone"></i>
+                <span>InterComm Details</span>
+            </a>
+      </li> -->
+      <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link"  th:href="@{/viewAdminLeaves(empid=${empDetailsByEmpId.empid})}">
+		        <i class="bi bi-calendar4-week"></i>
+		        <span>Leaves</span>
+		    </a>
+	 </li>
+	 <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link"  th:href="@{/events}">
+		        <i class="bi bi-award"></i>
+		        <span>Events</span>
+		    </a>
+	 </li> 
+	 
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link" th:href="@{/addDepartment}">
+		        <i class="bi bi-calendar4-week"></i>
+		        <span>Department</span>
+		    </a>
+	   </li>
+	 <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link"  th:href="@{/addRole}">
+		        <i class="bi bi-receipt"></i>
+		        <span>Role</span>
+		    </a>
+	 </li>
+	 
+	 <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link" th:href="@{/employee}">
+		        <i class="bi bi-people"></i>
+		        <span>Employee</span>
+		    </a>
+	 </li> 
+	
+       
+      <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+            <a class="nav-link"  th:href="@{/ongoingProject}">
+                <i class="bi bi-calendar3"></i>
+                <span>Projects</span>
+            </a>
+      </li>  
+      <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+            <a class="nav-link"  th:href="@{/asset}">
+                <i class="bi bi-wallet"></i>
+                <span>Assets</span>
+            </a>
+      </li>  
+      <li class="nav-item" th:if="${permissions.interviewAccess && empDetailsByEmpId.deptId==0}" >
+            <a class="nav-link" th:href="@{/interview}">
+                <i class="bi bi-vector-pen"></i>
+                <span>Interview</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.sales && empDetailsByEmpId.deptId==0}" >
+            <a class="nav-link" th:href="@{/sales}">
+                <i class="bi bi-cart3"></i>
+                <span>Sales</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.accountsAccess && empDetailsByEmpId.deptId==0}" >
+            <a class="nav-link" th:classappend="${empDetailsByEmpId.deptId==0} ? ' active'" th:href="@{/accounts}">
+                <i class="bi bi-person-vcard"></i>
+                <span>Accounts</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.storeAccess && empDetailsByEmpId.deptId==0}" >
+            <a class="nav-link" th:href="@{/store}">
+                <i class="bi bi-shop-window"></i>
+                <span>Store</span>
+            </a>
+        </li> 
+       
+    </ul>
+</aside>
+
+  <!-- End Sidebar-->
+  <main id="main" class="main">
+     <!-- Display Success Message -->
+        <div th:if="${message}" class="alert alert-success" role="alert">
+            <span th:text="${message}"></span>
+        </div>
+
+        <!-- Display Error Message -->
+        <div th:if="${error}" class="alert alert-danger" role="alert">
+            <span th:text="${error}"></span>
+        </div>
+         <div class="text-end mb-3">
+          <!--  <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #DEF5FA; border-radius: 10px;">
+                <div class="container-fluid">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page" th:href="@{/accounts}">Payslip</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" th:href="@{/salaryDetailsPage}">Salary Details</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Bank Transaction</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav> -->
+            
+            
+						            <div class="d-flex justify-content-between">
+						            	 <div class="pagetitle">
+													      <nav>
+													        <ol class="breadcrumb">
+													          <li class="breadcrumb-item"><a href="index.html">Employees</a></li>
+													          <li class="breadcrumb-item active">Accounts</li>
+													        </ol>
+													      </nav>
+													    </div><!-- End Page Title -->
+													    
+						            					<!-- Bordered Tabs Justified -->
+												        <div class="d-flex justify-content-end">
+														    <ul class="nav nav-tabs nav-tabs-bordered" id="borderedTab" role="tablist">
+														        <li class="nav-item" role="presentation">
+														            <button class="nav-link w-100 active" id="home-tab" data-bs-toggle="tab" data-bs-target="#bordered-justified-home" type="button" role="tab" aria-controls="home" aria-selected="true"  style="font-size:13px;">Payslip</button>
+														        </li>
+														        <li class="nav-item" role="presentation">
+														            <button class="nav-link w-100" id="profile-tab" data-bs-toggle="tab" data-bs-target="#bordered-justified-profile" type="button" role="tab" aria-controls="profile" aria-selected="false"  style="font-size:13px;">Salary details</button>
+														        </li>
+														    </ul>
+														</div>
+						            </div>
+
+									<div class="tab-content pt-2" id="borderedTabJustifiedContent">
+									    <!-- Home Tab Content -->
+									    <div class="tab-pane fade show active" id="bordered-justified-home" role="tabpanel" aria-labelledby="home-tab" style="height:600px;overflow:auto">
+											
+											
+												<!-- PreLoader for AJAX -->
+												<div id="loadingModal">
+												    <div id="loadingModalContent">
+												        <div class="ball-container">
+												            <div class="ball"></div>
+												            <div class="ball"></div>
+												            <div class="ball"></div>
+												        </div>
+												    </div>
+												</div>
+												
+												<!-- <div class="navBar_logo">
+													<img src="assets/images/logo.png" alt="melange_logo" width="15%" height="45px">
+												</div>
+												 -->
+												<div class="container" style="width: 400px; background-color: #EBF5FB; border-radius: 10px; margin: 5px auto; padding: 15px;">
+													<h5 style="text-align: center;">Upload Excel File To Send Payslips</h5>
+													<input type="file" class="form-control mt-3" id="fileInput" />
+													<button class="btn btn-info mt-4" style="color: #fff; font-weight: bold;" onclick="sendSelectedPayslips()">Send Selected Payslips</button>
+												</div>
+												
+												<div class="table_container" id="employeeTableContainer"></div>
+												
+												<div class="fixed-bottom" id="status" style="display: none; padding: 4px; height: 30px; font-size: 17px; text-align: center;"></div>
+											   
+											
+											
+										</div>
+										<!-- Profile Tab Content -->
+									    <div class="tab-pane fade" id="bordered-justified-profile" role="tabpanel" th:if="${empDetailsByEmpId.deptId!=74}" aria-labelledby="profile-tab" style="max-height:40%;overflow:auto;">
+									    	<div class="row" style="max-height:500px;overflow:auto;">
+												<table id="salaryDetailsTable" class="table table-hover mb-0 text-center">
+													<thead class="fixTHead" style="position:sticky;top:0;">
+														<tr>
+															<th>Sl no</th>
+															<th>Emp ID</th>
+															<th>Hike(%)</th>
+															<th>After Revision(LPA)</th>
+															<th>Effect from</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr th:if="${appraisalData.size() == 0}">
+															<td>No Data Found</td>
+														</tr>
+														<tr th:each="appraisalDetails,iterStat:${appraisalData}" th:unless="${appraisalData.size() == 0}">
+															<td th:text="${iterStat.count}">1</td>
+															<td th:text="${appraisalDetails.empId}">-</td>
+															<td th:text="${appraisalDetails.hike}">-</td>
+															<td th:text="${appraisalDetails.salary_after_hike}">-</td>
+															<td th:text="${appraisalDetails.hike_affect_from}">-</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+									    </div>
+       								 </div>
+
+
+		<section class="section profile">
+			
+		</section>
+	</main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+    <div class="copyright">
+      &copy; Copyright <strong><span>Melange System pvt ltd</span></strong>. All Rights Reserved
+    </div>
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/chart.js/chart.umd.js"></script>
+  <script src="assets/vendor/echarts/echarts.min.js"></script>
+  <script src="assets/vendor/quill/quill.js"></script>
+  <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+  <script src="assets/vendor/tinymce/tinymce.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+<!-- script to check the New Password and Re-enter New Password are equal or not if equal update the password -->
+
+<!-- script to fetch the designation based on selected department -->
+<script>
+function fetchDesignations(deptId) {
+     if(deptId) {
+        fetch(`/getDesignations?deptId=${deptId}`)
+            .then(response => response.json())
+            .then(data => {
+                let designationSelect = document.getElementById('roleId');
+                designationSelect.innerHTML = '<option value="" selected>Select Designation</option>';
+                data.forEach(designation => {
+                    let option = document.createElement('option');
+                    option.value = designation.role_id;
+                    option.text = designation.roleName;
+                    designationSelect.add(option);
+                });
+            })
+            .catch(error => console.error('Error fetching designations:', error));
+    }
+}
+</script>
+
+<!-- script to update the permission -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#interviewAccess').on('change', function() {
+        var isChecked = $(this).is(':checked');
+        var employeeId = document.getElementById("employeeId").value;
+        
+        // Confirming values        
+        $.ajax({
+            url: '/updateInterviewPermission',
+            type: 'POST',
+            contentType: 'application/json', // Specify content type
+            data: JSON.stringify({
+                "userId": employeeId,
+                "enabled": isChecked
+            }),
+            success: function(response) {
+                console.log('Permission updated successfully');
+            },
+            error: function(xhr, status, error) {
+                console.error('Failed to update permission:', error);
+                console.error('Response text:', xhr.responseText);
+            }
+        });
+    });
+});
+</script>
+
+<!-- script to notification -->
+<script>
+// Function to fetch flag value from the backend
+function fetchFlag() {
+    $.get("/flag", function(response) {
+        var leaveRequestCountValue = response; 
+        // If total notification count is greater than 0, show the bell icon and notifications
+        if (leaveRequestCountValue.totalNotificationCount > 0) {
+            $("#notificationBellIcon").show();  // Show bell icon
+            $("#leaveRequestNotification").show();  // Show specific notification
+            
+            $("#leaveRequestMessage").text(leaveRequestCountValue.leaveRequestFlagCount + " leave request(s)");
+            $(".badge-number").text(leaveRequestCountValue.leaveRequestFlagCount);
+            $("#leaveRequestFlagCount").text(leaveRequestCountValue.leaveRequestFlagCount);
+        } else {
+            // If total notification count is 0, hide the bell icon and notification
+            $("#notificationBellIcon").hide();
+        }
+        //display the asset notifu=ication based on asset count value
+        if(leaveRequestCountValue.asseteRequestFlagCount>0){
+        	
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#assetRequestNotification").show();  // Show specific notification
+             
+             $("#assetRequestMessage").text(leaveRequestCountValue.asseteRequestFlagCount + " asset request(s)");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+             $("#asseteRequestFlagCount").text(leaveRequestCountValue.asseteRequestFlagCount);
+        		
+        }
+        else {
+            // If total notification count is 0, hide the bell icon and notification
+            $("#assetRequestNotification").hide();
+        }
+        
+        //display the new project notification based on asset count value
+        if(leaveRequestCountValue.newPrjectValueCount>0){
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#newProjectNotification").show();  // Show specific notification
+             
+             $("#newProjectMessage").text(leaveRequestCountValue.newPrjectValueCount + " project request(s)");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+             $("#newPrjectValueCount").text(leaveRequestCountValue.asseteRequestFlagCount);
+        }
+        else {
+            // If total notification count is 0, hide the bell icon and notification
+            $("#notificationBellIcon").hide();
+        }
+         
+    });
+}
+
+// Periodically fetch flag value every second (adjust as needed)
+setInterval(fetchFlag, 1000);
+
+</script>
+<!-- script to notification link redirect -->
+<script th:inline="javascript">
+    function redirectToLeaveRequest() {
+        var empid = /*[[${empDetailsByEmpId.empid}]]*/ 'defaultEmpId';
+        window.location.href = '/viewAdminLeaves?empid=' + empid;
+    }
+    function redirectToAsset() {
+        //var empid = /*[[${empDetailsByEmpId.empid}]]*/ 'defaultEmpId';
+        window.location.href = '/asset';
+    }
+    function redirectToProject() {
+        //var empid = /*[[${empDetailsByEmpId.empid}]]*/ 'defaultEmpId';
+        window.location.href = '/ongoingProject';
+    }
+</script>
+  
+  
+  
+  <!-- script for profile pic -->
+<script>
+$.ajax({
+    type: "GET",
+    url: "fetchEmployeeDocumentDetailsOnlyByEmpId",
+    data: {
+        "emp_id": $('#emp_idSessionValue').val()
+    },
+    success: function(data) {
+    	console.log("++++data"+JSON.stringify(data));
+        $('#dynamicProfilePic').attr('src', `${data.profilePicPath}`);
+    },
+    error: function(xhr, status, error) {
+        console.error("Error invoking data:", error);
+    }
+});
+</script>
+
+ <script>
+		
+		let timeoutAlert;
+		let isConnected = false; // Global variable to track connectivity status
+		let stompClient = null;
+		let totalRows=0;
+		let sentCount=0;
+		
+        function uploadFile() {
+			
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            fetch('/uploadPayslip', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(employees => {
+                displayEmployees(employees);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error uploading file');
+            });
+            
+        }
+        
+        function compareFile(){
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            //formData.append('predefinedFilePath', "email_status.xlsx");
+            
+            fetch('/comparingFile', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text(); // Get the response as text
+            })
+            .then(text => {
+                try {
+                    const employees = JSON.parse(text); // Try to parse it as JSON
+                    console.log(JSON.stringify(employees));
+                    compareEmpIdData(employees);
+                } catch (error) {
+                    console.error('Error parsing JSON:', error);
+                    alert('Error parsing response');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error uploading file');
+            });
+        }
+
+        
+        function displayEmployees(employees) {
+            const employeeTableContainer = document.getElementById('employeeTableContainer');
+            let html = `<table class="table table-hover text-center" style="font-size: 12px;">
+				<thead style="position: sticky; top: 0;">
+	            	<tr>
+	            		<th style="background-color:#EBF5FB;color:black;">
+	            			<input type="checkbox" id="selectAllCheck" onclick="toggleSelectAll(this)">
+	            		</th>    
+	            		<th style="background-color:#EBF5FB;color:black;">SL No</th>
+	            		<th style="background-color:#EBF5FB;color:black;">Employee ID</th>
+	            		<th style="background-color:#EBF5FB;color:black;">Employee Name</th>
+	            		<th style="background-color:#EBF5FB;color:black;">Email</th>
+	            		<th style="background-color:#EBF5FB;color:black;">Payslip Month</th>
+	            		<th style="background-color:#EBF5FB;color:black;">Department</th>
+	            		<th style="background-color:#EBF5FB;color:black;">Designation</th>
+	            		<th style="background-color:#EBF5FB;color:black;">DOJ</th>
+	            		<th style="background-color:#EBF5FB;color:black;">Bank Name</th>
+	            		<th style="background-color:#EBF5FB;color:black;">Bank A/c No</th>
+	            		<th style="background-color:#EBF5FB;color:black;">UAN No</th>
+	            		<th style="background-color:#EBF5FB;color:black;">Pan No</th>
+	            		<th style="background-color:#EBF5FB;color:black;">PF No</th>
+	            		<th style="background-color:#EBF5FB;color:black;">ESI No</th>
+	            		<th style="background-color:#EBF5FB;color:black;">No of Days</th>
+	            		<th style="background-color:#EBF5FB;color:black;">No of Worked Days</th>
+	            		<th style="background-color:#EBF5FB;color:black;">Basic</th>
+	            		<th style="background-color:#EBF5FB;color:black;">HRA</th>
+	            		<th style="background-color:#EBF5FB;color:black;">Conveyance</th>
+	            		<th style="background-color:#EBF5FB;color:black;">Medical Allowance</th>
+	            		<th style="background-color:#EBF5FB;color:black;">Other Allowance</th>
+	            		<th style="background-color:#EBF5FB;color:black;">Other Allowance 1</th>
+	            		<th style="background-color:#EBF5FB;color:black;">Arrears</th>
+	            		<th style="background-color:#EBF5FB;color:black;">Bonus</th>
+	            		<th style="background-color:#EBF5FB;color:black;">Reimbursement</th>
+	            		<th style="background-color:#EBF5FB;color:black;">Total Earnings</th>
+	            		<th style="background-color:#EBF5FB;color:black;">PF</th>
+	            		<th style="background-color:#EBF5FB;color:black;">ESI</th>
+	            		<th style="background-color:#EBF5FB;color:black;">PT</th>
+	            		<th style="background-color:#EBF5FB;color:black;">Income Tax</th>
+	            		<th style="background-color:#EBF5FB;color:black;">Loan</th>
+	            		<th style="background-color:#EBF5FB;color:black;">Others</th>
+	            		<th style="background-color:#EBF5FB;color:black;">Others 1</th>
+	            		<th style="background-color:#EBF5FB;color:black;">Total Deduction</th>
+	            		<th style="background-color:#EBF5FB;color:black;">Net Salary</th>
+	            	</tr>
+            	</thead>`;
+            employees.forEach((employee, index) => {
+                html += `<tr>
+                            <td style="background-color:#EBF5FB;color:black;">
+                            	<input type="checkbox" class="employeeCheckbox" data-index="${index}" data-emp-id="${employee.employeeId}">
+                            </td>
+                            <td>${index + 1}</td>
+                           	<td>${employee.employeeId ? employee.employeeId : '-'}</td>
+                            <td>${employee.name ? employee.name : '-'}</td>
+                            <td>${employee.email ? employee.email : '-'}</td>
+                            <td>${employee.month ? employee.month : '-'}</td>
+                            <td>${employee.department ? employee.department : '-'}</td>
+                            <td>${employee.designation ? employee.designation : '-'}</td>
+                            <td>${employee.dateOfJoining ? employee.dateOfJoining : '-'}</td>
+                            <td>${employee.bankName ? employee.bankName : '-'}</td>
+                            <td>${employee.bankAccount ? employee.bankAccount : '-'}</td>
+                            <td>${employee.uanNo ? employee.uanNo : '-'}</td>
+                            <td>${employee.pan ? employee.pan : '-'}</td>
+                            <td>${employee.pfNumber ? employee.pfNumber : '-'}</td>
+                            <td>${employee.esi_num ? employee.esi_num : '-'}</td>
+                            <td>${employee.days ? employee.days : '-'}</td>
+                            <td>${employee.workedDays ? employee.workedDays : '-'}</td>
+                            <td>${employee.basic ? employee.basic : '-'}</td>
+                            <td>${employee.hra ? employee.hra : '-'}</td>
+                            <td>${employee.conveyance ? employee.conveyance : '-'}</td>
+                            <td>${employee.medical ? employee.medical : '-'}</td>
+                            <td>${employee.otherAllowance ? employee.otherAllowance : '-'}</td>
+                            <td>${employee.otherAllowance1 ? employee.otherAllowance1 : '-'}</td>
+                            <td>${employee.arrears ? employee.arrears : '-'}</td>
+                            <td>${employee.bounce ? employee.bounce : '-'}</td>
+                            <td>${employee.reimbursement ? employee.reimbursement : '-'}</td>
+                            <td>${employee.totalEarnings ? employee.totalEarnings : '-'}</td>
+                            <td>${employee.pfDeduction ? employee.pfDeduction : '-'}</td>
+                            <td>${employee.esi ? employee.esi : '-'}</td>
+                            <td>${employee.pt ? employee.pt : '-'}</td>
+                            <td>${employee.incomeTax ? employee.incomeTax : '-'}</td>
+                            <td>${employee.loan ? employee.loan : '-'}</td>
+                            <td>${employee.otherDeductions ? employee.otherDeductions : '-'}</td>
+                            <td>${employee.otherDeductions1 ? employee.otherDeductions1 : '-'}</td>
+                            <td>${employee.totalDeductions ? employee.totalDeductions : '-'}</td>
+                            <td>${employee.netSalary ? employee.netSalary : '-'}</td>
+                        </tr>`;
+            });
+            html += '</table>';
+            employeeTableContainer.innerHTML = html;
+            window.employees = employees;
+        }
+        
+        
+        function compareEmpIdData(data) {
+            const employeeCheckboxes = document.querySelectorAll('.employeeCheckbox');
+            const empIds = data ? data.map(emp => emp.empId) : [];
+            employeeCheckboxes.forEach(checkbox => {
+                const empId = checkbox.getAttribute('data-emp-id');
+                if (empIds.length === 0 || empIds.includes(empId)) {
+                    checkbox.checked = false;
+                } else {
+                    checkbox.checked = true;
+                }
+            });
+        }
+        
+     // Function to disable all interactions except scroll on the table container and disable fileInput and button
+        /* function disableInteractions() {
+            const tableContainer = document.querySelector('.table_container');
+            tableContainer.classList.add('disable-interactions');
+            
+            const fileInput = document.getElementById('fileInput');
+            const sendButton = document.querySelector('.btn.btn-info');
+
+            // Add a class to the body to disable interactions globally
+            document.body.classList.add('disable-interactions');
+            
+            // Disable file input and button
+            fileInput.disabled = true;
+            sendButton.disabled = true;
+        }
+
+        // Function to enable all interactions
+        function enableInteractions() {
+            const tableContainer = document.querySelector('.table_container');
+            tableContainer.classList.remove('disable-interactions');
+            
+            const fileInput = document.getElementById('fileInput');
+            const sendButton = document.querySelector('.btn.btn-info');
+
+            // Remove the class from the body to enable interactions globally
+            document.body.classList.remove('disable-interactions');
+            
+            // Enable file input and button
+            fileInput.disabled = false;
+            sendButton.disabled = false;
+        }
+
+        // Add a mutation observer to watch for changes in the display property of the loading modal
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.attributeName === "style" || mutation.attributeName === "class") {
+                    const loadingModal = document.getElementById('loadingModal');
+                    if (loadingModal.style.display === "none" || !loadingModal.classList.contains('show')) {
+                        enableInteractions();
+                    } else {
+                        disableInteractions();
+                    }
+                }
+            });
+        });
+
+        observer.observe(document.getElementById('loadingModal'), { attributes: true });
+
+        // Prevent default behavior for clicks within the table container
+        document.querySelector('.table_container').addEventListener('click', function(event) {
+            if (document.body.classList.contains('disable-interactions')) {
+                event.preventDefault();
+            }
+        }); */
+
+
+        
+        function toggleSelectAll(selectAllCheckbox){
+        	const checkBoxes=document.querySelectorAll('.employeeCheckbox');
+        	checkBoxes.forEach(checkbox => {
+        		checkbox.checked = selectAllCheckbox.checked;
+        	});
+        }
+        
+        
+    var statusDiv = document.getElementById("status");
+    var noInternetAlert; // Variable to track the Swal instance
+    var payslipSentAlert;
+
+    if (typeof(EventSource) !== "undefined") {
+        var source = new EventSource("/connectivity-status");
+        source.onmessage = function(event) {
+            var newConnectionStatus = (event.data === 'true');
+            
+            if (newConnectionStatus !== isConnected) { // Check if connection status changed
+                isConnected = newConnectionStatus;
+
+                if (isConnected) {
+                    statusDiv.innerHTML = "<p>Internet connection is active</p>";
+                    statusDiv.style.backgroundColor = "lightgreen";
+                    statusDiv.style.color = "green";
+
+                    displayInternetStatusBox();
+                    setTimeout(function() {
+                        hideInternetStatusBox();
+                    }, 2000); // Display "Connected" message for 10 seconds
+                    
+                    // Close the "No internet" popup if it's open
+                    if (noInternetAlert) {
+                        noInternetAlert.close();
+                        noInternetAlert = null;
+                    }
+
+                } else {
+                    statusDiv.innerHTML = "<p>No internet connection</p>";
+                    statusDiv.style.backgroundColor = "lightcoral";
+                    statusDiv.style.color = "red";
+                    
+                    displayInternetStatusBox(); //Always display "No internet" message
+                    
+                    handleConnectionLost(); //Handle connection lost scenario
+                }
+            }
+        };
+        
+    } else {
+        statusDiv.innerHTML = "Sorry, your browser does not support server-sent events";
+        statusDiv.style.backgroundColor = "#FAD7A0";
+        statusDiv.style.color = "#F39C12";
+    }
+
+    function displayInternetStatusBox() {
+        document.getElementById("status").style.display = "block";
+    }
+
+    function hideInternetStatusBox() {
+        document.getElementById("status").style.display = "none";
+    }
+    
+    
+    function handleConnectionLost() {
+        // Close loading modal if open
+        closeLoadingModal2();
+
+        // Show Swal message on connection loss
+        noInternetAlert = Swal.fire({
+            icon: 'error',
+            title: "No internet connection",
+        });
+        
+         // Clear the timeout if connection is lost
+        clearTimeout(timeoutAlert);
+    }
+        
+        
+    function sendSelectedPayslips() {
+        const checkboxes = document.querySelectorAll('.employeeCheckbox');
+        const selectedEmployees = [];
+        checkboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                const index = checkbox.getAttribute('data-index');
+                selectedEmployees.push(window.employees[index]);
+                totalRows=totalRows+1;
+            }
+            
+        });
+
+        const fileInput = document.getElementById('fileInput');
+        const file = fileInput.files[0];
+        if (!file) {
+            Swal.fire({
+                icon: 'warning',
+                title: "Please select a file first",
+                customClass: {
+                    title: 'swal-custom-title'
+                }
+            });
+            return;
+        }
+
+        if (selectedEmployees.length === 0) {
+            Swal.fire({
+                icon: 'warning',
+                title: "Please select check box to send payslips",
+            });
+            return;
+        }
+
+        showLoadingModal2();
+
+        // Check internet connection before proceeding
+        if (!isConnected) {
+            handleConnectionLost();
+            closeLoadingModal2(); // Ensure modal is closed when there is no connection
+            return;
+        }
+
+        fetch('/sendPayslips', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(selectedEmployees)
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(text => {throw new Error(text)});
+            }
+            return response.text();
+        })
+        .then(result => {
+            if (isConnected) {
+            	
+            	connect();
+            	
+               // timeoutAlert = setTimeout(() => {
+              /*   if(totalRows === sentCount){
+ 			    	   closeLoadingModal2();
+			    	   payslipSentAlert = Swal.fire({
+	                        icon: 'success',
+	                        title: result,
+	                    });
+                    }else{
+                    	alert("Total Rows == "+totalRows+" sentCount == "+sentCount);
+                    } */
+                	
+                	/* closeLoadingModal2();
+			    	   payslipSentAlert = Swal.fire({
+	                        icon: 'success',
+	                        title: result,
+	                    }); */
+               // }, 15000); // Delay of 30 seconds
+            } else {
+                handleConnectionLost();
+                if (payslipSentAlert) {
+                    payslipSentAlert.close();
+                    payslipSentAlert = null;
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            Swal.fire({
+                icon: 'error',
+                title: `<p style="font-size: 20px; margin: 0;">Please fix this error in imported excel sheet</p>`,
+                html: `<div style="font-size: 14px; width: 380px; color: #E74C3C; margin: 0 auto; text-align: center;">${error.message.replace(/\n/g, '<br>')}</div>`,
+            });
+            closeLoadingModal2();
+            timeoutAlert = null; // Clear the timeoutAlert
+        });
+    }
+
+            // Automatically call uploadFile when file input changes
+            document.getElementById('fileInput').addEventListener('change', function(event) {
+			    uploadFile(event);
+			    setTimeout(function() {
+			    	compareFile(event);
+			    }, 1000); 
+			});
+      
+            
+    	    function showLoadingModal2() {
+    		    const modal = document.getElementById('loadingModal');
+    		    modal.style.display = 'block';
+    		}
+    		
+    		function closeLoadingModal2() {
+    		    const modal = document.getElementById('loadingModal');
+    		    modal.style.display = 'none';
+    		}		
+    		
+    		  function connect() {
+    		      const socket = new SockJS('/chat-websocket');
+    		      stompClient = Stomp.over(socket);
+    		      stompClient.connect({}, (frame) => {
+    		          console.log('Connected::: ' + frame);
+    		          stompClient.subscribe('/topic/emailStatus', (message) => {
+    		              const employee = JSON.parse(message.body);	             
+    		              
+    		              if(isConnected){		
+    		            	  sentCount = sentCount +1;
+    		            	  updateEmployeeRowColor(employee);
+    		              }
+    		          });
+    		      });
+    		  }
+
+    		  function updateEmployeeRowColor(employee) {
+    			   
+    			  const rows = document.querySelectorAll('table tr');
+	  			    rows.forEach(row => {
+	  			        const cells = row.getElementsByTagName('td');
+	  			        if (cells[2] && cells[2].innerText.trim() === employee.employeeId.trim()) {
+	  			            Array.from(cells).forEach(cell => {
+	  			                cell.classList.add('highlight-row'); // Apply highlight
+	  			                
+	  			                // Uncheck the checkbox associated with this row
+	  			                const checkbox = row.querySelector('.employeeCheckbox');
+	  			                if (checkbox) {
+	  			                    checkbox.checked = false;
+	  			                }
+	  			            });
+	  			            // Scroll the row into view
+	  			            row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+	  			        }
+	  			        console.log("Total rows = " + totalRows + ", Sent count = " + sentCount);
+	  			    });
+  			    
+  			    
+    			    if(totalRows === sentCount){
+    			    	console.log("Final total rows = "+totalRows+", Final sent count = "+sentCount);
+    			        closeLoadingModal2();
+    			        clearExcel();
+    			        payslipSentAlert = Swal.fire({
+    			            icon: 'success',
+    			            title: 'Payslips sent successfully',
+    			            allowOutsideClick: false,  // Prevent closing by clicking outside
+    			            allowEscapeKey: false      // Prevent closing by pressing Escape
+    			        }).then((result) => {
+    			            if (result.isConfirmed) {
+    			                // AJAX call to delete data
+    			                $.ajax({
+    			                    url: '/delete-excel-data',
+    			                    type: 'DELETE',
+    			                    success: function(response) {
+    			                        console.log('Excel data deleted successfully');
+    			                    },
+    			                    error: function(error) {
+    			                        console.error('Error deleting Excel data:', error);
+    			                    }
+    			                });
+    			            }
+    			        });
+    			    }
+
+    			}	 		  
+    		
+    		  /* document.addEventListener('DOMContentLoaded', (event) => {
+    			    connect();
+    			});	*/
+    			
+    			
+    			function clearExcel(){
+    				//alert("hi");
+    				 // AJAX call to delete data
+	                $.ajax({
+	                    url: '/delete-excel-data',
+	                    type: 'DELETE',
+	                    success: function(response) {
+	                        console.log('Excel data deleted successfully');
+	                    },
+	                    error: function(error) {
+	                        console.error('Error deleting Excel data:', error);
+	                    }
+	                });
+    			}
+		        
+    </script>
+</body>
+
+</html>

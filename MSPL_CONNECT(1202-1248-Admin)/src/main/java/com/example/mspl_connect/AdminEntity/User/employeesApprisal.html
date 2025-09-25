@@ -1,0 +1,2581 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Employees Appraisal</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <!-- Include jsPDF Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <!-- =======================================================
+  * Template Name: NiceAdmin
+  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+  * Updated: Apr 20 2024 with Bootstrap v5.3.3
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+  
+  <style>  
+       .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .info-card {
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        #attendence-chart{
+            width: 100%;
+            height: 190px; /* Adjust the height as needed */
+        }
+       #attendence-chart {
+        font-size: 3rem; /* Large font size */
+        font-weight: bold; /* Make it bold */
+        color: #012970; /* Green color for a nice appearance */
+        text-align: center; /* Center the text */
+        margin-top: 10px; /* Add some space above the running time */
+      }
+      
+        /* Example CSS to style disabled items */
+		.activity-item .disabled {
+		    pointer-events: none; /* Disable interactions */
+		    opacity: 0.5; /* Make the item appear grayed out */
+		}
+		.activity {
+		    max-height: 190px; /* Set the maximum height as per your requirement */
+		    overflow: hidden; /* Hide content that overflows */
+		    position: relative;
+		    transition: max-height 0.3s ease; /* Add a smooth transition */
+		}
+		
+		.activity.expanded {
+		    max-height: none; /* Remove the height limit when expanded */
+		}
+		
+		.view-more {
+		    display: block;
+		    cursor: pointer;
+		    color: #007bff; /* Change to your preferred color */
+		    text-align: center;
+		    padding: 10px;
+		    background: white;
+		    border-top: 1px solid #ddd;
+		    position: absolute;
+		    bottom: 0;
+		    width: 100%;
+		}
+		.view-more.hidden {
+		    display: none; /* Hide the button when it's not needed */
+		}
+		.profile-picture {
+		    width: 40px;  /* Adjust the size as needed */
+		    height: 150px; /* Ensure the height and width are the same */
+		    border-radius: 50%; /* This makes the image a circle */
+		    object-fit: cover;  /* Ensures the image fits within the circle */
+		}		
+              .list-group-item {
+		    padding: 10px 15px;
+		    display: flex;
+		    align-items: center;
+		}
+		
+		.list-group-item img {
+		    border-radius: 50%; /* Ensures user image is circular */
+		}
+		
+		.list-group-item .ms-3 {
+		    margin-left: 15px; /* Spacing between the icon and text */
+		}
+		.leaveLists small{
+			color:#99A3A4;
+		}
+	   /* CSS for highlighting the focused link */
+		.highlighted {
+		    background-color: yellow;
+		    border: 2px solid #ffa500; /* Example border */
+		    color: black; /* Change the text color if needed */
+		}
+    /* Keyframes for changing background color */
+    @keyframes backgroundColorChange {
+        0% {
+            background-color: #1e3c72; /* Start with dark blue */
+        }
+        50% {
+            background-color: #2a69ac; /* Transition to a lighter blue */
+        }
+        100% {
+            background-color: #1e3c72; /* Back to dark blue */
+        }
+    }
+
+    /* Keyframes for star movement */
+    @keyframes moveStars {
+        0% {
+            transform: translateX(0) translateY(0);
+            opacity: 1;
+        }
+        50% {
+            transform: translateX(20px) translateY(-20px);
+            opacity: 0.5;
+        }
+        100% {
+            transform: translateX(40px) translateY(-40px);
+            opacity: 0;
+        }
+    }
+
+     /* Blinking animation */
+    @keyframes blink {
+        0%, 100% {
+            opacity: 1; /* Fully visible */
+        }
+        50% {
+            opacity: 0; /* Invisible */
+        }
+    }
+
+    /* Target only the Apprisal link for the blinking effect */
+    #apprisalLink.blinking {
+        animation: blink 0.5s ease-in-out 3; /* Blinks 3 times in 0.5s intervals */
+    }
+    
+    .icon-large {
+	    font-size: 1.5em;
+	}
+    .YearlyPdfForm {
+	    position: relative;
+	   
+	}
+	
+	.top-corner-logo {
+	    position: absolute;
+	    top: 0;
+	    left: 0;
+	    width: 80px; /* Adjust the size of the image */
+	    height: auto;
+	    margin: 10px; /* Add some margin for spacing */
+	}
+    
+	  .YearlyPdfForm {
+	    border: 2px solid #ccc; /* Light gray border */
+	    padding: 20px; /* Space inside the border */
+	    border-radius: 8px; /* Rounded corners */
+	    background-color: #f9f9f9; /* Optional: Light background color */
+	    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Subtle shadow for depth */
+	}
+	                
+  </style>
+</head>
+
+<body>
+
+	<!-- ======= Header ======= -->
+	<header id="header" class="header fixed-top d-flex align-items-center">
+
+		<div class="d-flex align-items-center"
+			style="width: 100%; margin: 0 0 0 10px; padding: 5px;">
+			<a class="app-logo" th:href=@{/dashboard}> <img
+				class="d-none d-lg-block" src="assets/img/logo.png" alt="logo"
+				style="width: 200px; height: 50px; max-width: 100%; padding: 0 2px 0 10px; margin: 0;">
+			</a><!--  <i class="bi bi-chevron-double-left toggle-sidebar-btn" onclick="toggleIconRotation()"></i> -->
+		</div>
+
+		<!-- Include the header fragment -->
+		<div th:replace="fragments/header :: header"></div>
+
+	</header>
+	<!-- End Header -->
+
+	<!-- ======= Sidebar ======= -->
+	<aside id="sidebar" class="sidebar">
+		<ul class="sidebar-nav" id="sidebar-nav">
+			<li class="nav-item"><a class="nav-link"
+				th:href="@{/userDashboard}"> <i class="bi bi-grid"></i> <span>Dashboard</span>
+			</a></li>
+			<li class="nav-item"><a class="nav-link"
+				th:href="@{/viewAdminProfile(empid=${empDetailsByEmpId.empid})}">
+					<i class="bi bi-person"></i>  <span>My Profile</span>
+			</a></li>
+			<li class="nav-item"><a class="nav-link"
+				th:href="@{/attendanceLive(email=${empDetailsByEmpId.email})}">
+					<i class="bi bi-calendar3"></i> <span>Attendance</span>
+			</a></li>
+				 
+		   <li class="nav-item">
+	            <a class="nav-link" th:href="@{/groupMailId}">
+	                <i class="bi bi-telephone"></i>
+	                <span>Employee Contacts</span>
+	            </a>
+	        </li>
+			<!-- <li class="nav-item"><a class="nav-link"
+				th:href="@{/InterCommDetails}"> <i class="bi bi-telephone"></i>
+					<span>InterComm Details</span>
+			</a></li> -->
+			<li class="nav-item"><a class="nav-link"
+				th:href="@{/adminHoliday}"> <i class="bi bi-calendar4-week"></i>
+					<span>Holiday List</span>
+			</a></li>
+			<li class="nav-item"><a class="nav-link" th:href="@{/employee}">
+					<i class="bi bi-people"></i> <span>Employee</span>
+			</a></li>
+			<li class="nav-item"><a class="nav-link"
+				th:href="@{/viewAdminLeaves(empid=${empDetailsByEmpId.empid})}">
+					<i class="bi bi-card-text"></i> <span>Team Leaves</span>
+			</a></li>
+			<li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}"><a
+				class="nav-link" th:href="@{/events}"> <i class="bi bi-megaphone"></i>
+					<span>Announcement</span>
+			</a></li>
+
+			<li class="nav-item"><a class="nav-link" th:href="@{/asset}">
+					<i class="bi bi-wallet"></i> <span>Assets</span>
+			</a></li>
+			<li class="nav-item"><a class="nav-link"
+				th:href="@{/ongoingProject}"> <i class="bi bi-card-heading"></i>
+					<span>Projects</span>
+			</a></li>
+
+			<!-- <li class="nav-item"><a class="nav-link"
+				th:href="@{/viewAdminPayslip(empid=${empDetailsByEmpId.empid})}">
+					<i class="bi bi-file-text"></i> <span>Payslip</span>
+			</a></li> -->
+			<!-- Loop through the permissions map -->
+			<li class="nav-item" th:if="${permissions.interviewAccess}"><a
+				class="nav-link" th:href="@{/interview}"> <i
+					class="bi bi-vector-pen"></i> <span>Interview</span>
+			</a></li>
+			<li class="nav-item" th:if="${permissions.sales}"><a
+				class="nav-link" th:href="@{/sales}"> <i class="bi bi-cart3"></i>
+					<span>Sales</span>
+			</a></li>
+
+			<li class="nav-item" th:if="${permissions.accountsAccess}"><a
+				class="nav-link" th:href="@{/accounts}"> <i
+					class="bi bi-person-vcard"></i> <span>Accounts</span>
+			</a></li>
+
+			<li class="nav-item" th:if="${permissions.storeAccess}"><a
+				class="nav-link" th:href="@{/store}"> <i
+					class="bi bi-shop-window"></i> <span>Store</span>
+			</a></li>
+			<li class="nav-item" th:if="${permissions.apprisalAccess}"><a
+				class="nav-link" id="apprisalLink"
+				th:href="@{/apprisal(empid=${empDetailsByEmpId.empid})}"> <i
+					class="bi bi-file-text"></i> <span>Appraisal</span>
+			</a></li>
+			<li class="nav-item">
+				<a class="nav-link active" id="apprisalLink"
+				th:href="@{/employeeApprisal(empid=${empDetailsByEmpId.empid})}">
+					<i class="bi bi-file-text"></i> <span>Employee Appraisal</span>
+			</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" th:href="@{/my-favorites}">
+					<i class="bi bi-layout-text-window-reverse"></i>
+					<span>To-Chat & Remind</span>
+				</a>
+		    </li>
+		</ul>
+	</aside>
+
+	<main id="main" class="main">
+	
+	
+	
+
+		<input type="hidden" id="emp_idSessionValue"
+			th:value="${empDetailsByEmpId.empid}">
+		<div class="pagetitle mb-0 d-flex"  th:if="${empDetailsByEmpId.deptId==0}">
+		    <i class="bi bi-chevron-double-left toggle-sidebar-btn mb-1" onclick="toggleIconRotation()" style="font-size:24px;color:#2F73B9;padding:0 10px;margin-left:-10px;margin-top:-10px;cursor:pointer;"></i>
+			<nav>
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a th:href="@{/navbar}">Home</a></li>
+					<li class="breadcrumb-item active">Appraisal</li>
+				</ol>
+			</nav>
+		</div>
+		<div class="pagetitle mb-0 d-flex"  th:if="${empDetailsByEmpId.deptId>0}">
+			<i class="bi bi-chevron-double-left toggle-sidebar-btn mb-1" onclick="toggleIconRotation()" style="font-size:24px;color:#2F73B9;padding:0 10px;margin-left:-10px;margin-top:-10px;cursor:pointer;"></i>
+			<nav>
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a th:href="@{/userDashboard}">Home</a></li>
+					<li class="breadcrumb-item active">Appraisal</li>
+				</ol>
+			</nav>
+		</div>
+		<!-- End Page Title -->
+		<section class="section dashboard">
+
+			<!-- Modal Structure -->
+			<div class="modal fade" id="appraisalDetailModal" tabindex="-1"
+				aria-labelledby="appraisalDetailModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-xl">
+					<!-- Add 'modal-lg' to increase modal size -->
+					<div class="modal-content">
+					<input type="hidden" id="emp_usertype">
+					<input type="hidden" id="appraisalEmp_idValue" th:value="${emp_id}">
+					
+						<div class="modal-header">
+							<h5 class="modal-title" id="appraisalDetailModalLabel">Appraisal
+								Details| <span id='employeeName' style="font-size:14px;"></span></h5>
+
+							<button type="button" class="btn-close" data-bs-dismiss="modal"
+								aria-label="Close"></button>
+						</div>
+						<!-- Button to open modal -->
+						<!-- <div class="p-2" style="text-align: right">
+							<button class="btn btn-primary salaryHikeForm"
+								data-bs-toggle="modal" data-bs-target="#employeeModal">
+								salary details</button>
+						</div>
+ -->
+
+						<div class="card" style="">
+							<!-- Bordered Tabs Justified -->
+							<ul class="nav nav-tabs nav-tabs-bordered d-flex"
+								id="borderedTabJustified" role="tablist">
+								<li class="nav-item flex-fill" role="presentation">
+									<button class="nav-link w-100 active" id="home-tab"
+										data-bs-toggle="tab" data-bs-target="#bordered-justified-quaterDetails"
+										type="button" role="tab" aria-controls="home"
+										aria-selected="true">Quater Details</button>
+								</li>
+								<li class="nav-item flex-fill" role="presentation">
+									<button class="nav-link w-100" id="profile-tab"
+										data-bs-toggle="tab"
+										data-bs-target="#bordered-justified-salary" type="button"
+										role="tab" aria-controls="profile" aria-selected="false">Salary
+										Records</button>										
+								</li>
+								<li class="nav-item flex-fill" role="presentation">
+									<button class="nav-link w-100" id="profile-tab"
+										data-bs-toggle="tab"
+										data-bs-target="#bordered-justified-PDF_Form" type="button"
+										role="tab" aria-controls="profile" aria-selected="false">View Form</button>
+								</li>
+							</ul>
+							<div class="tab-content pt-2" id="borderedTabJustifiedContent1">
+								<div class="tab-pane fade show active"
+									id="bordered-justified-quaterDetails" role="tabpanel"
+									aria-labelledby="home-tab">
+									<div class="modal-body pt-0">
+										<!-- Table Structure -->
+										<div class="col-lg-12">
+
+											<input type='hidden' id="empId">
+
+											<div class="card">
+												<div class="card-body table-responsive">
+													<!-- <button id="downloadPDF" class="btn btn-primary">Download PDF</button> -->
+
+													<table id="holidayTable"
+														class="table table-hover mb-0 text-center">
+														<thead class="fixTHead">
+															<tr>
+																<th>ID</th>
+																<th>Name</th>
+																<th>Max Score</th>
+																<th>Allotted Score</th>
+																<th>Overall Percentage</th>
+																<th>Overall Rating</th>
+																<th>Overall Description</th>
+																<th>Department</th>
+																<th>Stream</th>
+																<th>Role</th>
+																<th>Email</th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr>
+																<td id="empIdModel"></td>
+																<td id="fullName"></td>
+																<td id="appraisalTotalScore">-</td>
+																<td id="appraisalAssignedScore">-</td>
+																<td id="appraisalOverallPercentage">-</td>
+																<td id="appraisalOverallRating">-</td>
+																<td id="appraisalOverallDesc">-</td>
+																<td id="dept"></td>
+																<td id="subdept"></td>
+																<td id="roleName"></td>
+																<td id="emailInModel"></td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+
+											<div class="card">
+												<div class="card-body">
+													<div class="accordion accordion-flush"
+														id="accordionFlushExample"></div>
+												</div>
+											</div>
+
+										</div>
+									</div>
+								</div>
+								<div class="tab-pane fade" id="bordered-justified-salary"
+									role="tabpanel" aria-labelledby="profile-tab">
+									<table id="salaryDetailsTable" class="table table-hover mb-0 text-center">
+														<thead class="fixTHead">
+															<tr>
+																<th>Sl no</th>
+																<th>EmpId</th>
+																<th>Financial Year</th>
+																<th>Perfomance</th>
+																<th>Previous Salary(LPA)</th>
+																<th>Hike(%)</th>																
+																<th>After Revision(LPA)</th>
+																<th>Affect From</th>
+																<th>Remarks</th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr>
+																
+															</tr>
+														</tbody>
+									</table>
+								</div>
+									<div class="tab-pane fade" id="bordered-justified-PDF_Form">
+								    <button type="button" id="downloadPdfBtn" class="btn btn-primary mt-3 mb-3">Download PDF</button>
+								    
+								    <div class="YearlyPdfForm position-relative" style="border: 2px solid #ccc; padding: 20px; border-radius: 8px;">
+									    <div class="d-flex justify-content-between headerOfPDF">
+									        <div>
+									            <!-- Add the image here -->
+									            <img class="d-none d-lg-block mb-3" src="assets/img/logo.png" alt="logo" style="width:200px; height:50px; max-width:100%; padding:0 2px 0 10px; margin:0;">
+									        </div>
+									        <div> 
+									            <p style="text-align: right; margin: 0; padding-right: 10px; font-size: 14px;">
+									                <strong>Melange Systems pvt ltd</strong><br>
+									                4/1, 7th Cross Rd, Kumara Park West,<br>
+									                Seshadripuram, Bengaluru,<br>
+									                Karnataka 560020
+									            </p>                                     
+									        </div>
+									    </div>
+									    
+									    <hr>
+									    <!-- Centered and Highlighted Appraisal Details -->
+									    <div style="text-align: center; background-color: #f8f9fa; padding: 10px; border-radius: 5px; font-weight: bold;">
+									        <h6 style="margin: 0; color: black;"><b>Appraisal Details</b></h6>
+									    </div>
+									    
+									    <!-- Simple text content -->
+									    <div class="details">
+									        <p class="mb-0"><b>EmpId:</b><span id="empIDInForm"></span></p>
+									        <p class="mb-0"><b>Name:</b><span id="empNameInForm"></span></p>									        
+									        <p class="mb-0"><b>Financial Year:</b><span id="financialYearInForm"></span></p>
+									    </div>
+									    
+									    <table class="table borderd-table mt-3" style="width: 100%; text-align: center;">
+									        <thead>
+									            <tr>
+									                <th>Q1</th>
+									                <th>Q2</th>
+									                <th>Q3</th>
+									                <th>Q4</th>
+									                <th>Total</th>
+									                <th>Grade</th>
+									                <th>Percentage(%)</th>
+									            </tr>
+									        </thead>
+									        
+									        <tbody>
+									            <tr>
+									                <td id="q1TotalForFOrm"></td>
+									                <td id="q2TotalForFOrm"></td>
+									                <td id="q3TotalForFOrm"></td>
+									                <td id="q4TotalForFOrm"></td>
+									                <td id="qTotalForFOrm"></td>
+									                <td id="grandeForFOrm"></td>
+									                <td id="percentageForForm"></td>
+									            </tr>
+									        </tbody>
+									    </table>
+									    <hr>
+									    <p>Note:</p>
+									    <table id="holidayTable" class="table table-hover mb-0" style="font-size: 14px;">
+										    <thead class="fixTHead">
+										        <tr>
+										            <th>Rating</th>
+										            <th>Description</th>
+										            <th>Percentage</th>
+										        </tr>
+										    </thead>
+										    <tbody>
+										        <tr>
+										            <td>5</td>
+										            <td>Exceeds performance, consistently exceeds expectations</td>
+										            <td>91-100</td>
+										        </tr>
+										        <tr>
+										            <td>4</td>
+										            <td>Meets expectations, occasionally exceeds expectations</td>
+										            <td>78-90</td>
+										        </tr>
+										        <tr>
+										            <td>3</td>
+										            <td>Needs improvement, satisfactory performance</td>
+										            <td>60-77</td>
+										        </tr>
+										        <tr>
+										            <td>2</td>
+										            <td>Unsatisfactory, needs improvement</td>
+										            <td>45-59</td>
+										        </tr>
+										        <tr>
+										            <td>1</td>
+										            <td>Unacceptable performance, does not meet expectations</td>
+										            <td>0-44</td>
+										        </tr>
+										    </tbody>
+										</table>
+									</div>
+
+								</div>
+							</div>	
+						</div>
+						
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary"
+								data-bs-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Modal Structure for empoyees salary hike form-->
+			<div class="modal fade" id="employeeModal" tabindex="-1"
+				aria-labelledby="employeeModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-lg">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="employeeModalLabel">Employee
+								Details</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal"
+								aria-label="Close"></button>
+						</div>
+						<div class="modal-body">
+							<!-- Employee Details -->
+							<p>
+								<strong>Emp Name:</strong> <span id="empName">John Doe</span>
+							</p>
+							<p>
+								<strong>Emp ID:</strong> <span id="empId">12345</span>
+							</p>
+							<p>
+								<strong>Department:</strong> <span id="dept">IT</span>
+							</p>
+
+							<!-- Table for Q1-Q4 Details -->
+							<table class="table table-bordered">
+							    <thead>
+							        <tr>
+							            <th>Quarter</th>
+							            <th>Total Marks</th>
+							            <th>Total Percentage</th>
+							            <th>Salary Hike (%)</th>
+							            <th>Before Hike (LPA)</th>
+							            <th>After Hike (LPA)</th>
+							        </tr>
+							    </thead>
+							    <tbody>
+							        <tr>
+							            <td>Q1</td>
+							            <td>85</td>
+							            <td>21.25%</td>
+							            <td>5%</td>
+							            <td>5.00</td>
+							            <td>5.25</td>
+							        </tr>
+							        <tr>
+							            <td>Q2</td>
+							            <td>90</td>
+							            <td>22.5%</td>
+							            <td>7%</td>
+							            <td>5.25</td>
+							            <td>5.62</td>
+							        </tr>
+							        <tr>
+							            <td>Q3</td>
+							            <td>88</td>
+							            <td>22%</td>
+							            <td>6%</td>
+							            <td>5.62</td>
+							            <td>5.95</td>
+							        </tr>
+							        <tr>
+							            <td>Q4</td>
+							            <td>92</td>
+							            <td>23%</td>
+							            <td>8%</td>
+							            <td>5.95</td>
+							            <td>6.43</td>
+							        </tr>
+							    </tbody>
+							    <tfoot></tfoot>
+							</table>
+
+
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary"
+								data-bs-dismiss="modal">Close</button>
+						
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-lg-12" id="appraisalForm">
+				<!-- Bordered Tabs Justified -->
+
+				<div class="row">
+
+					<div class="col-lg-12">
+
+						<div class="card">
+							<!-- Bordered Tabs Justified -->
+							<ul class="nav nav-tabs nav-tabs-bordered d-flex"
+								id="borderedTabJustified" role="tablist">
+								
+								<li class="nav-item flex-fill" role="presentation">
+									<button class="nav-link w-100" id="profile-tab"
+										data-bs-toggle="tab"
+										data-bs-target="#bordered-justified-profile" type="button"
+										role="tab" aria-controls="profile"
+										th:classappend="${appraisalByEmpId == null ? ' active' : ''}" aria-selected="false">Employee
+										Records</button>
+								</li>
+								<li class="nav-item flex-fill" role="presentation">
+									<button class="nav-link w-100 " id="home-tab"
+										data-bs-toggle="tab" data-bs-target="#bordered-justified-home"
+										type="button" role="tab" aria-controls="home"
+										th:classappend="${appraisalByEmpId != null ? ' active' : ''}"
+										aria-selected="true">Submissions</button>
+								</li>
+							</ul>
+							<div class="tab-content pt-2" id="borderedTabJustifiedContent">
+								<div class="tab-pane fade"
+									id="bordered-justified-home" role="tabpanel"
+									aria-labelledby="home-tab" 
+									th:classappend = "${appraisalByEmpId != null ? ' show active' : ''}">
+									
+									<div class="card-body" th:if="${appraisalByEmpId == null}">
+										<h5 class="card-title pt-0">Employees Appraisals</h5>
+
+										<!-- Table with stripped rows -->
+										<table class="table datatable">
+											<thead>
+												<tr>
+													<th>Sl no.</th>
+													<th>Emp Id</th>
+													<th>Emp Name</th>
+													<th>Dept</th>
+													<th>Total Score</th>
+													<!-- <th data-type="date" data-format="YYYY/DD/MM">Start Date</th> -->
+													<th>Action</th>
+												</tr>
+											</thead>
+											<tbody>
+
+												<tr th:each="appraisal, iterStat : ${appraisal}">
+													<td th:text="${iterStat.index + 1}">1</td>
+													<!-- Sl. no. (starting from 1) -->
+													<td th:text="${appraisal.empId}">Emp ID</td>
+													<!-- Employee ID -->
+													<td th:text="${appraisal.emp_name}">Emp Name</td>
+													<td th:text="${appraisal.department}">Department</td>
+													<!-- Department -->
+													<td th:text="${appraisal.totalScore}">Department</td>
+													<td><a th:href="@{/employeeApprisal(empid=${appraisal.empId})}">
+															<i class="bi bi-pencil-square"></i> <!-- Edit icon -->
+															Edit
+													</a></td>
+													<!-- Edit Action button -->
+												</tr>
+											</tbody>
+										</table>
+										<!-- End Table with stripped rows -->
+									</div>
+									<div class="card-body" th:if="${appraisalByEmpId}">
+										<div class="d-flex justify-content-between mb-2">
+											<h5 class="card-title pt-0">
+												Appraisal Form&nbsp;|&nbsp;<span th:text="${empName}"></span>
+											</h5>
+											<button onclick="history.back()"
+												class="btn btn-primary btn-sm rounded-pill px-4 py-2 d-flex align-items-center">
+												<i class="bx bxs-share icon-small fs-4 me-2"></i> <span>Go
+													Back</span>
+											</button>
+										</div>
+
+									<!-- 	<table class="table table-bordered">
+												<tr><th colspan="8">Self-Assessment Scores</th></tr>
+												<tr>
+												    <th>Quter</th>
+													<th>Project</th>
+													<th>Attendance</th>
+													<th>Team Collaboration</th>
+													<th>Communication</th>
+													<th>Initiative</th>
+													<th>Leadership</th>
+													<th>Extra-Curricular Activities</th>
+												</tr>
+												<tr>
+													<td th:text="${appraisalByEmpId.quarter}">-</td>
+													<td th:text="${appraisalByEmpId.projectScore}"></td>
+													<td th:text="${appraisalByEmpId.attendanceScore}">-</td>
+													<td th:text="${appraisalByEmpId.teamCollaborationScore}">-</td>
+													<td th:text="${appraisalByEmpId.communicationScore}">-</td>
+													<td th:text="${appraisalByEmpId.initiativeScore}">-</td>
+													<td th:text="${appraisalByEmpId.leadershipScore}">-</td>
+													<td th:text="${appraisalByEmpId.extraCurricularScore}">-</td>
+												</tr>
+											</table> -->
+										<form id="appraisalFormDetails">
+											<input type="hidden" id="appraisalEmpId" th:value="${appraisalEmpId}"></input>
+											<input type="hidden" id="dept" th:value="${appraisalByEmpId.department}"></input>
+											<input type="hidden" id="quarter"	th:value="${appraisalByEmpId.quarter}"></input> 
+											<input type="hidden" id="quarterYear" th:value="${appraisalByEmpId.quarter_year}"></input>
+											
+											
+											<!-- Project Section -->
+											<div class="form-group">
+
+												<label><strong>1. Project: 65 Points</strong></label>
+												<p>
+													<strong>Description:</strong> Evaluation of the employee’s
+													contribution to project success, based on the value
+													received from the application and project outcomes.
+												</p>
+												<p>
+													<strong>Rating Explanation:</strong> This category assesses
+													the employee's performance on specific projects,
+													achievement of project goals, and overall impact on the
+													team or organization.
+												</p>
+												<!--  <label for="projectRating">Rating</label>-->
+												
+												<div class="d-flex justify-content-between" > 
+											        <div style="width:100%;padding-right:5px;">
+											            <label for="projectRating">Rating:</label>
+											            <input type="text" th:value="${appraisalByEmpId.projectScore}" class="form-control" id="projectRating" readonly>
+											        </div>
+											        <div style="width:100%;padding-left:5px;">
+											            <label for="projectRating">Self Rating:</label>
+											            <input type="text" th:value="${appraisalByEmpId.projectScore}" class="form-control" id="projectRating" readonly>
+											        </div>
+											    </div>
+													
+												<label for="projectComments">Comments</label>
+												<textarea id="projectComments"
+													th:text="${appraisalByEmpId?.projectComments}"
+													name="projectComments" class="form-control"
+													placeholder="Add comments"></textarea>
+											</div>
+
+											<!-- Attendance Section -->
+											<div class="form-group mt-2">
+												<label><strong>2. Attendance: 10 Points</strong></label>
+												<p>
+													<strong>Description:</strong> Evaluating the employee's
+													reliability and punctuality. The employee is expected to
+													maintain good attendance and avoid misuse of leave types.
+												</p>
+												<p>
+													<strong>Rating Explanation:</strong> Absenteeism,
+													tardiness, or frequent unapproved leave can impact the
+													overall work performance.
+												</p>
+												<div class="d-flex justify-content-between">
+													<div style="width:100%;padding-right:5px;">
+														<label for="attendanceRating">Rating</label> 
+														<select
+															id="attendanceRating" name="attendanceRating"
+															class="form-control" required>
+															<option value="" disabled selected>Select your
+																Rating</option>
+															<option value="5"
+																th:selected="${appraisalByEmpId?.attendanceScore == 5}">5
+																- Perfect attendance (10 points)</option>
+															<option value="4"
+																th:selected="${appraisalByEmpId?.attendanceScore == 4}">4
+																- Minor issues, acceptable (8-9 points)</option>
+															<option value="3"
+																th:selected="${appraisalByEmpId?.attendanceScore == 3}">3
+																- Occasional issues (6-7 points)</option>
+															<option value="2"
+																th:selected="${appraisalByEmpId?.attendanceScore == 2}">2
+																- Frequent absenteeism (4-5 points)</option>
+															<option value="1"
+																th:selected="${appraisalByEmpId?.attendanceScore == 1}">1
+																- Unacceptable attendance (0-3 points)</option>
+														</select>
+													</div>
+													<div style="width:100%;padding-left:5px;">
+											            <label for="projectRating">Self Rating:</label>
+											            <input type="text" th:value="${appraisalByEmpId.attendanceScore}" class="form-control" id="projectRating" readonly>
+											        </div>
+
+												</div>
+
+												<label for="attendanceComments">Comments</label>
+												<textarea id="attendanceComments"
+													th:text="${appraisalByEmpId?.attendanceComments}"
+													name="attendanceComments" class="form-control"
+													placeholder="Add comments"></textarea>
+											</div>
+
+											<!-- Team Collaboration Section -->
+											<div class="form-group mt-2">
+												<label><strong>3. Team Collaboration: 5
+														Points</strong></label>
+												<p>
+													<strong>Description:</strong> Evaluating the employee's
+													ability to collaborate and work effectively with others.
+													Team collaboration includes working harmoniously with
+													peers, sharing knowledge, and supporting colleagues.
+												</p>
+												<p>
+													<strong>Rating Explanation:</strong>: The employee is
+													assessed on teamwork, mutual respect, and contribution to
+													team success.
+												</p>
+												
+												<div class="d-flex justify-content-between">
+													<div style="width:100%;padding-right:5px;">
+														<label for="collaborationRating">Rating</label> 
+														<select
+															id="collaborationRating" name="collaborationRating"
+															class="form-control" required>
+															<option value="" disabled selected>Select your
+																Rating</option>
+															<option value="5"
+																th:selected="${appraisalByEmpId?.teamCollaborationScore == 5}">5
+																- Consistently fosters cooperation (5 points)</option>
+															<option value="4"
+																th:selected="${appraisalByEmpId?.teamCollaborationScore == 4}">4
+																- Meets expectations (4 points)</option>
+															<option value="3"
+																th:selected="${appraisalByEmpId?.teamCollaborationScore == 3}">3
+																- Generally works well (3 points)</option>
+															<option value="2"
+																th:selected="${appraisalByEmpId?.teamCollaborationScore == 2}">2
+																- Difficulty working with team (2 points)</option>
+															<option value="1"
+																th:selected="${appraisalByEmpId?.teamCollaborationScore == 1}">1
+																- Fails to collaborate (0-1 points)</option>
+														</select>
+													</div>
+													<div style="width:100%;padding-left:5px;">
+												            <label for="projectRating">Self Rating:</label>
+												            <input type="text" th:value="${appraisalByEmpId.teamCollaborationScore}" class="form-control" id="projectRating" readonly>
+												     </div>
+												</div>
+												
+												 <label for="collaborationComments">Comments</label>
+												<textarea id="collaborationComments"
+													th:text="${appraisalByEmpId?.teamCollaborationComments}"
+													name="collaborationComments" class="form-control"
+													placeholder="Add comments"></textarea>
+											</div>
+
+											<!-- Communication Section -->
+											<div class="form-group mt-2">
+											
+												<label><strong>4. Communication: 5 Points</strong></label>
+												<p>
+													<strong>Description:</strong> Assessing clarity and
+													effectiveness in communication.
+												</p>
+												<p>
+													<strong>Rating Explanation:</strong>Assessing the clarity
+													and effectiveness of the employee’s communication, both
+													verbal and written. This includes how well the employee
+													conveys information, listens, and responds to others.
+												</p>
+												
+												<div class="d-flex justify-content-between">
+													<div style="width:100%;padding-right:5px;">
+													    <label for="collaborationRating">Rating:</label> 
+														<select
+															id="communicationRating" name="communicationRating"
+															class="form-control" required>
+															<option value="" disabled selected>Select your
+																Rating</option>
+															<option value="5"
+																th:selected="${appraisalByEmpId?.communicationScore == 1}">5
+																- Clear, effective communication (5 points)</option>
+															<option value="4"
+																th:selected="${appraisalByEmpId?.communicationScore == 2}">4
+																- Generally clear, minor improvements (4 points)</option>
+															<option value="3"
+																th:selected="${appraisalByEmpId?.communicationScore == 3}">3
+																- Lacks clarity or promptness (3 points)</option>
+															<option value="2"
+																th:selected="${appraisalByEmpId?.communicationScore == 4}">2
+																- Significant issues causing delays (2 points)</option>
+															<option value="1"
+																th:selected="${appraisalByEmpId?.communicationScore == 5}">1
+																- Ineffective communication (0-1 points)</option>
+														</select> 
+													</div>
+													<div style="width:100%;padding-left:5px;">
+												            <label for="projectRating">Self Rating:</label>
+												            <input type="text" th:value="${appraisalByEmpId.communicationScore}" class="form-control" id="projectRating" readonly>
+												     </div>
+												</div>
+												
+												<label for="communicationRating">Rating</label> 
+												<label for="communicationComments">Comments</label>
+												<textarea id="communicationComments"
+													th:text="${appraisalByEmpId?.communicationComments}"
+													name="communicationComments" class="form-control"
+													placeholder="Add comments"></textarea>
+											</div>
+
+											<!-- Initiative Section -->
+											<div class="form-group mt-2">
+												<label><strong>5. Initiative: 5 Points</strong></label>
+												<p>
+													<strong>Description:</strong>Evaluating the employee's
+													willingness to take on new tasks, solve problems, and
+													improve processes within the organization.
+												</p>
+												<p>
+													<strong>Rating Explanation:</strong>Initiative is a key
+													driver of personal and team growth. Employees who
+													demonstrate initiative take ownership of challenges and
+													contribute ideas for improvement.
+												</p>
+												
+												<div class="d-flex justify-content-between">
+													<div style="width:100%;padding-right:5px;">
+														<label for="initiativeRating">Rating:</label> 
+														<select
+															id="initiativeRating" name="initiativeRating"
+															class="form-control" required>
+															<option value="" disabled selected>Select your
+																Rating</option>
+															<option value="5"
+																th:selected="${appraisalByEmpId?.initiativeScore == 5}">5
+																- Proactively identifies improvements (5 points)</option>
+															<option value="4"
+																th:selected="${appraisalByEmpId?.initiativeScore == 4}">4
+																- Occasionally shows initiative (4 points)</option>
+															<option value="3"
+																th:selected="${appraisalByEmpId?.initiativeScore == 3}">3
+																- Needs improvement in proactivity (3 points)</option>
+															<option value="2"
+																th:selected="${appraisalByEmpId?.initiativeScore == 2}">2
+																- Rarely shows initiative (2 points)</option>
+															<option value="1"
+																th:selected="${appraisalByEmpId?.initiativeScore == 1}">1
+																- Shows no initiative (0-1 points)</option>
+														</select>
+													</div>
+													<div style="width:100%;padding-left:5px;">
+												            <label for="projectRating">Self Rating:</label>
+												            <input type="text" th:value="${appraisalByEmpId.initiativeScore}" class="form-control" id="projectRating" readonly>
+												     </div>
+												</div>
+
+												 <label for="initiativeComments">Comments</label>
+												<textarea id="initiativeComments"
+													th:text="${appraisalByEmpId?.initiativeComments}"
+													name="initiativeComments" class="form-control"
+													placeholder="Add comments"></textarea>
+											</div>
+
+											<!-- Leadership Section -->
+											<div class="form-group mt-2">
+												<label><strong>6. Leadership (if
+														applicable): 5 Points</strong></label>
+												<p>
+													<strong>Description:</strong> If the employee holds a
+													leadership role, this criterion assesses their ability to
+													motivate, guide, and manage their team effectively.
+												</p>
+												<p>
+													<strong>Rating Explanation:</strong>Leadership involves
+													directing the team, resolving conflicts, and ensuring the
+													team achieves its objectives.
+												</p>
+												<div class="d-flex justify-coontent-between">
+													<div  style="width: 100%; padding-right: 5px;">
+														<label for="leadershipRating">Rating</label>
+														<select
+															id="leadershipRating" name="leadershipRating"
+															class="form-control" required>
+															<option value="" disabled selected>Select your
+																Rating</option>
+															<option value="5"
+																th:selected="${appraisalByEmpId?.leadershipScore == 5}">5
+																- Excellent leadership (5 points)</option>
+															<option value="4"
+																th:selected="${appraisalByEmpId?.leadershipScore == 4}">4
+																- Effective leader (4 points)</option>
+															<option value="3"
+																th:selected="${appraisalByEmpId?.leadershipScore == 3}">3
+																- Satisfactory, needs improvement (3 points)</option>
+															<option value="2"
+																th:selected="${appraisalByEmpId?.leadershipScore == 2}">2
+																- Limited leadership capabilities (2 points)</option>
+															<option value="1"
+																th:selected="${appraisalByEmpId?.leadershipScore == 1}">1
+																- Ineffective leadership (0-1 points)</option>
+														 </select>
+													</div>
+													<div style="width: 100%; padding-left: 5px;">
+														<label for="projectRating">Self Rating:</label> 
+														<input
+															type="text"
+															th:value="${appraisalByEmpId.leadershipScore}"
+															class="form-control" id="projectRating" readonly>
+													</div>
+												</div>
+												<label for="leadershipComments">Comments</label>
+												<textarea id="leadershipComments"
+													th:text="${appraisalByEmpId?.leadershipComments}"
+													name="leadershipComments" class="form-control"
+													placeholder="Add comments"></textarea>
+											</div>
+
+											<!-- Extra-Curricular Activities Section -->
+											<div class="form-group mt-2">
+												<label>
+												<strong>7. Extra-Curricular
+														Activities: 5 Points</strong></label>
+												<p>
+													<strong>Description:</strong> : Willingness to participate
+													in office or team-building activities that promote a
+													positive work culture.
+												</p>
+												<p>
+													<strong>Rating Explanation:</strong>Engagement in
+													extra-curricular activities shows an employee’s interest in
+													contributing to the work environment beyond just completing
+													tasks.
+												</p>
+												<div class="d-flex justify-content-between">
+													<div style="width: 100%; padding-right: 5px;">
+														<label for="extraCurricularRating">Rating</label> 
+														<select
+															id="extraCurricularRating" name="extraCurricularRating"
+															class="form-control" required>
+															<option value="" disabled selected>Select your
+																Rating</option>
+															<option value="5"
+																th:selected="${appraisalByEmpId?.extraCurricularScore == 5}">5
+																- Regularly participates in activities (5 points)</option>
+															<option value="4"
+																th:selected="${appraisalByEmpId?.extraCurricularScore == 4}">4
+																- Occasionally participates (4 points)</option>
+															<option value="3"
+																th:selected="${appraisalByEmpId?.extraCurricularScore == 3}">3
+																- Participates only when necessary (3 points)</option>
+															<option value="2"
+																th:selected="${appraisalByEmpId?.extraCurricularScore == 2}">2
+																- Shows little interest (2 points)</option>
+															<option value="1"
+																th:selected="${appraisalByEmpId?.extraCurricularScore == 1}">1
+																- Does not participate (0-1 points)</option>
+														</select> 
+													</div>
+													<div style="width: 100%; padding-left: 5px;">
+														<label for="projectRating">Self Rating:</label> 
+														<input
+															type="text"
+															th:value="${appraisalByEmpId.extraCurricularScore}"
+															class="form-control" id="projectRating" readonly>
+													</div>
+													
+												</div>
+												<label for="extraCurricularComments">Comments</label>
+												<textarea id="extraCurricularComments"
+													th:text="${appraisalByEmpId?.extraCurricularComments}"
+													name="extraCurricularComments" class="form-control"
+													placeholder="Add comments"></textarea>
+											</div>
+
+											<!-- Total Score and Overall Rating Section -->
+											<div class="row mt-4">
+												<div class="col-lg-6">
+													<label>Total Score:</label> <span id="totalScore"
+														th:text="${appraisalByEmpId?.totalScore}">0</span>
+												</div>
+												<div class="col-lg-6">
+													<label>Overall Rating:</label> <span id="overallRating">N/A</span>
+												</div>
+											</div>
+
+											<!-- Submit Button -->
+											<button type="submit" id="submitAppraisal"
+												class="btn btn-primary mt-3">Submit Appraisal</button>
+										</form>
+									</div>
+
+
+								</div>
+								<div class="tab-pane fade"  id="bordered-justified-profile"
+									role="tabpanel" aria-labelledby="profile-tab" th:classappend="${appraisalByEmpId == null ? ' show active' : ''}">
+
+									<table class="table table-hover text-center"
+										style="font-size: 14px;">
+										<thead class="fixTHead">
+											<tr>
+												<th scope="col">SL No</th>
+												<th scope="col">View</th>
+												<th scope="col">Emp Id</th>
+												<th scope="col">Name</th>
+												<th scope="col">Department</th>
+												<th scope="col">Role</th>
+												<th scope="col">Email</th>
+											</tr>
+										</thead>
+										<tbody id="empTbody"></tbody>
+									</table>
+
+								</div>
+							</div>
+							<!-- End Bordered Tabs Justified -->
+
+						</div>
+					</div>
+				</div>
+			</div>
+							<!-- Feedback Modal -->
+			<div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+			    <div class="modal-dialog">
+			        <div class="modal-content rounded-4 shadow-lg">
+			            <div class="modal-header border-0">
+			                <h5 class="modal-title" id="feedbackModalLabel">Feedback Form</h5>
+			                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			            </div>
+			            <div class="modal-body">
+			                <form id="feedbackForm" method="post" enctype="multipart/form-data">
+			                    <div class="mb-3" style="display: none;">
+			                        <label for="feedbackName" class="form-label fw-bold">Your Name</label>
+			                        <input type="text" class="form-control" id="feedbackName" name="name" th:value="${empDetailsByEmpId.fullName}" readonly>
+			                    </div>
+			                    <div class="mb-3" style="display: none;">
+			                        <label for="feedbackEmail" class="form-label fw-bold">Your Email</label>
+			                        <input type="email" class="form-control" id="feedbackEmail" name="email" th:value="${empDetailsByEmpId.email}" readonly>
+			                    </div>
+			                    <div class="mb-3">
+			                        <label for="feedbackEmailyy" class="form-label fw-bold">To</label>
+			                        <div class="to-field-container">
+			                            <span class="to-field rounded-pill px-3 py-2 shadow-sm">bugs_msplconnect@melangesystems.com</span>
+			                        </div>
+			                    </div>
+								<div class="mb-3">
+								    <label for="bugType" class="form-label fw-bold">Bug Type</label>
+								    <select class="form-control" id="bugType" name="bugType" required>
+								        <option value="About Application">About Application</option>
+								        <option value="New Feature">New Feature</option>
+								    </select>
+								</div>
+
+			                    <div class="mb-3">
+			                        <label for="feedbackMessage" class="form-label fw-bold">Message</label>
+			                        <textarea class="form-control" id="feedbackMessage" name="message" rows="4" placeholder="Enter your feedback here..." required></textarea>
+			                    </div>
+			                    <div class="mb-3">
+			                        <label for="feedbackAttachment" class="form-label fw-bold">Attachment (optional)</label>
+			                        <input type="file" class="form-control" id="feedbackAttachment" name="attachment" accept=".png, .jpg, .jpeg" multiple>
+			                        <small class="text-muted">Max size: 5MB. You can upload multiple images.</small>
+			                    </div>
+			                    <button type="submit" class="btn btn-primary w-100 mt-3 py-2 shadow-sm" id="submitFeedbackBtn">Submit Feedback</button>
+			                </form>
+			            </div>
+			        </div>
+			    </div>
+			</div>
+			<script>
+				    // Calculate total score and overall rating
+				    document.getElementById('appraisalFormDetails').addEventListener('input', calculateTotal);
+
+				    function calculateTotal() {
+				        const ratings = [
+				            parseInt(document.getElementById('projectRating').value) || 0,
+				            parseInt(document.getElementById('attendanceRating').value) || 0,
+				            parseInt(document.getElementById('collaborationRating').value) || 0,
+				            parseInt(document.getElementById('communicationRating').value) || 0,
+				            parseInt(document.getElementById('initiativeRating').value) || 0,
+				            parseInt(document.getElementById('leadershipRating').value) || 0,
+				            parseInt(document.getElementById('extraCurricularRating').value) || 0,
+				            
+				        ];
+
+				        const totalScore = ratings.reduce((sum, value) => sum + value, 0);
+				        document.getElementById('totalScore').innerText = totalScore;
+
+				        let overallRating;
+				        if (totalScore >= 90) overallRating = 'Outstanding';
+				        else if (totalScore >= 75) overallRating = 'Exceeds Expectations';
+				        else if (totalScore >= 60) overallRating = 'Meets Expectations';
+				        else overallRating = 'Needs Improvement';
+
+				        document.getElementById('overallRating').innerText = overallRating;
+				    }
+					
+					document.getElementById('submitAppraisal').addEventListener('click', function(event) {
+					    event.preventDefault();  // Prevent the default form submission to handle it manually
+
+					    // Check if all ratings are selected
+					    if (!isAllRatingsSelected()) {
+					        Swal.fire({
+					            title: 'Incomplete Form',
+					            text: 'Please fill in all the ratings before submitting.',
+					            icon: 'error',
+					            confirmButtonText: 'Ok'
+					        });
+					        return;  // Prevent submission if ratings are missing
+					    }
+
+					    // Show a SweetAlert confirmation dialog
+					    Swal.fire({
+					        title: 'Are you sure?',
+					        text: "Please review your input carefully. Once submitted, the action cannot be reversed.",
+					        icon: 'warning',
+					        showCancelButton: true,
+					        confirmButtonText: 'Yes, submit!',
+					        cancelButtonText: 'No, cancel',
+					        reverseButtons: true
+					    }).then((result) => {
+					        if (result.isConfirmed) {
+					            // Collect form data only if user confirmed
+					            const formData = {
+					            	empId:document.getElementById('appraisalEmpId').value,
+					            	department:document.getElementById('dept').value,
+					            	quarter:document.getElementById('quarter').value,
+					            	quarter_year:document.getElementById('quarterYear').value,
+					            	
+					                projectScore:  document.getElementById('projectRating').value,  // Extract the first number from the rating
+					                projectComments: document.getElementById('projectComments').value,
+					                attendanceScore:document.getElementById('attendanceRating').value,  // Extract the first number from the rating
+					                attendanceComments: document.getElementById('attendanceComments').value,
+					                teamCollaborationScore: document.getElementById('collaborationRating').value,
+					                teamCollaborationComments: document.getElementById('collaborationComments').value,
+					                communicationScore: document.getElementById('communicationRating').value,
+					                communicationComments: document.getElementById('communicationComments').value,
+					                initiativeScore: document.getElementById('initiativeRating').value,
+					                initiativeComments: document.getElementById('initiativeComments').value,
+					                leadershipScore: document.getElementById('leadershipRating').value,
+					                leadershipComments: document.getElementById('leadershipComments').value,
+					                extraCurricularScore: document.getElementById('extraCurricularRating').value,
+					                extraCurricularComments: document.getElementById('extraCurricularComments').value,
+					                totalScore: document.getElementById('totalScore').innerText,
+					                overallRating: document.getElementById('overallRating').innerText
+					            };
+
+					            console.log('Form Data:', formData);
+
+					            // Send AJAX request after user confirmation
+					            fetch('/saveEmployeeAppraisal', {
+					                method: 'POST',
+					                headers: {
+					                    'Content-Type': 'application/json'
+					                },
+					                body: JSON.stringify(formData)
+					            })
+					            .then(response => response.json())
+					            .then(data => {
+					                if (data.success) {
+					                    Swal.fire({
+					                        title: 'Success!',
+					                        text: 'Appraisal submitted successfully!',
+					                        icon: 'success',
+					                        confirmButtonText: 'Ok'
+					                    }).then(() => {
+					                        // Redirect to dashboard after user clicks "Ok"
+					                        window.location.href = '/userDashboard';
+					                    });
+					                } else {
+					                    Swal.fire('Error!', 'There was an error submitting the appraisal.', 'error');
+					                }
+					            })
+					            .catch(error => {
+					                console.error('Error:', error);
+					                Swal.fire('Error!', 'An error occurred. Please try again later.', 'error');
+					            });
+					        } else {
+					            // If the user cancels, show a cancellation message
+					            Swal.fire('Cancelled', 'Your submission was cancelled.', 'info');
+					        }
+					    });
+					});
+
+
+					// Helper function to extract the first rating number (5, 4, 3, etc.) from the option text
+					function getFirstRatingNumber(selectId) {
+					    const selectElement = document.getElementById(selectId);
+					    const selectedOption = selectElement.options[selectElement.selectedIndex];
+					    const optionText = selectedOption.textContent || selectedOption.innerText;
+
+					    // Extract the first number from the option text (before the hyphen or dash)
+					    const ratingNumber = optionText.split(' -')[0];  // Split at the first " -"
+					    
+					    return ratingNumber;  // Return the extracted number (5, 4, 3, etc.)
+					}
+					// Function to check if all ratings are selected
+					function isAllRatingsSelected() {
+					    return (
+					        document.getElementById('projectRating').value &&
+					        document.getElementById('attendanceRating').value &&
+					        document.getElementById('collaborationRating').value &&
+					        document.getElementById('communicationRating').value &&
+					        document.getElementById('initiativeRating').value &&
+					        document.getElementById('leadershipRating').value &&
+					        document.getElementById('extraCurricularRating').value
+					    );
+					}
+				</script>
+
+
+			</div>
+			<!-- End Left side columns -->
+		</section>
+
+	</main>
+	<!-- End #main -->
+
+	<!-- ======= Footer ======= -->
+	<footer id="footer" class="footer">
+		<div class="copyright">
+			&copy; Copyright <strong><span>Melange System pvt ltd</span></strong>.
+			All Rights Reserved
+		</div>
+	</footer>
+	<!-- End Footer -->
+
+	<a href="#"
+		class="back-to-top d-flex align-items-center justify-content-center"><i
+		class="bi bi-arrow-up-short"></i></a>
+
+	<!-- Vendor JS Files -->
+	<script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+	<script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script src="assets/vendor/chart.js/chart.umd.js"></script>
+	<script src="assets/vendor/echarts/echarts.min.js"></script>
+	<script src="assets/vendor/quill/quill.js"></script>
+	<script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+	<script src="assets/vendor/tinymce/tinymce.min.js"></script>
+	<script src="assets/vendor/php-email-form/validate.js"></script>
+
+	<!-- Template Main JS File -->
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+	<div id="attendence-chart"></div>
+	<!-- <script src="/path/to/your/timer.js"></script>
+ -->
+	<!-- <script>
+        // Function to calculate elapsed time
+        function calculateElapsedTime(loggedInTime) {
+            const currentTime = new Date();
+            
+            // Parse the logged-in time (format: HH:mm:ss) into a date object for today
+            const [hours, minutes, seconds] = loggedInTime.split(":").map(Number);
+            const loggedInDate = new Date();
+            loggedInDate.setHours(hours, minutes, seconds, 0);  // Set the time
+
+            // Calculate the difference in milliseconds
+            const elapsedMs = currentTime - loggedInDate;
+
+            // Convert milliseconds into hours, minutes, and seconds
+            const totalSeconds = Math.floor(elapsedMs / 1000);
+            const hoursWorked = Math.floor(totalSeconds / 3600);
+            const minutesWorked = Math.floor((totalSeconds % 3600) / 60);
+            const secondsWorked = totalSeconds % 60;
+
+            // Format as HH:mm:ss
+            const formattedElapsedTime = `${String(hoursWorked).padStart(2, '0')}:${String(minutesWorked).padStart(2, '0')}:${String(secondsWorked).padStart(2, '0')}`;
+
+            return formattedElapsedTime;
+        }
+
+        // Function to update elapsed time every second
+        function startTimer(loggedInTime) {
+            if (loggedInTime === "" || loggedInTime === "00:00:00") {
+                document.getElementById('elapsedTime').textContent = "00:00:00";
+            } else {
+                setInterval(() => {
+                    const elapsedTime = calculateElapsedTime(loggedInTime);
+                    document.getElementById('elapsedTime').textContent = elapsedTime;
+                }, 1000);
+            }
+        }
+
+        // Get the logged-in time from the HTML and start the timer
+        const loggedInTime = document.getElementById('start-time').textContent || "00:00:00";
+        startTimer(loggedInTime);
+    </script>
+ -->
+
+
+
+	<!-- script to notification -->
+<script>
+//Function to fetch flag value from the backend
+function fetchFlag() {
+    $.get("/flag", function(response) {
+    	console.log("admin");
+        var leaveRequestCountValue = response;
+        console.log(leaveRequestCountValue);
+       // If total notification count is greater than 0, show the bell icon
+        if (leaveRequestCountValue.totalNotificationCount > 0) {
+            $("#notificationBellIcon").show();  // Show bell icon
+        } else {
+            $("#notificationBellIcon").hide();  // Hide bell icon if no notifications
+        }
+
+        if (leaveRequestCountValue.leaveRequestFlagCount > 0) {
+            $("#notificationBellIcon").show();  // Show bell icon
+            $("#leaveRequestNotification").show();  // Show specific notification
+            
+            $("#leaveRequestMessage").text(leaveRequestCountValue.leaveRequestFlagCount + " leave request(s)");
+            $(".badge-number").text(leaveRequestCountValue.leaveRequestFlagCount);
+            $("#leaveRequestFlagCount").text(leaveRequestCountValue.leaveRequestFlagCount);
+        }
+        //display the asset notifu=ication based on asset count value
+        if(leaveRequestCountValue.asseteRequestFlagCount>0){
+        	 
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#assetRequestNotification").show();  // Show specific notification
+              
+             $("#assetRequestMessage").text(leaveRequestCountValue.asseteRequestFlagCount + " asset request(s)");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+             $("#asseteRequestFlagCount").text(leaveRequestCountValue.asseteRequestFlagCount);
+        	 	
+        }
+        
+        //display the new project notification based on asset count value
+        if(leaveRequestCountValue.newPrjectValueCount>0){
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#newProjectNotification").show();  // Show specific notification
+             
+             $("#newProjectMessage").text(leaveRequestCountValue.newPrjectValueCount + " project request(s)");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+             $("#newPrjectValueCount").text(leaveRequestCountValue.asseteRequestFlagCount);
+        }
+        //display the appraisal from HR notification ]
+        if(leaveRequestCountValue.appraisalCount>0){
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#hrAppraisal").show();  // Show specific notification
+             
+             $("#newProjectMessage").text(leaveRequestCountValue.appraisalCount + " Appraisal Form");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+             $("#newPrjectValueCount").text(leaveRequestCountValue.asseteRequestFlagCount);
+        }
+      //display the appraisal from employee notification 
+        if(leaveRequestCountValue.empAppraisalflag>0){
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#empAppraisal").show();  // Show specific notification
+             
+             $("#apprisalempNotification").text(leaveRequestCountValue.empAppraisalflag + " employees sent appraisal");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+             $("#newPrjectValueCount").text(leaveRequestCountValue.asseteRequestFlagCount);
+        }
+        
+        //display the appraisal Due date notification 
+        if(leaveRequestCountValue.adminAppraisalDuedate>0){
+        	 $("#dueAppraisal").show();  // Show bell icon
+             $("#empAppraisal").show();  // Show specific notification
+             
+             $("#apprisalDueNotification").text("Tomorrow is the due date for submit appraisal");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+             $("#newPrjectValueCount").text(leaveRequestCountValue.asseteRequestFlagCount);
+        }
+      //display the announcement notification based on asset count value
+        if(leaveRequestCountValue.announcementNotification>0){
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#newAnnouncementNotification").show();  // Show specific notification
+             
+             $("#newannouncement").text(leaveRequestCountValue.announcementNotification + " announcement(s)");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+        }
+        //display the leave request status change notification
+        if(leaveRequestCountValue.leaveRequestStatusChangeValue > 0){
+        	 
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#leaveRequestSatusChangeNotification").show();  // Show specific notification
+             
+             $("#leaveRequestSatusChangeMessage").text("Your leave request status has been");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);             
+        	 	
+        } 
+       
+    });
+}
+//Function to fetch flag value from the backend
+function fetchsuperAdminFlag() {
+    $.get("/flag", function(response) {
+    	//console.log("Super admin");
+        var requestCount = response;
+         
+        // If total notification count is greater than 0, show the bell icon and notifications
+        if (requestCount.totalNotificationCount > 0) {
+            $("#notificationBellIcon").show();  // Show bell icon
+            $("#leaveRequestNotification").show();  // Show specific notification
+            
+            $("#leaveRequestMessage").text(requestCount.leaveRequestFlagCount + " leave request(s)");
+            $(".badge-number").text(requestCount.totalNotificationCount);
+            $("#leaveRequestFlagCount").text(requestCount.leaveRequestFlagCount);
+        } else {
+            // If total notification count is 0, hide the bell icon and notification
+            $("#notificationBellIcon").hide();
+        }
+        //display the asset notifu=ication based on asset count value
+        if(requestCount.asseteRequestFlagCount>0){
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#assetRequestNotification").show();  // Show specific notification
+             
+             $("#assetRequestMessage").text(requestCount.asseteRequestFlagCount + " asset request(s)");
+             $(".badge-number").text(requestCount.totalNotificationCount);
+             $("#asseteRequestFlagCount").text(requestCount.asseteRequestFlagCount);
+        		
+        }
+        else {
+            // If total notification count is 0, hide the bell icon and notification
+            $("#assetRequestNotification").hide();
+        }
+    });
+}
+
+// Periodically fetch flag value every second (adjust as needed)
+const employeeId = document.getElementById('employee-id').value; // This is a string
+console.log(employeeId);
+
+if(employeeId === "0") {
+	setInterval(fetchsuperAdminFlag, 1000);
+}
+else{
+	setInterval(fetchFlag, 1000);
+}
+</script>
+
+<!-- script to notification link redirect -->
+<script th:inline="javascript">
+    function redirectToLeaveRequest() {
+        var empid = /*[[${empDetailsByEmpId.empid}]]*/ 'defaultEmpId';
+        window.location.href = '/viewAdminLeaves?empid=' + empid;
+    }
+    function redirectToAsset() {
+        //var empid = /*[[${empDetailsByEmpId.empid}]]*/ 'defaultEmpId';
+        window.location.href = '/asset';
+    }
+    function redirectToProject() {
+        //var empid = /*[[${empDetailsByEmpId.empid}]]*/ 'defaultEmpId';
+        window.location.href = '/ongoingProject';
+    }    
+    function redirectToAppraisal() {
+    	var empid = /*[[${empDetailsByEmpId.empid}]]*/ 'defaultEmpId';
+    	window.location.href = '/apprisal?empid=' + empid;
+    }    
+    function redirectToemployeeAppraisal() {
+    	var empid = /*[[${empDetailsByEmpId.empid}]]*/ 'defaultEmpId';
+    	window.location.href = '/employeeApprisal?empid=' + empid;
+    }    
+    function redirectToAnnouncement() {
+    	var empid = /*[[${empDetailsByEmpId.empid}]]*/ 'defaultEmpId';
+    	window.location.href = '/events';
+    }
+    
+    function redirectToAttendence() {
+    	var email = /*[[${empDetailsByEmpId.email}]]*/ 'defaultEmpId';
+    	window.location.href = '/attendanceLive?email=' +email;
+    }
+</script>
+
+	<!-- script for display attendence graph -->
+	<!-- <script>
+		const data = [
+		    { name: 'Present', count: 23 },
+		    { name: 'Absent', count: 6},
+		   
+		];
+
+        	console.log(data);
+            // Initialize the chart with the fetched data
+            Highcharts.chart('attendence-chart1', {
+                chart: {
+                    type: 'pie'
+                },
+                title: {
+                    text: ''
+                },
+                plotOptions: {
+                    pie: {
+                        dataLabels: {
+                            enabled: true,
+                            distance: 5, // Move labels slightly outside the pie
+                            formatter: function() {
+                                return this.point.name + ': <br>' + this.point.y;
+                            },
+                            style: {
+                                color: 'black',
+                                textOutline: 'none'
+                            }
+                        }
+                    }
+                },
+                series: [{
+                    name: 'Employees',
+                    data: data.map(dept => [dept.name, dept.count])
+                }]
+            });
+       
+</script> -->
+
+
+
+	<!-- script for profile pic -->
+	<script>
+$.ajax({
+    type: "GET",
+    url: "fetchEmployeeDocumentDetailsOnlyByEmpId",
+    data: {
+        "emp_id": $('#emp_idSessionValue').val()
+    },
+    success: function(data) {
+    	//console.log("++++data"+JSON.stringify(data));
+        $('#dynamicProfilePic').attr('src', `${data.profilePicPath}`);
+    },
+    error: function(xhr, status, error) {
+        console.error("Error invoking data:", error);
+    }
+});
+</script>
+
+
+	<!-- script to remove filter option to 5th column(Action column) in table -->
+	<!-- <script>
+$(document).ready(function() {
+    $('.datatable').DataTable({
+        columnDefs: [
+            { orderable: false, searchable: false, targets: [5] } // Disables search and sorting for the Action column
+        ]
+    });
+});
+</script> -->
+
+
+	<!-- script to get employees list -->
+	<!-- Template Main JS File -->
+	<script src="assets/js/main.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+	<script>
+$.ajax({
+    type: "GET",
+    url: "/fetchAllEmployeeDetailsExceptDocuments",
+    success: function(data) {
+    	//console.log("abcd---"+JSON.stringify(data));
+    	updateEmpLists(data);
+    },
+    error: function(xhr, status, error) {
+    	console.error('Error fetching data:', error);
+		console.log('Error fetching data. Please try again.');
+    }
+});
+
+
+function updateEmpLists(data) {
+    var viewEmpDetailsTBody = document.getElementById('empTbody');
+    viewEmpDetailsTBody.innerHTML = ''; // Clear existing table rows
+
+    if (data && data.length > 0) {
+        for (var i = 0; i < data.length; i++) {
+            var empid = JSON.stringify(data[i].empid); // Ensure empid is a string
+            var empName = JSON.stringify(data[i].fullName);
+            var roleName = JSON.stringify(data[i].roleName);
+            var deptName = JSON.stringify(data[i].deptName);
+            var subDeptName = JSON.stringify(data[i].sub_dept_name);
+            var email = JSON.stringify(data[i].email);
+            var usertype = JSON.stringify(data[i].usertype);
+            //alert(data[i].usertype);
+
+            var row = "<tr>" +
+                "<td>" + (i + 1) + "</td>" +
+                "<td>" +
+                    "<i class='bi bi-eye-fill' style='font-size: 16px; color: #4154f1; cursor: pointer;' onclick='openAppraisalDetailPage(" + empid + ","+ empName +","+ roleName +","+ deptName +","+ subDeptName +","+ email +","+ usertype +");' title='View'></i>" +
+                "</td>" +
+                "<td>" + data[i].empid + "</td>" +
+                "<td>" + data[i].fullName + "</td>" +
+                "<td>" + data[i].deptName + "</td>" +
+                "<td>" + data[i].roleName + "</td>" +
+                
+                "<td>" + data[i].email + "</td>" +
+            "</tr>";
+
+            viewEmpDetailsTBody.innerHTML += row; // Append row HTML
+        }
+    } else {
+        var noDataRow = "<tr><td colspan='7'>No data available</td></tr>"; // Adjust colspan for the number of columns
+        viewEmpDetailsTBody.innerHTML = noDataRow; // Display 'No data available'
+    }
+}
+
+
+let fixedFinancialYear = null; // Variable to store the fixed financial year
+let gradePointForForm = null;
+function openAppraisalDetailPage(emp_id, fullName, roleName, deptName, subDeptName, email, usertype) { 
+	
+	document.getElementById('empId').value = emp_id;
+	
+	document.getElementById('empIdModel').innerText = emp_id;
+	document.getElementById('fullName').innerText = fullName;
+	document.getElementById('dept').innerText= deptName;
+	document.getElementById('subdept').innerText = subDeptName;
+	document.getElementById('roleName').innerText = roleName;
+	document.getElementById('emailInModel').innerText = email;
+	
+	
+	document.getElementById('employeeName').innerText = fullName;
+	document.getElementById('emp_usertype').value = usertype;
+	document.getElementById('appraisalEmp_idValue').value = emp_id;
+	
+	//making financial year and grade to null so that it grade will calculate from begining
+	fixedFinancialYear = null; // Variable to store the fixed financial year
+    gradePointForForm = null;
+	
+	// Fill the PDF form details
+	// Update the elements with the appropriate properties
+	document.getElementById('empNameInForm').innerText = fullName; // Use innerText
+	document.getElementById('empIDInForm').innerText = emp_id; // Use innerText
+	
+    // Show modal
+    var appraisalModal = new bootstrap.Modal(document.getElementById('appraisalDetailModal'));
+    appraisalModal.show();
+    
+    createAccordion() ;
+   // assignFetchAppraisalDataHandler();
+    
+    // Make the AJAX call
+	  $.ajax({
+	    url: `/fetchAllSalaryDetails/${emp_id}`, // The endpoint
+	    type: 'GET', // HTTP method
+	    success: function(response) {
+	        // Clear existing table rows in tbody
+	        const tbody = $("#salaryDetailsTable tbody");
+	        tbody.empty();
+	
+	        // Check if response data is empty
+	        if (response.length === 0) { 
+	            const noDataRow = `
+	                <tr>
+	                    <td colspan="8" style="text-align: center;">No data available</td>
+	                </tr>
+	            `;
+	            tbody.append(noDataRow);
+	            return;
+	        }
+
+        // Populate the table with response data
+        response.forEach((item, index) => {
+            // Helper function to handle null or empty values
+            const formatData = (value) => value ? value : "-";
+            
+            const formattedDate = formatHikeAffectFrom(item.hike_affect_from);
+            const afterHike = calculateAfterHike(item.old_salary, item.hike);
+            const row = `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${formatData(item.empId)}</td>
+                    <td>${formatData(item.financial_year)}</td>
+                    <td>${formatData(item.total_performance)}</td>
+                    <td>${formatData(formatCurrency(item.old_salary))}</td>
+                    <td>${formatData(item.hike)}%</td>                    
+                    <td>${formatData(formatCurrency(afterHike))}</td>
+                    <td>${formatData(formattedDate)}</td>
+                    <td>${formatData(item.remarks)}</td>
+                </tr>
+            `;
+            tbody.append(row);
+        });
+    },
+    error: function(error) {
+        console.error("Error fetching salary details:", error);
+    }
+});
+}
+
+//Helper Function to format yyyy-MM to MM-yyyy
+const formatHikeAffectFrom = (date) => {
+    if (!date) return "-";
+    const [year, month] = date.split("-");
+    return `${month}-${year}`;
+};
+//Helper function to calculate salary after hike
+function calculateAfterHike(oldSalary, hike) {
+    return (parseFloat(oldSalary) + (parseFloat(oldSalary) * parseFloat(hike) / 100)).toFixed(2);
+}
+
+// Helper function to format currency in Indian Rupees
+function formatCurrency(value) {
+    return `₹${parseFloat(value).toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
+}
+</script>
+	<!-- script to create financial year accordion and fetch employee appraisal data  then display that in model-->
+	<script>
+	function getFinancialYears() {
+	    const currentDate = new Date();
+	    const currentYear = currentDate.getFullYear();
+	    const month = currentDate.getMonth();
+	    
+	 	// let startYear = currentYear;
+	    // let endYear = currentYear + 1;
+
+	    const baseYear = 2023; // Define the base financial year
+	    let startYear, endYear;
+
+	    if (month < 3) { 
+	        startYear = currentYear - 1;
+	        endYear = currentYear;
+	    } else {
+	        startYear = currentYear;
+	        endYear = currentYear + 1;
+	    }
+
+	    const months = ["Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "March"];
+	    const startMonth = months[0];
+	    const endMonth = months[11];
+
+	    const financialYears = [];
+
+	    // Loop from base year to the current financial year
+	    for (let year = baseYear; year <= startYear; year++) {
+	        const nextYear = year + 1;
+	        financialYears.push(`(${startMonth}-${year}) - (${endMonth}-${nextYear})`);
+	    }
+
+	    console.log("financialYears === ", financialYears);
+
+	    return financialYears;
+	}
+
+function createAccordion() {
+    const financialYears = getFinancialYears();
+    const accordionContainer = document.getElementById('accordionFlushExample');
+    
+    accordionContainer.innerHTML = '';
+
+    financialYears.forEach((financialYear, index) => {
+        const accordionItem = document.createElement('div');
+        accordionItem.classList.add('accordion-item');
+
+        const headingId = `flush-heading${index + 1}`;
+        const collapseId = `flush-collapse${index + 1}`;
+        const bodyId = `accordion-body-${index + 1}`;
+
+        accordionItem.innerHTML = `
+            <h2 class="accordion-header" id="${headingId}">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#${collapseId}" aria-expanded="false" aria-controls="${collapseId}">
+                    ${financialYear}
+                </button>
+            </h2>
+            
+            <div id="${collapseId}" class="accordion-collapse collapse" aria-labelledby="${headingId}" data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body" id="${bodyId}"></div>
+            </div>
+        `;
+
+        accordionContainer.appendChild(accordionItem);
+
+        accordionItem.querySelector('.accordion-button').addEventListener('click', function () {
+            fetchAppraisalData(financialYear, bodyId);
+        });
+    });
+   // Call clickFirstAccordionButton explicitly after creating accordion items
+    clickFirstAccordionButton(); 
+}
+
+function clickFirstAccordionButton() {
+	
+    const firstAccordionButton = document.querySelector('#accordionFlushExample .accordion-button');
+    if (firstAccordionButton) {
+        firstAccordionButton.click();
+    }
+}
+
+//Ensure fetchAppraisalData is only assigned based on the user type
+/* function assignFetchAppraisalDataHandler() {
+	
+    const userType = $('#emp_usertype').val();
+  
+    
+    switch (userType) {
+    
+        case 'User': 
+            window.fetchAppraisalData = function (financialYear, bodyId) {
+        	
+                $.ajax({
+                    type: "GET",
+                    url: "/fetchAllAppraisalDataFromUsersByUsingEmpId",
+                    data: {
+                        emp_id: $('#appraisalEmp_idValue').val(),
+                        financialYear: financialYear 
+                    },
+                    success: function(data) {
+                        createDynamicAppraisalTableForUser(data, bodyId);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching data:', error);
+                    }
+                });
+            };
+            break;
+            
+        case 'Admin': 
+            window.fetchAppraisalData = function (financialYear, bodyId) {
+                $.ajax({
+                    type: "GET",
+                    url: "/fetchAllAppraisalDataFromAdminsByUsingEmpId",
+                    data: {
+                        emp_id: $('#appraisalEmp_idValue').val(),
+                        financialYear: financialYear 
+                    },
+                    success: function(data) {
+                        createDynamicAppraisalTableForAdmin(data, bodyId);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching data:', error);
+                    }
+                });
+            };
+            break;
+
+        default:
+            console.log("Usertype of clicked employee is not defined in Employee details");
+            window.fetchAppraisalData = function () {
+                console.error("Usertype of clicked employee is not defined in Employee details...");
+            };
+            break;
+    }
+} */
+
+//Ensure handlers are assigned and accordion is created
+/* assignFetchAppraisalDataHandler();
+createAccordion(); */
+
+/* function fetchAppraisalData(financialYear, bodyId) {
+    $.ajax({
+        type: "GET",
+        url: "/fetchAllAppraisalDataFromEmployeesByUsingEmpId",
+        data: {
+            emp_id: $('#empId').val(),
+            financialYear: financialYear 
+        },
+        success: function(data) {
+        	 createDynamicAppraisalTable(data.appraisalData, data.employeeAppraisalData, bodyId);
+        },
+        error: function(xhr, status, error) {
+            console.error('Error fetching data:', error);
+        }
+    });
+} */
+ 
+function fetchAppraisalData(financialYear, bodyId){
+    const userType = $('#emp_usertype').val();
+  
+    
+    switch (userType) {
+    
+        case 'User': 
+        	
+                $.ajax({
+                    type: "GET",
+                    url: "/fetchAllAppraisalDataFromUsersByUsingEmpId",
+                    data: {
+                        emp_id: $('#appraisalEmp_idValue').val(),
+                        financialYear: financialYear 
+                    },
+                    success: function(data) {
+                        createDynamicAppraisalTableForUser(data, bodyId);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching data:', error);
+                    }
+                });
+            break;
+            
+        case 'Admin': 
+                $.ajax({
+                    type: "GET",
+                    url: "/fetchAllAppraisalDataFromAdminsByUsingEmpId",
+                    data: {
+                        emp_id: $('#appraisalEmp_idValue').val(),
+                        financialYear: financialYear 
+                    },
+                    success: function(data) {
+                        createDynamicAppraisalTableForAdmin(data, bodyId);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching data:', error);
+                    }
+                });
+            break;
+
+        default:
+            console.log("Usertype of clicked employee is not defined in Employee details");
+           
+                console.error("Usertype of clicked employee is not defined in Employee details...");
+            
+            break;
+    }
+}
+
+
+
+
+function createDynamicAppraisalTableForUser(data, bodyId) {
+	
+	// Check if the financial year is already assigned
+    if (fixedFinancialYear === null) {
+        // Extract the financial years from the data
+        const years = data.map(item => item.quarter_year.match(/\d{4}/g));
+
+        // Determine the start and end years of the financial year
+        const startYear = Math.min(...years.flat());
+        const endYear = Math.max(...years.flat());
+
+        // Assign the financial year if it hasn't been assigned
+        fixedFinancialYear = `${startYear}-${endYear}`;
+    }
+
+    // Alert the financial year (fixed or newly assigned)
+    // alert("Financial Year: " + fixedFinancialYear);
+    // console.log("Financial Year:", fixedFinancialYear);
+
+
+    // assigning the financial year in the pdf form
+    document.getElementById('financialYearInForm').innerText = fixedFinancialYear; // Use innerText
+	
+    const mainPersonalDiv = document.createElement('div');
+    mainPersonalDiv.className = "row mb-4 mt-4 appraisalMainBox";
+
+    const accordionBody = document.getElementById(bodyId);
+    accordionBody.innerHTML = '';
+
+    let appraisalTotalCount = 0, appraisalTotalPercentage = 0;
+
+    if(data && data.length > 0) {
+        data.forEach((item) => {
+            const appraisalDiv = document.createElement('div');
+            appraisalDiv.className = "col-sm-6 border appraisalSubBox";
+
+            appraisalDiv.innerHTML = `
+                <h5 class="text-center" style="font-weight: bold;">${item.quarter}</h5>
+                <p class="candidatePrfoilesHeading text-center" style="font-weight: bold;">${item.quarter_year}</p>
+                <table class="table table-hover shadow">
+                    <tr><th>Factors Type</th><th>Max Score</th><th>Employee Score</th><th>Manager Score</th><th>Description</th></tr>
+                    <tr><th style="background-color: #f4f6f7">Project Score</th><td style="background-color: #f4f6f7">65</td><td style="background-color: #f4f6f7">${item.user_project_score}</td><td style="background-color: #f4f6f7">${item.project_score}</td><td style="background-color: #f4f6f7">${item.project_comments}</td></tr>
+                    <tr><th style="background-color: #f4f6f7">Attendance Score</th><td style="background-color: #f4f6f7">10</td><td style="background-color: #f4f6f7">${item.user_attendance_score}</td> <td style="background-color: #f4f6f7">${item.attendance_score}</td><td style="background-color: #f4f6f7">${item.attendance_comments}</td></tr>
+                    <tr><th style="background-color: #f4f6f7">Team Collaboration Score</th><td style="background-color: #f4f6f7">5</td><td style="background-color: #f4f6f7">${item.user_team_collaboration_score}</td> <td style="background-color: #f4f6f7">${item.team_collaboration_score}</td><td style="background-color: #f4f6f7">${item.team_collaboration_comments}</td></tr>
+                    <tr><th style="background-color: #f4f6f7">Communication Score</th><td style="background-color: #f4f6f7">5</td><td style="background-color: #f4f6f7">${item.user_communication_score}</td> <td style="background-color: #f4f6f7">${item.communication_score}</td><td style="background-color: #f4f6f7">${item.communication_comments}</td></tr>
+                    <tr><th style="background-color: #f4f6f7">Initiative Score</th><td style="background-color: #f4f6f7">5</td><td style="background-color: #f4f6f7">${item.user_initiative_score}</td>  <td style="background-color: #f4f6f7">${item.initiative_score}</td><td style="background-color: #f4f6f7">${item.initiative_comments}</td></tr>
+                    <tr><th style="background-color: #f4f6f7">Leadership Score</th><td style="background-color: #f4f6f7">5</td><td style="background-color: #f4f6f7">${item.user_leadership_score}</td> <td style="background-color: #f4f6f7">${item.leadership_score}</td><td style="background-color: #f4f6f7">${item.leadership_comments}</td></tr>
+                    <tr><th style="background-color: #f4f6f7">Extra Curricular Score</th><td style="background-color: #f4f6f7">5</td><td style="background-color: #f4f6f7">${item.user_extra_curricular_score}</td> <td style="background-color: #f4f6f7">${item.extra_curricular_score}</td><td style="background-color: #f4f6f7">${item.extra_curricular_comments}</td></tr>
+                    <tr><th>Total Score</th><th>100</th><th>${item.user_total_score}</th><th>${item.total_score}</th><th></th></tr>
+                </table>
+            `;
+            
+             // Append the appraisalDiv to the main container
+		    mainPersonalDiv.appendChild(appraisalDiv);
+		
+		    // Map quarterly scores to the corresponding table cells
+		    const quarterCellMapping = {
+		        "Q1": "q1TotalForFOrm",
+		        "Q2": "q2TotalForFOrm",
+		        "Q3": "q3TotalForFOrm",
+		        "Q4": "q4TotalForFOrm"
+		    };
+		
+		    const cellId = quarterCellMapping[item.quarter];
+		    if (cellId) {
+		        document.getElementById(cellId).innerText = item.total_score;
+		    }
+
+            appraisalTotalCount += Number(item.total_score);
+            mainPersonalDiv.appendChild(appraisalDiv);
+        });
+
+        $('#appraisalAssignedScore').text(appraisalTotalCount || '-');
+        $('#qTotalForFOrm').text(appraisalTotalCount || '-');
+        //alert((100 * (data.length)))
+        
+		// Calculate total percentage based on 400 total max score (if this is the correct max score)
+        appraisalTotalPercentage = (appraisalTotalCount / (100 * (data.length))) * 100;
+        //appraisalTotalPercentage = 120;		
+        $('#appraisalTotalScore').text((100 * (data.length)) || '-');
+		
+		$('#appraisalOverallPercentage').text((appraisalTotalPercentage != null || appraisalTotalPercentage !== "") ? appraisalTotalPercentage.toFixed(2) + " %" : '-');
+		$('#percentageForForm').text((appraisalTotalPercentage != null || appraisalTotalPercentage !== "") ? appraisalTotalPercentage.toFixed(2) + " %" : '-');
+
+        // Setting the appraisalOverallRating text and color based on percentage
+        if (appraisalTotalPercentage >= 91 && appraisalTotalPercentage <= 100) {
+        	$('#appraisalOverallRating').text("5");
+            $('#appraisalOverallDesc').html('<i class="bi bi-emoji-heart-eyes" style="font-size: 16px;"></i> Exceeds performance, consistently exceeds expectations');
+            $('#appraisalOverallDesc').css("color", "green");
+            $('#appraisalOverallDesc').css("font-weight", "bold");
+            $('#appraisalOverallDesc').css("background-color", "#d4edda");  // Light green background for excellent performance
+            
+            //assign grade value for pdf form 
+            // Check if the financial year is already assigned
+		    if (gradePointForForm === null) {		       
+		    	gradePointForForm = 5;
+		    	$('#grandeForFOrm').text("5");
+		    }
+        } else if (appraisalTotalPercentage >= 78 && appraisalTotalPercentage <= 90) {
+        	$('#appraisalOverallRating').text("4");
+            $('#appraisalOverallDesc').html('<i class="bi bi-emoji-sunglasses" style="font-size: 16px;"></i> Meets expectations, occasionally exceeds expectations');
+            $('#appraisalOverallDesc').css("color", "blue");
+            $('#appraisalOverallDesc').css("font-weight", "bold");
+            $('#appraisalOverallDesc').css("background-color", "#cce5ff");  // Light blue background for meeting expectations
+            
+          //assign grade value for pdf form 
+            // Check if the financial year is already assigned
+		    if (gradePointForForm === null) {		       
+		    	gradePointForForm = 4;
+		    	$('#grandeForFOrm').text("4");
+		    }
+        } else if (appraisalTotalPercentage >= 60 && appraisalTotalPercentage <= 77) {
+        	$('#appraisalOverallRating').text("3");
+            $('#appraisalOverallDesc').html('<i class="bi bi-emoji-smile" style="font-size: 16px;"></i> Needs improvement, satisfactory performance');
+            $('#appraisalOverallDesc').css("color", "orange");
+            $('#appraisalOverallDesc').css("font-weight", "bold");
+            $('#appraisalOverallDesc').css("background-color", "#fff3cd");  // Light yellow background for satisfactory performance
+            
+            //assign grade value for pdf form 
+            // Check if the financial year is already assigned
+		    if (gradePointForForm === null) {		       
+		    	gradePointForForm = 3;
+		    	$('#grandeForFOrm').text("3");
+		    }
+        } else if (appraisalTotalPercentage >= 45 && appraisalTotalPercentage <= 59) {
+        	$('#appraisalOverallRating').text("2");
+            $('#appraisalOverallDesc').html('<i class="bi bi-emoji-frown" style="font-size: 16px;"></i> Unsatisfactory, needs improvement');
+            $('#appraisalOverallDesc').css("color", "red");
+            $('#appraisalOverallDesc').css("font-weight", "bold");
+            $('#appraisalOverallDesc').css("background-color", "#f8d7da");  // Light red background for unsatisfactory performance
+            
+          //assign grade value for pdf form 
+            // Check if the financial year is already assigned
+		    if (gradePointForForm === null) {		       
+		    	gradePointForForm = 2;
+		    	$('#grandeForFOrm').text("2");
+		    }
+        } else if (appraisalTotalPercentage >= 0 && appraisalTotalPercentage <= 44) {
+        	$('#appraisalOverallRating').text("1");
+            $('#appraisalOverallDesc').html('<i class="bi bi-emoji-angry" style="font-size: 16px;"></i> Unacceptable performance, does not meet expectations');
+            $('#appraisalOverallDesc').css("color", "darkred");
+            $('#appraisalOverallDesc').css("font-weight", "bold");
+            $('#appraisalOverallDesc').css("background-color", "#f5c6cb");  // Dark red background for unacceptable performance
+            
+          //assign grade value for pdf form 
+            // Check if the financial year is already assigned
+		    if (gradePointForForm === null) {		       
+		    	gradePointForForm = 1;
+		    	$('#grandeForFOrm').text("1");
+		    }
+        } else {
+        	$('#appraisalOverallRating').text("-");
+            $('#appraisalOverallDesc').html('<i class="bi bi-emoji-neutral" style="font-size: 16px;"></i> Not met any condition');
+            $('#appraisalOverallDesc').css("color", "grey");
+            $('#appraisalOverallDesc').css("font-weight", "bold");
+            $('#appraisalOverallDesc').css("background-color", "#d6d8d9");  // Grey background for invalid data 
+            
+          //assign grade value for pdf form 
+            // Check if the financial year is already assigned
+		    if (gradePointForForm === null) {		       
+		    	gradePointForForm = "-";
+		    }
+        }
+
+    } else {
+        const noDataDiv = document.createElement('div');
+        noDataDiv.className = "col-lg-12";
+        noDataDiv.innerHTML = `<h6 class="text-center" style="color: red; background-color: #fadbd8; font-weight: bold;">No data found</h6>`;
+        mainPersonalDiv.appendChild(noDataDiv);
+
+        $('#appraisalTotalScore').text('-');
+        $('#appraisalAssignedScore, #appraisalOverallRating, #appraisalOverallDesc, #appraisalOverallPercentage').text('-');
+        $('#appraisalAssignedScore, #appraisalOverallRating, #appraisalOverallDesc, #appraisalOverallPercentage').css("background-color", "#fff");
+        $('#appraisalAssignedScore, #appraisalOverallRating, #appraisalOverallDesc, #appraisalOverallPercentage').css("color", "#000");
+        $('#appraisalAssignedScore, #appraisalOverallRating, #appraisalOverallDesc, #appraisalOverallPercentage').css("font-weight", "normal");
+    }
+
+    accordionBody.appendChild(mainPersonalDiv);
+}
+
+
+
+
+function createDynamicAppraisalTableForAdmin(data, bodyId) {
+	
+	
+	// Check if the financial year is already assigned
+    if (fixedFinancialYear === null) {
+        // Extract the financial years from the data
+        const years = data.map(item => item.quarter_year.match(/\d{4}/g));
+
+        // Determine the start and end years of the financial year
+        const startYear = Math.min(...years.flat());
+        const endYear = Math.max(...years.flat());
+
+        // Assign the financial year if it hasn't been assigned
+        fixedFinancialYear = `${startYear}-${endYear}`;
+    }
+
+    // Alert the financial year (fixed or newly assigned)
+    // alert("Financial Year: " + fixedFinancialYear);
+    // console.log("Financial Year:", fixedFinancialYear);
+
+
+    // assigning the financial year in the pdf form
+    document.getElementById('financialYearInForm').innerText = fixedFinancialYear; // Use innerText
+	
+
+    const mainPersonalDiv = document.createElement('div');
+    mainPersonalDiv.className = "row mb-4 mt-4 appraisalMainBox";
+
+    const accordionBody = document.getElementById(bodyId);
+    accordionBody.innerHTML = '';
+
+    let appraisalTotalCount = 0, appraisalTotalPercentage = 0;
+
+    if (data && data.length > 0) {
+        data.forEach((item) => {
+            const appraisalDiv = document.createElement('div');
+            appraisalDiv.className = "col-sm-6 border appraisalSubBox";
+
+            appraisalDiv.innerHTML = `
+                <h5 class="text-center" style="font-weight: bold;">${item.quarter}</h5>
+                <p class="candidatePrfoilesHeading text-center" style="font-weight: bold;">${item.quarter_year}</p>
+                <table class="table table-hover shadow">
+                    <tr><th>Factors Type</th><th>Max Score</th><th>Employee Score</th><th>Manager Score</th><th>Justification</th></tr>
+                    <tr><th style="background-color: #f4f6f7">Project Planning</th><td style="background-color: #f4f6f7">20</td><td style="background-color: #f4f6f7">${item.user_project_planning_points}</td> <td style="background-color: #f4f6f7">${item.project_planning_points}</td><td style="background-color: #f4f6f7">${item.project_planning_desc}</td></tr>
+                    <tr><th style="background-color: #f4f6f7">Team Leadership</th><td style="background-color: #f4f6f7">20</td><td style="background-color: #f4f6f7">${item.user_team_leadership_points}</td> <td style="background-color: #f4f6f7">${item.team_leadership_points}</td><td style="background-color: #f4f6f7">${item.team_leadership_desc}</td></tr>
+                    <tr><th style="background-color: #f4f6f7">Stakeholder Communication</th><td style="background-color: #f4f6f7">20</td><td style="background-color: #f4f6f7">${item.user_stakeholder_comm_points}</td> <td style="background-color: #f4f6f7">${item.stakeholder_comm_points}</td><td style="background-color: #f4f6f7">${item.stakeholder_comm_desc}</td></tr>
+                    <tr><th style="background-color: #f4f6f7">Budget and Cost Management</th><td style="background-color: #f4f6f7">20</td><td style="background-color: #f4f6f7">${item.user_budget_cost_points}</td> <td style="background-color: #f4f6f7">${item.budget_cost_points}</td><td style="background-color: #f4f6f7">${item.budget_cost_description}</td></tr>
+                    <tr><th style="background-color: #f4f6f7">Risk Management</th><td style="background-color: #f4f6f7">10</td><td style="background-color: #f4f6f7">${item.user_risk_management_points}</td> <td style="background-color: #f4f6f7">${item.risk_management_points}</td><td style="background-color: #f4f6f7">${item.risk_management_desc}</td></tr>
+                    <tr><th style="background-color: #f4f6f7">Quality Assurance</th><td style="background-color: #f4f6f7">10</td><td style="background-color: #f4f6f7">${item.user_quality_assurance_points}</td> <td style="background-color: #f4f6f7">${item.quality_assurance_points}</td><td style="background-color: #f4f6f7">${item.quality_assurance_desc}</td></tr>
+                    <tr><th>Total Score</th><th>100</th><th>${item.user_total_score}</th><th>${item.total_score}</th><th></th></tr>
+                </table>
+            `;
+		    mainPersonalDiv.appendChild(appraisalDiv);
+		
+		    // Map quarterly scores to the corresponding table cells
+		    const quarterCellMapping = {
+		        "Q1": "q1TotalForFOrm",
+		        "Q2": "q2TotalForFOrm",
+		        "Q3": "q3TotalForFOrm",
+		        "Q4": "q4TotalForFOrm"
+		    };
+		
+		    const cellId = quarterCellMapping[item.quarter];
+		    if (cellId) {
+		        document.getElementById(cellId).innerText = item.total_score;
+		    }
+            appraisalTotalCount += Number(item.total_score);
+            mainPersonalDiv.appendChild(appraisalDiv);
+            
+        });
+
+        $('#appraisalAssignedScore').text(appraisalTotalCount || '-');
+        $('#qTotalForFOrm').text(appraisalTotalCount || '-');
+        
+        //alert((100 * (data.length)))
+        
+		// Calculate total percentage based on 400 total max score (if this is the correct max score)
+        appraisalTotalPercentage = (appraisalTotalCount / (100 * (data.length))) * 100;
+        //appraisalTotalPercentage = 120;
+		
+        $('#appraisalTotalScore').text((100 * (data.length)) || '-');
+		
+		$('#appraisalOverallPercentage').text((appraisalTotalPercentage != null || appraisalTotalPercentage !== "") ? appraisalTotalPercentage.toFixed(2) + " %" : '-');
+		$('#percentageForForm').text((appraisalTotalPercentage != null || appraisalTotalPercentage !== "") ? appraisalTotalPercentage.toFixed(2) + " %" : '-');
+
+        // Setting the appraisalOverallRating text and color based on percentage
+        if (appraisalTotalPercentage >= 91 && appraisalTotalPercentage <= 100) {
+        	$('#appraisalOverallRating').text("5");
+            $('#appraisalOverallDesc').html('<i class="bi bi-emoji-heart-eyes" style="font-size: 16px;"></i> Exceeds performance, consistently exceeds expectations');
+            $('#appraisalOverallDesc').css("color", "green");
+            $('#appraisalOverallDesc').css("font-weight", "bold");
+            $('#appraisalOverallDesc').css("background-color", "#d4edda");  // Light green background for excellent performance
+            
+          //assign grade value for pdf form 
+            // Check if the financial year is already assigned
+		    if (gradePointForForm === null) {		       
+		    	gradePointForForm = 5;
+		    	$('#grandeForFOrm').text("5");
+		    }
+        } else if (appraisalTotalPercentage >= 78 && appraisalTotalPercentage <= 90) {
+        	$('#appraisalOverallRating').text("4");
+            $('#appraisalOverallDesc').html('<i class="bi bi-emoji-sunglasses" style="font-size: 16px;"></i> Meets expectations, occasionally exceeds expectations');
+            $('#appraisalOverallDesc').css("color", "blue");
+            $('#appraisalOverallDesc').css("font-weight", "bold");
+            $('#appraisalOverallDesc').css("background-color", "#cce5ff");  // Light blue background for meeting expectations
+            
+          //assign grade value for pdf form 
+            // Check if the financial year is already assigned
+		    if (gradePointForForm === null) {		       
+		    	gradePointForForm = 4;
+		    	$('#grandeForFOrm').text("4");
+		    }
+        } else if (appraisalTotalPercentage >= 60 && appraisalTotalPercentage <= 77) {
+        	$('#appraisalOverallRating').text("3");
+            $('#appraisalOverallDesc').html('<i class="bi bi-emoji-smile" style="font-size: 16px;"></i> Needs improvement, satisfactory performance');
+            $('#appraisalOverallDesc').css("color", "orange");
+            $('#appraisalOverallDesc').css("font-weight", "bold");
+            $('#appraisalOverallDesc').css("background-color", "#fff3cd");  // Light yellow background for satisfactory performance
+            
+          //assign grade value for pdf form 
+            // Check if the financial year is already assigned
+		    if (gradePointForForm === null) {		       
+		    	gradePointForForm = 3;
+		    	$('#grandeForFOrm').text("3");
+		    }
+        } else if (appraisalTotalPercentage >= 45 && appraisalTotalPercentage <= 59) {
+        	$('#appraisalOverallRating').text("2");
+            $('#appraisalOverallDesc').html('<i class="bi bi-emoji-frown" style="font-size: 16px;"></i> Unsatisfactory, needs improvement');
+            $('#appraisalOverallDesc').css("color", "red");
+            $('#appraisalOverallDesc').css("font-weight", "bold");
+            $('#appraisalOverallDesc').css("background-color", "#f8d7da");  // Light red background for unsatisfactory performance
+            
+          //assign grade value for pdf form 
+            // Check if the financial year is already assigned
+		    if (gradePointForForm === null) {		       
+		    	gradePointForForm = 2;
+		    	$('#grandeForFOrm').text("2");
+		    }
+        } else if (appraisalTotalPercentage >= 0 && appraisalTotalPercentage <= 44) {
+        	$('#appraisalOverallRating').text("1");
+            $('#appraisalOverallDesc').html('<i class="bi bi-emoji-angry" style="font-size: 16px;"></i> Unacceptable performance, does not meet expectations');
+            $('#appraisalOverallDesc').css("color", "darkred");
+            $('#appraisalOverallDesc').css("font-weight", "bold");
+            $('#appraisalOverallDesc').css("background-color", "#f5c6cb");  // Dark red background for unacceptable performance
+            
+          //assign grade value for pdf form 
+            // Check if the financial year is already assigned
+		    if (gradePointForForm === null) {		       
+		    	gradePointForForm = 1;
+		    	$('#grandeForFOrm').text("1");
+		    }
+            
+        } else {
+        	$('#appraisalOverallRating').text("-");
+            $('#appraisalOverallDesc').html('<i class="bi bi-emoji-neutral" style="font-size: 16px;"></i> Not met any condition');
+            $('#appraisalOverallDesc').css("color", "grey");
+            $('#appraisalOverallDesc').css("font-weight", "bold");
+            $('#appraisalOverallDesc').css("background-color", "#d6d8d9");  // Grey background for invalid data
+        }
+
+    } else {
+        const noDataDiv = document.createElement('div');
+        noDataDiv.className = "col-lg-12";
+        noDataDiv.innerHTML = `<h6 class="text-center" style="color: red; background-color: #fadbd8; font-weight: bold;">No data found</h6>`;
+        mainPersonalDiv.appendChild(noDataDiv);
+
+        $('#appraisalTotalScore').text('-');
+        $('#appraisalAssignedScore, #appraisalOverallRating, #appraisalOverallDesc, #appraisalOverallPercentage').text('-');
+        $('#appraisalAssignedScore, #appraisalOverallRating, #appraisalOverallDesc, #appraisalOverallPercentage').css("background-color", "#fff");
+        $('#appraisalAssignedScore, #appraisalOverallRating, #appraisalOverallDesc, #appraisalOverallPercentage').css("color", "#000");
+        $('#appraisalAssignedScore, #appraisalOverallRating, #appraisalOverallDesc, #appraisalOverallPercentage').css("font-weight", "normal");
+    }
+
+    accordionBody.appendChild(mainPersonalDiv);
+}
+
+
+
+// Helper function to generate the table for each quarter
+/* function generateTable(data, tableId) {
+    if (!data) {
+        return `<p class="text-center text-muted">No data available</p>`;
+    }
+    return `
+        <table id="${tableId}" class="table table-hover shadow downloadable-table">
+            <tr><th>Factors Type</th><th>Max Score</th><th>Allotted Score</th><th>Justification</th></tr>
+            <tr><th style="background-color: #f4f6f7">Project Score</th><td style="background-color: #f4f6f7">65</td><td style="background-color: #f4f6f7">${data.projectScore || '-'}</td><td style="background-color: #f4f6f7">${data.projectComments || '-'}</td></tr>
+            <tr><th style="background-color: #f4f6f7">Attendance Score</th><td style="background-color: #f4f6f7">10</td><td style="background-color: #f4f6f7">${data.attendanceScore || '-'}</td><td style="background-color: #f4f6f7">${data.attendanceComments || '-'}</td></tr>
+            <tr><th style="background-color: #f4f6f7">Team Collaboration Score</th><td style="background-color: #f4f6f7">5</td><td style="background-color: #f4f6f7">${data.teamCollaborationScore || '-'}</td><td style="background-color: #f4f6f7">${data.teamCollaborationComments || '-'}</td></tr>
+            <tr><th style="background-color: #f4f6f7">Communication Score</th><td style="background-color: #f4f6f7">5</td><td style="background-color: #f4f6f7">${data.communicationScore || '-'}</td><td style="background-color: #f4f6f7">${data.communicationComments || '-'}</td></tr>
+            <tr><th style="background-color: #f4f6f7">Initiative Score</th><td style="background-color: #f4f6f7">5</td><td style="background-color: #f4f6f7">${data.initiativeScore || '-'}</td><td style="background-color: #f4f6f7">${data.initiativeComments || '-'}</td></tr>
+            <tr><th style="background-color: #f4f6f7">Leadership Score</th><td style="background-color: #f4f6f7">5</td><td style="background-color: #f4f6f7">${data.leadershipScore || '-'}</td><td style="background-color: #f4f6f7">${data.leadershipComments || '-'}</td></tr>
+            <tr><th style="background-color: #f4f6f7">Extra Curricular Score</th><td style="background-color: #f4f6f7">5</td><td style="background-color: #f4f6f7">${data.extraCurricularScore || '-'}</td><td style="background-color: #f4f6f7">${data.extraCurricularComments || '-'}</td></tr>
+            <tr><th>Total Score</th><th>100</th><th>${data.totalScore || '-'}</th><th></th></tr>
+        </table>
+    `;
+} */
+</script>
+
+
+	<!-- script to save download dynamic table as pdf -->
+	<script>
+//Function to trigger PDF download
+document.getElementById('downloadPDF').addEventListener('click', function () {
+    const elementToConvert = document.getElementById('appraisalTablesContainer');  // Container holding all the tables
+
+    // Define the options for the PDF
+    const options = {
+        filename: 'appraisal_data.pdf',  // Filename for the downloaded PDF
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { dpi: 192, letterRendering: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+
+    // Convert the content inside the specified element to PDF
+    html2pdf().from(elementToConvert).set(options).save();
+});
+
+</script>
+
+
+<!-- script to display salary hike details -->
+<script>
+document.querySelector(".salaryHikeForm").addEventListener("click", function () {
+    
+	// Example of setting dynamic data
+    document.getElementById("empName").textContent = "Jane Smith";
+    document.getElementById("empId").textContent = "67890";
+    document.getElementById("dept").textContent = "Finance";
+    
+});
+</script>
+
+<!-- script to salary hike info dynamically -->
+<script>
+document.querySelector(".salaryHikeForm").addEventListener("click", function () {
+	 const rows = document.querySelectorAll("table tbody tr");
+	    let totalMarks = 0;
+	    let totalPercentage = 0;
+	    let beforeHike = 5.00; // Initial salary (LPA)
+	    let cumulativeAfterHike = beforeHike;
+
+	    rows.forEach((row) => {
+	        // Parse and validate Total Marks
+	        const marks = parseFloat(row.cells[1]?.textContent || "0");
+	        if (isNaN(marks)) {
+	            console.error("Invalid Total Marks value:", row.cells[1]?.textContent);
+	            return;
+	        }
+
+	        // Parse and validate Total Percentage
+	        const percentageText = row.cells[2]?.textContent.replace("%", "").trim() || "0";
+	        const percentage = parseFloat(percentageText);
+	        if (isNaN(percentage)) {
+	            console.error("Invalid Total Percentage value:", row.cells[2]?.textContent);
+	            return;
+	        }
+
+	        // Parse and validate Salary Hike
+	        const hikeText = row.cells[3]?.textContent.replace("%", "").trim() || "0";
+	        const hike = parseFloat(hikeText);
+	        if (isNaN(hike)) {
+	            console.error("Invalid Salary Hike value:", row.cells[3]?.textContent);
+	            return;
+	        }
+
+	        // Accumulate Total Marks and Percentage
+	        totalMarks += marks;
+	        totalPercentage += percentage;
+
+	        // Calculate Cumulative After Hike
+	        cumulativeAfterHike += (cumulativeAfterHike * hike) / 100;
+	    });
+
+	    // Calculate Average Percentage
+	    const averagePercentage = rows.length ? (totalPercentage / rows.length).toFixed(2) : "0";
+
+	    // Add the cumulative row to the table footer
+	    const tfoot = document.querySelector("table tfoot");
+	    if (tfoot) {
+	        tfoot.innerHTML = `
+	            <tr>
+	                <th>Cumulative</th>
+	                <th><strong>${totalMarks.toFixed(2)}</strong></th>
+	                <th><strong>${averagePercentage}%</strong></th>
+	                <th><strong>26%</strong></th>
+	                <th><strong>${beforeHike.toFixed(2)}</strong></th>
+	                <th><strong>${cumulativeAfterHike.toFixed(2)}</strong></th>
+	            </tr>
+	        `;
+	    }
+	});
+</script>
+
+
+
+<!-- script to download pdf form -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script>
+    document.getElementById('downloadPdfBtn').addEventListener('click', function () {
+        const { jsPDF } = window.jspdf;
+
+        // Get the element to be captured
+        const element = document.querySelector('.YearlyPdfForm');
+
+        html2canvas(element, {
+            scale: 2, // Higher scale for better quality
+        }).then((canvas) => {
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF({
+                orientation: 'portrait',
+                unit: 'mm',
+                format: 'a4',
+            });
+
+            const pageWidth = pdf.internal.pageSize.getWidth();
+            const pageHeight = pdf.internal.pageSize.getHeight();
+            const imgWidth = pageWidth; // Scale image width to fit page width
+            const imgHeight = (canvas.height * imgWidth) / canvas.width; // Maintain aspect ratio
+
+            pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+
+            // Save the PDF
+            pdf.save('YearlyPdfForm.pdf');
+        });
+    });
+</script>
+
+
+
+
+</body>
+
+</html>

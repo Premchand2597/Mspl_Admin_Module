@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Interview</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+<!--   <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+ -->
+ <link rel="stylesheet" href="/assets/font/fonts.css"> 
+ 
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+  <!-- Template Main JS File -->
+<!--  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> -->
+<script src="assets/js/jquery-3.6.4.min.js"></script> 
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+
+ 
+  <style>
+  .moat_navbar{
+	  font-size: 14px;
+	  background: #fff;
+	  padding: 15px;
+	  position: sticky;
+	  top: 64px;
+	  width: 100%;
+	  margin-left: auto;
+	  margin-right: auto;
+	  box-shadow: 0 0 10px #0005;
+	  gap: 0.7rem;
+	  backdrop-filter: blur(10px);
+	  background-color: #fff2;
+	  display: flex;
+}
+
+.moattt_anchor {
+    position: relative;
+    display: inline-block;
+    padding: 5px 10px;
+    color: inherit;
+    text-decoration: none;
+    text-shadow: 0 0 5px rgba(#000, 0.8);
+    letter-spacing: 1px;
+    border-right: 1px solid #d5d8dc;
+  }
+
+.moattt_anchor.active{
+	font-weight: bold;
+	color: #4154f1;
+}
+
+.moat_parentDropDown{
+	position: relative;
+    display: inline-block;
+}
+
+.moat_subDropDown {
+    display: none;
+    position: absolute;
+    background-color: #f6f9ff;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+  .progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0.08rem;
+    background-image: linear-gradient(to right, #8ad4ff, #fa7196);
+    border-radius: 0.1rem;
+    animation: progressMove linear both;
+    animation-timeline: scroll(block root);
+  }
+
+.moat_iframe{
+	width: 100%;
+	height: 100vh;
+}
+
+/* Fullscreen overlay with dim background */
+#loadingPopup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Dim background */
+    z-index: 9999;
+    font-family: Arial, sans-serif;
+    color: white; /* Text color for better contrast */
+    display: none;
+}
+
+.spinnerAndParaMerger{
+	display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* background: red; */
+    margin: 18% auto;
+}
+
+/* Spinner animation */
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 6px solid rgba(255, 255, 255, 0.3); /* Semi-transparent border */
+    border-top-color: white; /* Bright top border */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Loading text */
+#loadingPopup p {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+}
+
+/* Spinner keyframe animation */
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.moatBody_content_div{
+	width: 100%;
+	height: 100%;
+}
+
+.add_questions_form_outer_div{
+	width: 98%;
+	height: auto;
+	padding: 10px;
+	box-shadow: 0 0 10px #0005;
+    backdrop-filter: blur(10px);
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 14px;
+}
+
+.add_questions_form_div{
+	width: 100%;
+	height: 100%;
+}
+
+.question_heading{
+	width: 100%;
+	padding: 5px 10px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 10px;
+}
+
+.question_p{
+	color: #566573;
+	font-size: 14px;
+	font-weight: bold;
+	margin-top: 10px;
+}
+
+.addQuestions_language_select{
+	border: none;
+	outline: none;
+	background-color: transparent;
+	border-bottom: 1px solid #566573;
+	color: #566573;
+	font-weight: bold;
+}
+
+.questionType_radio_box{
+	width: auto;
+}
+
+.questionTypeLabel{
+	color: #566573;
+	font-weight: bold;
+}
+
+.question_text_area_box,.correct_answer_box2{
+	width: 100%;
+	height: auto;
+}
+
+.question_text_area{
+	width: 100%;
+	height: 100%;
+	font-size: 14px;
+}
+
+.options_p,.correct_answer_p{
+	color: #566573;
+	padding: 5px 10px;
+	font-weight: bold;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.options_box{
+	width: 100%;
+	height: auto;
+	display: flex;
+	justify-content: space-evenly;
+	gap: 5px;
+}
+
+.question_text_field{
+	padding-left: 5px;
+	font-size: 14px;
+}
+
+.answer_text_area2{
+	width: 100%;
+	font-size: 14px;
+}
+
+.btn_outer_div{
+	width: 100%;
+	height: auto;
+	padding: 5px 10px;
+	margin-top: 2%;
+}
+
+.btn_div{
+	display: flex;
+	width: 100%;
+	height: auto;
+	justify-content: flex-start;
+	gap: 10px;
+}
+
+.questions_table_div{
+	width: 98%;
+	height: 90vh;
+	overflow: auto;
+	box-shadow: 0 0 10px #0005;
+    backdrop-filter: blur(10px);
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 14px;
+}
+
+.cards_container{
+	width: 98%;
+	margin-bottom: 8px;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 5px 10px;
+	display: flex;
+	justify-content: space-between;
+	box-shadow: 0 0 10px #0005;
+    backdrop-filter: blur(10px);
+}
+
+.card1{
+	width: 24%;
+	/*background-color: green;*/
+	display: flex;
+	padding: 5px;
+	border-right: 2px solid #ECF0F1;
+}
+
+.card4{
+	width: 24%;
+	/*background-color: green;*/
+	display: flex;
+	padding: 5px;
+}
+
+.card_numbers{
+	/*background-color: yellow;*/
+	width: auto;
+	height: 100%;
+}
+
+.card_numbers p{
+	font-size: 30px;
+	font-weight: bold;
+	color: #4154f1;
+}
+
+.card_text{
+	/*background-color: red;*/
+	width: auto;
+	height: 100%;
+}
+
+.p2{
+	margin-top: 5px;
+	/*background-color: orange;*/
+	padding-left: 10px;
+	color: #566573;
+	font-size: 15px;
+	font-weight: bold;
+}
+
+.p3{
+	margin-top: -15px;
+	/*background-color: darkgreen;*/
+	padding-left: 10px;
+	color: #AEB6BF;
+	font-size: 14px;
+}
+
+.student_table_outer_div{
+	width: 98%;
+	height: 100%;
+	box-shadow: 0 0 10px #0005;
+	backdrop-filter: blur(10px);
+	margin-left: auto;
+	margin-right: auto;
+	background: transparent !important;
+}
+
+.student_table_div{
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+}
+
+.student_table_div .table,.student_table_url_archive_div .table{
+	width: 100%;
+	font-size: 14px;
+}
+
+.student_table_div .table thead th,.student_table_url_archive_div .table thead th{
+	padding: 12px;
+	font-size: 14px;
+	background: transparent !important;
+	color: #566573;
+}
+
+.emailFormOuterDiv{
+   	width: 100%;
+   	height: 100%;
+   	position: fixed;
+   	background: rgba(0,0,0,0.5);
+   	top: 0;
+   	left: 0;
+   	z-index: 200;
+   	display: none;
+   }
+
+.emailFormInnerBoxCloser{
+   	/* background: red; */
+   	padding-right: 10px;
+   	text-align: right;
+   }
+   
+   .emailFormInnerBoxCloser span{
+   	font-size: 25px;
+   	font-weight: bold;
+   	cursor: pointer;
+   }
+
+.emailFormBox{
+   	/* background: red; */
+   	width: 98%;
+   	margin-right: auto;
+   	margin-left: auto;
+   }
+
+.ctcFormOuterDiv{
+   	width: 100%;
+   	height: 100%;
+   	position: fixed;
+   	background: rgba(0,0,0,0.5);
+   	top: 0;
+   	left: 0;
+   	z-index: 200;
+   	display: none;
+   }
+   
+.ctcFormInnerBox{
+	width: 60%;
+   	height: 400px;
+   	background: rgb(255,255,255);
+   	margin: 3% auto;
+   	border-radius: 10px;
+   	padding: 15px 5px;
+   	overflow: auto;
+}
+
+  .ctcFormInnerBoxCloser{
+   	/* background: red; */
+   	padding-right: 10px;
+   	text-align: right;
+   	margin: 0;
+   }
+   
+   .ctcFormInnerBoxCloser span{
+   	font-size: 25px;
+   	font-weight: bold;
+   	cursor: pointer;
+   }
+
+.hiddenCtcFeedbackFromCandidate{
+   	display: none;
+   }
+
+.docUploadFormOuterDiv{
+   	width: 100%;
+   	height: 100%;
+   	position: fixed;
+   	background: rgba(0,0,0,0.5);
+   	top: 0;
+   	left: 0;
+   	z-index: 200;
+   	display: none;
+   }
+
+.docUploadFormInnerBox{
+	width: 30%;
+   	height: auto;
+   	background: rgb(255,255,255);
+   	margin: 3% auto;
+   	border-radius: 10px;
+   	padding: 15px 5px;
+   	overflow: auto;
+}
+
+.docUploadBox{
+	width: 32%;
+	height: 10px;
+	margin: 40px auto 5px auto;
+	/* background: red; */
+}
+
+.docUploadViewFormOuterDiv{
+   	width: 100%;
+   	height: 100%;
+   	position: fixed;
+   	background: rgba(0,0,0,0.5);
+   	top: 0;
+   	left: 0;
+   	z-index: 200;
+   	display: none;
+   }
+   
+   .docUploadViewFormInnerBox{
+	width: 70%;
+   	height: 440px;
+   	background: rgb(255,255,255);
+   	margin: 2% auto;
+   	border-radius: 10px;
+   	padding: 5px;
+   	overflow-y: auto;
+   	overflow-x: hidden;
+}
+
+.candidateCompleteViewFormOuterDiv{
+   	width: 100%;
+   	height: 100%;
+   	position: fixed;
+   	background: rgba(0,0,0,0.5);
+   	top: 0;
+   	left: 0;
+   	z-index: 200;
+   	display: none;
+   }
+
+.candidateCompleteViewFormInnerBox{
+	width: 86%;
+   	height: 96%;
+   	background: rgb(255,255,255);
+   	margin: 1% auto;
+   	border-radius: 5px;
+   	overflow: auto;
+}
+
+.candidateProfileHeadingAndAddEmpIconMerger{
+	 /* background: red; */
+	 display: flex;
+	 justify-content: space-between;
+	 align-items: center;
+}
+
+.candidateProfileHeadingAndAddEmpIconMerger span{
+	background: #eaeded;
+	padding: 2px 8px;
+	border-radius: 10px;
+	box-shadow: 0 0 4px #0005;
+}
+
+.candidateProfileHeadingAndAddEmpIconMerger span i{
+	font-size: 22px;
+	font-weight: bold;
+	color: #4154f1;
+}
+
+.candidateProfileHeadingAndAddEmpIconMerger span i:hover{
+	color: #52be80;
+}
+
+.student_result_box{
+	width: 98%;
+	height: 200px;
+	padding: 5px;
+	overflow: auto;
+	box-shadow: 0 0 10px #0005;
+    backdrop-filter: blur(10px);
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 14px;
+}
+
+.student_result_box_heading{
+	color: #566573;
+	padding: 5px 10px;
+	font-weight: bold;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	position: sticky;
+	top: 0;
+	left: 0;
+}
+
+.student_result_sheet_heading{
+	color: #566573;
+	padding: 5px 10px;
+	font-weight: bold;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.student_result_box_table thead th,.student_result_box_table tbody td{
+	padding: 10px;
+	font-size: 14px;
+	background: transparent !important;
+	color: #566573;
+}
+
+.candidate_resultSheet_box{
+	width: 98%;
+	height: auto;
+	box-shadow: 0 0 10px #0005;
+    backdrop-filter: blur(10px);
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 14px;
+	margin-top: 15px;
+	padding: 5px 10px;
+	display: none;
+}
+
+.questions_filter_box{
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.marksDetails_outerBox{
+	width: 50%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.5);
+	z-index: 5;
+	position: fixed;
+	top: 0;
+    right: 0; /* Initially positioned outside the screen */
+    transform: translateX(100%); /* Initial position outside the viewport */
+    transition: transform 0.8s ease;
+}
+
+.marksDetails_outerBox.active {
+    transform: translateX(0); /* When the modal is active, it slides to the right edge of the screen */
+}
+
+.marksDetails_outerBox_closeBox{
+	/* background-color: red; */
+	margin-top: 2vh;
+	margin-bottom: 3px;
+}
+
+.close_marksDetails_outerBox_span{
+	font-size: 20px;
+	color: #fff;
+	margin-left: 10px;
+	cursor: pointer;
+}
+
+.marksDetails_outerBox{
+	width: 50%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.5);
+	z-index: 5;
+	position: fixed;
+	top: 0;
+    right: 0; /* Initially positioned outside the screen */
+    transform: translateX(100%); /* Initial position outside the viewport */
+    transition: transform 0.8s ease;
+}
+
+.marksDetails_outerBox.active {
+    transform: translateX(0); /* When the modal is active, it slides to the right edge of the screen */
+}
+
+.marksDetails_outerBox_closeBox{
+	/* background-color: red; */
+	margin-top: 2vh;
+	margin-bottom: 3px;
+}
+
+.close_marksDetails_outerBox_span{
+	font-size: 20px;
+	color: #fff;
+	margin-left: 10px;
+	cursor: pointer;
+}
+
+.markDetails_table_and_chartBox{
+	width: 86%;
+	height: 82vh;
+	/* background-color: green; */
+	margin: 1px auto; 
+	padding: 4px;
+	overflow: auto;
+}
+
+.markDetails_tableBox{
+	width: 100%;
+	height: 46vh;
+	background-color: #fff;
+	padding: 8px;
+	margin-bottom: 5px;
+	overflow: auto;
+}
+
+.markDetails_table{
+	width: 100%;
+	height: 100%;
+}
+
+.markDetails_grapghBox{
+	width: 100%;
+	height: auto;
+	background-color: #fff;
+	padding: 5px;
+	margin-bottom: 5px;
+}
+
+.student_marksDetail_table{
+	width: 100%;
+	height: 100%;
+	font-size: 14px;
+	padding: 5px;
+	color: #566573;
+}
+
+.marksDetail_table_heading{
+	text-align: center;	
+	font-size: 15px;
+	font-weight: bold;
+	padding: 5px;
+	color: #566573;
+}
+
+.updateQuestionPopupOuterDiv{
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.2);
+	z-index: 9999;
+	position: fixed;
+	top: 0;
+	display: none;
+	overflow: auto;
+}
+
+.update_questions_form_outer_div{
+	width: 90%;
+	height: auto;
+	padding: 10px;
+	background-color: #f6f9ff;
+	margin: 2% auto;
+	border-radius: 10px;
+}
+
+.update_questions_form_div{
+	width: 100%;
+	height: 100%;
+}
+
+.UpdateQuestionPopupCloseBtnDiv{
+	margin-top: -20px;
+}
+
+.UpdateQuestionPopupCloseBtnDiv span{
+	font-size: 25px;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.update_questions_form_outer_div{
+	width: 90%;
+	height: auto;
+	padding: 10px;
+	background-color: #f6f9ff;
+	margin: 2% auto;
+	border-radius: 10px;
+}
+
+.update_questions_form_div{
+	width: 100%;
+	height: 100%;
+}
+
+.questions_table_div{
+	width: 98%;
+	height: 90vh;
+	overflow: auto;
+	box-shadow: 0 0 10px #0005;
+    backdrop-filter: blur(10px);
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 14px;
+}
+.customTable2{
+	width: 100%;
+	font-size: 14px;
+}
+
+.customTable2 thead{
+	position: sticky;
+	top: 0;
+	background-color: #f6f9ff;
+}
+
+.customTable2 thead th{
+	padding: 10px;
+	font-size: 14px;
+	background: transparent !important;
+	color: #566573;
+}
+
+.customTable2 tbody td{
+	font-size: 14px;
+}
+
+.viewQuestions_language_select{
+	border: none;
+	outline: none;
+	background-color: transparent;
+	border-bottom: 1px solid #566573;
+	color: #566573;
+	font-weight: bold;
+}
+
+.questions{
+	color: #EC7063 !important;
+}
+
+.answers{
+	color: #229954 !important;
+}
+
+.moatResultView_icon{
+	cursor: pointer;
+}
+
+.student_table_url_archive_div{
+	width: 98%;
+	height: 82vh;
+	box-shadow: 0 0 10px #0005;
+	backdrop-filter: blur(10px);
+	margin-left: auto;
+	margin-right: auto;
+	background: transparent !important;
+	overflow: auto;
+}
+
+.emailSentLoadingDiv{
+   	width: 100%;
+   	height: 100%;
+   	position: fixed;
+   	background: rgba(0,0,0,0.5);
+   	top: 0;
+   	left: 0;
+   	z-index: 200;
+   	display: none;
+   }
+   
+   .emailFormInnerBox{
+   	width: 40%;
+   	height: auto;
+   	background: rgb(255,255,255);
+   	margin: 10% auto;
+   	border-radius: 10px;
+   	padding: 15px 5px;
+   }
+
+.emailSentLoadingInnerBox{
+   	width: 40%;
+   	height: auto;
+   	background: rgb(255,255,255);
+   	margin: 10% auto;
+   	border-radius: 10px;
+   	padding: 15px 5px;
+   }
+   
+   .emailFormInnerBoxCloser{
+   	/* background: red; */
+   	padding-right: 10px;
+   	text-align: right;
+   }
+   
+   .emailFormInnerBoxCloser span{
+   	font-size: 25px;
+   	font-weight: bold;
+   	cursor: pointer;
+   }
+   
+   .emailFormBox{
+   	/* background: red; */
+   	width: 98%;
+   	margin-right: auto;
+   	margin-left: auto;
+   }
+
+.linkGenerateFormBox{
+   	width: 35%;
+    height: auto;
+    padding: 10px;
+    margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 10px;
+    box-shadow: 0 0 10px #0005;
+    backdrop-filter: blur(10px);
+   }
+
+	.customTable{
+	    	width: 100%;
+	    	height: 100%;
+	    	font-size: 14px;
+	   }
+        
+     .customTable td{
+     	padding-bottom: 15px;
+     	padding: 10px;
+     	text-align: left !important;
+     	font-size: 14px;
+     }
+
+	#emailList{
+		display: flex;
+		flex-wrap: wrap;
+		gap: 10px;
+	}
+	
+	.test_link_generator_btn {
+	  color: #4154f1;
+	  border: 1px solid #4154f1;
+	  font-size: 14px;
+	}
+	
+	.test_link_generator_btn:focus,
+	.test_link_generator_btn:hover 
+	{
+	  color: #fff;
+	  background-color: #4154f1;
+	}
+	
+	.generatedLink {
+	    margin-top: 20px;
+	    margin-left: auto;
+	    margin-right: auto;
+	    text-align: center;
+	}
+</style> 
+</head>
+<body style="overflow-x: hidden;">
+
+<input type="hidden" id="sessionLoggedInName" th:value="${session.empDetailsByEmpId.fullName}">
+
+<!-- <div class="emailFormOuterDiv" id="emailFormOuterDiv">
+	<div class="emailFormInnerBox">
+		<p class="emailFormInnerBoxCloser"><span onclick="closeEmailFormOuterDiv();">&times;</span></p>
+			<div class="row emailFormBox">
+				<div class="col-sm-10">
+					<input type="email" class="form-control" id="emailField" style="font-size: 14px; margin-left: 5px;" placeholder="Enter candidate email-id to send test link">
+				</div>
+				<div class="col-sm-2">
+					<button type="button" class="btn btn-primary" style="font-size: 14px; margin-left: -10px;" onclick="sendEmail();">Send</button>
+				</div>
+			</div>
+			<p style="padding: 10px 5px 5px 38px;" id="pleaseWaitPara"></p>
+		</div>
+	</div> -->
+	
+	
+<div class="emailSentLoadingDiv" id="emailSentLoadingDiv">
+	<div class="emailSentLoadingInnerBox">
+			<p style="padding: 8px 10px; text-align: center;" class="pleaseWaitPara">
+				<b style="font-size: 30px;">Please Wait....</b>
+			</p>
+		</div>
+	</div>
+
+  <main id="moatMain" class="moatMain">
+  
+			<section class="section dashboard">
+				<div class="col-lg-12">
+					<div class="row">
+						<div class="moatBody_content_div">
+							
+							<div class="linkGenerateFormBox">
+
+								<table class="customTable">
+								  <tbody>
+								    <tr>
+								      <td><label class="customLabel">Supervisor Name:<span>*</span></label> <input id="name" style="font-size: 14px;" class="form-control" type="text" readonly required></td>
+								    </tr>
+								    <tr th:if="${session.empDetailsByEmpId.deptId==0}">
+								      <td>
+								        <label class="customLabel">Select Hiring Department:<span>*</span></label> 
+									    <select style="font-size: 14px;" class="form-select custom-select browser-default custom_selectfield" id="hiringDeptName">
+									        <option value="" selected>Select Hiring Department</option>
+									        <option th:each="dept : ${departments}" th:value="${dept.deptName}" th:text="${dept.deptName}"></option>
+									    </select>
+									   </td>
+								    </tr>
+								    <tr>
+								     <td>
+								        <label class="customLabel">Candidate Email Id:<span>*</span></label>
+								        <div class="d-flex" style="gap: 5px;">
+								          <input style="font-size: 14px;" id="email" class="form-control" type="email" required>
+								          <button style="font-size: 14px;" class="btn btn-outline-primary" onclick="addEmail()">Add</button>
+								        </div>
+								      </td>
+								    </tr>
+								    <tr style="display: none;" id="emailListRow">
+								      <td>
+								        <div id="emailList" style="font-size: 14px;"></div>
+								      </td>
+								    </tr>
+								    <tr>
+								      <td><label class="customLabel">Select Test Type:<span>*</span></label> 
+								      	<select style="font-size: 14px;" onchange="toggleTestDuration($('#candidate_test_type').val())"
+											class="form-select custom-select browser-default custom_selectfield"
+											name="candidate_test_type" id="candidate_test_type" required>
+											<option value="">Select Test Type</option>
+											<option value="skip_all">Skip all</option>
+											<option value="dont_skip">Don't skip</option>
+											<option value="skip_first_round">Skip first round</option>
+										</select>
+								      </td>
+								    </tr>
+								    <tr style="display: none;" id="testDurationRow">
+								      <td>
+								      <label class="customLabel">Test Duration:<span>*</span></label>
+										<!-- <input id="testDuration" type="time" placeholder="Test duration(minutes)"> -->
+										<div class="d-flex" style="gap: 5px;">
+										    <select style="font-size: 14px;" class="form-select" id="hour">
+										        <option value="">HH</option>
+										        <!-- Hours from 00 to 23 -->
+										        <option value="00">00</option>
+										        <option value="01">01</option>
+										        <option value="02">02</option>
+										        <option value="03">03</option>
+										        <!-- <option value="04">04</option>
+										        <option value="05">05</option>
+										        <option value="06">06</option>
+										        <option value="07">07</option>
+										        <option value="08">08</option>
+										        <option value="09">09</option>
+										        <option value="10">10</option>
+										        <option value="11">11</option>
+										        <option value="12">12</option> -->
+										    </select>
+										    
+										    <select style="font-size: 14px;" class="form-select" id="minute">
+										        <option value="">MM</option>
+										        <!-- Minutes from 00 to 59 -->
+										        <option value="00">00</option>
+										        <option value="01">01</option>
+										        <option value="02">02</option>
+										        <option value="03">03</option>
+										        <option value="04">04</option>
+										        <option value="05">05</option>
+										        <option value="06">06</option>
+										        <option value="07">07</option>
+										        <option value="08">08</option>
+										        <option value="09">09</option>
+										        <option value="10">10</option>
+										        <option value="11">11</option>
+										        <option value="12">12</option>
+										        <option value="13">13</option>
+										        <option value="14">14</option>
+										        <option value="15">15</option>
+										        <option value="16">16</option>
+										        <option value="17">17</option>
+										        <option value="18">18</option>
+										        <option value="19">19</option>
+										        <option value="20">20</option>
+										        <option value="21">21</option>
+										        <option value="22">22</option>
+										        <option value="23">23</option>
+										        <option value="24">24</option>
+										        <option value="25">25</option>
+										        <option value="26">26</option>
+										        <option value="27">27</option>
+										        <option value="28">28</option>
+										        <option value="29">29</option>
+										        <option value="30">30</option>
+										        <option value="31">31</option>
+										        <option value="32">32</option>
+										        <option value="33">33</option>
+										        <option value="34">34</option>
+										        <option value="35">35</option>
+										        <option value="36">36</option>
+										        <option value="37">37</option>
+										        <option value="38">38</option>
+										        <option value="39">39</option>
+										        <option value="40">40</option>
+										        <option value="41">41</option>
+										        <option value="42">42</option>
+										        <option value="43">43</option>
+										        <option value="44">44</option>
+										        <option value="45">45</option>
+										        <option value="46">46</option>
+										        <option value="47">47</option>
+										        <option value="48">48</option>
+										        <option value="49">49</option>
+										        <option value="50">50</option>
+										        <option value="51">51</option>
+										        <option value="52">52</option>
+										        <option value="53">53</option>
+										        <option value="54">54</option>
+										        <option value="55">55</option>
+										        <option value="56">56</option>
+										        <option value="57">57</option>
+										        <option value="58">58</option>
+										        <option value="59">59</option>
+										    </select>
+									    </div>
+									</td>
+							     </tr>
+							     <tr>
+							     <td><button type="submit" class="btn test_link_generator_btn" onclick="generateEncryptedLink()">Generate Link</button> 
+							     <!-- <button type="button" style="font-size: 14px;" class="btn btn-outline-primary" onclick="openEmailFormOuterDiv()">Mail Test Link</button> -->
+							     <button type="button" style="font-size: 14px;" class="btn btn-outline-secondary" onclick="clearInputs()">Reset</button>
+							     </td>
+							     </tr>
+							  </tbody>
+							</table>
+							
+							</div>
+							
+							<div style="display: none;" class="generatedLink"></div>
+							
+						</div>
+					</div>
+				</div>
+			</section>
+
+	</main><!-- End #main -->
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/chart.js/chart.umd.js"></script>
+  <script src="assets/vendor/echarts/echarts.min.js"></script>
+  <script src="assets/vendor/quill/quill.js"></script>
+  <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+  <script src="assets/vendor/tinymce/tinymce.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+
+
+<!-- Template Main JS File -->
+<script src="assets/js/main.js"></script>
+
+<input type="hidden" id="testDurationValidationEnableValue">
+
+
+<script>
+
+$('#name').val($('#sessionLoggedInName').val());
+
+function toggleTestDuration(testType){
+	//alert(testType)
+	if(testType === "skip_all"){
+		$('#testDurationRow').hide();
+		$('#testDurationValidationEnableValue').val("false");
+	}else if(testType === "dont_skip"){
+		$('#testDurationRow').show();
+		$('#testDurationValidationEnableValue').val("true");
+	}else if(testType === "skip_first_round"){
+		$('#testDurationRow').show();
+		$('#testDurationValidationEnableValue').val("true");
+	}else{
+		$('#testDurationRow').hide();
+		$('#testDurationValidationEnableValue').val("false");
+	}
+}
+
+
+
+var timerFlags = {}; // Object to store the timer status for each token
+let emails = []; // Array to hold email addresses
+let combinedArrayData = [];
+
+// Combine the data and send it to the server to get a token
+function generateEncryptedLink() {
+	var name = document.getElementById("name").value.trim();
+    //var email = document.getElementById("email").value.trim();
+    var hour = document.getElementById("hour").value;
+    var minute = document.getElementById("minute").value;
+    var candidate_test_type = document.getElementById("candidate_test_type").value;
+    var testDurationValidationEnableValue = document.getElementById("testDurationValidationEnableValue").value;
+    var testDuration;
+    //var testDuration = document.getElementById("testDuration").value;
+    
+    // Validation for Supervisor Name
+    if (name.length === 0) {
+        alert("Please fill a supervisor name");
+        return;
+    }
+    
+    /* if ($('#hiringDeptName').val() === '') {
+        alert("Please select hiring department name");
+        return;
+    }
+ */
+    // Validation for Candidate Email
+    /* if (email.length === 0) {
+        alert("Please fill a candidate email");
+        return;
+    } */
+    
+ // Validation for Candidate Email List
+    if (emails.length === 0) {
+        alert("Please add at least one candidate email");
+        return;
+    }
+
+    // Regular expression to validate email format
+   /*  var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    if (!emailPattern.test(email)) {
+        alert("Please enter a valid email address");
+        return;
+    } */
+    
+ 	// Validation for Candidate skip test
+    if (candidate_test_type === "") {
+        alert("Please select test type");
+        return;
+    }
+    
+ 	if(testDurationValidationEnableValue === "true"){
+ 		if (!hour || !minute) {
+ 	        alert("Please select a valid time for the test duration.");
+ 	        return;
+ 	    }else{
+ 	    	testDuration = hour + ":" + minute +":00";
+ 	    }
+ 	}else{
+ 		testDuration = "00:00:00";
+ 	}
+    
+    var combinedData = `name=${name}&email=${emails}&candidate_test_type=${candidate_test_type}&testDuration=${testDuration}`;
+
+    combinedArrayData.push(combinedData);
+    
+    /* var combinedData = {
+        name: name,
+        emails: emails,
+        candidate_test_type: candidate_test_type,
+        testDuration: testDuration
+    }; */
+    
+    
+    $('#emailSentLoadingDiv').show();
+    
+    fetch('/generateToken', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(combinedArrayData)
+    })
+    .then(response => response.text())
+    .then(token => {
+    	
+    	//alert(token);
+    	//alert($('#hiringDeptName').val() || null);
+    	
+    	$.ajax({
+	        type: 'POST', 
+	        url: '/insertLink',
+	        data: {
+			        "url": token,
+			        "candidate_emails": emails.join(","),
+			        "test_duration": testDuration,
+			        "supervisor_name": name,
+			        "test_type": candidate_test_type,
+			        "dept_name": $('#hiringDeptName').val() || null,
+			        "encrypted_data": combinedArrayData.join(",")
+	    		},
+	        success: function(data) {
+					
+					if(data === "success"){
+						
+						var generatedUrl = `https://melange-systems/bangalore?token=${token}`;
+				        
+				        var linkDiv = document.querySelector(".generatedLink");
+				        var newItem = document.createElement('div');
+				        newItem.classList.add("generatedItem");
+				        
+				     // onclick="startTimer(this, '${token}')"
+				        newItem.innerHTML = `
+				        	<a href="melange-systems/bangalore?token=${token}&encrypted_data=${combinedData}&candidate_email=${email}&test_duration=${testDuration}&supervisor_name=${name}">${generatedUrl}</a> 
+				            <div class="timer" id="timer-${token}"></div>
+				        `;
+				        
+				        linkDiv.appendChild(newItem);
+
+				        // Initialize the timer flag for this token
+				        timerFlags[token] = false;
+				        
+				        $('#name').val("");
+				        emails = [];
+				        combinedArrayData = [];
+				        //$('#email').val("");
+				        $('#emailList').html("");
+				        $('#hour').val("");
+				        $('#candidate_test_type').val("");
+				        $('#minute').val("");
+				        
+				        $('#emailSentLoadingDiv').hide();
+				        alert("Link generated successfully");
+				        
+					}else{
+						
+						$('#emailSentLoadingDiv').hide();
+						alert("Error inserting link to DB");
+						
+					}
+				},
+	        error: function(xhr, status, error) {
+	        	$('#emailSentLoadingDiv').hide();
+	            console.error('Error fetching data:', error);
+	            console.log('Error fetching data. Please try again.');
+	        }
+	    });
+    })
+    .catch(error => {
+    	console.error('Error:', error);
+    	$('#emailSentLoadingDiv').hide();
+    });
+}
+
+function clearInputs() {
+    document.getElementById("name").value = "";
+    document.getElementById("email").value = "";
+   	//document.getElementById("testDuration").value = "";
+    document.getElementById("hour").value = "";
+    document.getElementById("minute").value = "";
+}
+
+/* function sendEmail() {
+    //var parentDiv = button.parentNode;
+    var email = document.getElementById('emailField').value;
+    //var link = parentDiv.querySelector('a').href;
+    var link = "https://192.168.1.66:8080/moatUserRegister";
+    
+    var pleaseWaitPara = document.getElementById('pleaseWaitPara');
+    pleaseWaitPara.innerHTML = "Please Wait...";
+    pleaseWaitPara.style.fontSize = "15px";
+    pleaseWaitPara.style.fontWeight = "bold";
+
+    if (email) {
+        fetch('/sendLinkToEmail', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "email": email,
+                "link": link
+            })
+        })
+        .then(response => response.text())
+        .then(result => {
+        	pleaseWaitPara.innerHTML = ""; // Clear the message after success
+            alert(result);
+            closeEmailFormOuterDiv();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            pleaseWaitPara.innerHTML = ""; // Clear the message after failure
+            alert("Failed to send email. Please try again.");
+            closeEmailFormOuterDiv();
+        });
+    } else {
+    	pleaseWaitPara.innerHTML="";
+        alert("Please enter an email address");
+        closeEmailFormOuterDiv();
+    }
+} */
+
+function startTimer(linkElement, token) {
+    // Check if the timer has already started
+    if (timerFlags[token]) {
+        return;  // Timer has already started, do nothing
+    }
+
+    timerFlags[token] = true;  // Mark the timer as started
+
+    let timerDiv = document.getElementById(`timer-${token}`);
+    let countdown = 60; // 60 seconds
+
+    let intervalId = setInterval(function() {
+        countdown--;
+        timerDiv.textContent = `Link expires in: ${countdown} seconds`;
+
+        if (countdown <= 0) {
+            clearInterval(intervalId);
+            timerDiv.textContent = "Link expired!";
+            //linkElement.style.pointerEvents = "none"; // Disable the link
+           // linkElement.style.color = "grey"; // Change color to indicate it's disabled
+        }
+    }, 1000);
+}
+
+//Prevent right-click context menu
+/* document.addEventListener('contextmenu', function(event) {
+    event.preventDefault();
+    alert("Right-clicking is not allowed.");
+}); */
+</script>
+
+<script>
+	function closeEmailFormOuterDiv(){
+		$('#emailFormOuterDiv').hide();
+	}
+	
+	function openEmailFormOuterDiv(){
+		$('#emailFormOuterDiv').show();
+	}
+</script>
+
+
+<script>
+function addEmail() {
+    const emailInput = document.getElementById("email");
+    const emailListDiv = document.getElementById("emailList");
+    const email = emailInput.value.trim(); // Get and trim the input value
+    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+
+    if (!emailPattern.test(email)) {
+        alert("Please enter a valid email address");
+        return;
+    }
+
+    if (emails.includes(email)) {
+        alert("This email is already added.");
+        return;
+    }
+
+    emails.push(email); // Add email to the list
+    
+    //console.log(emails)
+
+    if (email) {
+    	
+    	$("#emailListRow").show();
+        // Create a new div for the email
+        const emailDiv = document.createElement("div");
+        emailDiv.style.display = "flex";
+        emailDiv.style.alignItems = "center";
+        emailDiv.style.gap = "5px";
+        emailDiv.style.backgroundColor = "#85c1e9";
+        emailDiv.style.borderRadius = "5px";
+        emailDiv.style.padding = "5px 10px";
+
+        // Add the email text
+        const emailText = document.createElement("span");
+        emailText.className = "emailCreationSpan";
+        emailText.style.paddingTop = "2px";
+        emailText.style.paddingBottom = "2px";
+        emailText.style.paddingRight = "10px";
+        emailText.style.paddingLeft = "10px";
+        emailText.textContent = email;
+
+        // Add a delete button
+        const deleteBtn = document.createElement("i");
+        deleteBtn.className = "bi bi-x-circle emailDeleteIcon";
+        deleteBtn.style.fontSize = "12px";
+        deleteBtn.onclick = () => {
+            const index = emails.indexOf(email);
+            if (index > -1) emails.splice(index, 1); // Remove email from array
+            emailDiv.remove();
+            //console.log(emails)
+        };
+
+        // Append the email text and delete button to the div
+        emailDiv.appendChild(emailText);
+        emailDiv.appendChild(deleteBtn);
+
+        // Append the new email div to the emailListDiv
+        emailListDiv.appendChild(emailDiv);
+
+        // Clear the input field
+        emailInput.value = "";
+    } else {
+        alert("Please enter an email");
+        $("#emailListRow").hide();
+    }
+}
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,10 @@
+implements/bugs clear 
+---------------------
+ 
+1. Chat active , in-active was not working when admin move to another tab(completed)
+2. Admin can able add previous asset Id as refernece id while assigning asset.
+ 
+
+
+
+

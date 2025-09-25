@@ -1,0 +1,98 @@
+<html xmlns:th="http://www.thymeleaf.org">
+    <body>
+            <nav th:fragment="header" class="header-nav ms-auto"> <!-- Fragment Declaration -->
+		      <ul class="d-flex align-items-center">
+		
+		        <li class="nav-item d-block d-lg-none">
+		          <a class="nav-link nav-icon search-bar-toggle " href="#">
+		            <i class="bi bi-search"></i>
+		          </a>
+		        </li><!-- End Search Icon-->
+		
+			   <!-- Notification Dropdown -->
+			               <li class="nav-item dropdown" id="notificationBellIcon" style="display:none;">
+						    <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+						        <i class="bi bi-bell"></i>
+						        <span class="badge bg-primary badge-number"></span>
+						    </a>
+						    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+						        <li class="dropdown-header">
+						            You have <span id="badge-number"></span> new notifications
+						        </li>
+						        <li><hr class="dropdown-divider"></li>
+						        <!-- Leave Request Notification -->
+						        <li class="notification-item" id="leaveRequestNotification" onclick="redirectToLeaveRequest()" style="display:none;">
+						            <div class="d-flex">
+						                <i class="bi bi-card-text icon-color"></i>
+						                <div>
+						                    <p id="leaveRequestMessage">You have new leave request</p>
+						                </div>
+						            </div>
+						        </li>
+						        <li><hr class="dropdown-divider"></li>
+						          <li class="notification-item" id="assetRequestNotification" onclick="redirectToAsset()" style="display:none;">
+						            <div class="d-flex">
+						                <i class="bi bi-card-text icon-color"></i>
+						                <div>
+						                    <p id="assetRequestMessage">You have new asset request</p>
+						                </div>
+						            </div>
+						        </li>
+						    </ul>
+						</li>
+		
+		        <li class="nav-item dropdown pe-3">
+		
+		          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+		            <!-- <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle"> -->
+		            <img id="dynamicProfilePic" class="profile-picture"/>
+		            <span class="d-none d-md-block dropdown-toggle ps-2" th:text="${empDetailsByEmpId.fullName}"></span>
+		          </a><!-- End Profile Iamge Icon -->
+		
+		          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+		            <li class="dropdown-header">
+		              <h6 th:text="${empDetailsByEmpId.fullName}">Kevin Anderson</h6>
+		              <span th:text="${empDetailsByEmpId.roleName}">Web Designer</span>
+		            </li>
+		            <li>
+		              <hr class="dropdown-divider">
+		            </li>
+		
+		            <!-- <li>
+		              <a class="dropdown-item d-flex align-items-center" th:href="@{/viewProfile(empid=${empDetailsByEmpId.empid})}">
+		                <i class="bi bi-person"></i>
+		                <span>My Profile</span>
+		              </a>
+		            </li> -->
+		            <li>
+                            <a class="dropdown-item d-flex align-items-center" th:href="@{/viewAdminProfile(empid=${empDetailsByEmpId.empid})}">
+                                <i class="bi bi-person"></i>
+                                <span>My Profile</span>
+                            </a>
+                        </li>
+		            <li>
+		              <hr class="dropdown-divider">
+		            </li>
+		            <li>
+		              <a class="dropdown-item d-flex align-items-center" th:href="@{/}">
+		                <i class="bi bi-box-arrow-right"></i>
+		                <span>Sign Out</span>
+		              </a>
+		            </li>
+		            <li>
+			      <hr class="dropdown-divider">
+				  </li>
+				  <li>
+				      <div class="dropdown-item d-flex align-items-center" style="font-size:12px;">
+				          <i class="bi bi-info-circle"></i>
+				          <span>Version: <strong>0.0.1</strong></span> <!-- Replace '1.0.0' with the dynamic version if applicable -->
+				      </div>
+				  </li>
+		            
+		          </ul><!-- End Profile Dropdown Items -->
+		        </li><!-- End Profile Nav -->
+		
+		      </ul>
+		    </nav><!-- End Icons Navigation -->
+    </body>
+</html>

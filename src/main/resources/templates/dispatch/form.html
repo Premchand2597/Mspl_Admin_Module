@@ -1,0 +1,1746 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dispatcher Details</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+ 
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+    
+	.navbar {
+		    position: fixed;
+		    top: 0;
+		    right: 0;
+		    background-color: #EBECF0; /* Darker shade for a professional look */
+		    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+		    z-index: 1000;
+		    width: 100%; /* Full width navbar */
+		    padding: 12px 4px;
+		    display: flex;
+		    align-items: center;
+		    justify-content: flex-start; /* Align entire content to the right */
+		    box-sizing: border-box;
+		}
+		
+		/* Navbar list style */
+		.navbar ul {
+		    display: flex;
+		    justify-content: flex-end; /* Align items to the right */
+		    padding: 0;
+		    margin: 0;
+		    list-style: none;
+		    gap: 5px;
+		}
+		
+		/* Navbar item */
+		.navbar li {
+		    padding: 10px 18px;
+		    border-radius: 5px;
+		    cursor: pointer;
+		    color: black; /* Light color text */
+		    font-size: 14px;
+		    font-weight: 600;
+		    transition: background-color 0.3s ease, transform 0.2s ease;
+		}
+		.navbar li a{
+			text-decoration:none;
+			color:black;
+		}
+		/* Hover effect */
+		.navbar li:hover {
+		    background-color: #F8F8FF; /* Bright blue for hover effect */
+		    color: white;
+		    transform: translateY(-2px); /* Slightly lift on hover */
+		}
+		
+		/* Active link style */
+/* Active link style */
+.navbar li.active {
+    background-color: #F8F8FF; /* Bright blue for hover effect */
+	font-weight: bold;
+}
+		
+		/* Navbar icons */
+		.navbar li i {
+		    margin-right: 8px;
+		}
+		
+		/* Optional: Add a little space between the navbar and the top of the page */
+		body {
+		    margin-top: 70px; /* Adjust based on navbar height */
+		}
+		
+		/* Mobile responsiveness (optional) */
+		@media (max-width: 768px) {
+		    .navbar {
+		        width: 100%;
+		        border-radius: 0;
+		    }
+		
+		    .navbar ul {
+		        justify-content: center; /* Center content on smaller screens */
+		    }
+		
+		    .navbar li {
+		        margin: 0 10px;
+		    }
+		}
+        .container {
+            max-width: 1000px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .company-info{
+	        align-items: right;
+	        font-size: 14px;
+	    }
+
+        .header {
+            padding: 5px;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+       .form-section .row .col-md-6 {
+		    margin-bottom: 15px; 
+		}
+		
+		.form-section {
+		    padding: 10px;
+		    margin-top: 15px;
+		    background: #ffffff;
+		    border-radius: 8px;
+		    /* box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1); */
+		}
+		
+		.form-section h2 {
+		    font-size: 18px;
+		    margin-bottom: 20px;
+		    font-weight:bold;
+		}
+		
+		.form-label {
+		    font-weight: bold;
+		    font-size: 14px;
+		}
+		.d-flex {
+		    align-items: center;
+		    gap: 5px; 
+		    flex-wrap: nowrap; 
+		}
+		
+		.d-flex a {
+		    text-decoration: underline;
+		    font-weight: bold;
+		    display: inline-flex;
+		    align-items: center;
+		    font-size: 12px; 
+		    white-space: nowrap; 
+		    margin-right: 8px; 
+		}
+		
+		.d-flex a:hover {
+		    text-decoration: none;
+		}
+		
+		.d-flex a i {
+		    margin-right: 5px; 
+		}	
+		
+		.toggle-buttons {
+		    position: fixed;
+		    top: 20px;
+		    right: 20px;
+		    z-index: 1000;
+		    display: flex;
+		    gap: 10px;
+		}
+
+	/* 		  .tables-container {
+			    display: flex;
+			    flex-direction: column;
+			    gap: 5px;
+			    width: 94%;
+			    margin: 2px auto; 
+			    padding: 20px;
+			    overflow-x: auto;
+			} */
+			
+			 .tables-container {
+			    display: flex;
+			    flex-direction: column;
+			    gap: 5px; 
+			    width: 100%;
+			    flex: 1;             
+			    padding: 20px;
+			    overflow-x: auto;
+			    margin-top:30px;
+			}
+			
+			/* .table-box {
+			    display: flex;
+			    flex-direction: column;
+			    align-items: center; 
+			    background: white;
+			    padding: 10px;
+			    box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.1);
+			    border: 1px solid #ccc;
+			    box-sizing: border-box;
+			} */
+			
+			.table-box {
+			        width: 94%;
+			        background: white;
+			        padding: 10px;
+			        box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.1);
+				    border: 1px solid #ccc;
+				    box-sizing: border-box;
+				    height: 500px;
+				    overflow: auto;
+				    margin: 6% auto 1% auto;
+						    }
+			
+			.table-header {
+			    /* display: flex;
+			    justify-content: space-between;
+			    align-items: left; */
+			    background: white;
+			    padding: 8px 10px;
+			    /* font-size: 16px; */
+			    white-space: nowrap;
+			    margin-bottom: 10px;
+			}
+			
+			.table-header h3 {
+			    margin: 0;
+			    font-size: 18px;
+			    color: #C71585;
+			    text-align: center;
+			}
+			
+			.table-header button {
+			    padding: 5px 10px;
+			    font-size: 14px;
+			}
+			
+			th {
+			    background: #DBDBEA;
+			    color: #2f73b9;
+			}
+			
+			.hidden-row {
+			    display: none;
+			}
+			
+			table {
+			    width: auto;                
+			    margin: 0 auto;            
+			    border-collapse: collapse;
+			}
+			
+			th, td {
+			    padding: 8px;
+			    /* border: 1px solid #ddd; */
+			    text-align: left;
+			    font-size: 14px;
+			}
+			
+			thead th {
+			    position: sticky;
+			    top: 0;
+			    background-color: #f5f5f5;
+			    z-index: 1;
+			}
+			h5{
+			 color:#00008B;
+			 font-size:28px;
+			 font-weight:25px;
+			}
+			
+			.modal-header h5{
+				font-size: 16px;
+			}
+			
+			.modal-header button{
+				font-size: 14px;
+			}
+			
+			.modal-body{
+				margin: 0;
+				padding: 5px;
+			}
+			
+			.user-dropdown {
+    position: absolute;
+    top: 50px; /* adjust as needed */
+    left: 10px;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    border-radius: 8px;
+    z-index: 1000;
+    width: auto;
+}
+
+.user-dropdown ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+     display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.user-dropdown ul li {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.user-dropdown ul li:hover {
+    background-color: #F8F8FF; /* Bright blue for hover effect */
+    color: #000;
+}
+
+.user-dropdown ul li:last-child {
+    border-bottom: none;
+}
+
+.user-dropdown ul li a {
+    text-decoration: none;
+    color: #333;
+}
+
+.user-dropdown ul li a i {
+    margin-right: 10px;
+}
+
+.dispatch_subDropDown {
+    display: none;
+    position: absolute;
+    background-color: #EBECF0;
+    width: auto;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    z-index: 1000;
+    top: 50px; /* adjust as needed */
+}
+
+.dispatch_subDropDown ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.dispatch_subDropDown ul li {
+    padding: 5px;
+    border-bottom: 1px solid #eee;
+}
+
+.dispatch_subDropDown ul li:hover {
+    background-color: #F8F8FF; /* Bright blue for hover effect */
+    color: #000;
+}
+
+.dispatch_subDropDown ul li:last-child {
+    border-bottom: none;
+}
+
+.dispatch_subDropDown ul li a {
+    text-decoration: none;
+    color: #333;
+}
+		
+    </style>
+</head>
+<body>
+
+  <div class="content">
+        <div class="navbar">
+        <!-- <i class="fa-solid fa-circle-user text-primary" style="font-size: 24px; padding-right: 15px; cursor: pointer;"></i> -->
+        <div class="user-dropdown" id="userDropdown" style="display: none;">
+			<ul>
+			        <li><a><i class="fas fa-user"></i><span th:text="${session.full_name}"></span></a></li>
+			        <li><a href="/logout"><i class="fas fa-sign-out-alt"></i> Sign Out</a></li>
+			    </ul>
+			</div>
+		   <ul>
+		    <li>
+		        <a th:href="@{/dashboard}">
+		            <i class="fas fa-home"></i> Home
+		        </a>
+		    </li>
+		    <li>
+		        <a href="#" id="dispatchMenu">
+		            <i class="fas fa-file-import"></i> Dispatch <i style="padding-left: 5px;" class="fa-solid fa-caret-down"></i>
+		        </a>
+		        <div class="dropdown-menu dispatch_subDropDown">
+			      <ul>
+			        <li><a class="dropdown-item" th:href="@{/form}">Add</a></li>
+			        <li><a class="dropdown-item" th:href="@{/view-dispatch}">View</a></li>
+			      </ul>
+			    </div>
+		    </li>
+		    <li>
+		         <a th:href="@{/import}">
+		            <i class="fas fa-arrow-down"></i> Import
+		        </a>
+		    </li>
+		    <!-- <li>
+		         <a th:href="@{/view-dispatch}">
+		            <i class="fas fa-eye"></i> View Dispatch
+		        </a>
+		    </li> -->
+		    <li>
+		        <a th:href="@{/calendar}">
+		            <i class="fas fa-calendar"></i> Calendar
+		        </a>
+		    </li>
+		    
+		    <li>
+		        <a href="#" id="masterMenu">
+		            <i class="fas fa-building"></i> Master <i style="padding-left: 5px;" class="fa-solid fa-caret-down"></i>
+		        </a>
+		        <div class="dropdown-menu dispatch_subDropDown master_subDropDown">
+			      <ul>
+			        <!-- <li><a class="dropdown-item" th:href="@{/adduser}">User Master</a></li> -->
+			        <li><a class="dropdown-item" th:href="@{/product}">Product Master</a></li>
+			        <li><a class="dropdown-item" th:href="@{/customer}">Customer Master</a></li>
+			      </ul>
+			    </div>
+		    </li>
+		    
+		    <!-- <li>
+		        <a th:href="@{/adduser}">
+		            <i class="fas fa-users"></i> Add Users
+		        </a>
+		    </li>
+		    <li>
+		        <a th:href="@{/product}">
+		            <i class="fas fa-box"></i> Product Master
+		        </a>
+		    </li>
+		    <li>
+		        <a th:href="@{/customer}">
+		            <i class="fas fa-building"></i> Customer Master
+		        </a>
+		    </li> -->
+		    
+		    <li>
+		        <a th:href="@{/dcDispatchData}">
+		            <i class="fa-solid fa-file"></i> Generated DC
+		        </a>
+		    </li>
+		    
+		    <li>
+		        <a th:href="@{/audit-log}">
+		            <i class="fas fa-cogs"></i> Track Info
+		        </a>
+		    </li>
+		</ul>
+
+	 </div>
+            
+        
+ <!-- <div class="toggle-buttons d-flex justify-content-end gap-2" style="margin-top: 80px;">
+    <button id="openFormBtn" class="btn btn-primary btn-sm me-2" onclick="toggleView('form')" style="display: none;">Open Form</button>
+    <button id="viewProductsBtn" class="btn btn-primary btn-sm" onclick="toggleView('table')">View Dispatched</button>
+</div> -->
+
+<div id="form-section" class="container">
+    <div class="header">
+        <h1>Dispatcher Details</h1>
+        <div id="companyInfo" class="company-info">
+            <strong>Melange Systems Pvt. Ltd.</strong><br>
+            4/1, 7th Cross, Kumara Park West,<br>
+            Bangalore, Karnataka - 560 020<br>
+            Phone: +91 802356 1023
+        </div>
+    </div>
+    <hr>
+ 
+    <form th:action="@{/submitForm}" th:object="${dispatch}" method="post"  enctype="multipart/form-data">
+        <div class="form-section" id="form-section">
+            <h2>User Details :</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="form-label">User Name:<span style="padding-left: 5px; color: red;">*</span></label>
+                    <!-- <input type="text" class="form-control" th:field="*{userName}" required> -->
+                    <select class="form-select" th:field="*{userName}" required>
+				        <option value="">Select User Name</option>
+				        <option th:each="un : ${distinctUserNames}" th:value="${un.emp_full_name}" th:text="${un.emp_full_name}"></option>
+				    </select>
+                </div>
+                <div class="col-md-6">
+				    <label class="form-label">Transport Mode:<span style="padding-left: 5px; color: red;">*</span></label>
+				    <div class="d-flex" style="gap: 10px;">
+				    <select class="form-select" th:field="*{transportMode}" id="transportModeDropDown" onchange="toggleTransportModeDeleteIcon();" required></select>
+				    	<div style="display: flex; justify-content: space-around;">
+						    <a href="#" style="text-decoration: none;" class="action-link">
+						    	<i data-bs-toggle="modal" data-bs-target="#userModal" title="Add new" style="font-size: 18px;" class="fas fa-plus"></i>
+						    </a>
+						    <a id="transportDeleteDropDownDataIcon" href="#" style="text-decoration: none; display: none;" class="action-link">
+						    	<i title="Delete" onclick="deleteTransportModeData($('#transportModeDropDown').val())" style="font-size: 14px; color: red;" class="fas fa-trash"></i>
+						    </a>
+					    </div>
+				    </div>
+				</div>
+                
+                <div class="col-md-6">
+                    <label class="form-label">Invoice No:</label>
+                    <input type="text" class="form-control" autocomplete="off" th:field="*{invoiceNo}">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Date:<span style="padding-left: 5px; color: red;">*</span></label>
+                    <input type="date" class="form-control" autocomplete="off" th:field="*{date}" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Dc No:</label>
+                    <input type="text" class="form-control" autocomplete="off" th:field="*{dcNo}">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">eWay Bill No:</label>
+                    <input type="text" class="form-control" autocomplete="off" th:field="*{eWayBillNo}">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Quantity:<span style="padding-left: 5px; color: red;">*</span></label>
+                    <input type="number" class="form-control" autocomplete="off" th:field="*{quantity}" required>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section" id="customerForm">
+    <h2>Customer Details :</h2>
+    <div class="row">
+       <div class="col-md-6">
+    <label class="form-label" for="customerNameDropdown">Contact Name:<span style="padding-left: 5px; color: red;">*</span></label>
+    <!-- <div class="d-flex">
+        <select class="form-select me-2" id="customerNameDropdown" onchange="fetchCustomerDetails()">
+            <option value="">Select Contact Name</option>
+            <option th:each="customer : ${customers}" th:value="${customer.customerName}" th:text="${customer.customerName}"></option>
+        </select>
+     		<a href="#" style="text-decoration: none;" class="action-link">
+		    	<i data-bs-toggle="modal" data-bs-target="#customerModal" title="Add new" style="font-size: 18px;" class="fas fa-plus"></i>
+		    </a>
+		    </div> -->
+		    
+		    <div class="d-flex" style="gap: 10px;">
+			    <select class="form-select me-2" id="customerNameDropdown" onchange="fetchCustomerDetails()" required>
+		            <option value="">Select Contact Name</option>
+		            <option th:each="customer : ${customers}" th:value="${customer.customerName}" th:text="${customer.customerName}"></option>
+		        </select>
+		    	<div style="display: flex; justify-content: space-around;">
+				    <a href="#" style="text-decoration: none;" class="action-link">
+				    	<i data-bs-toggle="modal" data-bs-target="#customerModal" title="Add new" style="font-size: 18px;" class="fas fa-plus"></i>
+				    </a>
+				    <a id="contactNameDeleteDropDownDataIcon" href="#" style="text-decoration: none; display: none;" class="action-link">
+				    	<i title="Delete" onclick="deleteContactNameData($('#customerNameDropdown').val(), $('#contactNo').val())" style="font-size: 14px; color: red;" class="fas fa-trash"></i>
+				    </a>
+			    </div>
+			</div>
+				    
+		    <!-- Hidden field to store the selected customer name -->
+		    <input type="hidden" id="customerName" th:field="*{customerName}">
+		</div>
+		
+		<div class="col-md-6">
+		    <label class="form-label" for="companyName">Company Name:</label>
+		    <input type="text" class="form-control" id="companyName" autocomplete="off" th:field="*{companyName}">
+		</div>
+		
+		<div class="col-md-6">
+		    <label class="form-label" for="contactNo">Contact Number:<span style="padding-left: 5px; color: red;">*</span></label>
+		    <input type="number" class="form-control" id="contactNo" autocomplete="off" th:field="*{contactNo}" required>
+		</div>
+		
+		<div class="col-md-6">
+		    <label class="form-label" for="emailId">Email ID:</label>
+		    <input type="email" class="form-control" id="emailId" th:field="*{emailId}" autocomplete="off">
+		</div>
+		
+		<div class="col-md-6">
+		    <label class="form-label" for="companyAddress">Company Address:</label>
+		    <textarea class="form-control" id="companyAddress" rows="1" autocomplete="off" th:field="*{companyAddress}"></textarea>
+		</div>
+		</div>
+		</div>
+        
+
+       <div class="form-section" id="productForm">
+    <h2>Product Details :</h2>
+    <div class="row">
+       <div class="col-md-6">
+	    	<label class="form-label" for="productName">Product Name with Model No:<span style="padding-left: 5px; color: red;">*</span></label>
+		    <!-- <div class="d-flex">
+		        <select class="form-select" id="productNameDropdown" onchange="fetchProductDetails()">
+				    <option value="">Select Product</option>
+				    <option th:each="product : ${products}" th:value="${product.productName}" th:text="${product.productName}"></option>
+				</select>
+			     <a href="#" style="text-decoration: none;" class="action-link">
+			    	<i data-bs-toggle="modal" data-bs-target="#productModal" title="Add new" style="font-size: 18px;" class="fas fa-plus"></i>
+			    </a>
+		    </div> -->
+		    
+		    <div class="d-flex" style="gap: 10px;">
+			    <select class="form-select" id="productNameDropdown" onchange="fetchProductDetails()" required>
+				    <option value="">Select Product name with model no</option>
+				    <option th:each="product : ${products}" th:if="${product.moduleNo != null and !#strings.isEmpty(product.moduleNo)}" th:value="${product.productName}" th:text="${product.productName+' ['+product.moduleNo+']'}"></option>
+				</select>
+		    	<div style="display: flex; justify-content: space-around;">
+				    <a href="#" style="text-decoration: none;" class="action-link">
+				    	<i data-bs-toggle="modal" data-bs-target="#productModal" title="Add new" style="font-size: 18px;" class="fas fa-plus"></i>
+				    </a>
+				    <a id="productNameDeleteDropDownDataIcon" href="#" style="text-decoration: none; display: none;" class="action-link">
+				    	<i title="Delete" onclick="deleteProductDetailsData($('#productNameDropdown option:selected').text(), $('#moduleNo').val())" style="font-size: 14px; color: red;" class="fas fa-trash"></i>
+				    </a>
+			    </div>
+			</div>
+	  
+			 <input type="hidden" id="productName" name="productName">
+		</div>
+		<div class="col-md-6">
+            <label class="form-label" for="moduleNo">Model No:<span style="padding-left: 5px; color: red;">*</span></label>
+            <input type="text" class="form-control" id="moduleNo" name="moduleNo" autocomplete="off" required>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label" for="rootFirmwareExternal">Root Firmware (External):</label>
+            <input type="text" class="form-control" id="rootFirmwareExternal" name="rootFirmwareExternal" autocomplete="off">
+        </div>
+        <div class="col-md-6">
+            <label class="form-label" for="rootFirmwareInternal">Root Firmware (Internal):</label>
+            <input type="text" class="form-control" id="rootFirmwareInternal" name="rootFirmwareInternal" autocomplete="off">
+        </div>
+        <div class="col-md-6">
+            <label class="form-label" for="routerFirmwareExternal">Router Firmware (External):</label>
+            <input type="text" class="form-control" id="routerFirmwareExternal" name="routerFirmwareExternal" autocomplete="off">
+        </div>
+        <div class="col-md-6">
+            <label class="form-label" for="routerFirmwareInternal">Router Firmware (Internal):</label>
+            <input type="text" class="form-control" id="routerFirmwareInternal" name="routerFirmwareInternal" autocomplete="off">
+        </div>
+        <div class="col-md-6">
+            <label class="form-label" for="antennaType">Antenna Type:</label>
+            <input type="text" class="form-control" id="antennaType" name="antennaType" autocomplete="off">
+        </div>
+        <div class="col-md-6">
+            <label class="form-label" for="firmwareHardwareVersion">Hardware Version:</label>
+            <input type="text" class="form-control" id="firmwareHardwareVersion" name="firmwareHardwareVersion" autocomplete="off">
+        </div>
+       <div class="col-md-6 col-sm-12">
+        <!-- <label class="form-label" for="uploadFile">Upload File:</label> -->
+        
+        <div class="mb-2" id="productImageBox" style="width: 100%; height: 200px; display: none;">
+        	<label class="form-label">Uploaded File:</label>
+        	<img src="" id="productImageTag" width="100%" height="100%">
+        </div>
+        
+        <input type="hidden" class="form-control" id="uploadedFilePath" name="uploadFile">
+        
+        <!-- <input type="file" class="form-control" id="uploadFile" name="file" accept=".png,.jpg,.jpeg"> -->
+    </div>
+    </div>
+</div>
+       
+
+        <div class="form-section">
+            <h2>Configuration Details :</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="form-label">AppSKey:</label>
+                    <input type="text" class="form-control" th:field="*{appSKey}" autocomplete="off">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">NwkSKey:</label>
+                    <input type="text" class="form-control" th:field="*{nwkSKey}" autocomplete="off">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">App EUI:</label>
+                    <input type="text" class="form-control" th:field="*{appEUI}" autocomplete="off">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Device Address:</label>
+                    <textarea class="form-control" rows="1" th:field="*{deviceAddress}" autocomplete="off"></textarea>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Remarks:</label>
+                    <textarea class="form-control" rows="1" th:field="*{remarks}" autocomplete="off"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <button type="submit" style="font-size: 14px;" class="btn btn-primary">Submit</button>
+            <button type="reset" style="font-size: 14px;" class="btn btn-secondary">Clear</button>
+        </div>
+    </form>
+</div>
+
+<div id="table-section" style="display:none;">
+ <div class="table-box tables-container">
+        <div class="table-responsive" style="height: 100%; overflow: auto;">
+    <div class="table-header" style="display: flex; justify-content: space-between; align-items: center;">
+         <h3>View Dispatched</h3>
+         <input type="text" class="form-control" id="searchInput" placeholder="Search..." style="padding: 5px; width: 20%;" />
+     </div>
+    <table class="table table-hover" id="tableData">
+    <thead>
+    <tr>
+        <th>Sl. No</th>
+        <th>Username</th>
+        <th>Transport Mode</th>
+        <th>Invoice no</th>
+        <th>Dc No</th>
+        <th>eWayBillNo</th>
+        <th>Qunatity</th>
+        <th>CustomerName</th>
+        <th>CompanyName</th>
+        <th>EmailId</th>
+        <th>Date</th>
+        <th>Product Name</th> 
+        <th>Module No</th>   
+        <th>Product Image</th> 
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="dispatch, stat : ${dispatchList}">
+        <td th:text="${stat.index + 1}"></td>
+        <td th:text="${dispatch.userName}"></td>
+        <td th:text="${dispatch.transportMode}"></td>
+        <td th:text="${dispatch.invoiceNo}"></td>
+        <td th:text="${dispatch.dcNo}"></td>
+        <td th:text="${dispatch.eWayBillNo}"></td>
+        <td th:text="${dispatch.quantity}"></td>
+        <td th:text="${dispatch.customerName}"></td>
+        <td th:text="${dispatch.companyName}"></td>
+        <td th:text="${dispatch.emailId}"></td>
+        <td th:text="${dispatch.date.substring(8,10) + '-' + dispatch.date.substring(5,7) + '-' + dispatch.date.substring(0,4)}"></td>
+        <td th:text="${dispatch.productName}"></td>
+        <td th:text="${dispatch.moduleNo}"></td>
+        <td>
+	  	  <img th:if="${dispatch.uploadFile != null}" 
+	         th:src="@{'dispatchDocs/' + ${dispatch.uploadFile.replace('\\', '/')}}" 
+	         alt="Image" 
+	         width="100" height="100">
+	    </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+</div>
+</div>
+
+<div id="productModal" class="modal fade" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Product Master</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form id="addProductsPopup" onsubmit="validateNewProductsAdd(event)" enctype="multipart/form-data">
+                    <div class="form-section">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="form-label">Product Name:<span style="padding-left: 5px; color: red;">*</span></label>
+                                <input type="text" class="form-control" name="productName" autocomplete="off" required>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label">Model No:<span style="padding-left: 5px; color: red;">*</span></label>
+                                <input type="text" class="form-control" name="moduleNo" autocomplete="off" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Root Firmware(External):</label>
+                                <input type="text" class="form-control" name="rootFirmwareExternal" autocomplete="off">
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label">Root Firmware(Internal):</label>
+                                <input type="text" class="form-control" name="rootFirmwareInternal" autocomplete="off">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Router Firmware(External):</label>
+                                <input type="text" class="form-control" name="routerFirmwareExternal" autocomplete="off">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Router Firmware(Internal):</label>
+                                <input type="text" class="form-control" name="routerFirmwareInternal" autocomplete="off">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Antenna Type:</label>
+                                <input type="text" class="form-control" name="antennaType" autocomplete="off">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Hardware Version:</label>
+                                <input type="text" class="form-control" name="firmwareHardwareVersion" autocomplete="off">
+                            </div>
+
+                            <div class="col-md-6 col-sm-12">
+                                <label class="form-label">Upload File:</label>
+                                <input type="file" class="form-control" accept=".png,.jpg,.jpeg" name="file">
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-4">
+                           <button type="submit" class="btn btn-custom" style="background-color: #00008B; color: white; font-size: 14px;">Add</button>
+                        </div>
+                    </div>  
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div id="customerModal" class="modal fade" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Customer Master</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form id="addCustomerPopup" onsubmit="validateNewCustomerAdd(event)">
+                    <div class="form-section">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="form-label">Customer Name<span style="padding-left: 5px; color: red;">*</span></label>
+                                <input type="text" class="form-control" name="customerName" id="customerName" autocomplete="off" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Email Id</label>
+                                <input type="email" class="form-control" onblur="checkEmailExistsOrNotPopup(this.value);" name="emailId" id="emailId" autocomplete="off">
+                            	<span id="uniqueEmailErrorPopup"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Contact No<span style="padding-left: 5px; color: red;">*</span></label>
+                                <input type="number" class="form-control" onblur="checkContactNoExistsOrNotPopup(this.value);" name="contactNo" id="contactNo" autocomplete="off" required>
+                            	<span id="uniqueContactNoErrorPopup"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Company Name<span style="padding-left: 5px; color: red;">*</span></label>
+                                <input type="text" class="form-control" name="companyName" id="companyName" autocomplete="off" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Address<span style="padding-left: 5px; color: red;">*</span></label>
+                                <textarea class="form-control" rows="2" name="companyAddress" id="companyAddress" autocomplete="off" required></textarea>
+                            </div>
+                        </div>
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-custom" id="addBtnPopup" style="background-color: #00008B; color: white; font-size: 14px;">Add</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div id="userModal" class="modal fade" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h5 class="modal-title">Transport Mode</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <form id="transportModeForm" onsubmit="validateTransportModeAdd(event)">
+                    <div class="form-section">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="form-label">Transport Mode<span style="padding-left: 5px; color: red;">*</span></label>
+                                <input type="text" class="form-control" name="name" autocomplete="off" required>
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-4">
+                           <button type="submit" class="btn btn-custom" style="background-color: #00008B; color: white; font-size: 14px;">Add</button>                      
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</div>
+
+<script>
+function toggleTransportModeDeleteIcon(){
+	var dropDownData = $('#transportModeDropDown').val();
+	if(dropDownData){
+    	$('#transportDeleteDropDownDataIcon').show();
+    }else{
+    	$('#transportDeleteDropDownDataIcon').hide();
+    }
+}
+
+/* document.addEventListener("DOMContentLoaded", function () {
+    var formSection = document.getElementById("form-section");
+    var tableSection = document.getElementById("table-section");
+    var companyInfo = document.getElementById("companyInfo"); 
+    var viewBtn = document.getElementById("viewProductsBtn"); 
+    var openFormBtn = document.getElementById("openFormBtn");
+
+    if (!formSection || !tableSection || !viewBtn || !openFormBtn) {
+        console.error("Some elements not found in the DOM! Please check IDs.");
+        return;
+    }
+
+    function toggleView(showForm) {
+        if (showForm) {
+            formSection.style.display = "block";
+            tableSection.style.display = "none";
+            if (companyInfo) companyInfo.style.display = "block";
+            openFormBtn.style.display = "none";
+            viewBtn.style.display = "block";
+        } else {
+            formSection.style.display = "none";
+            tableSection.style.display = "block";
+            if (companyInfo) companyInfo.style.display = "none";
+            openFormBtn.style.display = "block";
+            viewBtn.style.display = "none";
+        }
+    }
+
+    viewBtn.addEventListener("click", function () {
+        toggleView(false);
+    });
+
+    openFormBtn.addEventListener("click", function () {
+        toggleView(true);
+    });
+
+    toggleView(true);
+}); */
+
+function fetchProductDetails() {
+    //var selectedProduct = document.getElementById("productNameDropdown").value;
+    
+    var dropdown = document.getElementById("productNameDropdown");
+    var selectedText = dropdown.options[dropdown.selectedIndex].text;
+    var prodName, moduleNo;
+    
+ 	// Use regex to extract the parts
+    var match = selectedText.match(/^(.*)\s+\[(.*)\]$/);
+
+    if (match) {
+    	prodName = match[1].trim();  // Part before the parentheses
+    	moduleNo = match[2].trim(); // Inside the parentheses
+    }
+    
+    //alert(selectedProduct);
+    
+    document.getElementById("productName").value = prodName;
+    
+    if(prodName){
+    	$('#productNameDeleteDropDownDataIcon').show();
+    }else{
+    	$('#productNameDeleteDropDownDataIcon').hide();
+    }
+    
+    if (prodName && moduleNo) {
+        fetch(`/getProductDetailsByPrdNameAndModelNo?productName=${encodeURIComponent(prodName)}&modelNo=${encodeURIComponent(moduleNo)}`)
+            .then(response => response.json())
+            .then(data => {
+            	//alert(JSON.stringify(data));
+                document.getElementById("rootFirmwareExternal").value = data.rootFirmwareExternal || "";
+                document.getElementById("routerFirmwareExternal").value = data.routerFirmwareExternal || "";
+                document.getElementById("moduleNo").value = data.moduleNo || "";
+                document.getElementById("rootFirmwareInternal").value = data.rootFirmwareInternal || "";
+                document.getElementById("routerFirmwareInternal").value = data.routerFirmwareInternal || "";
+                document.getElementById("antennaType").value = data.antennaType || "";
+                document.getElementById("firmwareHardwareVersion").value = data.firmwareHardwareVersion || "";
+                if(data.uploadFile){
+                	$('#uploadedFilePath').val(data.uploadFile);
+                	//alert(`dispatchDocs/${data.uploadFile}`);
+                	$('#productImageTag').prop("src", `${data.uploadFile}`);
+                	$('#productImageBox').show();
+                }else{
+                	$('#uploadedFilePath').val("");
+                	$('#productImageBox').hide();
+                }
+            });
+    	}else {
+    		document.getElementById("rootFirmwareExternal").value = "";
+            document.getElementById("routerFirmwareExternal").value = "";
+            document.getElementById("moduleNo").value = "";
+            document.getElementById("rootFirmwareInternal").value = "";
+            document.getElementById("routerFirmwareInternal").value = "";
+            document.getElementById("antennaType").value = "";
+            document.getElementById("firmwareHardwareVersion").value = "";
+            $('#productImageTag').prop("src", "");
+            $('#productImageBox').hide();
+        }
+
+/*     if (selectedProduct) {
+        fetch(`/getProductDetails?productName=${encodeURIComponent(selectedProduct)}`)
+            .then(response => response.json())
+            .then(data => {
+            	//alert(JSON.stringify(data));
+                document.getElementById("rootFirmwareExternal").value = data.rootFirmwareExternal || "";
+                document.getElementById("routerFirmwareExternal").value = data.routerFirmwareExternal || "";
+                document.getElementById("moduleNo").value = data.moduleNo || "";
+                document.getElementById("rootFirmwareInternal").value = data.rootFirmwareInternal || "";
+                document.getElementById("routerFirmwareInternal").value = data.routerFirmwareInternal || "";
+                document.getElementById("antennaType").value = data.antennaType || "";
+                document.getElementById("firmwareHardwareVersion").value = data.firmwareHardwareVersion || "";
+                if(data.uploadFile){
+                	$('#uploadedFilePath').val(data.uploadFile);
+                	//alert(`dispatchDocs/${data.uploadFile}`);
+                	$('#productImageTag').prop("src", `dispatchDocs/${data.uploadFile}`);
+                	$('#productImageBox').show();
+                }else{
+                	$('#uploadedFilePath').val("");
+                	$('#productImageBox').hide();
+                }
+            });
+    	}else {
+    		document.getElementById("rootFirmwareExternal").value = "";
+            document.getElementById("routerFirmwareExternal").value = "";
+            document.getElementById("moduleNo").value = "";
+            document.getElementById("rootFirmwareInternal").value = "";
+            document.getElementById("routerFirmwareInternal").value = "";
+            document.getElementById("antennaType").value = "";
+            document.getElementById("firmwareHardwareVersion").value = "";
+            $('#productImageTag').prop("src", "");
+            $('#productImageBox').hide();
+        } */
+	}
+
+function fetchCustomerDetails() {
+    var selectedCustomer = document.getElementById("customerNameDropdown").value;
+    document.getElementById("customerName").value = selectedCustomer;
+    
+    if(selectedCustomer){
+    	$('#contactNameDeleteDropDownDataIcon').show();
+    }else{
+    	$('#contactNameDeleteDropDownDataIcon').hide();
+    }
+
+    if (selectedCustomer) {
+        fetch('/getCustomerDetails?customerName=' + encodeURIComponent(selectedCustomer))
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("companyName").value = data.companyName || '';
+                document.getElementById("contactNo").value = data.contactNo || '';
+                document.getElementById("emailId").value = data.emailId || '';
+                document.getElementById("companyAddress").value = data.companyAddress || '';
+            })
+            .catch(error => console.error('Error fetching customer details:', error));
+    } else {
+        document.getElementById("companyName").value = '';
+        document.getElementById("contactNo").value = '';
+        document.getElementById("emailId").value = '';
+        document.getElementById("companyAddress").value = '';
+    }
+}
+
+function openProductForm() {
+    const modal = new bootstrap.Modal(document.getElementById("productModal"));
+    modal.show();
+}
+
+function openCustomerForm() {
+    const modal = new bootstrap.Modal(document.getElementById("customerModal"));
+    modal.show();
+}
+
+function openUserForm() {
+    const modal = new bootstrap.Modal(document.getElementById("userModal"));
+    modal.show();
+}
+
+
+
+window.onload = function () {
+    const currentPath = window.location.pathname;
+    const sidebarLinks = document.querySelectorAll(".sidebar ul li a");
+
+    sidebarLinks.forEach(link => {
+        if (link.getAttribute("href") === currentPath) {
+            link.classList.add("active");
+        }
+    });
+};
+
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const currentPath = window.location.pathname;
+    const navLinks = document.querySelectorAll('.navbar ul li a');
+
+    navLinks.forEach(link => {
+        const linkHref = link.getAttribute('href');
+
+        if (linkHref === currentPath) {
+            // Highlight the current link
+            link.parentElement.classList.add('active');
+
+            // Check if it's a submenu item and activate the main menu as well
+            let parentMenu = link.closest('.dropdown-menu');
+            if (parentMenu) {
+                // Find the parent <li> of the main menu that contains this dropdown
+                let mainMenuLi = parentMenu.parentElement;
+                if (mainMenuLi && mainMenuLi.tagName === 'LI') {
+                    mainMenuLi.classList.add('active');
+                }
+            }
+        }
+    });
+});
+</script>
+
+ <script>
+$.ajax({
+    type: 'GET', 
+    url: '/fetchAllDistinctTransportModes', 
+    success: function(data) {
+		//alert(JSON.stringify(data));
+		updateTransportModeDetailsDataToDropdown(data);
+			},
+    error: function(xhr, status, error) {
+        console.error('Error fetching data for transport mode:', error);
+        console.log('Error fetching data for  transport mode. Please try again.');
+    }
+});
+
+function updateTransportModeDetailsDataToDropdown(datas) {
+	let transportModeDropdown = document.getElementById("transportModeDropDown");
+	transportModeDropdown.innerHTML = "";
+	
+	let defaultOption = document.createElement("option");
+	defaultOption.value = "";
+	defaultOption.text = "Select Transport Mode";
+	transportModeDropdown.appendChild(defaultOption);
+	
+	datas.forEach(data => {
+		let option = document.createElement("option");
+		option.value = data.name;
+		option.text = data.name;
+		transportModeDropdown.appendChild(option);
+	});
+}
+
+function updateTransportModeDetailsDataToDropdownAfterAdd(datas){
+	let transportModeDropdown = document.getElementById("transportModeDropDown");
+	transportModeDropdown.innerHTML = "";
+	
+	let defaultOption = document.createElement("option");
+	defaultOption.value = "";
+	defaultOption.text = "Select Transport Mode";
+	defaultOption.disabled = true;
+	transportModeDropdown.appendChild(defaultOption);
+	
+	datas.forEach(data => {
+		let option = document.createElement("option");
+		option.value = data.name;
+		option.text = data.name;
+		transportModeDropdown.appendChild(option);
+	});
+}
+
+function validateTransportModeAdd(e){
+	e.preventDefault();
+	
+	const form = document.getElementById("transportModeForm");
+    const formData = new FormData(form);
+
+    fetch("/submitTransportMode", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => {
+    	if (!response.ok) {
+            throw new Error("Failed to add transport mode");
+        }
+        return response.text(); // Extract response body text
+    })
+    .then(data => {
+    	if (data === "data exists") {
+            alert("Entered data already exists!");
+        } else if (data === "successfull") {
+        	
+        	$.ajax({
+        	    type: 'GET', 
+        	    url: '/fetchAllDistinctTransportModes', 
+        	    success: function(data) {
+        			updateTransportModeDetailsDataToDropdownAfterAdd(data);
+        				},
+        	    error: function(xhr, status, error) {
+        	        console.error('Error fetching data for transport mode:', error);
+        	        console.log('Error fetching data for  transport mode. Please try again.');
+        	    }
+        	});
+        	
+            //console.log("Transport mode added successfully!");
+            form.reset();
+            $('#userModal').modal('hide');
+            /* const modalElement = document.getElementById('userModal');
+            const modalInstance = bootstrap.Modal.getInstance(modalElement);
+            modalInstance.hide(); */
+        } else {
+            alert("Unexpected response: " + data);
+        }
+    })
+    .catch(error => {
+        alert("Error: " + error.message);
+    });
+}
+
+function validateNewCustomerAdd(e){
+	e.preventDefault();
+	
+	const form = document.getElementById("addCustomerPopup");
+    const formData = new FormData(form);
+
+    fetch("/submitCustomerPopupData", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => {
+    	if (!response.ok) {
+            throw new Error("Failed to add customer details");
+        }
+        return response.text(); // Extract response body text
+    })
+    .then(data => {
+    	
+		$.ajax({
+    	    type: 'GET', 
+    	    url: '/fetchAllCustomerDetails', 
+    	    success: function(data) {
+    	    	updateCustomerNamesToDropdownAfterPopupAdd(data);
+    				},
+    	    error: function(xhr, status, error) {
+    	        console.error('Error fetching data for customer details:', error);
+    	        console.log('Error fetching data for customer details. Please try again.');
+    	    }
+    	});
+    	
+        //console.log("New customer details added successfully!");
+        form.reset();
+        $('#customerModal').modal('hide');
+    })
+    .catch(error => {
+        alert("Error: " + error.message);
+    });
+}
+
+function updateCustomerNamesToDropdownAfterPopupAdd(datas){
+	var customerNameDropdown = document.getElementById('customerNameDropdown');
+	customerNameDropdown.innerHTML = "";
+	
+	var defaultOption = document.createElement("option");
+	defaultOption.value = "";
+	defaultOption.text = "Select Contact Name";
+	defaultOption.disabled = true;
+	customerNameDropdown.appendChild(defaultOption);
+	
+	datas.forEach(data =>{
+		var option = document.createElement("option");
+		option.text = data.customerName;
+		option.value = data.customerName;
+		customerNameDropdown.appendChild(option);
+	});
+	
+	populateTheRecentlyInsertedCustomerDetails();
+}
+
+function updateCustomerNamesToDropdown(datas){
+	var customerNameDropdown = document.getElementById('customerNameDropdown');
+	customerNameDropdown.innerHTML = "";
+	
+	var defaultOption = document.createElement("option");
+	defaultOption.value = "";
+	defaultOption.text = "Select Contact Name";
+	customerNameDropdown.appendChild(defaultOption);
+	
+	datas.forEach(data =>{
+		var option = document.createElement("option");
+		option.text = data.customerName;
+		option.value = data.customerName;
+		customerNameDropdown.appendChild(option);
+	});
+}
+
+function populateTheRecentlyInsertedCustomerDetails(){
+	$.ajax({
+	    type: 'GET', 
+	    url: '/fetchRecentCustomerDetails', 
+	    success: function(data) {
+	    	
+	    	const dropdown = $('#customerNameDropdown');
+            const valueToSelect = data.customerName;
+
+            // Check if the option exists
+            if (dropdown.find(`option[value="${valueToSelect}"]`).length > 0) {
+                dropdown.val(valueToSelect); // Set the value if present
+            } else {
+                console.warn('Customer name not found in dropdown options.');
+            }
+            
+			$('#emailId').val(data.emailId);
+			$('#contactNo').val(data.contactNo);
+			$('#companyName').val(data.companyName);
+			$('#companyAddress').val(data.companyAddress);
+				},
+	    error: function(xhr, status, error) {
+	        console.error('Error fetching data for customer details:', error);
+	        console.log('Error fetching data for customer details. Please try again.');
+	    }
+	});
+}
+
+function validateNewProductsAdd(e){
+	e.preventDefault();
+	
+	const form = document.getElementById("addProductsPopup");
+    const formData = new FormData(form);
+
+    fetch("/submitProduct", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => {
+    	if (!response.ok) {
+            throw new Error("Failed to add product details");
+        }
+        return response.text(); // Extract response body text
+    })
+    .then(data => {
+    	
+		$.ajax({
+    	    type: 'GET', 
+    	    url: '/getAllProductDetails', 
+    	    success: function(data) {
+    	    	updateProductNamesToDropdownAfterPopupAdd(data);
+    				},
+    	    error: function(xhr, status, error) {
+    	        console.error('Error fetching data for product details:', error);
+    	        console.log('Error fetching data for product details. Please try again.');
+    	    }
+    	});
+    	
+        //console.log("New product details added successfully!");
+        form.reset();
+        $('#productModal').modal('hide');
+    })
+    .catch(error => {
+        alert("Error: " + error.message);
+    });
+}
+
+function updateProductNamesToDropdownAfterPopupAdd(datas){
+	var productNameDropdown = document.getElementById('productNameDropdown');
+	productNameDropdown.innerHTML = "";
+	
+	var defaultOption = document.createElement("option");
+	defaultOption.value = "";
+	defaultOption.text = "Select Product name with model no";
+	defaultOption.disabled = true;
+	productNameDropdown.appendChild(defaultOption);
+	
+	datas.forEach(data =>{
+		if(data.moduleNo){
+			var option = document.createElement("option");
+			option.text = data.productName+" ["+data.moduleNo+"]";
+			option.value = data.productName;
+			productNameDropdown.appendChild(option);
+		}
+	});
+	populateTheRecentlyInsertedProductDetails();
+}
+
+function updateProductNamesToDropdown(datas){
+	var productNameDropdown = document.getElementById('productNameDropdown');
+	productNameDropdown.innerHTML = "";
+	
+	var defaultOption = document.createElement("option");
+	defaultOption.value = "";
+	defaultOption.text = "Select Product name with model no";
+	productNameDropdown.appendChild(defaultOption);
+	
+	datas.forEach(data =>{
+		if(data.moduleNo){
+			var option = document.createElement("option");
+			option.text = data.productName+" ["+data.moduleNo+"]";
+			option.value = data.productName;
+			productNameDropdown.appendChild(option);
+		}
+	});
+}
+
+function populateTheRecentlyInsertedProductDetails(){
+	$.ajax({
+	    type: 'GET', 
+	    url: '/fetchRecentProductDetails', 
+	    success: function(data) {
+	    	
+	    	const dropdown = $('#productNameDropdown');
+            const valueToSelect = data.productName+" ["+data.moduleNo+"]";
+            let optionFound = false;
+
+            dropdown.find('option').each(function() {
+                if ($(this).text().trim() === valueToSelect) {
+                    $(this).prop('selected', true);
+                    optionFound = true;
+                    fetchProductDetails(); // Call your function if matched
+                    return false; // break the loop
+                }
+            });
+
+            if (!optionFound) {
+                console.warn('Product name not found in dropdown options.');
+            }
+            
+			/* $('#moduleNo').val(data.moduleNo);
+			$('#rootFirmwareExternal').val(data.rootFirmwareExternal);
+			$('#rootFirmwareInternal').val(data.rootFirmwareInternal);
+			$('#routerFirmwareExternal').val(data.routerFirmwareExternal);
+			$('#routerFirmwareInternal').val(data.routerFirmwareInternal);
+			$('#antennaType').val(data.antennaType);
+			$('#firmwareHardwareVersion').val(data.firmwareHardwareVersion); */
+				},
+	    error: function(xhr, status, error) {
+	        console.error('Error fetching data for customer details:', error);
+	        console.log('Error fetching data for customer details. Please try again.');
+	    }
+	});
+}
+
+function deleteTransportModeData(data){
+	Swal.fire({
+		title: "Are you sure?",
+		text: "You want to delete!",
+		icon: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#007bff",
+		cancelButtonColor: "#EC7063",
+		confirmButtonText: "Yes, delete it!",
+		customClass: {
+            popup: 'custom-swal-font'
+        },
+	}).then((result) => {
+		if (result.isConfirmed) {
+			$.ajax({
+			    type: 'POST', 
+			    url: '/deleteTransportModeBasedOnName', 
+			    data: {
+			    	name: data
+			    },
+			    success: function(data) {
+				    	$.ajax({
+				    	    type: 'GET', 
+				    	    url: '/fetchAllDistinctTransportModes', 
+				    	    success: function(data) {
+				    			updateTransportModeDetailsDataToDropdown(data);
+				    				},
+				    	    error: function(xhr, status, error) {
+				    	        console.error('Error fetching data for transport mode:', error);
+				    	        console.log('Error fetching data for  transport mode. Please try again.');
+				    	    }
+				    	});
+				    	$('#transportDeleteDropDownDataIcon').hide();
+					},
+			    error: function(xhr, status, error) {
+			        console.error('Error deleting transport mode data:', error);
+			        console.log('Error deleting transport mode data. Please try again.');
+			    }
+			});
+		}
+	});
+}
+
+function deleteContactNameData(name, contactNo){
+	Swal.fire({
+		title: "Are you sure?",
+		text: "You want to delete!",
+		icon: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#007bff",
+		cancelButtonColor: "#EC7063",
+		confirmButtonText: "Yes, delete it!",
+		customClass: {
+            popup: 'custom-swal-font'
+        },
+	}).then((result) => {
+		if (result.isConfirmed) {
+			$.ajax({
+			    type: 'POST', 
+			    url: '/deleteCustomerDetailsBasedOnNameAndContactNo', 
+			    data: {
+			    	name: name,
+			    	contactNo: contactNo
+			    },
+			    success: function(data) {
+				    	$.ajax({
+				    	    type: 'GET', 
+				    	    url: '/fetchAllCustomerDetails', 
+				    	    success: function(data) {
+				    	    	updateCustomerNamesToDropdown(data);
+				    				},
+				    	    error: function(xhr, status, error) {
+				    	        console.error('Error fetching data for customer details:', error);
+				    	        console.log('Error fetching data for customer details. Please try again.');
+				    	    }
+				    	});
+				    	document.getElementById("companyName").value = '';
+				        document.getElementById("contactNo").value = '';
+				        document.getElementById("emailId").value = '';
+				        document.getElementById("companyAddress").value = '';
+				    	$('#contactNameDeleteDropDownDataIcon').hide();
+					},
+			    error: function(xhr, status, error) {
+			        console.error('Error deleting customer details data:', error);
+			        console.log('Error deleting customer details data. Please try again.');
+			    }
+			});
+		}
+	});
+}
+
+function deleteProductDetailsData(productNameWithModelNo, modelNo){
+	//alert(productNameWithModelNo);
+	var productName;
+	var match = productNameWithModelNo.match(/^(.*)\s+\[(.*)\]$/);
+	productName = match[1].trim();
+	
+	Swal.fire({
+		title: "Are you sure?",
+		text: "You want to delete!",
+		icon: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#007bff",
+		cancelButtonColor: "#EC7063",
+		confirmButtonText: "Yes, delete it!",
+		customClass: {
+            popup: 'custom-swal-font'
+        },
+	}).then((result) => {
+		if (result.isConfirmed) {
+			$.ajax({
+			    type: 'POST', 
+			    url: '/deleteProductDetailsBasedOnProdNameAndModelNo', 
+			    data: {
+			    	prodName: productName,
+			    	modelNo: modelNo
+			    },
+			    success: function(data) {
+				    	$.ajax({
+				    	    type: 'GET', 
+				    	    url: '/getAllProductDetails', 
+				    	    success: function(data) {
+				    	    	updateProductNamesToDropdown(data);
+				    				},
+				    	    error: function(xhr, status, error) {
+				    	        console.error('Error fetching data for product details:', error);
+				    	        console.log('Error fetching data for product details. Please try again.');
+				    	    }
+				    	});
+				    	document.getElementById("rootFirmwareExternal").value = "";
+			            document.getElementById("routerFirmwareExternal").value = "";
+			            document.getElementById("moduleNo").value = "";
+			            document.getElementById("rootFirmwareInternal").value = "";
+			            document.getElementById("routerFirmwareInternal").value = "";
+			            document.getElementById("antennaType").value = "";
+			            document.getElementById("firmwareHardwareVersion").value = "";
+			            $('#productImageTag').prop("src", "");
+			            $('#productImageBox').hide();
+				    	$('#productNameDeleteDropDownDataIcon').hide();
+					},
+			    error: function(xhr, status, error) {
+			        console.error('Error deleting product details data:', error);
+			        console.log('Error deleting product details data. Please try again.');
+			    }
+			});
+		}
+	});
+}
+</script>
+
+  	<script>
+    const searchInput = document.getElementById('searchInput');
+    const table = document.getElementById('tableData');
+    const rows = table.getElementsByTagName('tr');
+
+    searchInput.addEventListener('keyup', function () {
+        const filter = searchInput.value.toLowerCase();
+
+        for (let i = 1; i < rows.length; i++) {
+            const cells = rows[i].getElementsByTagName('td');
+            let match = false;
+
+            for (let j = 0; j < cells.length; j++) {
+                const cellText = cells[j].textContent.toLowerCase();
+                if (cellText.includes(filter)) {
+                    match = true;
+                    break;
+                }
+            }
+
+            rows[i].style.display = match ? '' : 'none';
+        }
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const userIcon = document.querySelector(".fa-circle-user");
+        const dropdown = document.getElementById("userDropdown");
+
+        userIcon.addEventListener("click", function () {
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        });
+
+        // Optional: Close dropdown when clicking outside
+        document.addEventListener("click", function (e) {
+            if (!userIcon.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.style.display = "none";
+            }
+        });
+    });
+    
+    document.addEventListener("DOMContentLoaded", function () {
+        const userIcon = document.querySelector("#dispatchMenu");
+        const dropdown = document.querySelector(".dispatch_subDropDown");
+
+        userIcon.addEventListener("click", function () {
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        });
+
+        // Optional: Close dropdown when clicking outside
+        document.addEventListener("click", function (e) {
+            if (!userIcon.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.style.display = "none";
+            }
+        });
+    });
+    
+    document.addEventListener("DOMContentLoaded", function () {
+        const userIcon = document.querySelector("#masterMenu");
+        const dropdown = document.querySelector(".master_subDropDown");
+
+        userIcon.addEventListener("click", function () {
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        });
+
+        // Optional: Close dropdown when clicking outside
+        document.addEventListener("click", function (e) {
+            if (!userIcon.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.style.display = "none";
+            }
+        });
+    });
+</script>
+
+<script>
+let isEmailValidPopup = true;
+let isContactNoValidPopup = true;
+
+function checkAddButtonStatusPopup() {
+    if (isEmailValidPopup && isContactNoValidPopup) {
+        $('#addBtnPopup').prop("disabled", false);
+    } else {
+        $('#addBtnPopup').prop("disabled", true);
+    }
+}
+
+function checkEmailExistsOrNotPopup(email) {
+    if (email) {
+        $.ajax({
+            type: 'GET',
+            url: '/checkCustomerEmailIdExists',
+            data: { email: email },
+            success: function (data) {
+                if (data === true) {
+                    $('#uniqueEmailErrorPopup').text("Email already exists!");
+                    $('#uniqueEmailErrorPopup').css({ "font-size": "14px", "color": "red" });
+                    isEmailValidPopup = false;
+                } else {
+                    $('#uniqueEmailErrorPopup').text("");
+                    isEmailValidPopup = true;
+                }
+                checkAddButtonStatusPopup();
+            },
+            error: function () {
+                console.error('Error checking email.');
+            }
+        });
+    } else {
+        $('#uniqueEmailErrorPopup').text("");
+        isEmailValidPopup = true;
+        checkAddButtonStatusPopup();
+    }
+}
+
+function checkContactNoExistsOrNotPopup(contactNo) {
+    if (contactNo) {
+        $.ajax({
+            type: 'GET',
+            url: '/checkCustomerContactNoExists',
+            data: { contact_no: contactNo },
+            success: function (data) {
+                if (data === true) {
+                    $('#uniqueContactNoErrorPopup').text("Contact No already exists!");
+                    $('#uniqueContactNoErrorPopup').css({ "font-size": "14px", "color": "red" });
+                    isContactNoValidPopup = false;
+                } else {
+                    $('#uniqueContactNoErrorPopup').text("");
+                    isContactNoValidPopup = true;
+                }
+                checkAddButtonStatusPopup();
+            },
+            error: function () {
+                console.error('Error checking email.');
+            }
+        });
+    } else {
+        $('#uniqueContactNoErrorPopup').text("");
+        isContactNoValidPopup = true;
+        checkAddButtonStatusPopup();
+    }
+}
+</script>
+
+</body>
+</html>

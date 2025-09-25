@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Custom Calendar</title>
+  <!-- FullCalendar v5 CSS -->
+  <!-- <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet" />
+
+  FullCalendar v5 JS
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script> -->
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <link href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.3/dist/css/datepicker-bs5.min.css" rel="stylesheet">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+	
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  
+  <style>
+	.navbar {
+		    position: fixed;
+		    top: 0;
+		    right: 0;
+		    background-color: #EBECF0; /* Darker shade for a professional look */
+		    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+		    z-index: 1000;
+		    width: 100%; /* Full width navbar */
+		    padding: 12px 4px;
+		    display: flex;
+		    align-items: center;
+		    justify-content: flex-start; /* Align entire content to the right */
+		    box-sizing: border-box;
+		}
+		
+		/* Navbar list style */
+		.navbar ul {
+		    display: flex;
+		    justify-content: flex-end; /* Align items to the right */
+		    padding: 0;
+		    margin: 0;
+		    list-style: none;
+		    gap: 5px;
+		}
+		
+		/* Navbar item */
+		.navbar li {
+		    padding: 10px 18px;
+		    border-radius: 5px;
+		    cursor: pointer;
+		    color: black; /* Light color text */
+		    font-size: 14px;
+		    font-weight: 600;
+		    transition: background-color 0.3s ease, transform 0.2s ease;
+		}
+		.navbar li a{
+			text-decoration:none;
+			color:black;
+		}
+		/* Hover effect */
+		.navbar li:hover {
+		    background-color: #F8F8FF; /* Bright blue for hover effect */
+		    color: white;
+		    transform: translateY(-2px); /* Slightly lift on hover */
+		}
+		
+/* Active link style */
+.navbar li.active {
+    background-color: #F8F8FF; /* Bright blue for hover effect */
+	font-weight: bold;
+}
+		
+		/* Navbar icons */
+		.navbar li i {
+		    margin-right: 8px;
+		}
+		
+		/* Optional: Add a little space between the navbar and the top of the page */
+		body {
+		    margin-top: 70px; /* Adjust based on navbar height */
+		}
+		
+		/* Mobile responsiveness (optional) */
+		@media (max-width: 768px) {
+		    .navbar {
+		        width: 100%;
+		        border-radius: 0;
+		    }
+		
+		    .navbar ul {
+		        justify-content: center; /* Center content on smaller screens */
+		    }
+		
+		    .navbar li {
+		        margin: 0 10px;
+		    }
+		}
+		
+		
+.calendar-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    width: 70%;
+    margin: 8% auto 0 auto;
+    flex-wrap: wrap;
+    /* background: red; */
+  }
+  
+  .calendar {
+    background-color: #fff;
+    /* border: 1px solid #ccc; */
+    border-radius: 10px;
+    padding: 10px;
+    width: auto;
+    border-spacing: 40px 40px; /* horizontal vertical */
+  }
+  
+  .calendar h3 {
+    margin: 10px 0;
+  }
+  
+  .calendar table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .calendar th, .calendar td {
+    width: 14.28%;
+    padding: 10px;
+    text-align: center;
+    /* cursor: pointer; */
+  }
+  
+  .calendar td {
+  position: relative;
+  text-align: center;
+  vertical-align: middle;
+  height: 60px;
+  width: 60px;
+  /* padding: 4px; */
+}
+  
+  .calendar th {
+    background-color: #1976d2;
+    color: white;
+  }
+  
+  .calendar td.disabled {
+    color: #ccc;
+    border-radius: 50%;
+    cursor: not-allowed;
+  }
+  
+  .calendar td.event {
+    background-color: #f3fad2;
+    border-radius: 50%;
+  }
+  
+  .eventPopup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+  }
+  
+  .popup-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+    position: relative;
+  }
+  
+  .close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 20px;
+    cursor: pointer;
+  }
+  
+  #events-list {
+    margin-top: 30px;
+  }
+  
+  #events-list ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .calendar-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 10px;
+}
+
+.calendar-header{
+	/* background: red; */
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+/* .calendar-header table,td:hover{
+	background-color: skyblue;
+	border-radius: 50%;
+} */
+
+.today {
+  color: #1976d2;
+  font-weight: bold;
+  background: #d2e6fa;
+  border-radius: 50%;
+}
+
+.eventListsBox{
+	/* background: red; */
+	width: 80%;
+	height: 170px;
+	margin: 1% auto 0 auto;
+	overflow: auto;
+	padding: 10px;
+	text-align: center;
+}
+
+/* Today with Event - half blue (today), half green (event) */
+.calendar td.today.event {
+  background: linear-gradient(to right, #d2e6fa 50%, #f3fad2 50%);
+  color: #1976d2;
+  font-weight: bold;
+  border-radius: 50%;
+}
+
+/* Past with Event - half grey (past), half green (event) */
+.calendar td.disabled.event {
+  background: linear-gradient(to right, #e0e0e0 50%, #f3fad2 50%);
+  color: #999;
+  border-radius: 50%;
+}
+
+.day-number {
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.event-count {
+  font-size: 12px;
+  color: #1976d2;
+  text-decoration: underline;
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.event-info-panel {
+    position: fixed;
+    top: 20%;
+    right: -400px; /* Hidden by default */
+    width: 350px;
+    background-color: #2f3640;
+    color: white;
+    padding: 20px;
+    border-left: 2px solid #00a8ff;
+    z-index: 10000;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.5);
+    transition: right 0.4s ease-in-out;
+}
+
+.event-info-panel.show {
+    right: 0;
+}
+
+.event-info-panel .close-panel {
+    font-size: 22px;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+}
+
+#eventDetails {
+    max-height: 400px;
+    overflow-y: auto;
+    /* background: red; */
+    margin-top: 25px;
+}
+
+.user-dropdown {
+    position: absolute;
+    top: 50px; /* adjust as needed */
+    left: 10px;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    border-radius: 8px;
+    z-index: 1000;
+    width: auto;
+}
+
+.user-dropdown ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+     display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.user-dropdown ul li {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.user-dropdown ul li:hover {
+    background-color: #F8F8FF; /* Bright blue for hover effect */
+    color: #000;
+}
+
+.user-dropdown ul li:last-child {
+    border-bottom: none;
+}
+
+.user-dropdown ul li a {
+    text-decoration: none;
+    color: #333;
+}
+
+.user-dropdown ul li a i {
+    margin-right: 10px;
+}
+
+.dispatch_subDropDown {
+    display: none;
+    position: absolute;
+    background-color: #EBECF0;
+    width: auto;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    z-index: 1000;
+    top: 50px; /* adjust as needed */
+}
+
+.dispatch_subDropDown ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.dispatch_subDropDown ul li {
+    padding: 5px;
+    border-bottom: 1px solid #eee;
+}
+
+.dispatch_subDropDown ul li:hover {
+    background-color: #F8F8FF; /* Bright blue for hover effect */
+    color: #000;
+}
+
+.dispatch_subDropDown ul li:last-child {
+    border-bottom: none;
+}
+
+.dispatch_subDropDown ul li a {
+    text-decoration: none;
+    color: #333;
+}
+  </style>
+</head>
+<body>
+        <div class="navbar">
+        <!-- <i class="fa-solid fa-circle-user text-primary" style="font-size: 24px; padding-right: 15px; cursor: pointer;"></i> -->
+        <div class="user-dropdown" id="userDropdown" style="display: none;">
+<ul>
+			        <li><a><i class="fas fa-user"></i><span th:text="${session.full_name}"></span></a></li>
+			        <li><a href="/logout"><i class="fas fa-sign-out-alt"></i> Sign Out</a></li>
+			    </ul>
+			</div>
+		   <ul>
+		    <li>
+		        <a th:href="@{/dashboard}">
+		            <i class="fas fa-home"></i> Home
+		        </a>
+		    </li>
+		    <li>
+		        <a href="#" id="dispatchMenu">
+		            <i class="fas fa-file-import"></i> Dispatch <i style="padding-left: 5px;" class="fa-solid fa-caret-down"></i>
+		        </a>
+		        <div class="dropdown-menu dispatch_subDropDown">
+			      <ul>
+			        <li><a class="dropdown-item" th:href="@{/form}">Add</a></li>
+			        <li><a class="dropdown-item" th:href="@{/view-dispatch}">View</a></li>
+			      </ul>
+			    </div>
+		    </li>
+		    <li>
+		         <a th:href="@{/import}">
+		            <i class="fas fa-arrow-down"></i> Import
+		        </a>
+		    </li>
+		    <!-- <li>
+		         <a th:href="@{/view-dispatch}">
+		            <i class="fas fa-eye"></i> View Dispatch
+		        </a>
+		    </li> -->
+		    <li>
+		        <a th:href="@{/calendar}">
+		            <i class="fas fa-calendar"></i> Calendar
+		        </a>
+		    </li>
+		    
+		    <li>
+		        <a href="#" id="masterMenu">
+		            <i class="fas fa-building"></i> Master <i style="padding-left: 5px;" class="fa-solid fa-caret-down"></i>
+		        </a>
+		        <div class="dropdown-menu dispatch_subDropDown master_subDropDown">
+			      <ul>
+			        <!-- <li><a class="dropdown-item" th:href="@{/adduser}">User Master</a></li> -->
+			        <li><a class="dropdown-item" th:href="@{/product}">Product Master</a></li>
+			        <li><a class="dropdown-item" th:href="@{/customer}">Customer Master</a></li>
+			      </ul>
+			    </div>
+		    </li>
+		    
+		    <!-- <li>
+		        <a th:href="@{/adduser}">
+		            <i class="fas fa-users"></i> Add Users
+		        </a>
+		    </li>
+		    <li>
+		        <a th:href="@{/product}">
+		            <i class="fas fa-box"></i> Product Master
+		        </a>
+		    </li>
+		    <li>
+		        <a th:href="@{/customer}">
+		            <i class="fas fa-building"></i> Customer Master
+		        </a>
+		    </li> -->
+		    <li>
+		        <a th:href="@{/dcDispatchData}">
+		            <i class="fa-solid fa-file"></i> Generated DC
+		        </a>
+		    </li>
+		    
+		    <li>
+		        <a th:href="@{/audit-log}">
+		            <i class="fas fa-cogs"></i> Track Info
+		        </a>
+		    </li>
+		</ul>
+
+	 </div>
+ <!-- <div id="calendar" style="max-width: 90%; margin: 40px auto;"></div> -->
+ 
+<div class="calendar-container">
+    <div id="calendar-current" class="calendar shadow"></div>
+    <div id="calendar-next" class="calendar shadow"></div>
+</div>
+
+<!-- <div class="calendar-navigation">
+  <button onclick="changeMonth(-1)">⬅ Prev</button>
+  <span id="current-month-year"></span>
+  <button onclick="changeMonth(1)">Next ➡</button>
+</div> -->
+  
+<div id="event-popup" class="eventPopup">
+    <div class="popup-content">
+      <span id="close-popup" style="font-weight: bold;" class="close">&times;</span>
+      <h5>Add Event</h5>
+      <p style="font-size: 14px; text-decoration: underline;" id="selected-date"></p>
+      <input type="hidden" style="font-size: 14px;" class="form-control" id="hiddenValidDateFormat">
+      <select style="font-size: 14px;" class="form-select mb-2" id="username">
+      	<option value="">Select User</option>
+      	<option th:each="un : ${distinctUserNames}" th:value="${un.emp_full_name}" th:text="${un.emp_full_name}"></option>
+      </select>
+      <input type="text" style="font-size: 14px;" class="form-control mb-2" id="eventTitle" placeholder="Enter event">
+      <select style="font-size: 14px;" class="form-select mb-2" id="eventType">
+      	<option value="">Select Event Type</option>
+      	<option value="Sample Dispatch">Sample Dispatch</option>
+      	<option value="Order Dispatch">Order Dispatch</option>
+      </select>
+      <select style="font-size: 14px;" class="form-select mb-2" id="product">
+      	<option value="">Select Product</option>
+      	<option th:each="product : ${products}" th:value="${product.productName}" th:text="${product.productName}"></option>
+      </select>
+      <div class="mt-4" style="display: flex; justify-content: flex-end;">
+      	<button style="font-size: 14px;" class="btn btn-primary" id="add-event">Add</button>
+      </div>
+    </div>
+</div>
+
+<div id="eventInfoPanel" class="event-info-panel">
+    <span class="close-panel">&times;</span>
+    <div id="eventDetails"></div>
+</div>
+
+  <!-- Events List -->
+  <!-- <div id="events-list" class="eventListsBox">
+    <h5>📅 Event Lists</h5>
+    <ul id="events"></ul>
+  </div> -->
+ 
+<!-- Your custom script -->
+ <!--  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var calendarEl = document.getElementById('calendar');
+
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        height: 'auto',
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        events: [
+          {
+            title: 'Sample Event',
+            start: new Date().toISOString().split('T')[0]
+          }
+        ]
+      });
+
+      calendar.render();
+    });
+  </script> -->
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const currentPath = window.location.pathname;
+    const navLinks = document.querySelectorAll('.navbar ul li a');
+
+    navLinks.forEach(link => {
+        const linkHref = link.getAttribute('href');
+
+        if (linkHref === currentPath) {
+            // Highlight the current link
+            link.parentElement.classList.add('active');
+
+            // Check if it's a submenu item and activate the main menu as well
+            let parentMenu = link.closest('.dropdown-menu');
+            if (parentMenu) {
+                // Find the parent <li> of the main menu that contains this dropdown
+                let mainMenuLi = parentMenu.parentElement;
+                if (mainMenuLi && mainMenuLi.tagName === 'LI') {
+                    mainMenuLi.classList.add('active');
+                }
+            }
+        }
+    });
+});
+</script>
+
+<script>
+let events = {};  // Stores events per date
+let selectedDate = null;
+let currentMonthOffset = 0;
+
+function fetchAllEventsListData() {
+  $.ajax({
+    type: 'GET',
+    url: '/getAllEventsLists',
+    success: function(data) {
+      events = {}; // Reset events
+
+      data.forEach(event => {
+        const dateKey = event.scheduled_date; // Should match exactly what you used in data-date
+
+        if (!events[dateKey]) {
+          events[dateKey] = [];
+        }
+
+        events[dateKey].push({
+          username: event.user_name,
+          eventTitle: event.event_title,
+          eventType: event.event_type,
+          product: event.product_name
+        });
+      });
+
+      //console.log("Mapped Events ==="+ JSON.stringify(events));
+
+      // Optionally, re-render calendar here
+      renderAllCalendars();
+    },
+    error: function(xhr, status, error) {
+      console.error('Error fetching data for calendar events:', error);
+    }
+  });
+}
+  
+fetchAllEventsListData();
+  
+  const calendarCurrent = document.getElementById('calendar-current');
+  const calendarNext = document.getElementById('calendar-next');
+  const popup = document.getElementById('event-popup');
+  const closePopup = document.getElementById('close-popup');
+  const addEventBtn = document.getElementById('add-event');
+  const selectedDateElem = document.getElementById('selected-date');
+  const usernameInput = document.getElementById('username');
+  const eventTitleInput = document.getElementById('eventTitle');
+  const eventTypeInput = document.getElementById('eventType');
+  const productInput = document.getElementById('product');
+  const eventsList = document.getElementById('events');
+
+  function renderCalendar(container, monthOffset) {
+    const today = new Date();
+    const date = new Date(today.getFullYear(), today.getMonth() + monthOffset, 1);
+    const month = date.getMonth();
+    const year = date.getFullYear();
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    // Always show Prev/Next buttons on both calendars
+    let table = '<div class="calendar-header">';
+    table += `<i class="fa-solid fa-arrow-left text-primary" style="cursor: pointer;" title="Prev" onclick="changeMonth(-1)"></i>`;
+    table += `<span class="month-year">${date.toLocaleString('default', { month: 'long' })} ${year}</span>`;
+    table += `<i class="fa-solid fa-arrow-right text-primary" style="cursor: pointer;" title="Next" onclick="changeMonth(1)"></i>`;
+    table += '</div>';
+
+    table += '<table><tr>';
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    for (let d of days) {
+      table += '<th>' + d + '</th>';
+    }
+    table += '</tr><tr>';
+
+    for (let i = 0; i < firstDay; i++) {
+      table += '<td></td>';
+    }
+
+    for (let day = 1; day <= daysInMonth; day++) {
+    	  const currentDate = new Date(year, month, day);
+    	  const dateStr = currentDate.toDateString();
+    	  const isPast = currentDate < new Date().setHours(0, 0, 0, 0);
+    	  const hasEvent = events[dateStr];
+    	  const isToday = currentDate.toDateString() === new Date().toDateString();
+
+    	  let classes = '';
+    	  if (isPast) classes += 'disabled ';
+    	  if (hasEvent) classes += 'event ';
+    	  if (isToday) classes += 'today ';
+
+    	  //table += `<td class="${classes.trim()}" data-date="${dateStr}">${day}</td>`;
+    	  
+	   	  	let eventCount = hasEvent ? events[dateStr].length : 0;
+			let eventIndicator = eventCount > 0 ? `<div class="event-count" onclick="fetchTootTipBasedOnDate('${dateStr}')">${eventCount}</div>` : '';
+	
+			table += `<td class="${classes.trim()}" data-date="${dateStr}">
+			            <div class="day-number">${day}</div>
+			            ${eventIndicator}
+			          </td>`;
+
+    	  if ((firstDay + day) % 7 === 0) {
+    	    table += '</tr><tr>';
+    	  }
+    	}
+
+    table += '</tr></table>';
+    container.innerHTML = table;
+
+    // Add click listeners
+    const cells = container.querySelectorAll('td');
+    cells.forEach(cell => {
+      const dayDiv = cell.querySelector('.day-number');
+      if (dayDiv && !cell.classList.contains('disabled') && cell.dataset.date) {
+        dayDiv.addEventListener('click', (e) => {
+          selectedDate = cell.dataset.date;
+          
+          const dateObj = new Date(selectedDate);
+          const yyyy = dateObj.getFullYear();
+          const mm = String(dateObj.getMonth() + 1).padStart(2, '0');
+          const dd = String(dateObj.getDate()).padStart(2, '0');
+          const formattedDate = `${yyyy}-${mm}-${dd}`;
+
+          $('#hiddenValidDateFormat').val(formattedDate);
+          selectedDateElem.textContent = selectedDate;
+          popup.style.display = 'block';
+
+          e.stopPropagation(); // Optional: prevent event bubbling
+        });
+      }
+    });
+  }
+
+  function updateEventsList() {
+    //eventsList.innerHTML = '<h2>📅 Events</h2><ul id="events"></ul>';
+    //console.log(JSON.stringify(events));
+    const ul = document.getElementById('events');
+    for (let date in events) {
+      events[date].forEach(evt => {
+        const li = document.createElement('li');
+        li.textContent = `${date}: ${evt.username} - ${evt.eventTitle} - ${evt.eventType} - ${evt.product}`;
+        ul.appendChild(li);
+      });
+    }
+  }
+
+  closePopup.addEventListener('click', () => {
+    popup.style.display = 'none';
+    usernameInput.value = '';
+    eventTitleInput.value = '';
+    eventTypeInput.value = '';
+    productInput.value = '';
+  });
+
+  addEventBtn.addEventListener('click', () => {
+    const username = usernameInput.value.trim();
+    const eventTitle = eventTitleInput.value.trim();
+    const eventType = eventTypeInput.value.trim();
+    const product = productInput.value.trim();
+    
+    if (!username || !eventTitle || !eventType || !product){
+    	alert("All fields are required!");
+    	return;
+    }
+
+    let finalEventsData = {
+    		"event_title": eventTitle,
+    		"user_name": username,
+    		"product_name": product,
+    		"event_type": eventType,
+    		"scheduled_date": selectedDate
+    	};
+
+    //console.log(JSON.stringify(finalEventsData));
+    
+     fetch('/submitEvent', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(finalEventsData)
+    })
+    .then(res => res.text())
+    .then(response => {
+    	/* Swal.fire({
+   	 		title: response,
+   	 		icon: "success",
+   	 		showCancelButton: false,
+   	 		confirmButtonColor: "#007bff",
+   	 		cancelButtonColor: "#EC7063",
+   	 		confirmButtonText: "OK",
+	   	 	allowOutsideClick: false,
+			allowEscapeKey: false,
+   	 	}).then((result) => {
+   			if (result.isConfirmed) {
+   				location.reload();
+   			}
+   		}); */
+   		fetchAllEventsListData();
+    	location.reload();
+    })
+    .catch(err => {
+        console.error("Upload error", err);
+    });
+
+    popup.style.display = 'none';
+    usernameInput.value = '';
+    eventTitleInput.value = '';
+    eventTypeInput.value = '';
+    productInput.value = '';
+    renderAllCalendars();
+    updateEventsList();
+  });
+
+  function renderAllCalendars() {
+    renderCalendar(calendarCurrent, currentMonthOffset);
+    renderCalendar(calendarNext, currentMonthOffset + 1);
+  }
+
+  function changeMonth(offset) {
+    currentMonthOffset += offset;
+    renderAllCalendars();
+  }
+
+  // Initial render
+  renderAllCalendars();
+  
+  function fetchTootTipBasedOnDate(date){
+	  //alert(date);
+	  $.ajax({
+		    type: 'GET',
+		    url: '/fetchEventsBasedOnDate',
+		    data: {
+		    	date: date
+		    },
+		    success: function(data) {
+		    	//alert(JSON.stringify(data));
+		    	createDynamicEventTootTipCards(data);
+		    },
+		    error: function(xhr, status, error) {
+		      console.error('Error fetching data for calendar events based on date string:', error);
+		    }
+		  });
+  }
+  
+  function createDynamicEventTootTipCards(data) {
+	    const panel = document.getElementById('eventInfoPanel');
+	    const details = document.getElementById('eventDetails');
+
+	    // Clear previous content
+	    details.innerHTML = '';
+
+	    if (Array.isArray(data) && data.length > 0) {
+	        data.forEach(event => {
+	            const eventHTML = `
+	                <div class="event-item" style="margin-bottom: 15px; padding: 10px; border-bottom: 1px solid #ccc;">
+	                	<p style="margin: 0; margin-bottom: 10px; text-align: center;"><strong>${event.scheduled_date}</strong></p>
+	                    <p style="margin: 0;"><strong>Title:</strong> ${event.event_title}</p>
+	                    <p style="margin: 0;"><strong>Product:</strong> ${event.product_name}</p>
+	                    <p style="margin: 0;"><strong>Type:</strong> ${event.event_type}</p>
+	                    <p style="margin: 0;"><strong>User:</strong> ${event.user_name}</p>
+	                </div>
+	            `;
+	            details.innerHTML += eventHTML;
+	        });
+	    } else {
+	        details.innerHTML = '<p>No events found for this date.</p>';
+	    }
+
+	    panel.classList.add('show');
+	}
+
+  
+	//Close button
+  document.querySelector('.close-panel').addEventListener('click', function () {
+      document.getElementById('eventInfoPanel').classList.remove('show');
+  });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const userIcon = document.querySelector(".fa-circle-user");
+        const dropdown = document.getElementById("userDropdown");
+
+        userIcon.addEventListener("click", function () {
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        });
+
+        // Optional: Close dropdown when clicking outside
+        document.addEventListener("click", function (e) {
+            if (!userIcon.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.style.display = "none";
+            }
+        });
+    });
+    
+    document.addEventListener("DOMContentLoaded", function () {
+        const userIcon = document.querySelector("#dispatchMenu");
+        const dropdown = document.querySelector(".dispatch_subDropDown");
+
+        userIcon.addEventListener("click", function () {
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        });
+
+        // Optional: Close dropdown when clicking outside
+        document.addEventListener("click", function (e) {
+            if (!userIcon.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.style.display = "none";
+            }
+        });
+    });
+    
+    document.addEventListener("DOMContentLoaded", function () {
+        const userIcon = document.querySelector("#masterMenu");
+        const dropdown = document.querySelector(".master_subDropDown");
+
+        userIcon.addEventListener("click", function () {
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        });
+
+        // Optional: Close dropdown when clicking outside
+        document.addEventListener("click", function (e) {
+            if (!userIcon.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.style.display = "none";
+            }
+        });
+    });
+</script>
+ 
+</body>
+</html>

@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Login</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+     <style>
+    	.loginBody{
+		        overflow: hidden;
+		}
+		
+		@property --a{
+		        syntax: '<angle>';
+		        inherits: false;
+		        initial-value: 0deg;
+		}
+		
+	
+.box {
+	position: relative;
+	width: 450px;
+	height: 520px;
+	background: repeating-conic-gradient(from var(--a), #5dade2 0%, #5dade2 5%, transparent 5%, transparent 40%, #5dade2 50%);
+	filter: drop-shadow(0 15px 50px #979a9a);
+	border-radius: 20px;
+	animation: rotating 4s linear infinite;
+	display: flex;
+	justify-content: center; 
+	align-items: center; 
+	margin: 3% auto;
+	transition: 0.5s;
+}
+
+.clickMeDiv {
+	position: absolute;
+	top: 25px;
+	left: 90%;
+	transform: translateX(-50%);
+	color: #a6acaf;
+	z-index: 1000;
+	cursor: pointer;
+	background: #5dade2;
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	box-shadow: 0 0 20px #5dade2;
+	transition: 0.2s;
+}
+
+.clickMeDiv:hover{
+	background: #3498db;
+	box-shadow: 0 0 20px #3498db;
+}
+
+@keyframes rotating {
+	0% {
+		--a: 0deg;
+	}
+	100% {
+		--a: 360deg;
+	}
+}
+
+ .box::before {
+	content: '';
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background: repeating-conic-gradient(from var(--a), #DB1F48 0%, #DB1F48 5%, transparent 5%, transparent 40%, #DB1F48 50%);
+	filter: drop-shadow(0 15px 50px #979a9a);
+	border-radius: 20px;
+	animation: rotating 4s linear infinite;
+	animation-delay: -1s;
+}
+
+.box::after {
+	content: '';
+	position: absolute;
+	inset: 6px;
+	background: #fff;
+	border-radius: 15px;
+	border: 10px aqua #d0d3d4;
+} 
+
+.login {
+	position: absolute;
+	display: flex;
+	justify-content: center; 
+	align-items: center;
+	flex-direction: column;
+	border-radius: 20px;
+	background: rgba(247, 249, 249, 0.5);
+	/* Updated box-shadow for neumorphism effect */
+	box-shadow: inset 8px 8px 16px rgba(0, 0, 0, 0.2),
+	            inset -8px -8px 16px rgba(255, 255, 255, 0.7),
+	            10px 10px 20px rgba(0, 0, 0, 0.1);
+	z-index: 1000;
+	/* Updated border for elevated effect */
+	border: 7px solid rgba(255, 255, 255, 0.6);
+	transition: 0.5s;
+	overflow: hidden;
+	inset: 30px;
+}
+
+
+.loginBx h2 {
+	color: #808b96;
+	text-transform: uppercase;
+	font-weight: 600;
+	letter-spacing: 0.2em;
+}
+
+.loginBx {
+	position: relative;
+	display: flex;
+	 justify-content: center;
+	/*align-items: center; */
+	flex-direction: column;
+	width: 100%;
+	height: 100%;
+	gap: 10px;
+	transform: translateY(0px);
+	transition: 0.5s;
+	background: #ecf0f1;
+	border-radius: 10px;
+	/* Updated box-shadow for neumorphism effect */
+	box-shadow: inset 8px 8px 16px rgba(0, 0, 0, 0.2),
+	            inset -8px -8px 16px rgba(255, 255, 255, 0.7),
+	            10px 10px 20px rgba(0, 0, 0, 0.1);
+	z-index: 1200;
+}
+
+.loginBx input  ,.loginBx select{
+	width: 80%;
+	padding: 10px 20px;
+	outline: none;
+	border-radius: 10px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.login_btn {
+	width: 80%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+
+.loginBx label{
+	color: #808b96;
+}
+
+.login_error{
+	 padding: 0;
+	 margin: 20px auto;
+	 width: 80%;
+	 font-size: 14px;
+	 text-align: center;
+	 display: none;
+}
+
+
+.login_img_box{
+	width: 200px;
+	height: 80px;
+	cursor: default;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.login_image{
+	width: 100%;
+	height: 100%;
+	cursor: default;
+}
+
+.loginOtpField{
+	 display: none;
+}
+
+.loadingBtn{
+	display: none;
+}  
+
+/* Style for the OTP Timer Container */
+#otpTimer {
+    font-family: 'Arial', sans-serif;
+    font-size: 14px;
+    color: black; /* Green color for visibility */
+    text-align: center;
+    margin-top: 3px;
+   
+    animation: fadeIn 1s ease-in-out;
+}
+
+/* Timer text animation */
+#timer {
+    font-size: 16px;
+    color: black; /* Red color for countdown */
+}
+
+/* Smooth fade-in effect */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+#otpExpiredMessage {
+    display: none;
+    padding: 10px;
+   
+    color: #721c24; /* Dark red text */
+  
+   
+    font-weight: bold; /* Make text bold */
+    font-size: 16px; /* Adjust font size */
+    margin-top: 15px; /* Add some space above the message */
+   
+    text-align: center; /* Center-align the message */
+    transition: all 0.3s ease-in-out; /* Smooth transition for visibility */
+}
+
+  
+    </style>
+</head>
+<body class="loginBody">
+
+
+<div class="box" >
+<!-- <div class="clickMeDiv" onclick="resizeBox(this)"></div> -->
+	 <div class="login">
+		<div class="loginBx">
+			<div class="app-auth-branding mb-2 login_img_box">
+		        <a class="app-logo" href="#"><img class="logo-icon me-2 login_image" src="assets/img/melange_updated_new_logo-modified.png" alt="logo"></a>
+		    </div>
+			<form id="loginForm" class="auth-form auth-signup-form login_form">
+				<div class="loginUsertype mb-3">
+						            <select class="form-select" id="loginUsertype" onchange="redirectLoginPages(this.value)">
+										<option value="User">User</option>
+										<option value="Admin" selected>Admin</option>
+										<option value="HR">HR</option>
+									</select>
+						        </div>
+		        <div class="email mb-3">
+		            <input id="login-email" name="email" type="email" class="form-control login-email" placeholder="Email" required="required">
+		        </div>
+		        <div class="password mb-3">
+		            <input id="login-password" name="password" type="password" class="form-control login-password" placeholder="Password" required="required">
+		        </div>
+		        <div class="otp mb-3 loginOtpField" id="otpField" style="display: none;">
+		            <input id="login-otp" name="otp" type="text" class="form-control login-otp" placeholder="Enter OTP">
+		        </div>
+				<div class="otp-timer mb-3" id="otpTimer" style="display: none;">
+				    OTP expires in <span id="timer">60</span> seconds.
+				</div>
+				<div id="otpExpiredMessage" style="display: none; color: red;">OTP has expired. Please request a new one.</div>
+
+		        <div class="text-center" id="mainBtn">
+		            <button type="submit" class="btn btn-primary btn-lg btn-block login_btn">Login</button>
+		        </div>
+		        
+		        <div class="text-center loadingBtn" id="loadingBtn">
+			        <button class="btn btn-primary btn-lg btn-block login_btn" type="button" disabled>
+		                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+		                Login
+	              	</button>
+              	</div>
+		    </form>
+		    <div id="errorMessage" class="alert alert-danger login_error" role="alert">
+		        <p id="errorText" class="m-0 p-1"></p>
+		    </div>
+			
+
+		</div>
+	</div> 
+</div>
+
+<script>
+
+	function displayLoadingBtn(){
+		$('#loadingBtn').show();
+		$('#mainBtn').hide();
+	}
+	
+	function displayMainBtn(){
+		$('#loadingBtn').hide();
+		$('#mainBtn').show();
+	}
+
+
+	$(document).ready(function () {
+	        let otpRequested = false; // Flag to check if OTP is already requested
+			let timerInterval; // Variable to store the timer interval
+			
+	        $('#loginForm').on('submit', function (e) {
+	            e.preventDefault(); // Prevent the form from submitting normally
+	            
+	            if (!otpRequested) {
+	                displayLoadingBtn();
+	            }
+
+	            $.ajax({
+	                type: 'POST',
+	                url: '/submitLogin',
+	                data: $(this).serialize(),
+	                success: function (response) {
+	                    // Hide error message by default
+	                    $('#errorMessage').hide();
+	                    $('#errorText').text('');
+						$('#otpExpiredMessage').hide();
+	                    if (response.otpRequired) {
+	                        $('#otpField').show(); // Show the OTP field
+							$('#otpTimer').show(); // Show the OTP timer
+						   	startOtpTimer(); // Start the OTP timer
+	                        otpRequested = true; // Set the flag to indicate OTP was requested
+	                        displayMainBtn(); // Show the main login button after OTP is required
+	                        otpRequested = false;
+	                    }
+
+	                    if (response.redirect) {
+	                        window.location.href = response.redirect; // Redirect to the dashboard
+	                    }
+
+	                    if (response.invalidOTPError) {
+	                        $('#errorText').text(response.invalidOTPError);
+	                        $('#errorMessage').show(); // Show the error message
+	                        $('#otpTimer').hide();
+	                        displayMainBtn(); // Show the main login button after OTP error
+	                        otpRequested = false;
+	                    } else if (response.error) {
+	                        $('#errorText').text(response.error);
+	                        $('#errorMessage').show(); // Show the error message
+	                        $('#otpTimer').hide();
+	                        displayMainBtn(); // Show the main login button after general error
+	                        otpRequested = false;
+	                    }
+	                },
+	                error: function () {
+	                    $('#errorText').text('An error occurred. Please try again.');
+	                    $('#errorMessage').show();
+	                    $('#otpTimer').hide();
+	                    displayMainBtn();
+	                    otpRequested = false;
+	                }
+	            });
+	        });
+			
+			function startOtpTimer() {
+			    let timeLeft = 60; // Set the timer to 60 seconds
+			    $('#timer').text(timeLeft);
+
+			    clearInterval(timerInterval); // Clear any existing timer interval
+			    timerInterval = setInterval(function () {
+			        timeLeft--;
+			        $('#timer').text(timeLeft);
+
+			        if (timeLeft <= 0) {
+			            clearInterval(timerInterval); // Stop the timer
+			            $('#otpTimer').hide(); // Hide the timer display
+			            $('#otpField').hide(); // Optionally hide the OTP field if expired
+			            $('#otpExpiredMessage').show(); // Show the OTP expiration message
+						
+			        }
+			    }, 1000); // Update the timer every second
+			}
+
+	    });
+
+
+    
+
+</script>
+
+<script>
+	function redirectLoginPages(selectedValue){
+		if(selectedValue === "User"){
+			location.href='https://www.msplrfdcu.com:9375/';
+		}else if(selectedValue === "Admin"){
+			location.href='https://www.msplrfdcu.com:9376/';
+		}else if(selectedValue === "HR"){
+			location.href='https://www.msplrfdcu.com:9377/';
+		}
+	}
+</script>
+
+
+
+</body>
+</html>

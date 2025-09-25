@@ -1,0 +1,1593 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Interview</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+  <!-- Template Main JS File -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+
+  <!-- =======================================================
+  * Template Name: NiceAdmin
+  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+  * Updated: Apr 20 2024 with Bootstrap v5.3.3
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+  
+  <style>
+  .moat_navbar{
+	  font-size: 14px;
+	  background: #fff;
+	  padding: 15px;
+	  position: sticky;
+	  top: 64px;
+	  width: 100%;
+	  margin-left: auto;
+	  margin-right: auto;
+	  box-shadow: 0 0 10px #0005;
+	  gap: 0.7rem;
+	  backdrop-filter: blur(10px);
+	  background-color: #fff2;
+	  display: flex;
+}
+
+.moattt_anchor {
+    position: relative;
+    display: inline-block;
+    padding: 5px 10px;
+    color: inherit;
+    text-decoration: none;
+    text-shadow: 0 0 5px rgba(#000, 0.8);
+    letter-spacing: 1px;
+    border-right: 1px solid #d5d8dc;
+  }
+
+.moattt_anchor.active{
+	font-weight: bold;
+	color: #4154f1;
+}
+
+.moat_parentDropDown{
+	position: relative;
+    display: inline-block;
+}
+
+.moat_subDropDown {
+    display: none;
+    position: absolute;
+    background-color: #f6f9ff;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+  .progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0.08rem;
+    background-image: linear-gradient(to right, #8ad4ff, #fa7196);
+    border-radius: 0.1rem;
+    animation: progressMove linear both;
+    animation-timeline: scroll(block root);
+  }
+
+.moat_iframe{
+	width: 100%;
+	height: 100vh;
+}
+
+/* Fullscreen overlay with dim background */
+#loadingPopup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Dim background */
+    z-index: 9999;
+    font-family: Arial, sans-serif;
+    color: white; /* Text color for better contrast */
+    display: none;
+}
+
+.spinnerAndParaMerger{
+	display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* background: red; */
+    margin: 18% auto;
+}
+
+/* Spinner animation */
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 6px solid rgba(255, 255, 255, 0.3); /* Semi-transparent border */
+    border-top-color: white; /* Bright top border */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Loading text */
+#loadingPopup p {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+}
+
+/* Spinner keyframe animation */
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.moatBody_content_div{
+	width: 100%;
+	height: 100%;
+}
+
+.add_questions_form_outer_div{
+	width: 98%;
+	height: auto;
+	padding: 10px;
+	box-shadow: 0 0 10px #0005;
+    backdrop-filter: blur(10px);
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 14px;
+}
+
+.add_questions_form_div{
+	width: 100%;
+	height: 100%;
+}
+
+.question_heading{
+	width: 100%;
+	padding: 5px 10px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 10px;
+}
+
+.question_p{
+	color: #566573;
+	font-size: 14px;
+	font-weight: bold;
+	margin-top: 10px;
+}
+
+.addQuestions_language_select{
+	border: none;
+	outline: none;
+	background-color: transparent;
+	border-bottom: 1px solid #566573;
+	color: #566573;
+	font-weight: bold;
+}
+
+.questionType_radio_box{
+	width: auto;
+}
+
+.questionTypeLabel{
+	color: #566573;
+	font-weight: bold;
+}
+
+.question_text_area_box,.correct_answer_box2{
+	width: 100%;
+	height: auto;
+}
+
+.question_text_area{
+	width: 100%;
+	height: 100%;
+	font-size: 14px;
+}
+
+.options_p,.correct_answer_p{
+	color: #566573;
+	padding: 5px 10px;
+	font-weight: bold;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.options_box{
+	width: 100%;
+	height: auto;
+	display: flex;
+	justify-content: space-evenly;
+	gap: 5px;
+}
+
+.question_text_field{
+	padding-left: 5px;
+	font-size: 14px;
+}
+
+.answer_text_area2{
+	width: 100%;
+	font-size: 14px;
+}
+
+.btn_outer_div{
+	width: 100%;
+	height: auto;
+	padding: 5px 10px;
+	margin-top: 2%;
+}
+
+.btn_div{
+	display: flex;
+	width: 100%;
+	height: auto;
+	justify-content: flex-start;
+	gap: 10px;
+}
+
+.questions_table_div{
+	width: 98%;
+	height: 90vh;
+	overflow: auto;
+	box-shadow: 0 0 10px #0005;
+    backdrop-filter: blur(10px);
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 14px;
+}
+
+.cards_container{
+	width: 98%;
+	margin-bottom: 8px;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 5px 10px;
+	display: flex;
+	justify-content: space-between;
+	box-shadow: 0 0 10px #0005;
+    backdrop-filter: blur(10px);
+}
+
+.card1{
+	width: 24%;
+	/*background-color: green;*/
+	display: flex;
+	padding: 5px;
+	border-right: 2px solid #ECF0F1;
+}
+
+.card4{
+	width: 24%;
+	/*background-color: green;*/
+	display: flex;
+	padding: 5px;
+}
+
+.card_numbers{
+	/*background-color: yellow;*/
+	width: auto;
+	height: 100%;
+}
+
+.card_numbers p{
+	font-size: 30px;
+	font-weight: bold;
+	color: #4154f1;
+}
+
+.card_text{
+	/*background-color: red;*/
+	width: auto;
+	height: 100%;
+}
+
+.p2{
+	margin-top: 5px;
+	/*background-color: orange;*/
+	padding-left: 10px;
+	color: #566573;
+	font-size: 15px;
+	font-weight: bold;
+}
+
+.p3{
+	margin-top: -15px;
+	/*background-color: darkgreen;*/
+	padding-left: 10px;
+	color: #AEB6BF;
+	font-size: 14px;
+}
+
+.student_table_outer_div{
+	width: 98%;
+	height: 100%;
+	box-shadow: 0 0 10px #0005;
+	backdrop-filter: blur(10px);
+	margin-left: auto;
+	margin-right: auto;
+	background: transparent !important;
+}
+
+.student_table_div{
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+}
+
+.student_table_div .table,.student_table_url_archive_div .table{
+	width: 100%;
+	font-size: 14px;
+}
+
+.student_table_div .table thead th,.student_table_url_archive_div .table thead th{
+	padding: 12px;
+	font-size: 14px;
+	background: transparent !important;
+	color: #566573;
+}
+
+.emailFormOuterDiv{
+   	width: 100%;
+   	height: 100%;
+   	position: fixed;
+   	background: rgba(0,0,0,0.5);
+   	top: 0;
+   	left: 0;
+   	z-index: 200;
+   	display: none;
+   }
+
+.emailFormInnerBoxCloser{
+   	/* background: red; */
+   	padding-right: 10px;
+   	text-align: right;
+   }
+   
+   .emailFormInnerBoxCloser span{
+   	font-size: 25px;
+   	font-weight: bold;
+   	cursor: pointer;
+   }
+
+.emailFormBox{
+   	/* background: red; */
+   	width: 98%;
+   	margin-right: auto;
+   	margin-left: auto;
+   }
+
+.ctcFormOuterDiv{
+   	width: 100%;
+   	height: 100%;
+   	position: fixed;
+   	background: rgba(0,0,0,0.5);
+   	top: 0;
+   	left: 0;
+   	z-index: 200;
+   	display: none;
+   }
+   
+.ctcFormInnerBox{
+	width: 60%;
+   	height: 400px;
+   	background: rgb(255,255,255);
+   	margin: 3% auto;
+   	border-radius: 10px;
+   	padding: 15px 5px;
+   	overflow: auto;
+}
+
+  .ctcFormInnerBoxCloser{
+   	/* background: red; */
+   	padding-right: 10px;
+   	text-align: right;
+   	margin: 0;
+   }
+   
+   .ctcFormInnerBoxCloser span{
+   	font-size: 25px;
+   	font-weight: bold;
+   	cursor: pointer;
+   }
+
+.hiddenCtcFeedbackFromCandidate{
+   	display: none;
+   }
+
+.docUploadFormOuterDiv{
+   	width: 100%;
+   	height: 100%;
+   	position: fixed;
+   	background: rgba(0,0,0,0.5);
+   	top: 0;
+   	left: 0;
+   	z-index: 200;
+   	display: none;
+   }
+
+.docUploadFormInnerBox{
+	width: 30%;
+   	height: auto;
+   	background: rgb(255,255,255);
+   	margin: 3% auto;
+   	border-radius: 10px;
+   	padding: 15px 5px;
+   	overflow: auto;
+}
+
+.docUploadBox{
+	width: 32%;
+	height: 10px;
+	margin: 40px auto 5px auto;
+	/* background: red; */
+}
+
+.docUploadViewFormOuterDiv{
+   	width: 100%;
+   	height: 100%;
+   	position: fixed;
+   	background: rgba(0,0,0,0.5);
+   	top: 0;
+   	left: 0;
+   	z-index: 200;
+   	display: none;
+   }
+   
+   .docUploadViewFormInnerBox{
+	width: 70%;
+   	height: 440px;
+   	background: rgb(255,255,255);
+   	margin: 2% auto;
+   	border-radius: 10px;
+   	padding: 5px;
+   	overflow-y: auto;
+   	overflow-x: hidden;
+}
+
+.candidateCompleteViewFormOuterDiv{
+   	width: 100%;
+   	height: 100%;
+   	position: fixed;
+   	background: rgba(0,0,0,0.5);
+   	top: 0;
+   	left: 0;
+   	z-index: 200;
+   	display: none;
+   }
+
+.candidateCompleteViewFormInnerBox{
+	width: 86%;
+   	height: 96%;
+   	background: rgb(255,255,255);
+   	margin: 1% auto;
+   	border-radius: 5px;
+   	overflow: auto;
+}
+
+.candidateProfileHeadingAndAddEmpIconMerger{
+	 /* background: red; */
+	 display: flex;
+	 justify-content: space-between;
+	 align-items: center;
+}
+
+.candidateProfileHeadingAndAddEmpIconMerger span{
+	background: #eaeded;
+	padding: 2px 8px;
+	border-radius: 10px;
+	box-shadow: 0 0 4px #0005;
+}
+
+.candidateProfileHeadingAndAddEmpIconMerger span i{
+	font-size: 22px;
+	font-weight: bold;
+	color: #4154f1;
+}
+
+.candidateProfileHeadingAndAddEmpIconMerger span i:hover{
+	color: #52be80;
+}
+
+.student_result_box{
+	width: 98%;
+	height: 200px;
+	padding: 5px;
+	overflow: auto;
+	box-shadow: 0 0 10px #0005;
+    backdrop-filter: blur(10px);
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 14px;
+}
+
+.student_result_box_heading{
+	color: #566573;
+	padding: 5px 10px;
+	font-weight: bold;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	position: sticky;
+	top: 0;
+	left: 0;
+}
+
+.student_result_sheet_heading{
+	color: #566573;
+	padding: 5px 10px;
+	font-weight: bold;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.student_result_box_table thead th,.student_result_box_table tbody td{
+	padding: 10px;
+	font-size: 14px;
+	background: transparent !important;
+	color: #566573;
+}
+
+.candidate_resultSheet_box{
+	width: 98%;
+	height: auto;
+	box-shadow: 0 0 10px #0005;
+    backdrop-filter: blur(10px);
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 14px;
+	margin-top: 15px;
+	padding: 5px 10px;
+	display: none;
+}
+
+.questions_filter_box{
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.marksDetails_outerBox{
+	width: 50%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.5);
+	z-index: 5;
+	position: fixed;
+	top: 0;
+    right: 0; /* Initially positioned outside the screen */
+    transform: translateX(100%); /* Initial position outside the viewport */
+    transition: transform 0.8s ease;
+}
+
+.marksDetails_outerBox.active {
+    transform: translateX(0); /* When the modal is active, it slides to the right edge of the screen */
+}
+
+.marksDetails_outerBox_closeBox{
+	/* background-color: red; */
+	margin-top: 2vh;
+	margin-bottom: 3px;
+}
+
+.close_marksDetails_outerBox_span{
+	font-size: 20px;
+	color: #fff;
+	margin-left: 10px;
+	cursor: pointer;
+}
+
+.marksDetails_outerBox{
+	width: 50%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.5);
+	z-index: 5;
+	position: fixed;
+	top: 0;
+    right: 0; /* Initially positioned outside the screen */
+    transform: translateX(100%); /* Initial position outside the viewport */
+    transition: transform 0.8s ease;
+}
+
+.marksDetails_outerBox.active {
+    transform: translateX(0); /* When the modal is active, it slides to the right edge of the screen */
+}
+
+.marksDetails_outerBox_closeBox{
+	/* background-color: red; */
+	margin-top: 2vh;
+	margin-bottom: 3px;
+}
+
+.close_marksDetails_outerBox_span{
+	font-size: 20px;
+	color: #fff;
+	margin-left: 10px;
+	cursor: pointer;
+}
+
+.markDetails_table_and_chartBox{
+	width: 86%;
+	height: 82vh;
+	/* background-color: green; */
+	margin: 1px auto; 
+	padding: 4px;
+	overflow: auto;
+}
+
+.markDetails_tableBox{
+	width: 100%;
+	height: 46vh;
+	background-color: #fff;
+	padding: 8px;
+	margin-bottom: 5px;
+	overflow: auto;
+}
+
+.markDetails_table{
+	width: 100%;
+	height: 100%;
+}
+
+.markDetails_grapghBox{
+	width: 100%;
+	height: auto;
+	background-color: #fff;
+	padding: 5px;
+	margin-bottom: 5px;
+}
+
+.student_marksDetail_table{
+	width: 100%;
+	height: 100%;
+	font-size: 14px;
+	padding: 5px;
+	color: #566573;
+}
+
+.marksDetail_table_heading{
+	text-align: center;	
+	font-size: 15px;
+	font-weight: bold;
+	padding: 5px;
+	color: #566573;
+}
+
+.updateQuestionPopupOuterDiv{
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.2);
+	z-index: 9999;
+	position: fixed;
+	top: 0;
+	display: none;
+	overflow: auto;
+}
+
+.update_questions_form_outer_div{
+	width: 90%;
+	height: auto;
+	padding: 10px;
+	background-color: #f6f9ff;
+	margin: 2% auto;
+	border-radius: 10px;
+}
+
+.update_questions_form_div{
+	width: 100%;
+	height: 100%;
+}
+
+.UpdateQuestionPopupCloseBtnDiv{
+	margin-top: -20px;
+}
+
+.UpdateQuestionPopupCloseBtnDiv span{
+	font-size: 25px;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.update_questions_form_outer_div{
+	width: 90%;
+	height: auto;
+	padding: 10px;
+	background-color: #f6f9ff;
+	margin: 2% auto;
+	border-radius: 10px;
+}
+
+.update_questions_form_div{
+	width: 100%;
+	height: 100%;
+}
+
+.questions_table_div{
+	width: 98%;
+	height: 90vh;
+	overflow: auto;
+	box-shadow: 0 0 10px #0005;
+    backdrop-filter: blur(10px);
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 14px;
+}
+.customTable2{
+	width: 100%;
+	font-size: 14px;
+}
+
+.customTable2 thead{
+	position: sticky;
+	top: 0;
+	background-color: #f6f9ff;
+}
+
+.customTable2 thead th{
+	padding: 10px;
+	font-size: 14px;
+	background: transparent !important;
+	color: #566573;
+}
+
+.customTable2 tbody td{
+	font-size: 14px;
+}
+
+.viewQuestions_language_select{
+	border: none;
+	outline: none;
+	background-color: transparent;
+	border-bottom: 1px solid #566573;
+	color: #566573;
+	font-weight: bold;
+}
+
+.questions{
+	color: #EC7063 !important;
+}
+
+.answers{
+	color: #229954 !important;
+}
+
+.moatResultView_icon{
+	cursor: pointer;
+}
+
+.student_table_url_archive_div{
+	width: 98%;
+	height: 82vh;
+	box-shadow: 0 0 10px #0005;
+	backdrop-filter: blur(10px);
+	margin-left: auto;
+	margin-right: auto;
+	background: transparent !important;
+	overflow: auto;
+}
+
+.emailSentLoadingDiv{
+   	width: 100%;
+   	height: 100%;
+   	position: fixed;
+   	background: rgba(0,0,0,0.5);
+   	top: 0;
+   	left: 0;
+   	z-index: 200;
+   	display: none;
+   }
+   
+   .emailFormInnerBox{
+   	width: 40%;
+   	height: auto;
+   	background: rgb(255,255,255);
+   	margin: 10% auto;
+   	border-radius: 10px;
+   	padding: 15px 5px;
+   }
+
+.emailSentLoadingInnerBox{
+   	width: 40%;
+   	height: auto;
+   	background: rgb(255,255,255);
+   	margin: 10% auto;
+   	border-radius: 10px;
+   	padding: 15px 5px;
+   }
+   
+   .emailFormInnerBoxCloser{
+   	/* background: red; */
+   	padding-right: 10px;
+   	text-align: right;
+   }
+   
+   .emailFormInnerBoxCloser span{
+   	font-size: 25px;
+   	font-weight: bold;
+   	cursor: pointer;
+   }
+   
+   .emailFormBox{
+   	/* background: red; */
+   	width: 98%;
+   	margin-right: auto;
+   	margin-left: auto;
+   }
+
+.linkGenerateFormBox{
+   	width: 35%;
+    height: auto;
+    padding: 10px;
+    margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 10px;
+    box-shadow: 0 0 10px #0005;
+    backdrop-filter: blur(10px);
+   }
+
+.customTable{
+    	width: 100%;
+    	height: 100%;
+    	font-size: 14px;
+   }
+        
+     .customTable td{
+     	padding-bottom: 15px;
+     	padding: 10px;
+     	text-align: left !important;
+     	font-size: 14px;
+     }
+	
+	#emailList{
+		display: flex;
+		flex-wrap: wrap;
+		gap: 10px;
+	}
+	
+	.test_link_generator_btn {
+	  color: #4154f1;
+	  border: 1px solid #4154f1;
+	  font-size: 14px;
+	}
+	
+	.test_link_generator_btn:focus,
+	.test_link_generator_btn:hover 
+	{
+	  color: #fff;
+	  background-color: #4154f1;
+	}
+	
+	.generatedLink {
+	    margin-top: 20px;
+	    margin-left: auto;
+	    margin-right: auto;
+	    text-align: center;
+	}
+  </style>
+  
+</head>
+
+<body style="overflow-x: hidden;">
+
+  <main id="moatMain" class="moatMain">
+  
+  <div id="loadingPopup">
+	<div class="spinnerAndParaMerger">
+	    <div class="spinner"></div>
+	    <p id="loadingPopupPara"></p>
+    </div>
+</div>
+  
+			<section class="section dashboard">
+				<div class="col-lg-12">
+					<div class="row">
+						<div class="moatBody_content_div">
+							
+							<div class="add_questions_form_outer_div">
+							    <form class="add_questions_form_div">
+							           <div class="question_heading"> 
+							            	<p class="question_p">Add Questions to <select onchange="toggleQuestionType(this.value);" class="addQuestions_language_select" id="languageSelected" name="languageSelected">
+																						<option id="option_value" value="Aptitude">Aptitude</option>
+																						<option id="option_value" value="C">C</option>
+																						<option id="option_value" value="Java">Java</option>
+																						<option id="option_value" value="Python">Python</option>
+																						<option id="option_value" value="SQL">SQL</option>
+																					</select> </p>
+							            	<!-- <div class="questionType_radio_box form-check form-switch" onclick="toggleQuestionType();">
+												<input class="form-check-input" name="switch" type="checkbox" id="flexSwitchCheckChecked" checked>
+							 						<label class="form-check-label questionTypeLabel" id="questionTypeLabel" for="flexSwitchCheckChecked">With MCQ</label>
+											</div> -->
+							            </div>
+							        
+							       <div class="question_text_area_box">
+							            <textarea class="form-control question_text_area" id="questions" rows="4"  placeholder="Enter a question"></textarea>
+							        </div>
+							        
+							            <p class="options_p" id="options_p">Add Options:</p>
+							        
+							        <div class="options_box" id="options_box">
+							            <input type="text" placeholder="Option A" class="form-control question_text_field" id="op1">
+							            <input type="text" placeholder="Option B" class="form-control question_text_field" id="op2">
+							            <input type="text" placeholder="Option C" class="form-control question_text_field" id="op3">
+							            <input type="text" placeholder="Option D" class="form-control question_text_field" id="op4">
+							        </div>
+							        
+							            <p class="correct_answer_p">Enter Correct Answer:</p>
+							        
+							        <div class="correct_answer_box2" id="correct_answer_box2">
+							            <textarea class="form-control answer_text_area2" id="answers" rows="4"  placeholder="Enter an answer"></textarea>
+							        </div>
+							        
+							        <div class="btn_outer_div">
+							            <div class="btn_div">
+							                <button style="font-size: 14px;" type="button" class="btn test_link_generator_btn" onclick="submit_question();">Add</button>
+							                <button style="font-size: 14px;" type="button" class="btn btn-outline-secondary">Clear</button>
+							            </div>
+							        </div>
+							    </form>
+							</div>
+							
+						</div>
+					</div>
+				</div>
+			</section>
+
+	</main><!-- End #main -->
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/chart.js/chart.umd.js"></script>
+  <script src="assets/vendor/echarts/echarts.min.js"></script>
+  <script src="assets/vendor/quill/quill.js"></script>
+  <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+  <script src="assets/vendor/tinymce/tinymce.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+
+
+<!-- Template Main JS File -->
+<script src="assets/js/main.js"></script>
+
+<!-- Script to auto logout the session if user is idle for more than 15 minutes -->
+<script>
+        let timeout;
+
+        // Function to reset the timeout
+        function resetTimeout() {
+            clearTimeout(timeout);
+            timeout = setTimeout(logout, 900000); // 15 minutes
+        }
+
+        // Function to logout the user
+        function logout() {
+        	 window.location.href = '/';
+        }
+
+        // Attach event listeners for user activity
+        document.addEventListener('mousemove', resetTimeout);
+        document.addEventListener('keypress', resetTimeout);
+        document.addEventListener('click', resetTimeout);
+        document.addEventListener('scroll', resetTimeout);
+
+        // Start the initial timeout
+        resetTimeout();
+</script>
+
+<!-- script for spinner -->
+<script>
+function displayOnLoadingPopup(){
+	$('#loadingPopup').show();
+	$('#loadingPopupPara').text("Loading, please wait...");
+}
+
+function displayAppraisalEmailSendingLoadingPopup(){
+	$('#loadingPopup').show();
+	$('#loadingPopupPara').text("Please hold on, the appraisal reminder emails are currently being sent...");
+}
+
+function hideLoadingPopup(){
+	$('#loadingPopup').hide();
+}
+
+window.onload = function() {
+	hideLoadingPopup();
+};
+</script>
+
+<script>
+	
+function submit_question(){
+	
+	var languageSelected = $('#languageSelected').val();
+	var questionValue = $('#questions').val().trim();
+	var op1 = $('#op1').val();
+	var op2 = $('#op2').val();
+	var op3 = $('#op3').val();
+	var op4 = $('#op4').val();
+	var answers = $('#answers').val().trim();
+	
+	var languageSelectedToAddQuestion = $('#languageSelected').val();
+	
+	if(questionValue === ""){
+		alert("Please add a question to submit");
+		document.getElementById('questions').focus();
+		return;
+	}
+	
+	if(languageSelectedToAddQuestion === "Aptitude"){
+		if(op1 === ""){
+			alert("Please add an option to submit");
+			document.getElementById('op1').focus();
+			return;
+		}
+		
+		if(op2 === ""){
+			alert("Please add an option to submit");
+			document.getElementById('op2').focus();
+			return;
+		}
+		
+		if(op3 === ""){
+			alert("Please add an option to submit");
+			document.getElementById('op3').focus();
+			return;
+		}
+		
+		if(op4 === ""){
+			alert("Please add an option to submit");
+			document.getElementById('op4').focus();
+			return;
+		}
+		
+		if(answers === ""){
+			alert("Please add a correct answer field to submit");
+			document.getElementById('answers').focus();
+			return;
+		}
+	}
+	
+	//alert(languageSelected);
+	
+	questionValue = questionValue.replace(/\n/g, "&new_line;")
+		                          .replace(/</g, "&lt;")
+		                          .replace(/>/g, "&gt;")
+		                          .replace(/"/g, "'")
+		                          .replace(/'/g, "&apos;")
+		                          .replace(/\//g, "&slash;");
+		                           
+ 	answers = answers.replace(/\n/g, "&new_line;")
+					   .replace(/</g, "&lt;")
+					   .replace(/>/g, "&gt;")
+					   .replace(/"/g, "'")
+					   .replace(/'/g, "&apos;")
+					   .replace(/\//g, "&slash;"); 
+ 	
+ 	displayOnLoadingPopup();
+
+	$.ajax({
+        type: 'POST', 
+        url: 'insertQuestionsData', 
+        data: {
+		        "languageSelected": languageSelected,
+		        "questions": questionValue,
+		        "op1": op1,
+		        "op2": op2,
+		        "op3": op3,
+		        "op4": op4,
+		        "answers": answers
+    		},
+        success: function(response) {
+        	hideLoadingPopup();
+            Swal.fire({
+                title: 'Success!',
+                text: response,
+                icon: 'success',
+                confirmButtonColor: '#007bff',
+                confirmButtonText: 'OK',
+                customClass: {
+                    popup: 'custom-swal-font'
+                },
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('.question_text_area').val('');
+				    $('.question_text_field').val('');
+				    $('.answer_text_area2').val('');
+                }
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error('Error inserting data:', error);
+            alert('Error inserting data. Please try again.');
+            hideLoadingPopup();
+        }
+    });
+}
+
+    $('.clear_btn').click(function() {
+        $('.question_text_area').val('');
+	    $('.question_text_field').val('');
+	    $('.answer_text_area2').val('');
+    });
+
+
+    // This script is used to toggle the question type to with mcq or without mcq
+	function toggleQuestionType(subjectName){
+	
+		var questionTypeLabel = document.getElementById('questionTypeLabel');
+		var switchCheckbox = document.getElementById("flexSwitchCheckChecked");
+		
+       /* if (switchCheckbox.checked) {
+			$('#options_p').show();
+			$('#options_box').show();
+			//$('#correct_answer_box').show();
+			//$('#correct_answer_box2').hide();
+            questionTypeLabel.textContent = "With MCQ";
+        } else {
+			$('#options_p').hide();
+			$('#options_box').hide();
+			//$('#correct_answer_box').hide();
+			//$('#correct_answer_box2').show();
+            questionTypeLabel.textContent = "Without MCQ";
+        } */
+        
+        if (subjectName === "Aptitude") {
+			$('#options_p').show();
+			$('#options_box').show();
+        } else {
+			$('#options_p').hide();
+			$('#options_box').hide();
+        }
+	}
+	
+</script>
+
+<!-- script to notification on bottom of the page-->
+<!--CHAT BOOT-->
+
+<!-- Include SockJS and Stomp.js libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.3.0/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
+<!-- script to notification on bottom of the page-->
+<script>
+		//CODE FOR CHATBOOT NOTIFICATION 
+		var stompClient = null;
+		var employeeMap = {}; // To store the mapping of employee names to emails
+		let employeePhotoMap = {};
+		let emailToNameMap = {}; // New map for email -> name lookup
+		var email = null;
+		var visibilityState = document.visibilityState; // Track tab visibility
+		var heartbeatInterval = null; // Track heartbeat interval
+
+		function connectWebSocket() {
+			var socket = new SockJS('/chat-websocket');
+			  stompClient = Stomp.over(socket);
+
+			  var email = document.getElementById('loggedInMail').value;
+			  console.log(`Connecting WebSocket as: ${email}`);
+
+			  stompClient.connect({ 'email': email }, function (frame) {
+			      console.log('Connected to WebSocket:', frame);
+
+			      // Mark user as active
+			      stompClient.send("/app/userConnected", {}, JSON.stringify({ email }));
+
+			      // Subscribe to active users list
+			      stompClient.subscribe('/topic/activeUsers', function (message) {
+			          var activeUsers = JSON.parse(message.body);
+			          updateActiveUserUI(activeUsers);
+			      });
+
+			      // Start heartbeat initially
+			      heartbeatInterval = setInterval(() => {
+			          if (stompClient && stompClient.connected) {
+			              stompClient.send("/app/userHeartbeat", {}, JSON.stringify({ email }));
+			              console.log("Heartbeat sent for user: " + email);
+			          }
+			      }, 20000); // 30 seconds
+
+			      // Detect tab visibility change
+			      document.addEventListener("visibilitychange", function () {
+			          if (document.hidden) {
+			              console.log("User switched to another tab. Marking as inactive.");
+			              stompClient.send("/app/userInactive", {}, JSON.stringify({ email }));
+			              clearInterval(heartbeatInterval); // Stop heartbeat
+			              heartbeatInterval = null;
+			          } else {
+			              console.log("User returned to the application tab. Marking as active.");
+			              stompClient.send("/app/userConnected", {}, JSON.stringify({ email }));
+			              if (!heartbeatInterval) {
+			                  heartbeatInterval = setInterval(() => {
+			                      if (stompClient && stompClient.connected) {
+			                          stompClient.send("/app/userHeartbeat", {}, JSON.stringify({ email }));
+			                          console.log("Heartbeat sent for user: " + email);
+			                      }
+			                  }, 30000);
+			              }
+			          }
+			      });
+
+			      // Detect tab close or WebSocket disconnect
+			      socket.onclose = function () {
+			          console.log("WebSocket disconnected. Updating user status.");
+			          stompClient.send("/app/userDisconnected", {}, JSON.stringify({ email }));
+			      };
+
+			      window.addEventListener('beforeunload', function () {
+			          stompClient.send("/app/userDisconnected", {}, JSON.stringify({ email }));
+			      });
+
+			  });
+		}
+
+		function updateActiveUserUI(activeUsers) {
+		//	alert("1");
+		    const employeeItems = document.getElementById('employeeNames').getElementsByTagName('li');
+
+		    Array.from(employeeItems).forEach(item => {
+		        const employeeName = item.querySelector('span').textContent;
+		        const email = employeeMap[employeeName]; 
+		        const statusIndicator = item.querySelector('.status-indicator'); // Get the status dot
+
+		        if (activeUsers.includes(email)) {
+		            item.classList.add('active-user');
+		            statusIndicator.style.backgroundColor = '#66cc66'; // Green for active users
+		        } else {
+		            item.classList.remove('active-user');
+		            statusIndicator.style.backgroundColor = '#ff6666'; // Red for inactive users
+		        }
+
+		        // If this employee is currently selected, update chat header status
+				if (selectedEmployee === email) {
+				           const chatStatusIndicator = document.getElementById('chatStatusIndicator');
+				           if (activeUsers.includes(email)) {
+				               chatStatusIndicator.style.backgroundColor = '#66cc66'; // Green (Online)
+				           } else {
+				               chatStatusIndicator.style.backgroundColor = '#ff6666'; // Red (Offline)
+				           }
+				       }
+		    });
+		}
+
+
+		// Select an employee to chat with
+		function selectEmployee(employeeName) {
+			selectedEmployee = employeeMap[employeeName]; // Get the email from the map
+			console.log(`Employee selected: ${selectedEmployee}`);
+
+			// Highlight the selected employee
+			var employeeItems = document.querySelectorAll('#employeeNames li');
+			employeeItems.forEach(function (item) {
+				item.classList.remove('active');
+			});
+			var selectedItem = Array.from(employeeItems).find(item => item.innerHTML === employeeName);
+			if (selectedItem) {
+				selectedItem.classList.add('active');
+			}
+
+			// Update chat header with employee name and photo
+			document.querySelector('.chat-about h6').innerText = employeeName;
+			document.querySelector('#employeePhoto').src = employeePhotoMap[selectedEmployee] || 'default-profile.jpg';
+
+			// Hide the message icon and dots when an employee is selected
+			document.getElementById('message-icon-container').style.display = 'none';
+			// Hide the paragraph when an employee is selected
+			document.getElementById('logo-text').style.display = 'none';
+
+			// Load messages for the selected employee
+			loadMessages();
+		}
+
+		function loadEmployees() {
+			console.log("Loading employee names...");
+
+			// Fetch employee names from the endpoint
+			fetch('/employees/names')
+				.then(response => {
+					console.log("Response received:", response);
+					if (!response.ok) {
+						throw new Error(`HTTP error! status: ${response.status}`);
+					}
+					return response.json();
+				})
+				.then(data => {
+					console.log("Employee data fetched:", data); // Log the raw data
+
+					const employeeList = document.getElementById('employeeNames');
+					if (!employeeList) {
+						console.error("Element with ID 'employeeNames' not found.");
+						return;
+					}
+
+					employeeList.innerHTML = ''; // Clear the list before adding new items
+
+					// Iterate through employee data
+					data.forEach(employee => {
+						console.log("Processing employee:", employee);
+
+						// Create a list item for each employee
+						const li = document.createElement('li');
+						li.classList.add('d-flex', 'align-items-center', 'employee-item');
+
+						// Handle missing or empty profile photo paths
+						const profilePic = employeePhotoMap[employee.email] || '/static/default-profile.jpg';
+						console.log(`Profile picture for ${employee.name}: ${profilePic}`);
+
+						li.innerHTML = `
+			                    <img src="${profilePic}" 
+			                         alt="Employee Photo" 
+			                         class="employee-photo mr-2" />
+			                    <span>${employee.name}</span>
+			                `;
+
+						// Map employee name to email
+						employeeMap[employee.name] = employee.email;
+						console.log("Mapped employee:", employee.name, "->", employee.email);
+						// Add new reverse mapping (email -> name)
+						emailToNameMap[employee.email] = employee.name;
+						// Add click event to list item
+						li.onclick = () => {
+							console.log(`Selected employee: ${employee.name}`);
+							selectEmployee(employee.name);
+						};
+
+						// Append the list item to the employee list
+						employeeList.appendChild(li);
+
+					});
+
+					console.log("Employee names loaded successfully. Employee map:", employeeMap);
+					// Call the unread messages function after loading employee data
+					fetchUnreadMessages();
+
+					// Set interval to check for new messages every 10 seconds
+						setInterval(fetchUnreadMessages, 10000);
+				})
+				.catch(error => {
+					console.error("Error loading employees:", error);
+				});
+		}
+
+
+		function loadMessages() {
+			// alert("Loading messages...");
+			// Get the logged-in user's email and selected employee's email
+			var loggedInEmail = document.getElementById('loggedInMail').value;
+			var selectedEmployeeEmail = selectedEmployee; // Email is already stored in selectedEmployee
+
+			console.log(`Loading messages between: ${loggedInEmail} and ${selectedEmployeeEmail}`);
+
+			fetch(`/messages?loggedInEmail=${encodeURIComponent(loggedInEmail)}&selectedEmployeeEmail=${encodeURIComponent(selectedEmployeeEmail)}`)
+				.then(response => response.json())
+				.then(data => {
+					console.log("Chat messages loaded:", data);
+					// Clear the chat window before displaying messages
+					var chatWindow = document.getElementById('chat-window').querySelector('ul');
+					chatWindow.innerHTML = '';
+
+					// Display messages
+					data.forEach(function (msg) {
+						// showMessage(msg.senderEmail, msg.content, msg.recipientEmail, loggedInEmail);
+						showMessage(msg.id, msg.senderEmail, msg.content, msg.recipientEmail, msg.timestamp, loggedInEmail);
+					});
+				})
+				.catch(error => console.error("Error loading chat messages:", error));
+		}
+		let activeDeleteDropdown = null;
+		function showMessage(id, senderEmail, message, recipientEmail, timestamp, loggedInEmail) {
+			console.log("Message ID:", id);
+			console.log(`LoggedInEmailrrr: ${loggedInEmail}, SenderEmail: ${senderEmail}`);
+
+			const isSender = senderEmail === loggedInEmail;
+			const senderName = isSender ? "Me" : Object.keys(employeeMap).find(name => employeeMap[name] === senderEmail) || senderEmail;
+			const senderPhoto = employeePhotoMap[senderEmail] || 'default-avatar.png';
+			const formattedTime = new Date(timestamp).toLocaleString(); // Format timestamp
+
+			console.log(`Message ID: ${id}, Time: ${formattedTime}, From: ${senderEmail}, To: ${recipientEmail}, Content: "${message}"`);
+
+			var chatWindow = document.getElementById('chat-window').querySelector('ul');
+			var li = document.createElement('li');
+			li.className = isSender ? 'clearfix right' : 'clearfix left';
+
+			li.innerHTML = `
+					    <div class="message-container" data-message-id="${id}" onclick="toggleDeleteOption(this)">
+					        <img class="sender-photo" src="${senderPhoto}" alt="Sender Photo" />
+					        <div class="message ${isSender ? 'my-message' : 'other-message'}">
+					            <strong>${senderName}:</strong> ${message}
+					        </div>
+					    </div>
+					    <div class="timestamp" style="text-align: ${isSender ? 'right' : 'left'};">
+					        ${formattedTime}
+					    </div>
+					    ${isSender ? `
+					        <div class="message-action-dropdown" >
+					            <a class="dropdown-item" href="#" onclick="deleteMessage(this, ${id})">Delete Message</a>
+					        </div>
+					    ` : ''}`;
+
+			chatWindow.appendChild(li);
+			chatWindow.scrollTop = chatWindow.scrollHeight;
+		}
+		
+		/*function fetchUnreadMessages() {
+			console.log("Fetching unread messages...");
+			var loggedInEmail = document.getElementById('loggedInMail').value;
+
+			fetch(`/unread?email=${loggedInEmail}`)
+				.then(response => response.json())
+				.then(messages => {
+					messages.forEach(message => {
+						let senderName = emailToNameMap[message.senderEmail] || message.senderEmail;
+
+						// Show notification with sender's email as a parameter
+						showToastNotification(`New message from ${senderName}: ${message.content}`, message.senderEmail);
+					});
+				})
+				.catch(error => console.error("Error fetching unread messages:", error));
+		}*/
+
+		let displayedMessageIds = new Set(); // Track displayed messages
+		let closedMessageIds = new Set(); // Track closed messages
+
+		function fetchUnreadMessages() {
+		    console.log("Fetching unread messages...");
+		    var loggedInEmail = document.getElementById('loggedInMail').value;
+
+		    fetch(`/unread?email=${loggedInEmail}`)
+		        .then(response => response.json())
+		        .then(messages => {
+		            messages.forEach(message => {
+		                console.log("Processing message ID:", message.id); // Print message ID to console
+		                
+		                // Ignore messages that were previously closed
+		                if (!displayedMessageIds.has(message.id) && !closedMessageIds.has(message.id)) {
+		                	
+							//alert(1);
+		                    let senderName = emailToNameMap[message.senderEmail] || message.senderEmail;
+		                    showToastNotification(`New message from ${senderName}: ${message.content}`, message.id, message.senderEmail);
+		                    displayedMessageIds.add(message.id); // Mark message as displayed
+		                }
+						//alert(2);
+		            });
+		        })
+		        .catch(error => console.error("Error fetching unread messages:", error));
+		}
+		// Global flag to track if the user manually dismissed notifications
+		
+		/*function showToastNotification(message, senderEmail) {
+			
+			var toastContainer = document.createElement('div');
+			toastContainer.className = 'toast-notification';
+
+			// Add message and close button
+			toastContainer.innerHTML = `<p>${message}</p> <span class="toast-close">✖</span>`;
+
+			document.body.appendChild(toastContainer);
+
+			// Animate in
+			setTimeout(() => {
+				toastContainer.classList.add('show');
+			}, 100);
+
+			// Auto-hide after 8 seconds
+			let autoHideTimeout = setTimeout(() => closeToast(toastContainer), 10000);
+
+			// Prevent opening chat when clicking the close button
+			toastContainer.querySelector('.toast-close').addEventListener('click', (event) => {
+				event.stopPropagation(); // Prevent click from bubbling to toastContainer
+				clearTimeout(autoHideTimeout);
+				
+				closeToast(toastContainer);
+			});
+
+			// Open chat when clicking on the notification
+			toastContainer.addEventListener('click', () => {
+				openChatWithSender(senderEmail);
+				closeToast(toastContainer); // Remove notification when chat opens
+			});
+		}*/
+		function showToastNotification(message, messageId, senderEmail) {
+			//alert(1);
+		    var toastContainer = document.createElement('div');
+		    toastContainer.className = 'toast-notification';
+		    toastContainer.innerHTML = `<p>${message}</p> <span class="toast-close">✖</span>`;
+
+		    document.body.appendChild(toastContainer);
+
+		    // Animate in
+		    setTimeout(() => {
+		        toastContainer.classList.add('show');
+		    }, 100);
+
+		    // Auto-hide after 8 seconds
+		    let autoHideTimeout = setTimeout(() => closeToast(toastContainer, messageId), 8000);
+
+		    // Prevent opening chat when clicking the close button
+		    toastContainer.querySelector('.toast-close').addEventListener('click', (event) => {
+		        event.stopPropagation(); // Prevent click from bubbling to toastContainer
+		        clearTimeout(autoHideTimeout);
+		        closedMessageIds.add(messageId); // Mark as closed so it won't be shown again
+		        closeToast(toastContainer, messageId);
+		    });
+
+		    // Open chat when clicking on the notification
+		    toastContainer.addEventListener('click', () => {
+		        openChatWithSender(senderEmail);
+		        closeToast(toastContainer, messageId); // Remove notification when chat opens
+		    });
+		}
+
+		// Function to handle toast closing
+		/*function closeToast(toast) {
+			toast.classList.remove('show');
+			setTimeout(() => toast.remove(), 300); // Faster fade-out
+		}*/
+		// Function to handle toast closing and mark as dismissed
+		// Function to handle toast closing
+		function closeToast(toast, messageId) {
+		    toast.classList.remove('show');
+		    setTimeout(() => toast.remove(), 300); // Faster fade-out
+		}
+		/*	function openChatWithSender(senderEmail) {
+				console.log("Opening chat with:", senderEmail);
+			    
+				// Construct the URL for the UserFavorite page with the senderEmail as a query parameter
+				const url = `/my-favorites?email=${encodeURIComponent(senderEmail)}`;
+			    
+				// Redirect to the UserFavorite page
+				window.location.href = url;
+			}*/
+
+		function openChatWithSender(senderEmail) {
+			console.log("Opening chat with:", senderEmail);
+
+			// Store sender email in sessionStorage
+			sessionStorage.setItem("chatSenderEmail", senderEmail);
+
+			// Redirect to the UserFavorite page
+			window.location.href = `/my-favorites`;
+		}
+
+		// Connect to the WebSocket server and load employees when the page is loaded
+		document.addEventListener('DOMContentLoaded', function () {
+			//fetchUnreadMessages();
+			loadEmployees();
+			connectWebSocket();
+		});
+
+	</script>
+
+</body>
+
+</html>

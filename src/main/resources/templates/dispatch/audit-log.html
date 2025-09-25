@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Track</title>
+    
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+	.navbar {
+		    position: fixed;
+		    top: 0;
+		    right: 0;
+		    background-color: #EBECF0; /* Darker shade for a professional look */
+		    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+		    z-index: 1000;
+		    width: 100%; /* Full width navbar */
+		    padding: 12px 4px;
+		    display: flex;
+		    align-items: center;
+		    justify-content: flex-start; /* Align entire content to the right */
+		    box-sizing: border-box;
+		}
+		
+		/* Navbar list style */
+		.navbar ul {
+		    display: flex;
+		    justify-content: flex-end; /* Align items to the right */
+		    padding: 0;
+		    margin: 0;
+		    list-style: none;
+		    gap: 5px;
+		}
+		
+		/* Navbar item */
+		.navbar li {
+		    padding: 10px 18px;
+		    border-radius: 5px;
+		    cursor: pointer;
+		    color: black; /* Light color text */
+		    font-size: 14px;
+		    font-weight: 600;
+		    transition: background-color 0.3s ease, transform 0.2s ease;
+		}
+		
+		.navbar li a{
+			text-decoration:none;
+			color:black;
+		}
+		/* Hover effect */
+		.navbar li:hover {
+		    background-color: #F8F8FF; /* Bright blue for hover effect */
+		    color: white;
+		    transform: translateY(-2px); /* Slightly lift on hover */
+		}
+		
+/* Active link style */
+.navbar li.active {
+    background-color: #F8F8FF; /* Bright blue for hover effect */
+	font-weight: bold;
+}
+		
+		/* Navbar icons */
+		.navbar li i {
+		    margin-right: 8px;
+		}
+		
+		/* Optional: Add a little space between the navbar and the top of the page */
+		body {
+		    margin-top: 70px; /* Adjust based on navbar height */
+		}
+		
+		 .tables-container {
+			    display: flex;
+			    flex-direction: column;
+			    gap: 5px; 
+			    width: 100%;
+			    margin-top:2px;
+			    flex: 1;             
+			    padding: 20px;
+			    overflow-x: auto;
+			}
+			    .table-box {
+			        width: 100%;
+			        background: white;
+			        padding: 10px;
+			        box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.1);
+				    border: 1px solid #ccc;
+				    max-width: 100%;
+				    box-sizing: border-box;
+						    }
+		
+				.table-header {
+				    display: flex;
+				    justify-content: space-between;
+				    align-items: center;
+				    background: white;
+				    padding: 8px 10px; 
+				    font-size: 16px; 
+				    white-space: nowrap; 
+				     margin-bottom: 10px;
+				}
+				
+				.table-header h3 {
+				    margin: 0;
+				    font-size: 18px; 
+				    color:#C71585;
+				    
+				}
+				
+				.table-header button {
+				    padding: 5px 10px; 
+				    font-size: 14px;
+				}
+				
+				th{
+				background:#DBDBEA;
+				color:#2f73b9;
+				}
+				
+				.hidden-row {
+			        display: none;
+			    }
+			    table {
+				    width: 100%;
+				    border-collapse: collapse;
+				}
+				
+				th, td {
+				    padding: 8px;
+				    /* border: 1px solid #ddd; */
+				    text-align: left;
+				    font-size: 14px;
+				}
+				
+
+				thead th {
+				    position: sticky;
+				    top: 0;
+				    background-color: #f5f5f5;
+				    z-index: 1;
+				}
+				
+				.table-scroll {
+				    height: 66vh; 
+				    overflow: auto;
+				    border: 1px solid #ccc;
+				}
+				
+				.user-dropdown {
+    position: absolute;
+    top: 50px; /* adjust as needed */
+    left: 10px;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    border-radius: 8px;
+    z-index: 1000;
+    width: auto;
+}
+
+.user-dropdown ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+     display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.user-dropdown ul li {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.user-dropdown ul li:hover {
+    background-color: #F8F8FF; /* Bright blue for hover effect */
+    color: #000;
+}
+
+.user-dropdown ul li:last-child {
+    border-bottom: none;
+}
+
+.user-dropdown ul li a {
+    text-decoration: none;
+    color: #333;
+}
+
+.user-dropdown ul li a i {
+    margin-right: 10px;
+}
+
+.dispatch_subDropDown {
+    display: none;
+    position: absolute;
+    background-color: #EBECF0;
+    width: auto;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    z-index: 1000;
+    top: 50px; /* adjust as needed */
+}
+
+.dispatch_subDropDown ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.dispatch_subDropDown ul li {
+    padding: 5px;
+    border-bottom: 1px solid #eee;
+}
+
+.dispatch_subDropDown ul li:hover {
+    background-color: #F8F8FF; /* Bright blue for hover effect */
+    color: #000;
+}
+
+.dispatch_subDropDown ul li:last-child {
+    border-bottom: none;
+}
+
+.dispatch_subDropDown ul li a {
+    text-decoration: none;
+    color: #333;
+}
+</style>
+</head>
+<body>
+ <div class="content">
+        <div class="navbar">
+        <!-- <i class="fa-solid fa-circle-user text-primary" style="font-size: 24px; padding-right: 15px; cursor: pointer;"></i> -->
+        <div class="user-dropdown" id="userDropdown" style="display: none;">
+<ul>
+			        <li><a><i class="fas fa-user"></i><span th:text="${session.full_name}"></span></a></li>
+			        <li><a href="/logout"><i class="fas fa-sign-out-alt"></i> Sign Out</a></li>
+			    </ul>
+			</div>
+		   <ul>
+		    <li>
+		        <a th:href="@{/dashboard}">
+		            <i class="fas fa-home"></i> Home
+		        </a>
+		    </li>
+		    <li>
+		        <a href="#" id="dispatchMenu">
+		            <i class="fas fa-file-import"></i> Dispatch <i style="padding-left: 5px;" class="fa-solid fa-caret-down"></i>
+		        </a>
+		        <div class="dropdown-menu dispatch_subDropDown">
+			      <ul>
+			        <li><a class="dropdown-item" th:href="@{/form}">Add</a></li>
+			        <li><a class="dropdown-item" th:href="@{/view-dispatch}">View</a></li>
+			      </ul>
+			    </div>
+		    </li>
+		    <li>
+		         <a th:href="@{/import}">
+		            <i class="fas fa-arrow-down"></i> Import
+		        </a>
+		    </li>
+		    <!-- <li>
+		         <a th:href="@{/view-dispatch}">
+		            <i class="fas fa-eye"></i> View Dispatch
+		        </a>
+		    </li> -->
+		    <li>
+		        <a th:href="@{/calendar}">
+		            <i class="fas fa-calendar"></i> Calendar
+		        </a>
+		    </li>
+		    
+		    <li>
+		        <a href="#" id="masterMenu">
+		            <i class="fas fa-building"></i> Master <i style="padding-left: 5px;" class="fa-solid fa-caret-down"></i>
+		        </a>
+		        <div class="dropdown-menu dispatch_subDropDown master_subDropDown">
+			      <ul>
+			        <!-- <li><a class="dropdown-item" th:href="@{/adduser}">User Master</a></li> -->
+			        <li><a class="dropdown-item" th:href="@{/product}">Product Master</a></li>
+			        <li><a class="dropdown-item" th:href="@{/customer}">Customer Master</a></li>
+			      </ul>
+			    </div>
+		    </li>
+		    
+		    <!-- <li>
+		        <a th:href="@{/adduser}">
+		            <i class="fas fa-users"></i> Add Users
+		        </a>
+		    </li>
+		    <li>
+		        <a th:href="@{/product}">
+		            <i class="fas fa-box"></i> Product Master
+		        </a>
+		    </li>
+		    <li>
+		        <a th:href="@{/customer}">
+		            <i class="fas fa-building"></i> Customer Master
+		        </a>
+		    </li> -->
+		    <li>
+		        <a th:href="@{/dcDispatchData}">
+		            <i class="fa-solid fa-file"></i> Generated DC
+		        </a>
+		    </li>
+		    <li>
+		        <a th:href="@{/audit-log}">
+		            <i class="fas fa-cogs"></i> Track Info
+		        </a>
+		    </li>
+		    
+		</ul>
+
+	 </div>
+
+
+<div class="tables-container">
+    <div class="table-box">
+        <div class="table-header" style="display: flex; justify-content: space-between; align-items: center;">
+            <h3>Audit Log Records</h3>
+            <input type="text" class="form-control" id="searchInput" placeholder="Search..." style="padding: 5px; width: 20%;" />
+        </div>
+
+        <div class="table-scroll">
+            <table class="table table-hover" id="auditTable">
+                <thead>
+                    <tr>
+                    	<th>SL. No</th>
+                        <th>Action</th>
+                        <th>Performed By</th>
+                        <th>Affected Data</th>
+                        <th>Timings</th>
+                    </tr>
+                </thead>
+                <tbody>
+                	<!-- Display this row if the events list is empty -->
+			        <tr th:if="${#lists.isEmpty(logs)}">
+			            <td colspan="30" class="text-center">No data available</td>
+			        </tr>
+                    <tr th:each="log, iterate : ${logs}">
+                    	<td style="min-width: 20px;" th:text="${iterate.count}"></td>
+                        <td style="min-width: 80px;" th:text="${log.actionType}"></td>
+                        <td style="min-width: 80px;" th:text="${log.performedBy}"></td>
+                        <td style="min-width: 120px;" th:text="${log.affectedUser}"></td>
+                        <td style="min-width: 80px;" class="timestamp-cell" th:attr="data-timestamp=${log.timestamp}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+</div>
+  	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  	<script>
+    const searchInput = document.getElementById('searchInput');
+    const table = document.getElementById('auditTable');
+    const rows = table.getElementsByTagName('tr');
+
+    searchInput.addEventListener('keyup', function () {
+        const filter = searchInput.value.toLowerCase();
+
+        for (let i = 1; i < rows.length; i++) {
+            const cells = rows[i].getElementsByTagName('td');
+            let match = false;
+
+            for (let j = 0; j < cells.length; j++) {
+                const cellText = cells[j].textContent.toLowerCase();
+                if (cellText.includes(filter)) {
+                    match = true;
+                    break;
+                }
+            }
+
+            rows[i].style.display = match ? '' : 'none';
+        }
+    });
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const currentPath = window.location.pathname;
+    const navLinks = document.querySelectorAll('.navbar ul li a');
+
+    navLinks.forEach(link => {
+        const linkHref = link.getAttribute('href');
+
+        if (linkHref === currentPath) {
+            // Highlight the current link
+            link.parentElement.classList.add('active');
+
+            // Check if it's a submenu item and activate the main menu as well
+            let parentMenu = link.closest('.dropdown-menu');
+            if (parentMenu) {
+                // Find the parent <li> of the main menu that contains this dropdown
+                let mainMenuLi = parentMenu.parentElement;
+                if (mainMenuLi && mainMenuLi.tagName === 'LI') {
+                    mainMenuLi.classList.add('active');
+                }
+            }
+        }
+    });
+});
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const cells = document.querySelectorAll('.timestamp-cell');
+
+        cells.forEach(cell => {
+            const rawTimestamp = cell.getAttribute('data-timestamp');
+            if (rawTimestamp) {
+                const date = new Date(rawTimestamp);
+                if (!isNaN(date.getTime())) {
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+                    const year = date.getFullYear();
+                    const hours = String(date.getHours()).padStart(2, '0');
+                    const minutes = String(date.getMinutes()).padStart(2, '0');
+                    const seconds = String(date.getSeconds()).padStart(2, '0');
+                    
+                    const formatted = `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+                    cell.textContent = formatted;
+                } else {
+                    cell.textContent = 'Invalid Date';
+                }
+            }
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const userIcon = document.querySelector(".fa-circle-user");
+        const dropdown = document.getElementById("userDropdown");
+
+        userIcon.addEventListener("click", function () {
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        });
+
+        // Optional: Close dropdown when clicking outside
+        document.addEventListener("click", function (e) {
+            if (!userIcon.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.style.display = "none";
+            }
+        });
+    });
+    
+    document.addEventListener("DOMContentLoaded", function () {
+        const userIcon = document.querySelector("#dispatchMenu");
+        const dropdown = document.querySelector(".dispatch_subDropDown");
+
+        userIcon.addEventListener("click", function () {
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        });
+
+        // Optional: Close dropdown when clicking outside
+        document.addEventListener("click", function (e) {
+            if (!userIcon.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.style.display = "none";
+            }
+        });
+    });
+    
+    document.addEventListener("DOMContentLoaded", function () {
+        const userIcon = document.querySelector("#masterMenu");
+        const dropdown = document.querySelector(".master_subDropDown");
+
+        userIcon.addEventListener("click", function () {
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        });
+
+        // Optional: Close dropdown when clicking outside
+        document.addEventListener("click", function (e) {
+            if (!userIcon.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.style.display = "none";
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

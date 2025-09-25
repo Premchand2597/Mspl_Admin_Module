@@ -1,0 +1,225 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+    <body>
+        <nav th:fragment="header" class="header-nav ms-auto d-flex justify-content-between" style="width:55%;"> <!-- Fragment Declaration -->
+			
+			<div>
+				<p style="margin: 0; font-weight: bold; font-size: 21px; color: #012970;">MSPL CONNECT</p>
+			</div>  
+			          
+            <ul class="d-flex align-items-center">
+
+               <!-- Notification Dropdown -->
+               <li class="nav-item dropdown" id="notificationBellIcon" style="display:none;">
+			    <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+			        <i class="bi bi-bell"></i>
+			        <span class="badge bg-primary badge-number"></span>
+			    </a>
+			    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+			        <li class="dropdown-header">
+			            You have <span id="badge-number"></span> new notifications
+			        </li>
+			        <li><hr class="dropdown-divider"></li>
+			        <!-- Leave Request Notification -->
+			        <li class="notification-item" id="leaveRequestNotification" onclick="redirectToLeaveRequest()" style="display:none;">
+			            <div class="d-flex">
+			                <i class="bi bi-card-text icon-color"></i>
+			                <div>
+			                    <p id="leaveRequestMessage">You have new leave request</p>
+			                </div>
+			            </div>
+			        </li>
+			        
+			        <!-- Leave Request status change value -->
+			        <li><hr class="dropdown-divider"></li>
+			        <li class="notification-item" id="leaveRequestSatusChangeNotification" onclick="redirectToAttendence()" style="display:none;">
+			            <div class="d-flex">
+			                <i class="bi bi-card-text icon-color"></i>
+			                <div>
+			                    <p id="leaveRequestSatusChangeMessage">You have leave request</p>
+			                </div>
+			            </div>
+			        </li>
+			        
+			        <li><hr class="dropdown-divider"></li>
+					<li class="notification-item" id="assetRequestNotification"
+						onclick="redirectToAsset()" style="display: none;">
+						<div class="d-flex">
+							<i class="bi bi-card-text icon-color"></i>
+							<div>
+								<p id="assetRequestMessage">You have new asset request</p>
+							</div>
+						</div>
+					</li>
+					
+					<li><hr class="dropdown-divider"></li>
+					<li class="notification-item" id="newProjectNotification"
+						onclick="redirectToProject()" style="display: none;">
+						<div class="d-flex">
+							<i class="bi bi-card-text icon-color"></i>
+							<div>
+								<p id="newProjectMessage">You have new project request</p>
+							</div>
+						</div>
+					</li>
+					
+					<li><hr class="dropdown-divider"></li>
+					<li class="notification-item" id="newAnnouncementNotification"
+						onclick="redirectToAnnouncement()" style="display: none;">
+						<div class="d-flex">
+							<i class="bi bi-card-text icon-color"></i>
+							<div>
+								<p id="newannouncement">You have new announcement</p>
+							</div>
+						</div>
+					</li>
+					
+					<li><hr class="dropdown-divider"></li>
+					<li class="notification-item" id="hrAppraisal"
+						onclick="redirectToAppraisal()" style="display: none;">
+						<div class="d-flex">
+							<i class="bi bi-card-text icon-color"></i>
+							<div>
+								<p id="apprisalHrNotification">Appraisal form</p>
+							</div>
+						</div>
+					</li>
+					
+					<li><hr class="dropdown-divider"></li>
+					<li class="notification-item" id="empAppraisal"
+						onclick="redirectToemployeeAppraisal()" style="display: none;">
+						<div class="d-flex">
+							<i class="bi bi-card-text icon-color"></i>
+							<div>
+								<p id="apprisalempNotification">Employee(s) appraisal</p>
+							</div>
+						</div>
+					</li>
+					<!-- if admin didn't send appraisal within due date this will display notification -->
+					<li><hr class="dropdown-divider"></li>
+					<li class="notification-item" id="dueAppraisal"
+						onclick="redirectToAppraisal()" style="display: none;">
+						<div class="d-flex">
+							<i class="bi bi-card-text icon-color"></i>
+							<div>
+								<p id="apprisalDueNotification"></p>
+							</div>
+						</div>
+					</li>
+					
+					<!-- notification to display to-do events -->
+					<li><hr class="dropdown-divider"></li>
+					<li class="notification-item" id="to-do-event"
+						onclick="redirectTo-myFav()" style="display: none;">
+						<div class="d-flex">
+							<i class="bi bi-card-text icon-color"></i>
+							<div>
+								<p id="to-do-eventNotification"></p>
+							</div>
+						</div>
+					</li>
+					
+					<!-- notification to display new features events -->
+					<li><hr class="dropdown-divider"></li>
+					<li class="notification-item" id="new-feature"
+						onclick="redirectToNewFeature()" style="display: none;">
+						<div class="d-flex">
+							<i class="bi bi-card-text icon-color"></i>
+							<div>
+								<p id="new-featuretext"></p>
+							</div>
+						</div>
+					</li>
+					
+					<!-- notification to display new Release events -->
+					<li><hr class="dropdown-divider"></li>
+					<li class="notification-item" id="new-release"
+						onclick="redirectToNewRelease()" style="display: none;">
+						<div class="d-flex">
+							<i class="bi bi-card-text icon-color"></i>
+							<div>
+								<p id="new-releasetext"></p>
+							</div>
+						</div>
+					</li>
+					
+					<!-- notification to display quotation  -->
+					<li><hr class="dropdown-divider"></li>
+					<li class="notification-item" id="quotation"
+						onclick="redirectTosales()" style="display: none;">
+						<div class="d-flex">
+							<i class="bi bi-card-text icon-color"></i>
+							<div>
+								<p id="quotationText"></p>
+							</div>
+						</div>
+					</li>
+					<!-- notification to display revised Quotation  -->
+					<li><hr class="dropdown-divider"></li>
+					<li class="notification-item" id="revisedQuotation"
+						onclick="redirectTosales()" style="display: none;">
+						<div class="d-flex">
+							<i class="bi bi-card-text icon-color"></i>
+							<div>
+								<p id="revisedQuotationText"></p>
+							</div>
+						</div>
+					</li>
+					
+				</ul>
+			</li>
+
+                <!-- Profile Dropdown -->
+                <li class="nav-item dropdown pe-3">
+                
+                    <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+                        <!-- <img th:src="@{${empDetailsByEmpId.profilePicPath} != null ? ${empDetailsByEmpId.profilePicPath} : '/default-profile.png'}"
+                             alt="Profile Picture" class="profile-picture"> -->
+                             <img id="dynamicProfilePic" class="profile-picture"/>
+                             
+                              <span class="d-none d-md-block dropdown-toggle ps-2" th:text="${empDetailsByEmpId.fullName}"></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                        <li class="dropdown-header">
+                        
+                            <h6 th:text="${empDetailsByEmpId.fullName}"></h6>
+                            <p class="mb-1" th:text="${empDetailsByEmpId.empid}"></p>
+                            <span th:text="${empDetailsByEmpId.roleName}"></span>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" th:href="@{/viewAdminProfile(empid=${empDetailsByEmpId.empid})}">
+                                <i class="bi bi-person"></i>
+                                <span>My Profile</span>
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+						       <a class="dropdown-item d-flex align-items-center" href="#" data-bs-toggle="modal" data-bs-target="#feedbackModal">
+						           <i class="bi bi-chat-square-text"></i>
+						           <span>Feedback Form</span>
+						       </a>
+						   </li> 						    
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" th:href="@{/}">
+                                <i class="bi bi-box-arrow-right"></i>
+                                <span>Sign Out</span>
+                            </a>
+                        </li>
+                        <li>
+			     		 <hr class="dropdown-divider">
+					  </li>
+					  <li>
+					      <div class="dropdown-item d-flex align-items-center" style="font-size:12px;">
+					          <i class="bi bi-info-circle"></i>
+					          <span>Version: <strong>0.1.2</strong></span> <!-- Replace '1.0.0' with the dynamic version if applicable -->
+					      </div>
+					  </li>
+                        
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </body>
+</html>

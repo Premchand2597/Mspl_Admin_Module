@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .navbar {
+		    position: fixed;
+		    top: 0;
+		    right: 0;
+		    background-color: #EBECF0; /* Darker shade for a professional look */
+		    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+		    z-index: 1000;
+		    width: 100%; /* Full width navbar */
+		    padding: 12px 4px;
+		    display: flex;
+		    align-items: center;
+		    justify-content: flex-start; /* Align entire content to the right */
+		    box-sizing: border-box;
+		}
+		
+		/* Navbar list style */
+		.navbar ul {
+		    display: flex;
+		    justify-content: flex-end; /* Align items to the right */
+		    padding: 0;
+		    margin: 0;
+		    list-style: none;
+		    gap: 5px;
+		}
+		
+		/* Navbar item */
+		.navbar li {
+		    padding: 10px 18px;
+		    border-radius: 5px;
+		    cursor: pointer;
+		    color: black; /* Light color text */
+		    font-size: 14px;
+		    font-weight: 600;
+		    transition: background-color 0.3s ease, transform 0.2s ease;
+		}
+		.navbar li a{
+			text-decoration:none;
+			color:black;
+		}
+		/* Hover effect */
+		.navbar li:hover {
+		    background-color: #F8F8FF; /* Bright blue for hover effect */
+		    color: white;
+		    transform: translateY(-2px); /* Slightly lift on hover */
+		}
+		
+/* Active link style */
+.navbar li.active {
+    background-color: #F8F8FF; /* Bright blue for hover effect */
+	font-weight: bold;
+}
+		
+		/* Navbar icons */
+		.navbar li i {
+		    margin-right: 8px;
+		}
+		
+		/* Optional: Add a little space between the navbar and the top of the page */
+		body {
+		    margin-top: 70px; /* Adjust based on navbar height */
+		}
+		
+		/* Mobile responsiveness (optional) */
+		@media (max-width: 768px) {
+		    .navbar {
+		        width: 100%;
+		        border-radius: 0;
+		    }
+		
+		    .navbar ul {
+		        justify-content: center; /* Center content on smaller screens */
+		    }
+		
+		    .navbar li {
+		        margin: 0 10px;
+		    }
+		}
+        .main-content {
+            flex-grow: 1;
+            padding: 15px;
+        }
+        .stats-container {
+            display: flex;
+            gap: 7px;
+            justify-content: space-around;
+            margin-bottom: 3px;
+        }
+        .stats-box {
+            background: white;
+            padding: 20px;
+            flex: 1;
+            text-align: center;
+            font-size: 1em;
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        .stats-box:hover {
+            transform: translateY(-5px);
+        }
+        .stats-box i {
+            font-size: 2.3 em;
+            margin-right: 10px;
+        }
+        .stats-number {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        .customers .stats-number { color:  #C71585; }
+        .products .stats-number { color:#C71585 ; }
+        .dispatches .stats-number { color:#C71585; }
+        .schedules .stats-number { color: #C71585; }
+        .tables-container {
+            display: flex;
+            gap: 30px;
+            margin-top: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            overflow: hidden;
+            /* box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); */
+        }
+        th, td {
+            border-bottom: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        button {
+            padding: 10px 15px;
+            margin-top: 10px;
+            border: none;
+            color: black;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background:#DBDBEA;
+            color:#2f73b9;
+        }
+          
+        .table-box h3{
+        background: white;
+        color: black;
+        padding: 10px;
+        text-align: center;
+		 }
+		 
+		
+		.table-box {
+		    flex: 1; 
+		    min-width: 50%; 
+		    margin: 0px;
+		}
+		
+	 .main-section {
+        display: flex;
+        justify-content: space-between;
+        gap: 5px;
+        margin-top: 5px;
+    }
+    .chart-container {
+                width: 49.5%;
+		        height: 530px;
+		        background: white;
+		        padding: 10px;
+		        box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.1);
+		        display: flex;
+		        align-items: center;
+		        justify-content: center;
+		    }
+		    .chart-container canvas {
+		        width: 100%;
+		        height: 200px;
+		    }
+			   .tables-container {
+			    display: flex;
+			    flex-direction: column;
+			    gap: 5px; 
+			    width: 50%;
+			    margin-top:2px;
+			}
+			    .table-box {
+			        width: 100%;
+			        background: white;
+			        padding: 10px;
+			        box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.1);
+				    /* border: 1px solid #ccc; */
+				    max-width: 100%;
+				    box-sizing: border-box;
+						    }
+		
+				.table-header {
+				    display: flex;
+				    justify-content: space-between;
+				    align-items: center;
+				    background: white;
+				    /* padding: 8px 10px; */ 
+				    white-space: nowrap; 
+				    margin-bottom: 10px;
+				}
+				
+				.table-header h3 {
+				    margin: 0;
+				    padding: 0;
+				    font-size: 15px; 
+				    color:#C71585;
+				    
+				}
+				
+				.table-header button {
+				    /* padding: 5px 10px;  */
+				    font-size: 14px;
+				}
+				
+				th{
+				background:#DBDBEA;
+				color:#2f73b9;
+				}
+				
+				.hidden-row {
+			        display: none;
+			    }
+			    .scrollable-table-wrapper {
+				    max-height: 250px;
+				    overflow-y: auto;
+				    overflow-x: auto;
+				}
+				table {
+				    width: 100%;
+				    border-collapse: collapse;
+				}
+				
+				th, td {
+				    padding: 8px;
+				    /* border: 1px solid #ddd; */
+				    text-align: left;
+				    font-size: 14px;
+				}
+				
+.user-dropdown {
+    position: absolute;
+    top: 50px; /* adjust as needed */
+    left: 10px;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    border-radius: 8px;
+    z-index: 1000;
+    width: auto;
+}
+
+.user-dropdown ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.user-dropdown ul li {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.user-dropdown ul li:hover {
+    background-color: #F8F8FF; /* Bright blue for hover effect */
+    color: #000;
+}
+
+.user-dropdown ul li:last-child {
+    border-bottom: none;
+}
+
+.user-dropdown ul li a {
+    text-decoration: none;
+    color: #333;
+}
+
+.user-dropdown ul li a i {
+    margin-right: 10px;
+}
+
+.dispatch_subDropDown {
+    display: none;
+    position: absolute;
+    background-color: #EBECF0;
+    width: auto;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    z-index: 1000;
+    top: 50px; /* adjust as needed */
+}
+
+.dispatch_subDropDown ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.dispatch_subDropDown ul li {
+    padding: 5px;
+    border-bottom: 1px solid #eee;
+}
+
+.dispatch_subDropDown ul li:hover {
+    background-color: #F8F8FF; /* Bright blue for hover effect */
+    color: #000;
+}
+
+.dispatch_subDropDown ul li:last-child {
+    border-bottom: none;
+}
+
+.dispatch_subDropDown ul li a {
+    text-decoration: none;
+    color: #333;
+}
+
+</style>
+</head>
+    	<body>
+     
+    <div class="content">
+        <div class="navbar">
+        	<!-- <i class="fa-solid fa-circle-user text-primary" style="font-size: 24px; padding-right: 15px; cursor: pointer;"></i> -->
+        	<div class="user-dropdown" id="userDropdown" style="display: none;">
+			    <ul>
+			        <li><a><i class="fas fa-user"></i><span th:text="${session.full_name}"></span></a></li>
+			        <li><a href="/logout"><i class="fas fa-sign-out-alt"></i> Sign Out</a></li>
+			    </ul>
+			</div>
+		   <ul>
+		    <li>
+		        <a th:href="@{/dashboard}" target="dispatch_iframe">
+		            <i class="fas fa-home"></i> Home
+		        </a>
+		    </li>
+		    <li>
+		        <a href="#" id="dispatchMenu">
+		            <i class="fas fa-file-import"></i> Dispatch <i style="padding-left: 5px;" class="fa-solid fa-caret-down"></i>
+		        </a>
+		        <div class="dropdown-menu dispatch_subDropDown">
+			      <ul>
+			        <li><a class="dropdown-item" th:href="@{/form}" target="dispatch_iframe">Add</a></li>
+			        <li><a class="dropdown-item" th:href="@{/view-dispatch}" target="dispatch_iframe">View</a></li>
+			      </ul>
+			    </div>
+		    </li>
+		    <li>
+		         <a th:href="@{/import}" target="dispatch_iframe">
+		            <i class="fas fa-arrow-down"></i> Import
+		        </a>
+		    </li>
+		    <!-- <li>
+		         <a th:href="@{/view-dispatch}">
+		            <i class="fas fa-eye"></i> View Dispatch
+		        </a>
+		    </li> -->
+		    <li>
+		        <a th:href="@{/calendar}" target="dispatch_iframe">
+		            <i class="fas fa-calendar"></i> Calendar
+		        </a>
+		    </li>
+		    
+		    <li>
+		        <a href="#" id="masterMenu">
+		            <i class="fas fa-building"></i> Master <i style="padding-left: 5px;" class="fa-solid fa-caret-down"></i>
+		        </a>
+		        <div class="dropdown-menu dispatch_subDropDown master_subDropDown">
+			      <ul>
+			        <!-- <li><a class="dropdown-item" th:href="@{/adduser}" target="dispatch_iframe">User Master</a></li> -->
+			        <li><a class="dropdown-item" th:href="@{/product}" target="dispatch_iframe">Product Master</a></li>
+			        <li><a class="dropdown-item" th:href="@{/customer}" target="dispatch_iframe">Customer Master</a></li>
+			      </ul>
+			    </div>
+		    </li>
+		    
+		    <!-- <li>
+		        <a th:href="@{/adduser}">
+		            <i class="fas fa-users"></i> Add Users
+		        </a>
+		    </li>
+		    <li>
+		        <a th:href="@{/product}">
+		            <i class="fas fa-box"></i> Product Master
+		        </a>
+		    </li>
+		    <li>
+		        <a th:href="@{/customer}">
+		            <i class="fas fa-building"></i> Customer Master
+		        </a>
+		    </li> -->
+		    <li>
+		        <a th:href="@{/dcDispatchData}" target="dispatch_iframe">
+		            <i class="fa-solid fa-file"></i> Generated DC
+		        </a>
+		    </li>
+		    
+		    <li>
+		        <a th:href="@{/audit-log}" target="dispatch_iframe">
+		            <i class="fas fa-cogs"></i> Track Info
+		        </a>
+		    </li>
+		</ul>
+
+	 </div>
+            
+        <div class="main-content">
+            <div class="stats-container">
+                 <div class="stats-box customers">
+            <i class="fas fa-users"></i> Total Customer(s): <span class="stats-number" th:text="${totalCustomers}"></span>
+	        </div>
+	        <div class="stats-box products">
+	            <i class="fas fa-box"></i> Total Product(s): <span class="stats-number" th:text="${totalProducts}"></span>
+	        </div>
+             <div class="stats-box dispatches">
+                <i class="fas fa-truck"></i> Modules Dispatched: <span class="stats-number" th:text="${totalModulesReturned+'/'+totalModules}"></span>
+             </div>
+             <div class="stats-box schedules">
+	            <i class="fas fa-calendar-alt"></i> Today Schedule(s): <span class="stats-number" th:text="${todayEvents}"></span>
+	        </div>
+            </div>
+	<div class="main-section">
+	    <div class="chart-container">
+	        <canvas id="qualityChart"></canvas>
+	    </div>
+	
+	    <div class="tables-container">
+	        <div class="table-box">
+	    <div class="table-header">
+	        <h3>Recently Dispatched</h3>
+	        <button class="btn btn-primary" onclick="window.location.href='/view-dispatch'">View All</button>
+	    </div>
+	    <table class="table table-hover">
+	    <thead>
+	        <tr>
+	            <th>Sl. No</th>
+	            <th>Product</th>
+	            <th>Company</th> 
+	             <th>Date</th>    
+	            <th>Qty</th>
+	        </tr>
+	        </thead>
+	        <tbody>
+	        <!-- Display this row if the events list is empty -->
+	        <tr th:if="${#lists.isEmpty(recentDispatches)}">
+	            <td colspan="5" class="text-center">No data available</td>
+	        </tr>
+	        <tr th:each="dispatch, stat : ${recentDispatches}">
+	            <td th:text="${stat.index + 1}"></td>
+	            <td th:text="${dispatch.productName}"></td>
+	            <td style="min-width: 140px;" th:text="${dispatch.companyName}"></td>
+	            <td style="min-width: 90px;" th:text="${dispatch.date.substring(8,10) + '-' + dispatch.date.substring(5,7) + '-' + dispatch.date.substring(0,4)}"></td>
+	            <td th:text="${dispatch.quantity}"></td>
+	        </tr>
+	        </tbody>
+	    </table>
+	</div>
+
+  <div class="table-box">
+    <div class="table-header">
+        <h3>Today Task(s)</h3>
+        <button class="btn btn-primary" id="viewAllBtn" onclick="window.location.href='/calendar'">View All</button>
+    </div>
+
+    <div class="scrollable-table-wrapper">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>User Name</th>
+                    <th>Event</th>
+                    <th>Product Name</th>
+                    <th>Event Type</th>
+                    <th>Scheduled Date</th>
+                </tr>
+            </thead>
+            <tbody>
+            	<!-- Display this row if the events list is empty -->
+		        <tr th:if="${#lists.isEmpty(events)}">
+		            <td colspan="5" class="text-center">No data available</td>
+		        </tr>
+                <tr th:each="event, iterStat : ${events}" th:classappend="${iterStat.index >= 4} ? 'hidden-row'">
+                    <td th:text="${event.user_name}"></td>
+                    <td th:text="${event.event_title}"></td>
+                    <td th:text="${event.product_name}"></td>
+                    <td th:text="${event.event_type}"></td>
+                    <td th:text="${event.scheduled_date}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+    </div>
+    </div>
+</div>
+  	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+   	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script th:inline="javascript">
+    const chartLabels = /*[[${chartLabels}]]*/ [];
+    const chartData = /*[[${chartData}]]*/ [];
+
+    const ctx = document.getElementById('qualityChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: chartLabels,
+            datasets: [{
+                label: 'Product Quantity',
+                data: chartData,
+                borderColor: '#2f73b9',
+                backgroundColor: 'rgba(47, 115, 185, 0.2)',
+                borderWidth: 2,
+                pointRadius: 3,
+                pointBackgroundColor: '#2f73b9'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    title: { display: true, text: 'Dispatch Dates' }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: { display: true, text: 'Quantity' }
+                }
+            }
+        }
+    });
+    
+    
+    
+    
+    function showAllRows() {
+        let hiddenRows = document.querySelectorAll(".hidden-row");
+        hiddenRows.forEach(row => row.style.display = "table-row");
+        //document.getElementById("viewAllBtn").style.display = "none"; 
+    }
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const currentPath = window.location.pathname;
+    const navLinks = document.querySelectorAll('.navbar ul li a');
+
+    navLinks.forEach(link => {
+        const linkHref = link.getAttribute('href');
+
+        if (linkHref === currentPath) {
+            // Highlight the current link
+            link.parentElement.classList.add('active');
+
+            // Check if it's a submenu item and activate the main menu as well
+            let parentMenu = link.closest('.dropdown-menu');
+            if (parentMenu) {
+                // Find the parent <li> of the main menu that contains this dropdown
+                let mainMenuLi = parentMenu.parentElement;
+                if (mainMenuLi && mainMenuLi.tagName === 'LI') {
+                    mainMenuLi.classList.add('active');
+                }
+            }
+        }
+    });
+});
+</script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const userIcon = document.querySelector(".fa-circle-user");
+        const dropdown = document.getElementById("userDropdown");
+
+        userIcon.addEventListener("click", function () {
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        });
+
+        // Optional: Close dropdown when clicking outside
+        document.addEventListener("click", function (e) {
+            if (!userIcon.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.style.display = "none";
+            }
+        });
+    });
+    
+    document.addEventListener("DOMContentLoaded", function () {
+        const userIcon = document.querySelector("#dispatchMenu");
+        const dropdown = document.querySelector(".dispatch_subDropDown");
+
+        userIcon.addEventListener("click", function () {
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        });
+
+        // Optional: Close dropdown when clicking outside
+        document.addEventListener("click", function (e) {
+            if (!userIcon.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.style.display = "none";
+            }
+        });
+    });
+    
+    document.addEventListener("DOMContentLoaded", function () {
+        const userIcon = document.querySelector("#masterMenu");
+        const dropdown = document.querySelector(".master_subDropDown");
+
+        userIcon.addEventListener("click", function () {
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        });
+
+        // Optional: Close dropdown when clicking outside
+        document.addEventListener("click", function (e) {
+            if (!userIcon.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.style.display = "none";
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

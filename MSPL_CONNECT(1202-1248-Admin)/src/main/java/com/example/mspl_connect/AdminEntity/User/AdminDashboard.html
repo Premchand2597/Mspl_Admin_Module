@@ -1,0 +1,2251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>AdminDashboard</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+  <!-- SweetAlert2 Library -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <!-- =======================================================
+  * Template Name: NiceAdmin
+  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+  * Updated: Apr 20 2024 with Bootstrap v5.3.3
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+  
+ <style>  
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+       
+        .info-card {
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        #attendence-chart{
+            width: 100%;
+            height: 58px; /* Adjust the height as needed */
+        }
+        #attendence-chart {
+        font-size: 2rem; /* Large font size */
+        font-weight: bold; /* Make it bold */
+        color: #012970; /* Green color for a nice appearance */
+        text-align: center; /* Center the text */
+        margin-top: 10px; /* Add some space above the running time */
+      }
+      
+        /* Example CSS to style disabled items */
+		.activity-item .disabled {
+		    pointer-events: none; /* Disable interactions */
+		    opacity: 0.5; /* Make the item appear grayed out */
+		}
+		.activity {
+		    max-height: 200px; /* Set the maximum height as per your requirement */
+		    overflow: hidden; /* Hide content that overflows */
+		    position: relative;
+		    transition: max-height 0.3s ease; /* Add a smooth transition */
+		}
+		
+		.activity.expanded {
+		    max-height: none; /* Remove the height limit when expanded */
+		}
+		
+		.view-more {
+		    color: #007bff; 
+		    text-align: center;
+		    padding: 10px;
+		    background: white;
+		    border-top: 1px solid #ddd;
+		    position: sticky;
+		    bottom: 0;
+		    z-index:1;
+		}
+		
+		.view-more.hidden {
+		    display: none; /* Hide the button when it's not needed */
+		}
+		
+		.profile-picture {
+		    width: 40px;  /* Adjust the size as needed */
+		    height: 150px; /* Ensure the height and width are the same */
+		    border-radius: 50%; /* This makes the image a circle */
+		    object-fit: cover;  /* Ensures the image fits within the circle */
+		}		
+		
+        .list-group-item {  
+		    padding: 10px 15px;
+		    display: flex;
+		    align-items: center;
+		}
+		
+		.list-group-item img {
+		    border-radius: 50%; /* Ensures user image is circular */
+		}
+		
+		.list-group-item .ms-3 {
+		    margin-left: 15px; /* Spacing between the icon and text */
+		}
+		
+		.leaveLists small{
+			color:#99A3A4;
+		}
+		
+	    /* CSS for highlighting the focused link */
+		.highlighted {
+		    background-color: yellow;
+		    border: 2px solid #ffa500; /* Example border */
+		    color: black; /* Change the text color if needed */
+		}
+	    /* Keyframes for changing background color */
+	    @keyframes backgroundColorChange {
+        0% {
+            background-color: #1e3c72; /* Start with dark blue */
+        }
+        50% {
+            background-color: #2a69ac; /* Transition to a lighter blue */
+        }
+        100% {
+            background-color: #1e3c72; /* Back to dark blue */
+        }
+    }
+
+    /* Keyframes for star movement */
+    @keyframes moveStars {
+        0% {
+            transform: translateX(0) translateY(0);
+            opacity: 1;
+        }
+        50% {
+            transform: translateX(20px) translateY(-20px);
+            opacity: 0.5;
+        }
+        100% {
+            transform: translateX(40px) translateY(-40px);
+            opacity: 0;
+        }
+    }
+
+     /* Blinking animation */
+    @keyframes blink {
+        0%, 100% {
+            opacity: 1; /* Fully visible */
+        }
+        50% {
+            opacity: 0; /* Invisible */
+        }
+    }
+
+    /* Target only the Apprisal link for the blinking effect */
+    #apprisalLink.blinking {
+        animation: blink 0.5s ease-in-out 3; /* Blinks 3 times in 0.5s intervals */
+    }
+    
+	/* Fullscreen overlay with dim background */
+	#loadingPopup {
+	    position: fixed;
+	    top: 0;
+	    left: 0;
+	    width: 100%;
+	    height: 100%;
+	    background: rgba(0, 0, 0, 0.5); /* Dim background */
+	    display: flex;
+	    flex-direction: column;
+	    justify-content: center;
+	    align-items: center;
+	    z-index: 9999;
+	    font-family: Arial, sans-serif;
+	    color: white; /* Text color for better contrast */
+	}
+	
+	/* Spinner animation */
+	.spinner {
+	    width: 50px;
+	    height: 50px;
+	    border: 6px solid rgba(255, 255, 255, 0.3); /* Semi-transparent border */
+	    border-top-color: white; /* Bright top border */
+	    border-radius: 50%;
+	    animation: spin 1s linear infinite;
+	}
+	
+	/* Loading text */
+	#loadingPopup p {
+	    margin-top: 20px;
+	    font-size: 18px;
+	    font-weight: bold;
+	    color: white;
+	}
+	
+	/* Spinner keyframe animation */
+	@keyframes spin {
+	    to {
+	        transform: rotate(360deg);
+	    }
+	} 
+	
+	 .popup-container {
+		     position: fixed;
+		     top: 0;
+		     left: 0;
+		     width: 100%;
+		     height: 100%;
+		     background-color: rgba(0, 0, 0, 0.5);
+		     display: flex;
+		     justify-content: center;
+		     align-items: center;
+		     z-index: 1000;
+		 }
+
+		 .popup-content {
+		     background: white;
+		     min-width: 300px; /* Slightly wider minimum width */
+		     max-width: 70%; /* Maximum width capped at 70% of the viewport */
+		     width: auto; /* Dynamically adjust based on content */
+		     border-radius: 8px;
+		     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+		     padding: 20px;
+		     text-align: left;
+		 }
+
+		 .popup-header {
+		     display: flex;
+		     justify-content: space-between;
+		     align-items: center;
+		     margin-bottom: 15px;
+		 }
+
+		 .popup-header h5 {
+		     margin: 0;
+		 }
+
+		 .close-popup {
+		     background: none;
+		     border: none;
+		     font-size: 1.5rem;
+		     cursor: pointer;
+		 }
+
+		 .popup-body {
+		     max-height: 300px; /* Keep height limited for overflow scenarios */
+		     overflow-y: auto;
+		 }
+
+		 .popup-footer {
+		     text-align: right;
+		     margin-top: 15px;
+		 }
+		 .datatable-top{
+		 	padding:5px 0;
+		 }
+		 .view-more {
+	        cursor: pointer;
+	    }	
+	    .activite-label {
+				    text-align: right; /* Align text to the right */
+				    padding-right: 10px; /* Add some space from the right edge */
+				}
+		#storeSubmenu.collapse:not(.show) + .nav-link #storeArrow {
+		    transform: rotate(0deg);
+		    transition: transform 0.3s ease;
+		}
+		
+		#storeSubmenu.collapse.show + .nav-link #storeArrow {
+		    transform: rotate(180deg); /* Rotate the arrow when expanded */
+		    transition: transform 0.3s ease;
+		}
+		#storeArrow {
+		    transition: transform 0.3s ease; /* Smooth rotation animation */
+		}
+		
+		/* Rotate arrow when submenu is expanded */
+		#storeSubmenu.show + .nav-link #storeArrow {
+		    transform: rotate(180deg);
+		}
+		
+  </style>
+</head>
+<body> 
+
+<!-- ======= Header ======= -->
+<!--  <header id="header" class="header fixed-top d-flex align-items-center">
+	
+		   <div class="d-flex align-items-center" style="width:100%; margin:0 0 0 10px; padding:5px;">
+				    <a class="app-logo" th:href=@{/dashboard}>
+				        <img class="d-none d-lg-block" src="assets/img/logo.png" alt="logo" style="width:200px; height:50px; max-width:100%; padding:0 2px 0 10px; margin:0;">
+				    </a>
+				     <i class="bi bi-list toggle-sidebar-btn"></i>
+			</div>
+   				
+   Include the header fragment
+   <div th:replace="fragments/header :: header"></div>
+  
+  </header>End Header -->
+  <!-- ======= Header ======= -->
+ <header id="header" class="header fixed-top d-flex align-items-center">
+	
+		   <div class="d-flex align-items-center" style="width:100%; margin:0 0 0 10px; padding:5px;">
+				    <a class="app-logo" th:href=@{/dashboard}>
+				        <img class="d-none d-lg-block" src="assets/img/logo.png" alt="logo" style="width:200px; height:50px; max-width:100%; padding:0 2px 0 10px; margin:0;">
+				    </a>
+				    <!--  <i class="bi bi-list toggle-sidebar-btn"></i> -->
+				    <!-- <i class="bi bi-chevron-double-left toggle-sidebar-btn" onclick="toggleIconRotation()"></i>	 -->			   
+			</div>
+   				
+   <!-- Include the header fragment -->
+   <div th:replace="fragments/header :: header"></div>
+  
+  </header><!-- End Header -->
+  <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar">
+    <ul class="sidebar-nav" id="sidebar-nav">
+         <li class="nav-item">
+            <a class="nav-link active" th:href="@{/userDashboard}">
+                <i class="bi bi-grid"></i>
+                <span>Dashboard</span>
+            </a>
+         </li>
+         <li class="nav-item">
+            <a class="nav-link" th:href="@{/viewAdminProfile(empid=${empDetailsByEmpId.empid})}">
+                <i class="bi bi-person"></i>
+                <span>My Profile</span>
+            </a>
+        </li>  
+        <li class="nav-item">
+			<a class="nav-link" th:href="@{/attendanceLive(email=${empDetailsByEmpId.email})}">
+				<i class="bi bi-calendar3"></i>
+				<span>Attendance</span>
+			</a>
+	    </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/groupMailId}">
+                <i class="bi bi-telephone"></i>
+                <span>Employee Contacts</span>
+            </a>
+        </li>
+       <!--  <li class="nav-item">
+            <a class="nav-link" th:href="@{/InterCommDetails}">
+                <i class="bi bi-telephone"></i>
+                <span>InterComm Details</span>
+            </a>
+        </li> -->
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/adminHoliday}">
+                <i class="bi bi-calendar4-week"></i>
+                <span>Holiday List</span>
+            </a>
+        </li>
+        <li class="nav-item">
+		    <a class="nav-link" th:href="@{/employee}">
+		        <i class="bi bi-people"></i>	
+		        <span>Employee</span>
+		    </a>
+	    </li> 
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/viewAdminLeaves(empid=${empDetailsByEmpId.empid})}">
+                <i class="bi bi-card-text"></i>
+                <span>Team Leaves</span>
+            </a>
+        </li>  
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/events}">
+                <i class="bi bi-megaphone"></i>
+                <span>Announcement</span>
+            </a>
+        </li>
+          
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/asset}">
+                <i class="bi bi-wallet"></i>
+                <span>Assets</span>
+            </a>
+        </li>  
+        <li class="nav-item">
+			<a class="nav-link" th:href="@{/ongoingProject}">
+				<i class="bi bi-card-heading"></i>
+				<span>Projects</span>
+			</a>
+	   </li> 
+	   
+	  <!--  <li class="nav-item">
+            <a class="nav-link" th:href="@{/viewAdminPayslip(empid=${empDetailsByEmpId.empid})}">
+                <i class="bi bi-file-text"></i>
+                <span>Payslip</span>
+            </a>
+        </li> -->
+	   <!-- Loop through the permissions map -->
+         <li class="nav-item" th:if="${permissions.interviewAccess}">
+             <a class="nav-link" th:href="@{/moatIframe}">
+                <i class="bi bi-vector-pen"></i>
+                <span>Interview</span>
+            </a>
+         </li>
+         <li class="nav-item" th:if="${permissions.sales}">
+            <a class="nav-link" th:href="@{/sales}">
+                <i class="bi bi-cart3"></i>
+                <span>Sales</span>
+            </a>
+        </li>
+         
+         <li class="nav-item" th:if="${permissions.accountsAccess}">
+            <a class="nav-link" th:href="@{/accounts}">
+                <i class="bi bi-person-vcard"></i>
+                <span>Accounts</span>
+            </a>
+        </li>        
+		<li class="nav-item" th:if="${permissions.storeAccess}">
+		    <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#storeSubmenu" role="button" aria-expanded="false" aria-controls="storeSubmenu">
+		        <span>
+		            <i class="bi bi-shop-window"></i>
+		            <span>Store</span>
+		        </span>
+		        <i class="bi bi-chevron-down" id="storeArrow"></i>
+		    </a>
+		    <ul class="collapse list-unstyled ms-3" id="storeSubmenu">
+		        <li class="nav-item">
+		            <a class="nav-link" th:href="@{/asset}">
+		                <i class="bi bi-wallet"></i>
+		                <span>Assets</span>
+		            </a>
+		        </li>
+		    </ul>
+		</li>
+
+		<li class="nav-item" th:if="${permissions.apprisalAccess}">
+		    <a class="nav-link" id="apprisalLink" th:href="@{/apprisal(empid=${empDetailsByEmpId.empid})}">
+		        <i class="bi bi-file-text"></i>
+		        <span>Appraisal</span>
+		    </a>
+		</li>		
+		<li class="nav-item" >
+		    <a class="nav-link" id="apprisalLink" th:href="@{/employeeApprisal(empid=${empDetailsByEmpId.empid})}">
+		        <i class="bi bi-file-text"></i>
+		        <span>Employee Appraisal</span>
+		    </a>
+		</li>
+		
+		<li class="nav-item">
+				<a class="nav-link" th:href="@{/my-favorites}">
+					<i class="bi bi-layout-text-window-reverse"></i>
+					<span>To-Chat & Remind</span>
+				</a>
+		</li>
+		
+    </ul>
+</aside>
+
+<!-- <aside id="sidebar" class="sidebar">
+	    <ul class="sidebar-nav" id="sidebar-nav">
+	      <li class="nav-item">
+			    <a class="nav-link" th:href="@{/navbar}">
+			        <i class="bi bi-grid"></i>
+			        <span>Dashboard</span>
+			    </a>
+		 </li>
+		 <li class="nav-item">
+			    <a class="nav-link" th:href="@{/addDepartment}">
+			        <i class="bi bi-grid"></i>
+			        <span>Department</span>
+			    </a>
+		 </li>
+		  <li class="nav-item">
+			    <a class="nav-link" th:href="@{/addRole}">
+			        <i class="bi bi-grid"></i>
+			        <span>Role</span>
+			    </a>
+			</li>
+			<li class="nav-item">
+			    <a class="nav-link" th:href="@{/employee}">
+			        <i class="bi bi-grid"></i>
+			        <span>Employee</span>
+			    </a>
+			</li><!-- End Dashboard Nav -->
+	
+	     <!--  <li class="nav-item">
+	        <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+	          <i class="bi bi-menu-button-wide"></i><span>Components</span><i class="bi bi-chevron-down ms-auto"></i>
+	        </a>
+	        <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+	          <li>
+	            <a href="components-alerts.html">
+	              <i class="bi bi-circle"></i><span>Alerts</span>
+	            </a>
+	          </li>
+	          <li>
+	            <a href="components-accordion.html">
+	              <i class="bi bi-circle"></i><span>Accordion</span>
+	            </a>
+	          </li>
+	          <li>
+	            <a href="components-badges.html">
+	              <i class="bi bi-circle"></i><span>Badges</span>
+	            </a>
+	          </li>
+	          <li>
+	            <a href="components-breadcrumbs.html">
+	              <i class="bi bi-circle"></i><span>Breadcrumbs</span>
+	            </a>
+	          </li>
+	          <li>
+	            <a href="components-buttons.html">
+	              <i class="bi bi-circle"></i><span>Buttons</span>
+	            </a>
+	          </li>
+	          <li>
+	            <a href="components-cards.html">
+	              <i class="bi bi-circle"></i><span>Cards</span>
+	            </a>
+	          </li>
+	          <li>
+	            <a href="components-carousel.html">
+	              <i class="bi bi-circle"></i><span>Carousel</span>
+	            </a>
+	          </li>
+	          <li>
+	            <a href="components-list-group.html">
+	              <i class="bi bi-circle"></i><span>List group</span>
+	            </a>
+	          </li>
+	          <li>
+	            <a href="components-modal.html">
+	              <i class="bi bi-circle"></i><span>Modal</span>
+	            </a>
+	          </li>
+	          <li>
+	            <a href="components-tabs.html">
+	              <i class="bi bi-circle"></i><span>Tabs</span>
+	            </a>
+	          </li>
+	          <li>
+	            <a href="components-pagination.html">
+	              <i class="bi bi-circle"></i><span>Pagination</span>
+	            </a>
+	          </li>
+	          <li>
+	            <a href="components-progress.html">
+	              <i class="bi bi-circle"></i><span>Progress</span>
+	            </a>
+	          </li>
+	          <li>
+	            <a href="components-spinners.html">
+	              <i class="bi bi-circle"></i><span>Spinners</span>
+	            </a>
+	          </li>
+	          <li>
+	            <a href="components-tooltips.html">
+	              <i class="bi bi-circle"></i><span>Tooltips</span>
+	            </a>
+	          </li>
+	        </ul>
+      </li>End Components Nav
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-journal-text"></i><span>Forms</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="forms-elements.html">
+              <i class="bi bi-circle"></i><span>Form Elements</span>
+            </a>
+          </li>
+          <li>
+            <a href="forms-layouts.html">
+              <i class="bi bi-circle"></i><span>Form Layouts</span>
+            </a>
+          </li>
+          <li>
+            <a href="forms-editors.html">
+              <i class="bi bi-circle"></i><span>Form Editors</span>
+            </a>
+          </li>
+          <li>
+            <a href="forms-validation.html">
+              <i class="bi bi-circle"></i><span>Form Validation</span>
+            </a>
+          </li>
+        </ul>
+      </li>End Forms Nav
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-layout-text-window-reverse"></i><span>Tables</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="tables-general.html">
+              <i class="bi bi-circle"></i><span>General Tables</span>
+            </a>
+          </li>
+          <li>
+            <a href="tables-data.html">
+              <i class="bi bi-circle"></i><span>Data Tables</span>
+            </a>
+          </li>
+        </ul>
+      </li>End Tables Nav
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-bar-chart"></i><span>Charts</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="charts-chartjs.html">
+              <i class="bi bi-circle"></i><span>Chart.js</span>
+            </a>
+          </li>
+          <li>
+            <a href="charts-apexcharts.html">
+              <i class="bi bi-circle"></i><span>ApexCharts</span>
+            </a>
+          </li>
+          <li>
+            <a href="charts-echarts.html">
+              <i class="bi bi-circle"></i><span>ECharts</span>
+            </a>
+          </li>
+        </ul>
+      </li>End Charts Nav
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#icons-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-gem"></i><span>Icons</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="icons-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="icons-bootstrap.html">
+              <i class="bi bi-circle"></i><span>Bootstrap Icons</span>
+            </a>
+          </li>
+          <li>
+            <a href="icons-remix.html">
+              <i class="bi bi-circle"></i><span>Remix Icons</span>
+            </a>
+          </li>
+          <li>
+            <a href="icons-boxicons.html">
+              <i class="bi bi-circle"></i><span>Boxicons</span>
+            </a>
+          </li>
+        </ul>
+      </li>End Icons Nav
+
+      <li class="nav-heading">Pages</li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="users-profile.html">
+          <i class="bi bi-person"></i>
+           <span>My Profile</span>
+        </a>
+      </li>End Profile Page Nav
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="pages-faq.html">
+          <i class="bi bi-question-circle"></i>
+          <span>F.A.Q</span>
+        </a>
+      </li>End F.A.Q Page Nav
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="pages-contact.html">
+          <i class="bi bi-envelope"></i>
+          <span>Contact</span>
+        </a>
+      </li>End Contact Page Nav
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="pages-register.html">
+          <i class="bi bi-card-list"></i>
+          <span>Register</span>
+        </a>
+      </li>End Register Page Nav
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="pages-login.html">
+          <i class="bi bi-box-arrow-in-right"></i>
+          <span>Login</span>
+        </a>
+      </li>End Login Page Nav
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="pages-error-404.html">
+          <i class="bi bi-dash-circle"></i>
+          <span>Error 404</span>
+        </a>
+      </li>End Error 404 Page Nav
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="pages-blank.html">
+          <i class="bi bi-file-earmark"></i>
+          <span>Blank</span>
+        </a>
+      </li>
+
+    </ul>
+
+  </aside> --><!-- End Sidebar-->
+<div id="loadingPopup">
+    <div class="spinner"></div>
+    <p>Loading please wait...</p>
+</div> 
+
+  <main id="main" class="main">
+  
+  
+<input type="hidden" id="loggedInDeptName" th:value="${empDetailsByEmpId.deptName}">
+ <input type="hidden" id="employeeId1" name="empId" th:value="${empDetailsByEmpId.empid}" />
+						<!-- Popup Div for Missing Punch Dates -->
+						<div id="missingPunchDatesPopup" class="popup-container" style="display: none;">
+						    <div class="popup-content">
+						        <div class="popup-header">
+						            <h5>Missed Punch Dates</h5>
+						        </div>
+						        <div class="popup-body">
+						            <ul id="missingPunchDatesList">
+						                <!-- Check if there are no missed punches -->
+						               
+						                <li th:each="date : ${missingPunchDates}" th:text="${date}"></li>
+						            </ul>
+									<p id="noMissedPunchesMessage" style="display: none; text-align: center;">No missed punches.</p>
+						        </div>
+						        <div class="popup-footer">
+						            <button class="btn btn-secondary" onclick="closePopup()">Close</button>
+						        </div>
+						    </div>
+						</div>
+						<!-- model to display leave Request -->
+						<div class="modal fade" id="leaveDetailsModal" tabindex="-1"
+							role="dialog" aria-labelledby="leaveDetailsModalLabel"
+							aria-hidden="true">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="leaveDetailsModalLabel">Leave Details</h5>
+										<button type="button" class="btn-close" data-bs-dismiss="modal"
+											aria-label="Close"></button>
+									</div>
+									<div class="modal-body">
+										<table class="table">
+											<thead>
+												<tr>
+													<th>Leave Type</th>
+													<th>Added</th>
+													<th>Used</th>
+													<th>Remaining</th>
+												</tr>
+											</thead>
+											<tbody id="leaveRecordsTable">
+												<!-- Dynamic content will be inserted here -->
+											</tbody>
+										</table>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary"
+											data-bs-dismiss="modal">Close</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<!-- modal to display change password for the first time -->
+						<div class="modal fade" id="passwordChangeModal" tabindex="-1" aria-labelledby="passwordChangeModalLabel" aria-hidden="true">
+						    <div class="modal-dialog">
+						        <div class="modal-content">
+						            <div class="modal-header">
+						                <h5 class="modal-title text-primary fw-bold" id="passwordChangeModalLabel">Change Password</h5>
+						                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						            </div>
+						            <div class="modal-body">
+						                <!-- Change Password Form -->
+								        <form id="passwordChangeForm">
+								            <input type="hidden" id="employeeId" name="empId" th:value="${empDetailsByEmpId.empid}" />
+								            <div class="mb-3">
+								                <input name="currentPassword" type="password" class="form-control" id="currentPassword" placeholder="Enter your current password">
+								                <div class="form-text text-danger" id="currentPasswordError"></div>
+								            </div>
+								            <div class="mb-3">
+								                <input name="newPassword" type="password" class="form-control" id="newPassword" placeholder="Enter your new password">
+								                <div class="form-text text-danger" id="newPasswordError"></div>
+								            </div>
+								            <div class="mb-4">
+								                <input name="renewPassword" type="password" class="form-control" id="renewPassword" placeholder="Re-enter your new password">
+								                <div class="form-text text-danger" id="renewPasswordError"></div>
+								            </div>
+								            <div class="text-center">
+								                <button type="submit" class="btn btn-primary   mb-2" style="border-radius: 6px;">Change Password</button>
+								                 <button type="submit" class="btn btn-secondary  mb-2" style="border-radius: 6px;color:white" data-bs-dismiss="modal">Skip</button>
+								            </div>
+								        </form>
+						            </div>
+						            
+						        </div>
+						    </div>
+						</div>
+						
+						<!-- password change successfully modal -->
+						<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+						    <div class="modal-dialog">
+						        <div class="modal-content">
+						            <div class="modal-header">
+						                <h5 class="modal-title text-success fw-bold" id="successModalLabel">Password Updated Successfully</h5>
+						                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						            </div>
+						            <div class="modal-body">
+						                <p id="successMessage"></p>
+						            </div>
+						            <div class="modal-footer">
+						                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+						            </div>
+						        </div>
+						    </div>
+						</div>
+<!-- Feedback Modal -->
+			<div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel"
+				aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content rounded-4 shadow-lg">
+						<div class="modal-header border-0">
+							<h5 class="modal-title" id="feedbackModalLabel">Feedback Form</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<div class="modal-body">
+							<form id="feedbackForm" method="post" enctype="multipart/form-data">
+								<div class="mb-3" style="display: none;">
+									<label for="feedbackName" class="form-label fw-bold">Your Name</label>
+									<input type="text" class="form-control" id="feedbackName" name="name"
+										th:value="${empDetailsByEmpId.fullName}" readonly>
+								</div>
+								<div class="mb-3" style="display: none;">
+									<label for="feedbackEmail" class="form-label fw-bold">Your Email</label>
+									<input type="email" class="form-control" id="feedbackEmail" name="email"
+										th:value="${empDetailsByEmpId.email}" readonly>
+								</div>
+								<div class="mb-3">
+									<label for="feedbackEmailyy" class="form-label fw-bold">To</label>
+									<div class="to-field-container">
+										<span
+											class="to-field rounded-pill px-3 py-2 shadow-sm">bugs_msplconnect@melangesystems.com</span>
+									</div>
+								</div>
+								<div class="mb-3">
+									<label for="bugType" class="form-label fw-bold">Bug Type</label>
+									<select class="form-control" id="bugType" name="bugType" required>
+										<option value="MSPL Connect Application">MSPL Connect Application</option>
+										<option value="MSPL Connect New Feature">MSPL Connect New Feature</option>
+									</select>
+								</div>
+
+								<div class="mb-3">
+									<label for="feedbackMessage" class="form-label fw-bold">Message</label>
+									<textarea class="form-control" id="feedbackMessage" name="message" rows="4"
+										placeholder="Enter your feedback here..." required></textarea>
+								</div>
+								<div class="mb-3">
+									<label for="feedbackAttachment" class="form-label fw-bold">Attachment
+										(optional)</label>
+									<input type="file" class="form-control" id="feedbackAttachment" name="attachment"
+										accept=".png, .jpg, .jpeg" multiple>
+									<small class="text-muted">Max size: 5MB. You can upload multiple images.</small>
+								</div>
+								<button type="submit" class="btn btn-primary w-100 mt-3 py-2 shadow-sm"
+									id="submitFeedbackBtn">Submit Feedback</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+		<input type="hidden" id="emp_idSessionValue" th:value="${empDetailsByEmpId.empid}">
+		<input type="hidden" id="loggedEmpEmail" th:value="${empDetailsByEmpId.email}">
+
+		<div class="pagetitle mb-0 d-flex"
+			th:if="${empDetailsByEmpId.deptId>0}">
+			<i class="bi bi-chevron-double-left toggle-sidebar-btn mb-1"
+				onclick="toggleIconRotation()"
+				style="font-size: 24px; color: #2F73B9; padding: 0 10px; margin-left: -10px; margin-top: -10px; cursor: pointer;"></i>
+			<nav>
+				<ol class="breadcrumb mb-1" style="padding-left: 5px;">
+					<li class="breadcrumb-item"><a th:href="@{/userDashboard}">Home</a></li>
+					<li class="breadcrumb-item active">Dashboard</li>
+				</ol>
+			</nav>
+		</div>
+		<!-- End Page Title -->
+		<section class="section dashboard">
+      <div class="row">
+        <!-- Left side columns -->
+        <div class="col-lg-8 first-row" style="padding-left:20px">
+          <div class="row">
+            <!-- Sales Card -->
+						<div class="row col-12 p-0 m-0">
+							<!-- Department Card -->
+							<div class="col-xxl-6 col-md-6 p-1">
+							    <div class="card info-card sales-card mb-2" style="padding-bottom:0;">
+							          <div class="d-flex justify-content-between">
+					                        <div>
+					                          <h5 class="card-title m-0 p-0">Check-in:</h5>
+					                            <span id="start-time" th:text="${loggedInTime}" style="font-size:12px;">01:00:00</span>							            
+					                        </div> 
+					                        <div>
+					                          <h5 class="card-title m-0 p-0">
+					                            Last-punch: </h5>
+					                          <span id="start-time" th:text="${empLastPunchTime}" style="font-size:12px;">01:00:00</span>							            
+					                        </div>                     
+					                  </div>
+							        <div id="attendence-chart" class="running-time m-0 p-0" ><span id="elapsedTime">00:00:00</span></div> <!-- Running time will be displayed here -->
+							    </div>
+							    <div class="d-flex justify-content-between">
+							    
+							    	<div class="card info-card customers-card mb-2" style="width:100%;margin-right:5px; " th:onclick="displayLeaveBalance('[[${empDetailsByEmpId.email}]]')">
+										<div class="card-body p-0">
+											<h5 class="card-title m-0 p-0 mb-2" style="font-size: 1rem;">Available leaves</h5>
+	
+											<div class="d-flex justify-content-between align-items-center p-0 mb-0" >
+												<div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="cursor:pointer;">
+													<i class="bi bi-calendar-week"></i>
+												</div>
+												<div class="ps-3">
+													<h6><span th:text="${totalLeavesAvailable}"></span></h6>
+												</div>
+											</div>
+	
+										</div>
+									</div>
+									<div class="card info-card customers-card mb-2" style="width:100%;margin-left:5px;">
+										<div class="card-body p-0">
+									        <h5 class="card-title m-0 p-0 mb-2" style="font-size: 1rem;">Missed Punch</h5>
+									        <div class="d-flex justify-content-between align-items-center p-0 mb-0">
+									            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" 
+									                 style="width: 60px; height: 60px; font-size: 24px; display: flex; align-items: center; justify-content: center;cursor:pointer;" 
+									                 onclick="openPopup()">
+									                <i class="bi bi-chevron-down"></i>
+									            </div>
+									            <div class="ps-3">
+									                <h6 th:classappend="${missingPunches > 0} ? 'text-danger' : ''">
+									                    <span th:text="${missingPunches}"></span>
+									                </h6>
+									            </div>
+									        </div>
+									    </div>
+									</div>							    
+							    </div>						    
+							</div>
+							
+
+							<div class="col-xxl-6 col-md-6 p-1">
+								<div class="card info-card customers-card mb-2" style="cursor: pointer;" onclick="location.href='/employee'">
+									<div class="card-body p-0">
+										<h5 class="card-title m-0 p-0 mb-2">My Team</h5>
+
+										<div class = "d-flex justify-content-between align-items-center p-0 mb-0">
+											<div
+												class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+												<i class="bi bi-people-fill"></i>
+											</div>
+											<div class="ps-3">
+												<h6><span th:text="${getTotalPresentCountByDeptId}"></span>/<span th:text="${totalEmployeCount}"></span></h6>
+											</div>
+										</div>
+									</div>
+								</div>
+									<div class="card info-card customers-card mb-2">
+									    <div class="card-body p-0">
+									        <h5 class="card-title m-0 p-0 mb-2">Live Projects</h5>
+									        <div class="d-flex justify-content-between align-items-center p-0 mb-0">
+									            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+									                <i class="bi bi-fan"></i>
+									            </div>
+									            <div class="ps-3" style="font-size:12px;margin-top:-10px;color:#012970;font-weight:bold;">
+									                <ul class="list-unstyled m-0" id="project-list">
+									                    <!-- Thymeleaf loop to display up to 2 project names -->
+									                    <li th:each="projectName, iterStat : ${ongoingProjectName}" 
+									                        th:if="${iterStat.index < 2}">
+									                        <span th:text="${projectName}"></span>
+									                    </li>
+									                </ul>
+									
+									                <!-- Hidden list for additional projects -->
+									                <ul class="list-unstyled m-0 d-none" id="more-projects">
+									                    <li th:each="projectName, iterStat : ${ongoingProjectName}" 
+									                        th:if="${iterStat.index >= 2}">
+									                        <span th:text="${projectName}" id="projectname"></span>
+									                    </li>
+									                </ul>
+									
+									                <!-- View More button, only shown if more than 2 projects -->
+									                <button class="btn btn-link p-0 mt-2" id="view-more-btn" 
+									                        th:if="${#lists.size(ongoingProjectName) > 2}" 
+									                        onclick="toggleProjects()" style="font-size:12px">View More</button>
+									            </div>
+									        </div>
+									    </div>
+									</div>
+							</div>
+						</div>
+
+						<!-- Customers Card -->
+           <!-- End Customers Card -->
+
+            <!-- Reports -->
+           <!--  <div class="col-xxl-6 col-md-6 p-1">
+								<div class="card info-card sales-card">
+									<h5 class="card-title m-0 p-0 mb-2">Attendence<span>| Today</span></h5>
+									<div id="attendence-chart1"></div>
+								</div>
+				</div>
+ -->
+            <!-- Recent Sales -->
+        <!--     <div class="col-12">
+              <div class="card recent-sales overflow-auto">
+
+                <div class="filter">
+                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                    <li class="dropdown-header text-start">
+                      <h6>Filter</h6>
+                    </li>
+
+                    <li><a class="dropdown-item" href="#">Today</a></li>
+                    <li><a class="dropdown-item" href="#">This Month</a></li>
+                    <li><a class="dropdown-item" href="#">This Year</a></li>
+                  </ul>
+                </div>
+
+                <div class="card-body">
+                  <h5 class="card-title">Recent Sales <span>| Today</span></h5>
+
+                  <table class="table table-borderless datatable">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Customer</th>
+                        <th scope="col">Product</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row"><a href="#">#2457</a></th>
+                        <td>Brandon Jacob</td>
+                        <td><a href="#" class="text-primary">At praesentium minu</a></td>
+                        <td>$64</td>
+                        <td><span class="badge bg-success">Approved</span></td>
+                      </tr>
+                      <tr>
+                        <th scope="row"><a href="#">#2147</a></th>
+                        <td>Bridie Kessler</td>
+                        <td><a href="#" class="text-primary">Blanditiis dolor omnis similique</a></td>
+                        <td>$47</td>
+                        <td><span class="badge bg-warning">Pending</span></td>
+                      </tr>
+                      <tr>
+                        <th scope="row"><a href="#">#2049</a></th>
+                        <td>Ashleigh Langosh</td>
+                        <td><a href="#" class="text-primary">At recusandae consectetur</a></td>
+                        <td>$147</td>
+                        <td><span class="badge bg-success">Approved</span></td>
+                      </tr>
+                      <tr>
+                        <th scope="row"><a href="#">#2644</a></th>
+                        <td>Angus Grady</td>
+                        <td><a href="#" class="text-primar">Ut voluptatem id earum et</a></td>
+                        <td>$67</td>
+                        <td><span class="badge bg-danger">Rejected</span></td>
+                      </tr>
+                      <tr>
+                        <th scope="row"><a href="#">#2644</a></th>
+                        <td>Raheem Lehner</td>
+                        <td><a href="#" class="text-primary">Sunt similique distinctio</a></td>
+                        <td>$165</td>
+                        <td><span class="badge bg-success">Approved</span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                </div>
+
+              </div>
+            </div> --><!-- End Recent Sales -->
+
+            <!-- Top Selling -->
+            <!-- <div class="col-12">
+              <div class="card top-selling overflow-auto">
+
+                <div class="filter">
+                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                    <li class="dropdown-header text-start">
+                      <h6>Filter</h6>
+                    </li>
+                    <li><a class="dropdown-item" href="#">Today</a></li>
+                    <li><a class="dropdown-item" href="#">This Month</a></li>
+                    <li><a class="dropdown-item" href="#">This Year</a></li>
+                  </ul>
+                </div>
+
+                <div class="card-body pb-0">
+                  <h5 class="card-title">Top Selling <span>| Today</span></h5>
+
+                  <table class="table table-borderless">
+                    <thead>
+                      <tr>
+                        <th scope="col">Preview</th>
+                        <th scope="col">Product</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Sold</th>
+                        <th scope="col">Revenue</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row"><a href="#"><img src="assets/img/product-1.jpg" alt=""></a></th>
+                        <td><a href="#" class="text-primary fw-bold">Ut inventore ipsa voluptas nulla</a></td>
+                        <td>$64</td>
+                        <td class="fw-bold">124</td>
+                        <td>$5,828</td>
+                      </tr>
+                      <tr>
+                        <th scope="row"><a href="#"><img src="assets/img/product-2.jpg" alt=""></a></th>
+                        <td><a href="#" class="text-primary fw-bold">Exercitationem similique doloremque</a></td>
+                        <td>$46</td>
+                        <td class="fw-bold">98</td>
+                        <td>$4,508</td>
+                      </tr>
+                      <tr>
+                        <th scope="row"><a href="#"><img src="assets/img/product-3.jpg" alt=""></a></th>
+                        <td><a href="#" class="text-primary fw-bold">Doloribus nisi exercitationem</a></td>
+                        <td>$59</td>
+                        <td class="fw-bold">74</td>
+                        <td>$4,366</td>
+                      </tr>
+                      <tr>
+                        <th scope="row"><a href="#"><img src="assets/img/product-4.jpg" alt=""></a></th>
+                        <td><a href="#" class="text-primary fw-bold">Officiis quaerat sint rerum error</a></td>
+                        <td>$32</td>
+                        <td class="fw-bold">63</td>
+                        <td>$2,016</td>
+                      </tr>
+                      <tr>
+                        <th scope="row"><a href="#"><img src="assets/img/product-5.jpg" alt=""></a></th>
+                        <td><a href="#" class="text-primary fw-bold">Sit unde debitis delectus repellendus</a></td>
+                        <td>$79</td>
+                        <td class="fw-bold">41</td>
+                        <td>$3,239</td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                </div>
+
+              </div>
+            </div> --><!-- End Top Selling -->
+
+          </div>
+          <div class="row">
+          <div class="card">
+            <div class="card-body p-0	">
+              <h5 class="card-title m-0 p-0 mb-2">Team <span>| Today</span></h5>
+              <!-- Table with stripped rows -->
+              <!-- Table HTML -->
+				<table class="table table-hover datatable" style="font-size:14px;">
+                <thead>
+                  <tr >
+                    <th style="padding-left:0;">Sl no</th>
+                    <th style="padding-left:0;">Employee No</th>
+                    <th style="padding-left:0;">
+                      <b>Employee N</b>ame
+                    </th>
+                    <th style="padding-left:0;">First Punch</th>
+                    <th style="padding-left:0;">Recent Punch</th>
+                    <th style="padding-left:0;">Department</th>
+                  </tr>
+                </thead>
+                <tbody>
+             		<tr th:each="emp,itrStart : ${todayPresentEmpsList}">
+             			<td th:text="${itrStart.count}"></td>
+             			<td th:text="${emp.eid}"></td>             			
+             			<td th:text="${emp.emp_name}"></td>
+             			<td th:text="${emp.pt}"></td>
+             			<td th:text="${emp.last_punch_time}"></td>
+             			<td th:text="${emp.dept_name}"></td>
+             		</tr>					
+                </tbody>
+              </table>
+              <!-- End Table with stripped rows -->
+            </div>
+          </div></div>
+        </div><!-- End Left side columns -->
+
+        <!-- Right side columns -->
+        <div class="col-lg-4 p-2 pt-1">
+
+          <!-- Recent Activity -->
+					<div class="card pb-0 mb-3">
+						<div class="card-body pt-0 pb-0 mt-0">
+							<h5 class="card-title pt-0">
+								Announcement(s)&nbsp;<span> | This Month</span>
+							</h5>
+							<div class="activity"></div>
+						</div>
+					</div>
+					<!-- End Recent Activity -->
+					
+					<!-- strat of display absent employees list -->
+					<div class="card">
+					    <div class="card-body pt-0 pb-0 mt-0">
+					        <h5 class="card-title pt-0">Absent Employee(s) <span>| Today</span></h5>
+					        <div id="Leaves">
+					            <!-- Loop through usersList -->
+					            <ul class="list-group list-group-flush">
+					                 <!-- Adding an icon next to the employee's name -->
+					                 <li th:if="${absentEmployees.isEmpty()}" class="list-group-item text-center">
+						                    No absenties
+						             </li>
+									 
+									  <!-- List of absent employees -->
+							        <li th:each="employee : ${absentEmployees}" class="list-group-item align-items-center">
+							            <!-- Display profile picture if available -->
+							            <img th:if="${!#strings.isEmpty(employee[1])}"
+							                 th:src="${employee[1]}" 
+							                 alt="Profile Picture" 
+							                 style="width:40px; height:40px; border-radius:50%;"
+							                onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
+											<i class="bi bi-person-fill" style="font-size:40px; display: none;"></i>
+							            <!-- Display a Bootstrap icon if profile picture is missing -->
+							            <i th:if="${#strings.isEmpty(employee[1])}" 
+							               class="bi bi-person-circle" 
+							               style="font-size:40px;"></i>
+							            &nbsp;&nbsp;<span th:text="${employee[0]}"></span>
+							        </li>
+					            </ul>
+					        </div>
+					    </div>
+					</div>
+					
+					<!-- Leave Request -->
+					<div class="card">
+					    <div class="card-body pt-0 pb-0 mt-0">
+					        <h5 class="card-title pt-0">Pending Leave Request(s)</h5>
+							 <input type="hidden" id="loggedEmpId" th:value="${empId}">
+					        <div id="Leaves">
+					            <!-- Loop through usersList -->
+					            <ul class="list-group list-group-flush">
+					           		 <li th:if="${usersList.isEmpty()}" class="list-group-item text-center">
+						                    No requests available
+						             </li>
+					                <li th:each="user : ${usersList}" class="list-group-item d-flex align-items-center">
+					                    <!-- Anchor tag for redirection -->
+					                        <a th:href="@{/viewAdminLeaves(empid=${empId})}" 
+                       						   class="d-flex align-items-center text-decoration-none w-100">
+					                        <!-- User Icon (Placeholder or fetched image) -->
+					                        <img th:src="@{${user.profile_pic_path}}" alt="Profile" class="rounded-circle" width="40" height="40">
+					                        
+					                        <!-- User Name and Leave Info -->
+					                        <div class="ms-3 leaveLists">
+					                            <h6 class="m-0" th:text="${user.employee_name}"></h6>
+					                            <small th:text="'From: ' + ${user.from_date}"></small><br>
+					                            <small th:text="'To: ' + ${user.to_date}"></small>
+					                        </div>
+					                    </a>
+					                </li>
+					            </ul>
+					        </div>
+					    </div>
+					</div>
+
+
+          <!-- Budget Report -->
+         <!--  <div class="card">
+		    <div class="card-body pt-0 pb-0 mt-0">
+		        <h5 class="card-title pt-0">Leave Request(s)<span>| This Month</span></h5>
+		
+		        <div id="Leaves">
+		            Loop through usersList
+		            <ul class="list-group list-group-flush">
+		                <li th:each="user : ${usersList}" class="list-group-item d-flex align-items-center">
+		                    User Icon (Placeholder or fetched image)
+		                    <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle" width="40" height="40">
+		                    
+		                    User Name and Leave Info
+		                    <div class="ms-3 leaveLists">
+		                        <h6 class="m-0" th:text="${user.employee_name}"></h6>
+		                        <small th:text="'From: ' + ${user.from_date}"></small><br>
+		                        <small th:text="'To: ' + ${user.to_date}"></small>
+		                    </div>
+		                    
+		                </li>
+		            </ul>
+		        </div>
+		    </div>
+		</div> -->
+		<!-- End Budget Report -->
+
+          <!-- Website Traffic -->
+<!--           <div class="card">
+            <div class="filter">	
+              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                <li class="dropdown-header text-start">
+                  <h6>Filter</h6>
+                </li>
+
+                <li><a class="dropdown-item" href="#">Today</a></li>
+                <li><a class="dropdown-item" href="#">This Month</a></li>
+                <li><a class="dropdown-item" href="#">This Year</a></li>
+              </ul>
+            </div>
+
+            <div class="card-body pb-0">
+              <h5 class="card-title">Website Traffic <span>| Today</span></h5>
+
+              <div id="trafficChart" style="min-height: 400px;" class="echart"></div>
+
+              <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  echarts.init(document.querySelector("#trafficChart")).setOption({
+                    tooltip: {
+                      trigger: 'item'
+                    },
+                    legend: {
+                      top: '5%',
+                      left: 'center'
+                    },
+                    series: [{
+                      name: 'Access From',
+                      type: 'pie',
+                      radius: ['40%', '70%'],
+                      avoidLabelOverlap: false,
+                      label: {
+                        show: false,
+                        position: 'center'
+                      },
+                      emphasis: {
+                        label: {
+                          show: true,
+                          fontSize: '18',
+                          fontWeight: 'bold'
+                        }
+                      },
+                      labelLine: {
+                        show: false
+                      },
+                      data: [{
+                          value: 1048,
+                          name: 'Search Engine'
+                        },
+                        {
+                          value: 735,
+                          name: 'Direct'
+                        },
+                        {
+                          value: 580,
+                          name: 'Email'
+                        },
+                        {
+                          value: 484,
+                          name: 'Union Ads'
+                        },
+                        {
+                          value: 300,
+                          name: 'Video Ads'
+                        }
+                      ]
+                    }]
+                  });
+                });
+              </script>
+
+            </div>
+          </div> --><!-- End Website Traffic -->
+
+          <!-- News & Updates Traffic -->
+<!--           <div class="card">
+            <div class="filter">
+              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                <li class="dropdown-header text-start">
+                  <h6>Filter</h6>
+                </li>
+
+                <li><a class="dropdown-item" href="#">Today</a></li>
+                <li><a class="dropdown-item" href="#">This Month</a></li>
+                <li><a class="dropdown-item" href="#">This Year</a></li>
+              </ul>
+            </div>
+
+            <div class="card-body pb-0">
+              <h5 class="card-title">News &amp; Updates <span>| Today</span></h5>
+
+              <div class="news">
+                <div class="post-item clearfix">
+                  <img src="assets/img/news-1.jpg" alt="">
+                  <h4><a href="#">Nihil blanditiis at in nihil autem</a></h4>
+                  <p>Sit recusandae non aspernatur laboriosam. Quia enim eligendi sed ut harum...</p>
+                </div>
+
+                <div class="post-item clearfix">
+                  <img src="assets/img/news-2.jpg" alt="">
+                  <h4><a href="#">Quidem autem et impedit</a></h4>
+                  <p>Illo nemo neque maiores vitae officiis cum eum turos elan dries werona nande...</p>
+                </div>
+
+                <div class="post-item clearfix">
+                  <img src="assets/img/news-3.jpg" alt="">
+                  <h4><a href="#">Id quia et et ut maxime similique occaecati ut</a></h4>
+                  <p>Fugiat voluptas vero eaque accusantium eos. Consequuntur sed ipsam et totam...</p>
+                </div>
+
+                <div class="post-item clearfix">
+                  <img src="assets/img/news-4.jpg" alt="">
+                  <h4><a href="#">Laborum corporis quo dara net para</a></h4>
+                  <p>Qui enim quia optio. Eligendi aut asperiores enim repellendusvel rerum cuder...</p>
+                </div>
+
+                <div class="post-item clearfix">
+                  <img src="assets/img/news-5.jpg" alt="">
+                  <h4><a href="#">Et dolores corrupti quae illo quod dolor</a></h4>
+                  <p>Odit ut eveniet modi reiciendis. Atque cupiditate libero beatae dignissimos eius...</p>
+                </div>
+
+              </div>End sidebar recent posts
+
+            </div>
+          </div> --><!-- End News & Updates -->
+
+        </div><!-- End Right side columns -->
+
+      </div>
+      
+    </section>
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+<!--   <footer id="footer" class="footer">
+    <div class="copyright">
+      &copy; Copyright <strong><span>Melange System pvt ltd</span></strong>. All Rights Reserved
+    </div>
+  </footer> --><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/chart.js/chart.umd.js"></script>
+  <script src="assets/vendor/echarts/echarts.min.js"></script>
+  <script src="assets/vendor/quill/quill.js"></script>
+  <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+  <script src="assets/vendor/tinymce/tinymce.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- script to send feedback form -->
+<script>
+		/*document.getElementById("feedbackForm").addEventListener("submit", function (event) {
+			event.preventDefault(); // Prevent default form submission
+
+			const submitButton = document.getElementById("submitFeedbackBtn");
+			submitButton.disabled = true; // Disable the submit button to prevent multiple submissions
+
+			const loadingSwal = Swal.fire({
+				title: 'Submitting feedback...',
+				text: 'Please wait while we submit your feedback.',
+				showConfirmButton: false,
+				allowOutsideClick: false,
+				didOpen: () => {
+					Swal.showLoading(); // Display the loading spinner
+				}
+			});
+
+			// Prepare form data
+			let formData = new FormData(this);
+
+			// Append files only once with unique keys
+			let files = document.getElementById("feedbackAttachment").files;
+			if (files.length > 0) {
+				for (let i = 0; i < files.length; i++) {
+					formData.append(`attachment[${i}]`, files[i]); // Use unique keys
+				}
+			}
+
+			let bugType = document.getElementById("bugType").value;
+			formData.append("bugTypeff", bugType); // Add the bug type to the form data
+
+			// Debugging: Log formData entries before the fetch call
+			console.log("Logging formData entries:");
+			for (let [key, value] of formData.entries()) {
+				if (value instanceof File) {
+					console.log(`Key: ${key}, File Name: ${value.name}, Size: ${value.size}`);
+				} else {
+					console.log(`Key: ${key}, Value: ${value}`);
+				}
+			}
+
+			// Make AJAX request
+			fetch("/submitFeedback", {
+				method: "POST",
+				body: formData
+			})
+				.then(response => response.json())
+				.then(data => {
+					loadingSwal.close();
+					submitButton.disabled = false; // Re-enable the button
+					if (data.success) {
+						$('#feedbackModal').modal('hide');
+						Swal.fire({
+							title: 'Success!',
+							text: 'Your feedback has been submitted successfully.',
+							icon: 'success',
+							confirmButtonText: 'OK'
+						});
+					} else {
+						Swal.fire({
+							title: 'Error!',
+							text: 'There was an error submitting your feedback.',
+							icon: 'error',
+							confirmButtonText: 'OK'
+						});
+					}
+				})
+				.catch(error => {
+					console.error('Error:', error);
+					loadingSwal.close();
+					submitButton.disabled = false; // Re-enable the button
+					Swal.fire({
+						title: 'Error!',
+						text: 'There was an error submitting your feedback.',
+						icon: 'error',
+						confirmButtonText: 'OK'
+					});
+				});
+		});
+
+		// Clear form fields when the modal is closed
+		document.getElementById('feedbackModal').addEventListener('hidden.bs.modal', function () {
+			const feedbackForm = document.getElementById('feedbackForm');
+			feedbackForm.reset(); // Reset the form fields
+			document.getElementById('feedbackAttachment').value = ""; // Clear file input manually
+		});*/
+		
+	</script>
+
+
+<!-- <div id="attendence-chart"></div> -->
+<script src="/path/to/your/timer.js"></script>
+    <script>
+        // Function to calculate elapsed time
+        function calculateElapsedTime(loggedInTime) {
+            const currentTime = new Date();
+            
+            // Parse the logged-in time (format: HH:mm:ss) into a date object for today
+            const [hours, minutes, seconds] = loggedInTime.split(":").map(Number);
+            const loggedInDate = new Date();
+            loggedInDate.setHours(hours, minutes, seconds, 0);  // Set the time
+
+            // Calculate the difference in milliseconds
+            const elapsedMs = currentTime - loggedInDate;
+
+            // Convert milliseconds into hours, minutes, and seconds
+            const totalSeconds = Math.floor(elapsedMs / 1000);
+            const hoursWorked = Math.floor(totalSeconds / 3600);
+            const minutesWorked = Math.floor((totalSeconds % 3600) / 60);
+            const secondsWorked = totalSeconds % 60;
+
+            // Format as HH:mm:ss
+            const formattedElapsedTime = `${String(hoursWorked).padStart(2, '0')}:${String(minutesWorked).padStart(2, '0')}:${String(secondsWorked).padStart(2, '0')}`;
+
+            return formattedElapsedTime;
+        }
+
+        // Function to update elapsed time every second
+        function startTimer(loggedInTime) {
+            if (loggedInTime === "" || loggedInTime === "00:00:00") {
+                document.getElementById('elapsedTime').textContent = "00:00:00";
+            } else {
+                setInterval(() => {
+                    const elapsedTime = calculateElapsedTime(loggedInTime);
+                    document.getElementById('elapsedTime').textContent = elapsedTime;
+                }, 1000);
+            }
+        }
+
+        // Get the logged-in time from the HTML and start the timer
+        const loggedInTime = document.getElementById('start-time').textContent || "00:00:00";
+        startTimer(loggedInTime);
+    </script>
+
+
+<!-- script to fetch events -->
+<script>
+    // Fetch data from the backend
+   fetch('/api/events')
+    .then(response => response.json())
+    .then(data => {
+        console.log("..................data" + JSON.stringify(data));
+        const activityDiv = document.querySelector('.activity');
+        activityDiv.innerHTML = ''; // Clear existing content
+
+        // Helper function to format date to 'dd-MM-yyyy'
+        /* function formatDate(date) {
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+            const year = date.getFullYear();
+            return `${day}-${month}-${year}`;
+        } */
+        
+        function formatDate(date) {
+		    const day = String(date.getDate()).padStart(2, '0');
+			 const month = date.toLocaleString('default', { month: 'short' });// Months are zero-indexed
+		    return `${day}-${month}`;
+		}
+
+
+        const today = new Date(); // Get today's date
+
+        
+     // Sort the data array: completed events (past events) go last
+        data.sort((a, b) => {
+ 		    const dateA = new Date(a.date.split('-').reverse().join('-'));
+ 		    const dateB = new Date(b.date.split('-').reverse().join('-'));
+ 		
+ 		    // Get day values
+ 		    const dayA = dateA.getDate();
+ 		    const dayB = dateB.getDate();
+ 		    const todayDay = today.getDate();
+ 		
+ 		    // Check if completed (based on day only)
+ 		    const isCompletedA = dayA < todayDay;
+ 		    const isCompletedB = dayB < todayDay;
+ 		
+ 		    // Push completed events to the end
+ 		    if (isCompletedA && !isCompletedB) return 1;
+ 		    if (!isCompletedA && isCompletedB) return -1;
+ 		
+ 		    // Otherwise, sort by day in ascending order
+ 		    return dayA - dayB;
+ 		});
+
+        // Render sorted events
+        data.forEach(event => {
+        	
+        	// Skip event if content contains "SANJAY V RAJ 's Birthday"
+            if (event.content.indexOf("SANJAY V RAJ 's Birthday") !== -1) {
+                return;
+            }
+            const eventDate = new Date(event.date.split('-').reverse().join('-'));
+
+            const activityItem = document.createElement('div');
+            activityItem.classList.add('activity-item', 'd-flex');
+
+            const activiteLabel = document.createElement('div');
+            activiteLabel.classList.add('activite-label');
+            activiteLabel.textContent = formatDate(eventDate);
+
+
+            const activityBadge = document.createElement('i');
+            activityBadge.classList.add('bi', 'bi-circle-fill', 'activity-badge', event.badgeColor, 'align-self-start');
+            activityBadge.style.backgroundColor = event.badgeColor || '#cccccc'; // Default color if not specified
+
+            const activityContent = document.createElement('div');
+            activityContent.classList.add('activity-content');
+            activityContent.innerHTML = event.content;
+
+            // Check if the event is completed and apply dimming
+            if (eventDate.getDate() < today.getDate()) {
+                activityItem.classList.add('disabled');
+                activityItem.style.opacity = '0.5'; // Gray out past events
+            }
+
+            activityItem.appendChild(activiteLabel);
+            activityItem.appendChild(activityBadge);
+            activityItem.appendChild(activityContent);
+
+            activityDiv.appendChild(activityItem);
+        });
+
+        // Add 'View More' button
+        const viewMoreButton = document.createElement('div');
+        viewMoreButton.classList.add('view-more');
+        viewMoreButton.textContent = 'View More';
+
+        viewMoreButton.addEventListener('click', function() {
+            // Toggle expansion
+            activityDiv.classList.toggle('expanded');
+            if (activityDiv.classList.contains('expanded')) {
+                viewMoreButton.textContent = 'View Less';
+            } else {
+                viewMoreButton.textContent = 'View More';
+            }
+        });
+
+        activityDiv.appendChild(viewMoreButton);
+
+        // If the content doesn't overflow, hide the "View More" button
+        if (activityDiv.scrollHeight <= activityDiv.clientHeight) {
+            viewMoreButton.classList.add('hidden');
+        }
+    })
+    .catch(error => console.error('Error fetching events:', error));
+</script>
+
+
+<!-- script to notification -->
+<script>
+// Function to fetch flag value from the backend
+function fetchFlag() {
+    $.get("/flag", function(response) {
+        var leaveRequestCountValue = response; 
+        // console.log(leaveRequestCountValue);
+        // If total notification count is greater than 0, show the bell icon and notifications
+        if (leaveRequestCountValue.leaveRequestFlagCount > 0) {
+            $("#notificationBellIcon").show();  // Show bell icon
+            $("#leaveRequestNotification").show();  // Show specific notification
+            
+            $("#leaveRequestMessage").text(leaveRequestCountValue.leaveRequestFlagCount + " leave request(s)");
+            $(".badge-number").text(leaveRequestCountValue.leaveRequestFlagCount);
+            $("#leaveRequestFlagCount").text(leaveRequestCountValue.leaveRequestFlagCount);
+        }  
+        
+        //display the asset notifu=ication based on asset count value
+        if(leaveRequestCountValue.asseteRequestFlagCount>0){
+        	 
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#assetRequestNotification").show();  // Show specific notification
+             
+             $("#assetRequestMessage").text(leaveRequestCountValue.asseteRequestFlagCount + " asset request(s)");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+             $("#asseteRequestFlagCount").text(leaveRequestCountValue.asseteRequestFlagCount);
+        	 	
+        }      
+        	
+        //display the new project notification based on asset count value
+        if(leaveRequestCountValue.newPrjectValueCount>0){
+        	
+        	 $("#notificationBellIcon").show();     // Show bell icon
+             $("#newProjectNotification").show();  // Show specific notification
+             
+             $("#newProjectMessage").text(leaveRequestCountValue.newPrjectValueCount + " project request(s)");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+             $("#newPrjectValueCount").text(leaveRequestCountValue.asseteRequestFlagCount); 
+             
+        }
+        
+        //display the appraisal from HR notification
+        if(leaveRequestCountValue.appraisalCount>0){
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#hrAppraisal").show();  // Show specific notification
+             
+             $("#apprisalHrNotification").text(" Appraisal Form");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+             $("#appraisalCount").text(leaveRequestCountValue.asseteRequestFlagCount);
+        }
+        
+        //display the appraisal from employee notification 
+        if(leaveRequestCountValue.empAppraisalflag>0){
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#empAppraisal").show();  // Show specific notification
+             
+             $("#apprisalempNotification").text(leaveRequestCountValue.empAppraisalflag + " employees sent appraisal");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+             $("#empAppraisalflag").text(leaveRequestCountValue.asseteRequestFlagCount);
+        }
+        
+        //display the appraisal Due date notification 
+        if(leaveRequestCountValue.adminAppraisalDuedate>0){
+        	 $("#dueAppraisal").show();  // Show bell icon
+             $("#empAppraisal").show();  // Show specific notification
+             
+             $("#apprisalDueNotification").text("Tomorrow is the due date for submit appraisal");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+             $("#adminAppraisalDuedate").text(leaveRequestCountValue.asseteRequestFlagCount);
+        }
+        
+        //display the asset notifu=ication based on asset count value
+        if(leaveRequestCountValue.announcementNotification>0){
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#newAnnouncementNotification").show();  // Show specific notification
+             
+             $("#newannouncement").text(leaveRequestCountValue.announcementNotification + " announcement(s)");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);             
+        }  
+        
+        //display the leave request status change notification
+        if(leaveRequestCountValue.leaveRequestStatusChangeValue > 0){
+        	 
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#leaveRequestSatusChangeNotification").show();  // Show specific notification
+             
+             $("#leaveRequestSatusChangeMessage").text("Your leave request status has been");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);             
+        	 	
+        }  
+    });
+}
+
+// Periodically fetch flag value every second (adjust as needed)
+setInterval(fetchFlag, 1000);
+
+</script>
+
+<!-- script to notification link redirect -->
+<script th:inline="javascript">
+    function redirectToLeaveRequest() {
+        var empid = /*[[${empDetailsByEmpId.empid}]]*/ 'defaultEmpId';
+        window.location.href = '/viewAdminLeaves?empid=' + empid;
+    }
+    function redirectToAsset() {
+        //var empid = /*[[${empDetailsByEmpId.empid}]]*/ 'defaultEmpId';
+        window.location.href = '/asset';
+    }
+    function redirectToProject() {
+        //var empid = /*[[${empDetailsByEmpId.empid}]]*/ 'defaultEmpId';
+        window.location.href = '/ongoingProject';
+    }    
+    function redirectToAppraisal() {
+    	var empid = /*[[${empDetailsByEmpId.empid}]]*/ 'defaultEmpId';
+    	window.location.href = '/apprisal?empid=' + empid;
+    }    
+    function redirectToemployeeAppraisal() {
+    	var empid = /*[[${empDetailsByEmpId.empid}]]*/ 'defaultEmpId';
+    	window.location.href = '/employeeApprisal?empid=' + empid;
+    }    
+    function redirectToAnnouncement() {
+    	var empid = /*[[${empDetailsByEmpId.empid}]]*/ 'defaultEmpId';
+    	window.location.href = '/events';
+    }
+    function redirectToAttendence() {
+    	var email = /*[[${empDetailsByEmpId.email}]]*/ 'defaultEmpId';
+    	var leaveTabActive='leaveTabActive';
+    	//window.location.href = '/attendanceLive?email=' +email + '/'+ ;
+    	 window.location.href = '/attendanceLive?email=' + email + '&tab=leaves' ;
+    }
+</script>
+
+<!-- script for display attendence graph -->
+<script>
+const data = [
+    { name: 'Present', count: 23 },
+    { name: 'Absent', count: 6},
+   
+];
+
+        	console.log(data);
+            // Initialize the chart with the fetched data
+            Highcharts.chart('attendence-chart1', {
+                chart: {
+                    type: 'pie'
+                },
+                title: {
+                    text: ''
+                },
+                plotOptions: {
+                    pie: {
+                        dataLabels: {
+                            enabled: true,
+                            distance: 5, // Move labels slightly outside the pie
+                            formatter: function() {
+                                return this.point.name + ': <br>' + this.point.y;
+                            },
+                            style: {
+                                color: 'black',
+                                textOutline: 'none'
+                            }
+                        }
+                    }
+                },
+                series: [{
+                    name: 'Employees',
+                    data: data.map(dept => [dept.name, dept.count])
+                }]
+            });
+       
+</script>
+
+<!--  <script>
+window.onload = function() {
+    var apprisalLink = document.getElementById("apprisalLink");
+    if (apprisalLink) {
+        apprisalLink.classList.add('blinking');  // Add blinking class
+        apprisalLink.focus();  // Set focus after animation
+    }
+};
+</script>  -->
+
+<!-- script for profile pic -->
+<script>
+$.ajax({
+    type: "GET",
+    url: "fetchEmployeeDocumentDetailsOnlyByEmpId",
+    data: {
+        "emp_id": $('#emp_idSessionValue').val()
+    },
+    success: function(data) {
+    	console.log("++++data"+JSON.stringify(data));
+        $('#dynamicProfilePic').attr('src', `${data.profilePicPath}`);
+    },
+    error: function(xhr, status, error) {
+        console.error("Error invoking data:", error);
+    }
+});
+</script>
+
+
+<!-- script for spinner -->
+<script>
+window.addEventListener('load', function () {
+    const loadingPopup = document.getElementById('loadingPopup');
+    const mainContent = document.getElementById('mainContent');
+    
+    // Add a fade-out effect for the loading popup
+    loadingPopup.style.transition = 'opacity 0.5s ease';
+    loadingPopup.style.opacity = '0';
+    
+    setTimeout(() => {
+        loadingPopup.style.display = 'none'; // Hide the popup after fade-out
+        mainContent.style.display = 'block'; // Show the main content
+    }, 500); // Match the transition duration
+});
+</script>
+
+
+<!-- script to view more project in dashboard -->
+<script>
+    function toggleProjects() {
+        const moreProjects = document.getElementById('more-projects');
+        const viewMoreBtn = document.getElementById('view-more-btn');
+        const isHidden = moreProjects.classList.contains('d-none');
+
+        moreProjects.classList.toggle('d-none');
+        viewMoreBtn.textContent = isHidden ? 'View Less' : 'View More';
+        viewMoreBtn.setAttribute('aria-expanded', isHidden.toString());
+    }
+</script>	
+
+<!-- script to open missspunch popup -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const dateList = document.querySelectorAll('#missingPunchDatesList li');
+	const noMissedPunchesMessage = document.getElementById('noMissedPunchesMessage');
+    dateList.forEach(item => {
+        const originalDate = item.textContent; // e.g., "2024-12-07"
+        if (originalDate !== "No missed punches.") {
+            const formattedDate = formatDate(originalDate); // Convert to "07-12-2024"
+            item.textContent = formattedDate;
+        }
+    });
+	// If there are no missed punches, display the 'No missed punches' message
+	   if (dateList.length === 0 || (dateList[0].textContent === "No missed punches.")) {
+	       noMissedPunchesMessage.style.display = 'block';
+	   }
+});
+
+function formatDate(date) {
+    const day = String(date.getDate()).padStart(2, '0');
+	 const month = date.toLocaleString('default', { month: 'short' });// Months are zero-indexed
+    return `${day}-${month}`;
+}
+
+function openPopup() {
+    const dateList = document.getElementById('missingPunchDatesList');
+	const noMissedPunchesMessage = document.getElementById('noMissedPunchesMessage');
+	if (dateList.children.length === 0 || (dateList.children[0].textContent === "No missed punches.")) {
+	        noMissedPunchesMessage.style.display = 'block';
+	    } else {
+	        noMissedPunchesMessage.style.display = 'none';
+	    }
+    document.getElementById('missingPunchDatesPopup').style.display = 'flex';
+}
+
+function closePopup() {
+    document.getElementById('missingPunchDatesPopup').style.display = 'none';
+}
+</script>
+
+<!-- script to display available popup -->
+<script>
+//function to display leave balance modal
+function displayLeaveBalance(email){
+    // Remove surrounding double quotes if they exist
+    email = email.replace(/^"|"$/g, ''); 
+	
+	
+	fetch(`/leaveRecords/${email}`, { method: 'GET' })
+		                .then(response => {
+		                    console.log("Fetch request sent for leave records");
+
+		                    if (!response.ok) {
+		                        throw new Error('Network response was not ok for leave records');
+		                    }
+		                    return response.json();
+		                })
+		                .then(data => {
+		                    console.log("Leave records data received from backend:", data);
+
+		                    const tbody = document.querySelector('#leaveRecordsTable');
+		                    tbody.innerHTML = ''; // Clear existing rows
+
+		                    if (!data || data.length === 0) {
+		                        const sickLeaveRow = document.createElement('tr');
+		                        sickLeaveRow.innerHTML = `
+		                            <td>Sick Leave</td>
+		                            <td>0</td>
+		                            <td>0</td>
+		                            <td>0</td>
+		                        `;
+		                        tbody.appendChild(sickLeaveRow);
+
+		                        const casualLeaveRow = document.createElement('tr');
+		                        casualLeaveRow.innerHTML = `
+		                            <td>Casual Leave</td>
+		                            <td>0</td>
+		                            <td>0</td>
+		                            <td>0</td>
+		                        `;
+		                        tbody.appendChild(casualLeaveRow);
+		                    } else {
+		                        data.forEach(record => {
+		                            const row = document.createElement('tr');
+		                            row.innerHTML = `
+		                                <td>${record.leaveType}</td>
+		                                <td>${record.totalAdded || '0'}</td>
+		                                <td>${record.totalUsed || '0'}</td>
+		                                <td>${record.remaining || '0'}</td>
+		                            `;
+		                            tbody.appendChild(row);
+		                        });
+		                    }
+
+		                    return fetch('/fetchMaternityLeave/${email}', { method: 'GET' });
+		                })
+		                 .then(() => fetch(`/calculate-earned-leave?year=${new Date().getFullYear()}&email=${email}`, { method: 'GET' }))
+		                .then(response => {
+		                    console.log("Fetch request sent for calculated earned leave");
+		                    console.log("Fetch request sent for calculated earned leave");
+		                    console.log("Calculated Earned Leave Response Status:", response.status);
+
+		                    if (!response.ok) {
+		                        throw new Error('Network response was not ok for calculated earned leave');
+		                    }
+		                    return response.json();
+		                })
+		                .then(earnedLeave => {
+		                    console.log("Calculated leave data received from backend:", earnedLeave);
+
+		                    const row = document.createElement('tr');
+		                    row.innerHTML = `
+		                        <td>Earned Leave</td>
+		                        <td>${earnedLeave.earnedLeave || '0'}</td>
+		                        <td>${earnedLeave.elUsed || '0'}</td>
+		                        <td>${earnedLeave.elRemaining || '0'}</td>
+		                    `;
+		                    const tbody = document.querySelector('#leaveRecordsTable');
+		                    tbody.appendChild(row);
+
+		                    // Hide the spinner and show the modal
+		                    loadingSpinner.style.display = "none";
+
+		                    const modal = new bootstrap.Modal(document.getElementById('leaveDetailsModal'));
+		                    modal.show();
+		                })
+		                .catch(error => {
+		                    console.error('Error fetching data:', error);
+
+		                    // Hide the spinner on error
+		                    loadingSpinner.style.display = "none";
+		                });
+	
+	
+	
+	
+	const modal = new bootstrap.Modal(document.getElementById('leaveDetailsModal'));
+    modal.show();
+    
+}
+</script>
+<!-- <script>
+
+    let logoutTimer;
+
+    function resetTimer() {
+    	/* alert(logoutTimer); */
+    	console.log("logoutTimer---"+logoutTimer);
+        clearTimeout(logoutTimer);
+        // Redirect to the login page after 15 minutes (900,000 ms) of inactivity
+        logoutTimer = setTimeout(() => {
+            alert("Session expired due to inactivity. Redirecting to login page.");
+            window.location.href = '/'; // Redirect to your login page
+        }, 5000); 
+    }
+
+    // Reset the timer on user activities
+    window.onload = resetTimer;
+    document.onmousemove = resetTimer;
+    document.onkeypress = resetTimer;
+    
+</script> -->
+
+<!-- script to change "entries per page" to "Entries Per Page" -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Function to convert text to title case (capitalize each word)
+    function toTitleCase(text) {
+      return text
+        .toLowerCase()
+        .replace(/\b(\w)/g, (match) => match.toUpperCase());
+    }
+
+    // Target the `.datatable-dropdown` and find the label text node
+    const dropdownLabel = document.querySelector('.datatable-dropdown label');
+    if (dropdownLabel) {
+      // Iterate through child nodes to find text nodes
+      dropdownLabel.childNodes.forEach((node) => {
+        if (node.nodeType === Node.TEXT_NODE && node.textContent.includes('entries per page')) {
+          // Update the text content to title case
+          node.textContent = toTitleCase(node.textContent.trim());
+        }
+      });
+    }
+  });
+</script>
+
+<!-- script to display display modal to password change  -->
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const passwordChangeFlag = '[[${passwordChangeFalgValue}]]';
+        if (passwordChangeFlag === '1') { // Compare as a string
+            const modal = new bootstrap.Modal(document.getElementById('passwordChangeModal'));
+            modal.show();
+        }
+    });
+</script>
+
+<!-- Bootstrap JS -->
+<!-- script to validate and update password for the first time -->
+<script>
+document.getElementById("passwordChangeForm").addEventListener("submit", async function (e) {
+    e.preventDefault(); // Prevent the form from submitting normally
+
+    const empId = document.getElementById("employeeId").value;
+    const currentPassword = document.getElementById("currentPassword").value;
+    const newPassword = document.getElementById("newPassword").value;
+    const renewPassword = document.getElementById("renewPassword").value;
+
+    // Clear previous error messages
+    document.getElementById("currentPasswordError").textContent = "";
+    document.getElementById("newPasswordError").textContent = "";
+    document.getElementById("renewPasswordError").textContent = "";
+
+    try {
+        // Step 1: Verify current password with the backend
+        const verifyResponse = await fetch("/verifyCurrentPassword", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: new URLSearchParams({
+                empId: empId,
+                currentPassword: currentPassword
+            })
+        });
+
+        const verifyData = await verifyResponse.json();
+
+        if (!verifyResponse.ok || !verifyData.success) {
+            // Display error for current password
+            document.getElementById("currentPasswordError").textContent = verifyData.message || "Current password is incorrect.";
+            return;
+        }
+
+        // Step 2: Check if the new password and re-entered password match
+        if (newPassword !== renewPassword) {
+            document.getElementById("newPasswordError").textContent = "New Password and Re-entered Password do not match.";
+            document.getElementById("renewPasswordError").textContent = "New Password and Re-entered Password do not match.";
+            return;
+        }
+
+        // Step 3: Update the password
+        const updateResponse = await fetch("/updatePassword", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: new URLSearchParams({
+                empId: empId,
+                newPassword: newPassword,                    
+            })
+        });
+
+        const updateData = await updateResponse.json();
+
+        if (updateResponse.ok) {
+        	 // Close the password change modal
+            const passwordChangeModal = bootstrap.Modal.getInstance(document.getElementById('passwordChangeModal'));
+            passwordChangeModal.hide();
+            // Update success message in the modal
+            document.getElementById("successMessage").textContent = updateData.message || "Password updated successfully!";
+            
+            // Show the success modal
+            const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+            successModal.show();
+
+            // Reset the form
+            document.getElementById("passwordChangeForm").reset(); 
+
+            // Optionally, redirect after some time
+            setTimeout(function() {
+                window.location.href = "/userDashboard";
+            }, 2000)
+
+        } else {
+            // Display update error
+            document.getElementById("newPasswordError").textContent = updateData.message || "Failed to update password.";
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        document.getElementById("currentPasswordError").textContent = "An error occurred. Please try again.";
+    }
+});
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,3214 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="utf-8">
+	<meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+	<title>Book of Knowledge</title>
+	<meta content="" name="description">
+	<meta content="" name="keywords">
+
+	<!-- Favicons -->
+	<link href="assets/img/favicon.png" rel="icon">
+	<link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+	<!-- Google Fonts -->
+	<!--<link href="https://fonts.gstatic.com" rel="preconnect">
+	<link
+		href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+		rel="stylesheet">-->
+		
+		<link rel="stylesheet" href="/assets/font/fonts.css"> 
+
+	<!-- Vendor CSS Files -->
+	<link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+	<link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+	<link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
+	<link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+	<link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+	<link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+	<!-- Template Main CSS File -->
+	<link href="assets/css/style.css" rel="stylesheet">
+	<script src="assets/js/highcharts.js"></script>
+	<script src="assets/js/jquery-3.6.0.min.js"></script>
+	<script src="assets/js/sweetalert2.all.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+	
+	<!--<script src="https://code.highcharts.com/highcharts.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>-->
+	<!--CHAT BOOT-->
+
+			<!-- Include SockJS and Stomp.js libraries -->
+		<!--	<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.3.0/sockjs.min.js"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>-->
+
+			<script src="assets/js/sockjs.min.js"></script>
+			<script src="assets/js/stomp.min.js"></script>
+
+	<!-- =======================================================
+  * Template Name: NiceAdmin
+  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+  * Updated: Apr 20 2024 with Bootstrap v5.3.3
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+	<style>
+		* {
+			font-size: 14px;
+		}
+
+		.card {
+			border: 1px solid #ddd;
+			border-radius: 8px;
+			padding: 15px;
+			margin-bottom: 20px;
+		}
+
+		.info-card {
+			background-color: #fff;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+		}
+
+		#attendence-chart {
+			width: 100%;
+			height: 190px;
+			/* Adjust the height as needed */
+		}
+
+		/* Example CSS to style disabled items */
+		.activity-item .disabled {
+			pointer-events: none;
+			/* Disable interactions */
+			opacity: 0.5;
+			/* Make the item appear grayed out */
+		}
+
+		.profile-picture {
+			width: 40px;
+			/* Adjust the size as needed */
+			height: 150px;
+			/* Ensure the height and width are the same */
+			border-radius: 50%;
+			/* This makes the image a circle */
+			object-fit: cover;
+			/* Ensures the image fits within the circle */
+		}
+
+		/* Make the body take up the full height of the viewport */
+		body {
+			display: flex;
+			flex-direction: column;
+			min-height: 100vh;
+			margin: 0;
+		}
+
+		/* Ensure the main content takes up all available space */
+		main {
+			flex: 1;
+		}
+
+		/* Style the footer */
+		.footer {
+			background-color: #f8f9fa;
+			/* Light gray background */
+			text-align: center;
+			/* Center-align text */
+			padding: 10px 0;
+			/* Add some padding */
+			font-size: 14px;
+			/* Set font size */
+		}
+
+		/* Blinking animation */
+		@keyframes blink {
+
+			0%,
+			100% {
+				opacity: 1;
+				/* Fully visible */
+			}
+
+			50% {
+				opacity: 0;
+				/* Invisible */
+			}
+		}
+
+		/* Target only the Apprisal link for the blinking effect */
+		#apprisalLink.blinking {
+			animation: blink 0.5s ease-in-out 3;
+			/* Blinks 3 times in 0.5s intervals */
+		}
+
+		.toast-notification {
+			position: fixed;
+			bottom: 20px;
+			right: 20px;
+			background: linear-gradient(135deg, #007bff, #00d4ff);
+			color: white;
+			padding: 15px 20px;
+			border-radius: 10px;
+			box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+			z-index: 1000;
+			opacity: 0;
+			transform: translateX(100%);
+			transition: opacity 0.3s ease, transform 0.3s ease-in-out;
+			font-family: 'Arial', sans-serif;
+			font-size: 14px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			min-width: 250px;
+			gap: 10px;
+		}
+
+		/* Fade-in effect */
+		.toast-notification.show {
+			opacity: 1;
+			transform: translateX(0);
+		}
+
+		/* Close button */
+		.toast-close {
+			cursor: pointer;
+			font-size: 16px;
+			opacity: 0.8;
+			transition: opacity 0.2s;
+		}
+
+		.toast-close:hover {
+			opacity: 1;
+		}
+
+		/* Fade-out effect */
+		.toast-notification:not(.show) {
+			opacity: 0;
+			transform: translateX(100%);
+			transition: opacity 0.3s ease, transform 0.3s ease-in-out;
+		}
+		
+
+		/* Style for the new feature list item */
+			.nav-item.new-feature {
+			  position: relative; /* Needed for pseudo-element positioning */
+			}
+
+			/* Create the "New" badge with a pseudo-element */
+		/*	.nav-item.new-feature::after {
+			  content: 'New';
+			  position: absolute;
+			  top: -8px;
+			  right: -10px;
+			  background-color: #28a745;
+			  color: #fff;
+			  font-size: 0.7rem;
+			  font-weight: bold;
+			  padding: 2px 6px;
+			  border-radius: 10px;
+			  animation: pulse 2s infinite;
+			}*/
+
+			/* Keyframes for a simple pulsating effect */
+			/*@keyframes pulse {
+			  0% {
+			    transform: scale(1);
+			    opacity: 1;
+			  }
+			  50% {
+			    transform: scale(1.1);
+			    opacity: 0.8;
+			  }
+			  100% {
+			    transform: scale(1);
+			    opacity: 1;
+			  }
+			}*/
+			
+			/* Ensure version number appears on a new line */
+						.release-note-text {
+						  display: flex;
+						  flex-direction: column; /* Stacks elements vertically */
+						  font-size: 1rem;
+						}
+
+						/* Optional: Adjust the version number styling */
+						.version-number {
+						  font-size: 0.9rem;
+						  font-weight: bold;
+						  color: #555;
+						}
+						
+						/* Reduce spacing above/below the submenu */
+																					ul.submenu {
+																					    margin-top: 0px;  /* Adjust as needed */
+																					    padding-top: 0px; /* Reduce top padding */
+																					}
+
+																					/* Optional: tighten spacing for submenu items */
+																					ul.submenu li a.nav-link {
+																					    padding: 4px 10px;  /* Adjust to your desired tightness */
+																					    line-height: 1.2;   /* Reduce line height for compactness */
+																					}
+																					#documentFrame {
+																					  border: none;
+																					  outline: none;
+																					  width: 100%;
+																					  height: 600px;
+																					}
+																					.wrap-text {
+																					   white-space: normal;
+																					   word-wrap: break-word;
+																					   word-break: break-all;
+																					   max-width: 200px; /* Adjust as needed */
+																					 }
+																					 /* Glassmorphism Card */
+																					
+																					 .dept-card {
+																					     position: relative;
+																					     border-radius: 18px;
+																					     background: rgba(255, 255, 255, 0.85); /* glass effect */
+																					     border: 2px solid transparent;
+																					     background-clip: padding-box;
+																					     transition: all 0.3s ease;
+																					     cursor: pointer;
+																					     min-height: 180px;
+																					     display: flex;
+																					     flex-direction: column;
+																						 align-items: center;   /* horizontal center */
+																					     justify-content: center;
+																						 text-align: center;
+																					     padding: 20px;
+																					     box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+																					     backdrop-filter: blur(8px);
+																					 }
+
+																					 /* Add a gradient border effect */
+																					 .dept-card::before {
+																					     content: "";
+																					     position: absolute;
+																					     inset: 0;
+																					     border-radius: 18px;
+																					     padding: 2px;
+																					     background: linear-gradient(135deg, #a0c4ff, #bdb2ff, #ffc6ff, #ffd6a5);
+																					     -webkit-mask: 
+																					         linear-gradient(#fff 0 0) content-box, 
+																					         linear-gradient(#fff 0 0);
+																					     -webkit-mask-composite: xor;
+																					     mask-composite: exclude;
+																					     pointer-events: none;
+																					 }
+
+																					 /* Hover: scale + shadow + glow */
+																					 .dept-card:hover {
+																					     transform: translateY(-6px) scale(1.02);
+																					     box-shadow: 0px 8px 24px rgba(0,0,0,0.1);
+																					 }
+
+																					 /* Active/Selected: stronger blue glow */
+																					 .dept-card.active {
+																					     box-shadow: 0 0 0 3px rgba(76, 139, 245, 0.3), 
+																					                 0 8px 24px rgba(76, 139, 245, 0.2);
+																					 }
+
+																					 .dept-icon {
+																					     background: var(--icon-gradient, linear-gradient(135deg, #8BBEE8, #6DA9D8));
+																					     color: white;
+																					     border-radius: 50%;
+																					     width: 70px;
+																					     height: 70px;
+																					     display: inline-flex;
+																					     align-items: center;
+																					     justify-content: center;
+																					     font-size: 1.8rem;
+																					     box-shadow: 
+																					         0 4px 12px rgba(0,0,0,0.12),
+																					         inset 1px 1px 2px rgba(255,255,255,0.4);
+																					     transition: transform 0.3s ease, box-shadow 0.3s ease;
+																					 }
+
+
+																					 /* Hover effect: rotate slightly + stronger glow */
+																					 .dept-card:hover .dept-icon {
+																					     transform: rotate(5deg) scale(1.05);
+																					     box-shadow: 
+																					         inset 2px 2px 5px rgba(255,255,255,0.6),
+																					         inset -2px -2px 5px rgba(0,0,0,0.2),
+																					         0 6px 14px rgba(0,0,0,0.18);
+																					 }
+
+																					 /* Icon color tweaks for better contrast */
+																					 .dept-icon i {
+																					     filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.25));
+																					 }
+
+																					  /* --- Smooth animations --- */
+																					  .slide-out {
+																					    animation: slideOut 0.4s ease forwards;
+																					  }
+																					  .slide-in {
+																					    animation: slideIn 0.4s ease forwards;
+																					  }
+
+																					  @keyframes slideOut {
+																					    from { opacity: 1; transform: translateY(0); }
+																					    to { opacity: 0; transform: translateY(-20px); }
+																					  }
+																					  @keyframes slideIn {
+																					    from { opacity: 0; transform: translateY(20px); }
+																					    to { opacity: 1; transform: translateY(0); }
+																					  }
+																					
+																					  /* Card */
+																					  .doc-card {
+																					      background: linear-gradient(135deg, #ffffff, #f9fafb);
+																					      border-radius: 16px;
+																					      box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+																					      padding: 20px;
+																					      display: flex;
+																					      flex-direction: column;
+																					      height: 100%;
+																					      transition: transform 0.3s ease, box-shadow 0.3s ease;
+																					      border: 1px solid #e2e8f0;
+																					      position: relative;
+																					      overflow: hidden;
+																					  }
+																					  .doc-card::before {
+																					      content: "";
+																					      position: absolute;
+																					      top: 0;
+																					      left: 0;
+																					      width: 100%;
+																					      height: 2px; /* decreased thickness */
+																					      background: linear-gradient(90deg, #f59e0b, #ec4899, #3b82f6, #f59e0b);
+																					      background-size: 300% 100%;
+																					      border-top-left-radius: 16px;
+																					      border-top-right-radius: 16px;
+																					      animation: gradient-move 4s linear infinite;
+																					  }
+
+																					  @keyframes gradient-move {
+																					      0% { background-position: 0% 50%; }
+																					      100% { background-position: 100% 50%; }
+																					  }
+
+
+
+
+
+
+																					  .doc-card:hover {
+																					      transform: translateY(-6px) scale(1.01);
+																					      box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+																					  }
+
+																					  /* Date Styling */
+																					  .doc-date {
+																					      font-size: 0.85rem;
+																					      font-style: italic;
+																					      font-weight: 600;
+																					      color: #334155;
+																					      background: #f8fafc;
+																					      padding: 4px 12px;
+																					      border-radius: 8px;
+																					      display: inline-block;
+																					      letter-spacing: 0.3px;
+																					      box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+																					      float: right;              /* ✅ move to right side */
+																					      margin-left: auto;         /* ensures it sticks to right */
+																					  }
+
+																					  .doc-date i {
+																					      color: #2563eb;
+																					      margin-right: 4px;
+																					  }
+
+																					  .doc-card:hover .doc-date {
+																					      background: #e0f2fe;
+																					      color: #1e3a8a;
+																					  }
+
+
+																					  /* Title */
+																					  .doc-title {
+																					      font-size: 1.1rem;
+																					      font-weight: 700;
+																					      color: #0f172a;
+																					      margin-bottom: 10px;
+																					      line-height: 1.5;
+																					      letter-spacing: -0.2px;
+																					      transition: color 0.2s ease;
+																					  }
+																					  .doc-card:hover .doc-title {
+																					      color: #1d4ed8;
+																					  }
+
+																					  /* Details */
+																					  .doc-details p {
+																					      font-size: 0.85rem;
+																					      color: #475569;
+																					      margin-bottom: 6px;
+																					      display: flex;
+																					      align-items: center;
+																					      gap: 8px;
+																					  }
+																					  .doc-details i {
+																					      color: #2563eb;
+																					      font-size: 1rem;
+																					  }
+
+																					  /* View Button */
+																					  .btn-view {
+																					      background: linear-gradient(90deg, #2563eb, #1d4ed8);
+																					      color: white;
+																					      border: none;
+																					      padding: 8px 14px;
+																					      border-radius: 10px;
+																					      font-size: 0.85rem;
+																					      font-weight: 600;
+																					      margin-top: auto;
+																					      margin-left: auto;
+																					      transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+																					  }
+																					  .btn-view:hover {
+																					      background: linear-gradient(90deg, #1d4ed8, #1e3a8a);
+																					      transform: translateY(-2px) scale(1.07);
+																					      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+																					  }
+
+			
+
+
+																					  
+																					  #searchBarContainer .btn {
+																					      white-space: nowrap; /* keeps button text in one line */
+																					  }
+
+
+																					  .btn-back {
+																					      background: linear-gradient(90deg, #2563eb, #1d4ed8);
+																					      color: white;
+																					      border: none;
+																					      padding: 6px 14px;
+																					      border-radius: 30px;
+																					      font-size: 0.9rem;
+																					      font-weight: 500;
+																					      display: flex;
+																					      align-items: center;
+																					      gap: 6px;
+																					      transition: all 0.2s ease;
+																					      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+																					  }
+																					  .btn-back:hover {
+																					      background: linear-gradient(90deg, #1d4ed8, #1e3a8a);
+																					      transform: translateY(-1px);
+																					  }
+																					  .btn-back i {
+																					      font-size: 1rem;
+																					  }
+
+																					  .viewer-item {
+																					    transition: background 0.2s ease, transform 0.1s ease;
+																					  }
+																					  .viewer-item:hover {
+																					    background: #f8f9fa;
+																					    transform: translateY(-1px);
+																					  }
+
+																					  .avatar-circle {
+																					    width: 40px;
+																					    height: 40px;
+																					    background: linear-gradient(135deg, #1a99aa, #0d6efd);
+																					    color: white;
+																					    border-radius: 50%;
+																					    font-weight: bold;
+																					    font-size: 14px;
+																					    display: flex;
+																					    align-items: center;
+																					    justify-content: center;
+																					    box-shadow: 0px 2px 5px rgba(0,0,0,0.15);
+																					  }
+
+																					  /* Rounded corners and shadow */
+																					  #deptToast {
+																					      border-radius: 0.5rem;
+																					      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+																					      min-width: 250px;
+																					      max-width: 350px;
+																					  }
+																				
+
+	</style>
+</head>
+
+<body>
+	<input type="hidden" id="loggedInDeptName" th:value="${empDetailsByEmpId.deptName}">
+	<!-- ======= Header ======= -->
+	<header id="header" class="header fixed-top d-flex align-items-center">
+
+		   <div class="d-flex align-items-center logo-container" style="width:45%; margin:0 0 0 10px; padding:5px;">
+				    <a class="app-logo" th:href=@{/userDashboard}>
+				        <img class="d-none d-lg-block" src="assets/img/logo.png" alt="logo" style="width:200px; height:50px;  padding:0 2px 0 10px; margin:0;">
+				    </a>
+				    <!--  <i class="bi bi-list toggle-sidebar-btn"></i> -->
+				    <!-- <i class="bi bi-chevron-double-left toggle-sidebar-btn" onclick="toggleIconRotation()"></i>	 -->			   
+			</div>
+	  				
+	  <!-- Include the header fragment -->
+	  <div th:replace="fragments/header :: header"></div>
+	 
+	 </header><!-- End Header -->
+	<script>
+			function clearSessionStorage() {
+			    sessionStorage.clear(); // Clear all session storage data
+			}
+
+		</script>
+	<!-- ======= Sidebar ======= -->
+
+	  
+<aside id="sidebar" class="sidebar">
+<input type="hidden" id="employee-id" th:value="${empDetailsByEmpId.deptId}">
+<input type="hidden" id="loggedEmpEmail" th:value="${empDetailsByEmpId.email}">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+		 
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/userDashboard}">
+                <i class="bi bi-grid"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link " th:href="@{/navbar}">
+		        <i class="bi bi-grid"></i>
+		        <span>Dashboard</span>
+		    </a>
+	    </li>
+	    <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+			<a class="nav-link active" th:href="@{/Departmentdoc}">
+				<i class="bi bi-journal-bookmark"></i>
+				<span>MSPL DocVault</span>
+			</a>
+		</li>
+		
+		<li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+			<a class="nav-link active" th:href="@{/Departmentdoc}">
+				<i class="bi bi-journal-bookmark"></i>
+				<span>MSPL DocVault</span>
+			</a>
+		</li>
+		<li class="nav-item" th:if="${session.permissions.dispatch && empDetailsByEmpId.deptId==0}">
+            <a class="nav-link" th:href="@{/dispatchIframe}">
+                <i class="bi bi-truck"></i>
+                <span>Dispatched Details</span>
+            </a>
+        </li>
+         <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/viewAdminProfile(empid=${empDetailsByEmpId.empid})}">
+                <i class="bi bi-person"></i>
+                 <span>My Profile</span>
+            </a>
+        </li>  
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/attendanceLive(email=${empDetailsByEmpId.email})}">
+                <i class="bi bi-calendar3"></i>
+                <span>Attendence</span>
+            </a> 
+        </li>      
+       <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/groupMailId}">
+                <i class="bi bi-telephone"></i>
+                <span>Employee Contacts</span>
+            </a>
+        </li>
+       <!--  <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link " th:href="@{/InterCommDetails}">
+                <i class="bi bi-telephone"></i>
+                <span>InterComm Details</span>
+            </a>
+        </li> -->
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/adminHoliday}">
+                <i class="bi bi-calendar4-week"></i>
+                <span>Holiday List</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+		    <a class="nav-link"  th:href="@{/employee}">
+		        <i class="bi bi-people"></i>	
+		        <span>Employee</span>
+		    </a>
+	   </li> 
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/viewAdminLeaves(empid=${empDetailsByEmpId.empid})}">
+                <i class="bi bi-card-text"></i>
+                <span>Team Leaves</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/events}">
+                <i class="bi bi-megaphone"></i>
+                <span>Announcement</span>
+            </a>
+        </li>               
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/asset}">
+                <i class="bi bi-wallet"></i>
+                <span>Assets</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/ongoingProject}">
+                <i class="bi bi-card-heading"></i>
+                <span>Projects</span>
+            </a>
+        </li>   
+         <!-- <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/viewAdminPayslip(empid=${empDetailsByEmpId.empid})}">
+                <i class="bi bi-file-text"></i>
+                <span>Payslip</span>
+            </a>
+        </li>     --> 
+         <!-- Loop through the permissions map -->
+       <li class="nav-item" th:if="${permissions.interviewAccess && empDetailsByEmpId.deptId>0}" >
+            <a class="nav-link" th:href="@{/moatIframe}">
+                <i class="bi bi-vector-pen"></i>
+                <span>Interview</span>
+            </a>
+        </li>
+         <li class="nav-item new-feature" th:if="${empDetailsByEmpId.deptId>0}">
+			    <a class="nav-link collapsed" data-bs-target="#presales-submenu" data-bs-toggle="collapse" href="#">
+			        <i class="bi bi-layout-text-window-reverse"></i>
+			        <span>Pre-sales</span>
+			        <i class="bi bi-chevron-down ms-auto"></i>
+			    </a> 
+			    <ul id="presales-submenu" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+			        <li>
+			            <a th:href="@{/crm}">
+			                <i class="bi bi-circle"></i><span>Activity</span>
+			            </a>
+			        </li>
+			        <li>
+			            <a th:href="@{/deals}">
+			                <i class="bi bi-circle"></i><span>Pipedrive</span>
+			            </a>
+			        </li>
+			    </ul>
+			</li>
+        <li class="nav-item" th:if="${permissions.sales && empDetailsByEmpId.deptId>0}" >
+            <a class="nav-link" th:href="@{/sales}">
+                <i class="bi bi-cart3"></i>
+                <span>Sales</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.accountsAccess && empDetailsByEmpId.deptId>0}" >
+            <a class="nav-link" th:href="@{/accounts}">
+                <i class="bi bi-person-vcard"></i>
+                <span>Accounts</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.storeAccess && empDetailsByEmpId.deptId>0}" >
+            <a class="nav-link" th:href="@{/store}">
+                <i class="bi bi-shop-window"></i>
+                <span>Store</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.apprisalAccess && empDetailsByEmpId.deptId>0}" >
+            <a class="nav-link" id="apprisalLink" th:href="@{/apprisal(empid=${empDetailsByEmpId.empid})}">
+		        <i class="bi bi-file-text"></i>
+		        <span>Appraisal</span>
+		    </a>
+        </li>
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+		    <a class="nav-link" id="apprisalLink" th:href="@{/employeeApprisal(empid=${empDetailsByEmpId.empid})}">
+		        <i class="bi bi-file-text"></i>
+		        <span>Employee Appraisal</span>
+		    </a>
+		</li>
+       <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+				<a class="nav-link" th:href="@{/my-favorites}">
+					<i class="bi bi-layout-text-window-reverse"></i>
+					<span>To-Chat & Remind</span><span id="unreadCountBadge" class="badge bg-primary" style="display: none;"></span>
+				</a>
+		</li>
+		<li class="nav-item new-feature" th:if="${empDetailsByEmpId.deptId>0}">
+					    <a class="nav-link" th:href="@{/releasenotes}">
+					        <i class="bi bi-layout-text-window-reverse"></i>
+					        <span class="release-note-text">
+					            Release Note 
+					            <span class="version-number">(V.0.1.2)</span>
+					        </span>
+					    </a>
+		</li> 
+	    <!-- <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+            <a class="nav-link" th:href="@{/attendanceLive(email=${empDetailsByEmpId.email})}">
+                <i class="bi bi-calendar3"></i>
+                <span>Attendence</span>
+            </a>
+        </li>  -->
+         <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link" th:href="@{/adminHoliday}">
+		        <i class="bi bi-calendar4-week"></i>
+		        <span>Holiday List</span>
+		    </a>
+	 </li>	
+	 
+	<li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		     <a class="nav-link" th:href="@{/addInterComm}">
+                <i class="bi bi-telephone"></i>
+                <span>Communication</span>
+            </a>
+	 </li>
+	 <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		     <a class="nav-link" th:href="@{/groupMailId}">
+                <i class="bi bi-envelope-open"></i>
+                <span>Group Mail Id</span>
+            </a>
+	 </li>
+	 <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		<a class="nav-link" th:href="@{/hikeRatingForm}">
+			<i class="bi bi-arrow-up-circle"></i><span>Appraisal Ratings</span>
+		</a>
+	</li>
+	<li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		<a class="nav-link" th:href="@{/apprisalEmployee}">
+			<i class="bi bi-check-square"></i><span>Submitted Appraisals</span>
+		</a>
+	</li>
+	 <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+          <a class="nav-link" href="hrActivity">
+	        <i class="bi bi-file-lock"></i><span>Permissions</span>
+	    </a>
+      </li>
+	 <!--  <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+            <a class="nav-link"  th:href="@{/InterCommDetails}">
+                <i class="bi bi-telephone"></i>
+                <span>InterComm Details</span>
+            </a>
+      </li> -->
+      <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link"  th:href="@{/viewAdminLeaves(empid=${empDetailsByEmpId.empid})}">
+		        <i class="bi bi-calendar4-week"></i>
+		        <span>Employee Leaves</span>
+		    </a>
+	 </li>
+	 <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link" th:href="@{/events}">
+		        <i class="bi bi-megaphone"></i>
+		        <span>Announcement</span>
+		    </a>
+	 </li> 
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link" th:href="@{/addDepartment}">
+		        <i class="bi bi-calendar4-week"></i>
+		        <span>Department</span>
+		    </a>
+	   </li>
+	 <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link"  th:href="@{/addRole}">
+		        <i class="bi bi-receipt"></i>
+		        <span>Role</span>
+		    </a>
+	 </li>
+	 
+	 <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link" th:href="@{/employee}">
+		        <i class="bi bi-people"></i>
+		        <span>Employee</span>
+		    </a>
+	 </li> 
+      <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+            <a class="nav-link"  th:href="@{/ongoingProject}">
+                <i class="bi bi-calendar3"></i>
+                <span>Projects</span>
+            </a>
+      </li>  
+      <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+            <a class="nav-link"  th:href="@{/asset}">
+                <i class="bi bi-wallet"></i>
+                <span>Assets</span>
+            </a>
+      </li>  
+      <li class="nav-item" th:if="${permissions.interviewAccess && empDetailsByEmpId.deptId==0}" >
+            <a class="nav-link" th:href="@{/moatIframe}">
+                <i class="bi bi-vector-pen"></i>
+                <span>Interview</span>
+            </a>
+        </li>
+         <li class="nav-item new-feature" th:if="${empDetailsByEmpId.deptId==0}">
+			    <a class="nav-link collapsed" data-bs-target="#presales-submenu" data-bs-toggle="collapse" href="#">
+			        <i class="bi bi-layout-text-window-reverse"></i>
+			        <span>Pre-sales</span>
+			        <i class="bi bi-chevron-down ms-auto"></i>
+			    </a> 
+			    <ul id="presales-submenu" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+			        <li>
+			            <a th:href="@{/crm}">
+			                <i class="bi bi-circle"></i><span>Activity</span>
+			            </a>
+			        </li>
+			        <li>
+			            <a th:href="@{/deals}">
+			                <i class="bi bi-circle"></i><span>Pipedrive</span>
+			            </a>
+			        </li>
+			    </ul>
+			</li>
+        <li class="nav-item" th:if="${permissions.sales && empDetailsByEmpId.deptId==0}" >
+            <a class="nav-link" th:href="@{/sales}">
+                <i class="bi bi-cart3"></i>
+                <span>Sales</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.accountsAccess && empDetailsByEmpId.deptId==0}" >
+            <a class="nav-link" th:href="@{/accounts}">
+                <i class="bi bi-person-vcard"></i>
+                <span>Accounts</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.storeAccess && empDetailsByEmpId.deptId==0}" >
+            <a class="nav-link" th:href="@{/store}">
+                <i class="bi bi-shop-window"></i>
+                <span>Store</span>
+            </a>
+        </li>  
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+			    <a class="nav-link" href="feedbackReports">
+			        <i class="bi bi-chat-square-text"></i>
+			        <span>Feedback Reports</span>
+			    </a>
+		 </li>
+        <li class="nav-item" th:if="${permissions.storeAccess && empDetailsByEmpId.deptId==0}">
+				<a class="nav-link" th:href="@{/my-favorites}">
+					<i class="bi bi-layout-text-window-reverse"></i>
+					<span>To-Chat & Remind</span><span id="unreadCountBadge" class="badge bg-primary" style="display: none;"></span>
+				</a>
+		</li>
+		<li class="nav-item new-feature"  th:if="${permissions.storeAccess && empDetailsByEmpId.deptId==0}">
+					    <a class="nav-link" th:href="@{/releasenotes}">
+					        <i class="bi bi-layout-text-window-reverse"></i>
+					        <span class="release-note-text">
+					            Release Note 
+					            <span class="version-number">(Policy Update)</span>
+					        </span>
+					    </a>
+		</li>
+    </ul>
+</aside>
+
+	<main id="main" class="main">
+
+		<div class="pagetitle  mb-0 d-flex">
+			<i class="bi bi-chevron-double-left toggle-sidebar-btn mb-1" onclick="toggleIconRotation()"
+				style="font-size:24px;color:#2F73B9;padding:0 10px;margin-left:-10px;margin-top:-10px"></i>
+			<nav>
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="userDashboard">Home</a></li>
+					<li class="breadcrumb-item active">Book of knowledge</li>
+				</ol>
+			</nav>
+		</div><!-- End Page Title -->
+
+		<input type="hidden" id="roleValue" th:value="${session.role_name}">
+
+		<section class="section dashboard">
+			<div class="row">
+				<div class="card">
+				  <div class="card-body">
+					<div class="d-flex justify-content-between align-items-center mb-3">
+					      <h5 class="mb-0">Department Resource Vault</h5>
+						  <th:block th:if="${canUpload}">
+							<div class="d-flex gap-2">
+								<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createDeptModal">
+														      Create Department
+														  </button>
+							  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadModal">
+							      Upload Document
+							  </button>
+							 
+							</div>
+
+						  </th:block>
+
+
+					    </div>
+						<!-- Search + Back Button Row -->
+						<!-- Search + Back Button Row -->
+						<div class="row mb-3" id="searchBarContainer" style="display:none;">
+						  <div class="col-md-12 d-flex align-items-center gap-2">
+							<!-- Search Bar -->
+												    <div class="flex-grow-1">
+												      <div class="input-group">
+												        <input type="text" id="searchInput" class="form-control" placeholder="Search documents by title..." onkeyup="searchDocuments()" />
+												        <span class="input-group-text"><i class="bi bi-search"></i></span>
+												      </div>
+												    </div>
+						    <!-- Back Button -->
+						    <button id="backToDepartments" class="btn-back">
+						      <i class="bi bi-arrow-left"></i> Departments
+						    </button>
+
+						
+						  </div>
+						</div>
+
+
+						  <!-- Department Dropdown -->
+						<!--  <div class="col-md-4">
+						    <select id="docDepartment" onchange="fetchDocuments()" class="form-select">
+						      <option value="">-- Select Department --</option>
+						    </select>
+						  </div>-->
+						
+					
+
+					<!-- Document Cards -->
+					<!--<div class="row  mb-3" id="documentCardContainer"></div>-->
+					<!-- Department Cards Container -->
+					<!-- Department Cards Container -->
+					<div class="row mb-4 g-3" id="departmentCardsContainer"></div>
+
+					<!-- Documents -->
+					<div class="row g-3" id="documentCardContainer" style="display:none;"></div>
+					
+				    <!-- Document Table -->
+				   <!-- <table class="table table-bordered table-hover text-center">
+				      <thead>
+				        <tr>
+				          <th>#</th>
+				          <th>Title</th>
+				          <th>File Name</th>
+				          <th>Uploaded Date</th>
+						  <th>Uploaded By</th>
+				          <th>View</th>
+				        </tr>
+				      </thead>
+				      <tbody id="documentTableBody"></tbody>
+				    </table>-->
+				  </div>
+				</div>
+
+
+				<!-- 🔷 Upload Modal -->
+				<div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+				  <div class="modal-dialog">
+				    <form id="uploadForm" enctype="multipart/form-data">
+				      <div class="modal-content">
+				        <div class="modal-header">
+				          <h5 class="modal-title" id="uploadModalLabel">Upload Department Document</h5>
+				          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				        </div>
+
+				        <div class="modal-body">
+				          <div class="mb-3">
+				            <label for="docTitle" class="form-label">Document Title</label>
+				            <!--<input type="text" class="form-control" id="docTitle" required />-->
+							<textarea class="form-control" id="docTitle" rows="2" placeholder="Enter document title" required></textarea>
+
+				          </div>
+				          <div class="mb-3">
+				            <label for="docFile" class="form-label">Choose File</label>
+							<input type="file" class="form-control" id="docFile" accept="application/pdf" required />
+							<div class="form-text text-primary mt-1">
+							  <i class="bi bi-filetype-pdf" style="color: #d63384;"></i>
+							  <small style="color: black;">Only PDF files are supported.</small>
+							</div>
+
+				          </div>
+						  <div class="mb-3">
+						      <label for="createdBy" class="form-label">Created By</label>
+						      <select class="form-control" id="createdBy" name="createdBy" required>
+						          <option value="">Select Employee</option>
+						      </select>
+						  </div>
+						  <div class="mb-3" id="deptField" style="display:none;">
+						    <label for="deptSelect" class="form-label" id="deptLabel">Select Department</label>
+						    <select class="form-control" id="deptSelect" name="deptId">
+						      <option value="">-- Select Department --</option>
+						    </select>
+						  </div>
+				        </div>
+
+				        <div class="modal-footer">
+				          <button type="submit" class="btn btn-success">Upload</button>
+				          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+				        </div>
+				      </div>
+				    </form>
+				  </div>
+				</div>
+				
+				<script>
+				  async function loadDepartments() {
+				    try {
+				      const res = await fetch("/bookofknowledgedepartmentsall");
+				      const departments = await res.json();
+
+				      const deptField = document.getElementById("deptField");
+				      const deptLabel = document.getElementById("deptLabel");
+				      const select = document.getElementById("deptSelect");
+
+				      // Reset options
+				      select.innerHTML = `<option value="">-- Select Department --</option>`;
+
+				      if (departments && departments.length > 0) {
+				        // Show field only if manual departments exist
+				        deptField.style.display = "block";
+
+				        // Change label to indicate this is a manual department selection
+				        deptLabel.textContent = "Assign to Book of Knowledge Department";
+
+				        departments.forEach(dept => {
+				          const opt = document.createElement("option");
+				          opt.value = dept.dept_id;
+				          opt.textContent = dept.deptName;
+				          select.appendChild(opt);
+				        });
+
+				      } else {
+				        // Hide field (default user dept will be used in backend)
+				        deptField.style.display = "none";
+				      }
+				    } catch (err) {
+				      console.error("Error loading departments:", err);
+				      document.getElementById("deptField").style.display = "none";
+				    }
+				  }
+
+				  // Load departments when modal opens
+				  document.getElementById("uploadModal")
+				          .addEventListener("shown.bs.modal", loadDepartments);
+				</script>
+					
+					
+				<div class="modal fade" id="createDeptModal" tabindex="-1" aria-labelledby="createDeptLabel" aria-hidden="true">
+				  <div class="modal-dialog">
+				    <div class="modal-content">
+				      
+				      <div class="modal-header">
+				        <h5 class="modal-title" id="createDeptLabel">Create Department</h5>
+				        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				      </div>
+				      
+				      <div class="modal-body">
+				        <!-- Department Name -->
+				        <div class="mb-3">
+				          <label for="newDeptName" class="form-label">Department Name</label>
+				          <input type="text" id="newDeptName" class="form-control" placeholder="Enter Department Name">
+				        </div>
+
+				        <!-- Department Description -->
+				        <div class="mb-3">
+				          <label for="newDeptDesc" class="form-label">Department Description</label>
+				          <textarea id="newDeptDesc" class="form-control" rows="3" placeholder="Enter Department Description"></textarea>
+				        </div>
+				      </div>
+				      
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+				        <button type="button" class="btn btn-success" id="createDeptBtn">Create</button>
+				      </div>
+
+				    </div>
+				  </div>
+				</div>
+
+
+				
+				<!-- Document View Modal -->
+				<div class="modal fade" id="documentModal" tabindex="-1" aria-labelledby="documentModalLabel" aria-hidden="true">
+				  <div class="modal-dialog modal-xl" style="max-width: 95vw;">
+				    <div class="modal-content" style="height: 90vh;">
+				      <div class="modal-header">
+				        <h5 class="modal-title" id="documentModalLabel">Document Viewer 												<span id="viewCountBadge"
+						      class="badge bg-secondary ms-2"
+						      style="cursor:pointer"
+							 
+						      >
+						  <i class="bi bi-eye me-1"></i> 0
+						</span>
+</h5>
+				        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				      </div>
+				      <div class="modal-body p-0" style="height: calc(100% - 56px);">
+				        <iframe
+				          id="documentFrame"
+				          src=""
+				          style="width: 100%; height: 100%; border: none;"
+				          allowfullscreen
+				        ></iframe>
+						<div id="viewerList" class="p-3" style="height: 20%; overflow-y:auto; background: #f8f9fa;"></div>
+				      </div>
+				    </div>
+				  </div>
+				</div>
+				
+			
+
+
+				<!-- Viewer List Modal -->
+				<div class="modal fade" id="viewerListModal" tabindex="-1" aria-labelledby="viewerListModalLabel" aria-hidden="true">
+				  <div class="modal-dialog">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <h5 class="modal-title" id="viewerListModalLabel">Viewer List</h5>
+				        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+				      </div>
+				      <div class="modal-body" id="viewerListContent"></div>
+				    </div>
+				  </div>
+				</div>
+				
+				
+				<!-- Viewer List Offcanvas inside the modal -->
+				<div class="offcanvas offcanvas-end" tabindex="-1" id="viewerListOffcanvas"
+				     style="z-index: 1065; width: 350px; background: #fff;">
+				  <div class="offcanvas-header">
+				    <h5 class="offcanvas-title">Viewer List</h5>
+				    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+				  </div>
+				  <div class="offcanvas-body" id="viewerListContent"></div>
+				</div>
+
+
+				<!-- ✅ Toast Container -->
+				<div class="toast-container position-fixed top-0 end-0 p-3" style="margin-top: 70px; z-index: 2000;">
+				  <div id="uploadToast" class="toast align-items-center text-bg-success border-0 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true">
+				    <div class="d-flex">
+				      <div class="toast-body">
+				        ✅ Document uploaded successfully!
+				      </div>
+				      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+				    </div>
+				  </div>
+				</div>
+
+				<!-- Toast Container -->
+				<div id="toastContainer" class="position-fixed top-0 end-0 p-3" style="z-index: 1080;">
+				  <!-- Toast element -->
+				  <div id="deptToast" class="toast align-items-center text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
+				    <div class="d-flex">
+				      <div class="toast-body" id="deptToastBody">
+				        <!-- Message goes here -->
+				      </div>
+				      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+				    </div>
+				  </div>
+				</div>
+
+
+
+
+
+				
+				<div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+						    <div class="modal-dialog">
+						        <div class="modal-content rounded-4 shadow-lg">
+						            <div class="modal-header border-0">
+						                <h5 class="modal-title" id="feedbackModalLabel">Feedback Form</h5>
+						                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						            </div>
+						            <div class="modal-body">
+						                <form id="feedbackForm" method="post" enctype="multipart/form-data">
+						                    <div class="mb-3" style="display: none;">
+						                        <label for="feedbackName" class="form-label fw-bold">Your Name</label>
+						                        <input type="text" class="form-control" id="feedbackName" name="name" th:value="${empDetailsByEmpId.fullName}" readonly>
+						                    </div>
+						                    <div class="mb-3" style="display: none;">
+						                        <label for="feedbackEmail" class="form-label fw-bold">Your Email</label>
+						                        <input type="email" class="form-control" id="feedbackEmail" name="email" th:value="${empDetailsByEmpId.email}" readonly>
+						                    </div>
+						                    <div class="mb-3">
+						                        <label for="feedbackEmailyy" class="form-label fw-bold">To</label>
+						                        <div class="to-field-container">
+						                            <span class="to-field rounded-pill px-3 py-2 shadow-sm">bugs_msplconnect@melangesystems.com</span>
+						                        </div>
+						                    </div>
+											<div class="mb-3">
+											    <label for="bugType" class="form-label fw-bold">Bug Type</label>
+											    <select class="form-control" id="bugType" name="bugType" required>
+											        <option value="About Application">About Application</option>
+											        <option value="New Feature">New Feature</option>
+											    </select>
+											</div>
+
+						                    <div class="mb-3">
+						                        <label for="feedbackMessage" class="form-label fw-bold">Message</label>
+						                        <textarea class="form-control" id="feedbackMessage" name="message" rows="4" placeholder="Enter your feedback here..." required></textarea>
+						                    </div>
+						                    <div class="mb-3">
+						                        <label for="feedbackAttachment" class="form-label fw-bold">Attachment (optional)</label>
+						                        <input type="file" class="form-control" id="feedbackAttachment" name="attachment" accept=".png, .jpg, .jpeg" multiple>
+						                        <small class="text-muted">Max size: 5MB. You can upload multiple images.</small>
+						                    </div>
+						                    <button type="submit" class="btn btn-primary w-100 mt-3 py-2 shadow-sm" id="submitFeedbackBtn">Submit Feedback</button>
+						                </form>
+						            </div>
+						        </div>
+						    </div>
+						</div>
+		</section>
+
+
+
+
+	</main><!-- End #main -->
+
+	<!-- ======= Footer ======= -->
+	<!-- ======= Footer ======= -->
+	 <footer id="footer" class="footer">
+	   <div class="copyright">
+	      Copyright &copy; <span id="currentYear"></span> <strong><span>Melange Systems Private Limited</span></strong>. All Rights Reserved
+	   </div>
+	 </footer>
+	 
+	<script>
+		var currentYear = new Date().getFullYear();
+		document.getElementById("currentYear").innerHTML = currentYear;
+	</script>
+
+	<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+			class="bi bi-arrow-up-short"></i></a>
+
+	<!-- Vendor JS Files -->
+	<script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+	<script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script src="assets/vendor/chart.js/chart.umd.js"></script>
+	<script src="assets/vendor/echarts/echarts.min.js"></script>
+	<script src="assets/vendor/quill/quill.js"></script>
+	<script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+	<script src="assets/vendor/tinymce/tinymce.min.js"></script>
+	<script src="assets/vendor/php-email-form/validate.js"></script>
+
+	<!-- Template Main JS File -->
+	<script src="assets/js/main.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+	<script>
+		document.getElementById("feedbackForm").addEventListener("submit", function (event) {
+			    event.preventDefault(); // Prevent default form submission
+
+			    $.ajax({
+			        url: 'recentlySavedTicketNumber',
+			        type: 'GET',
+			        success: function (response) {
+			            let recentlyInsertedTicketIdData = response;
+
+			            // Get the current date
+			            var today = new Date();
+			            var year = today.getFullYear();
+			            var month = today.getMonth() + 1; // JavaScript months are 0-based
+
+			            // Calculate the financial year
+			            var financialYearStart = month >= 4 ? year : year - 1; // Fiscal year starts in April
+			            var financialYearEnd = financialYearStart + 1;
+
+			            // Format as FYY-YY
+			            var financialYear = `F${financialYearStart % 100}-${financialYearEnd % 100}`;
+
+			            // Department Name
+			            var loggedInDeptName = $('#loggedInDeptName').val();
+
+			            let incrementedNumber = "0001"; // Default number if response is empty or null
+
+			            // Check if recentlyInsertedTicketIdData is not empty or null
+			            if (recentlyInsertedTicketIdData) {
+			                // Extract the last part of the ticket (e.g., 0001)
+			                let ticketParts = recentlyInsertedTicketIdData.split("/");
+			                let lastPart = ticketParts[ticketParts.length - 1];
+
+			                // Increment the extracted number
+			                let numericValue = parseInt(lastPart, 10) + 1;
+			                incrementedNumber = numericValue.toString().padStart(4, '0'); // Pad with leading zeros
+			            }
+
+			            // Construct the feedback ticket
+			            var feedbackTicket = `MSPL/FT/${financialYear}/${loggedInDeptName}/${incrementedNumber}`;
+
+			            // Add feedback ticket to the form data
+			            let formData = new FormData(document.getElementById("feedbackForm"));
+			            formData.append("id", feedbackTicket);
+			            formData.append("emp_id", $('#emp_idSessionValue').val());
+
+			            const submitButton = document.getElementById("submitFeedbackBtn");
+			            submitButton.disabled = true; // Disable the submit button to prevent multiple submissions
+
+			            const loadingSwal = Swal.fire({
+			                title: 'Submitting feedback...',
+			                text: 'Please wait while we submit your feedback.',
+			                showConfirmButton: false,
+			                allowOutsideClick: false, // Prevent closing when clicking outside
+			                            allowEscapeKey: false, // Prevent closing when pressing escape key
+			                didOpen: () => {
+			                    Swal.showLoading(); // Display the loading spinner
+			                }
+			            });
+
+			            // Append files to form data
+			            let files = document.getElementById("feedbackAttachment").files;
+			            if (files.length > 0) {
+			                for (let i = 0; i < files.length; i++) {
+			                    formData.append(`attachment[${i}]`, files[i]); // Use unique keys
+			                }
+			            }
+
+			            let bugType = document.getElementById("bugType").value;
+			            formData.append("bugTypeff", bugType); // Add the bug type to the form data
+
+			            // Debugging: Log formData entries before the fetch call
+			            console.log("Logging formData entries:");
+			            for (let [key, value] of formData.entries()) {
+			                if (value instanceof File) {
+			                    console.log(`Key: ${key}, File Name: ${value.name}, Size: ${value.size}`);
+			                } else {
+			                    console.log(`Key: ${key}, Value: ${value}`);
+			                }
+			            }
+
+			            // Make AJAX request to submit feedback
+			            fetch("/submitFeedback", {
+			                method: "POST",
+			                body: formData
+			            })
+			                .then(response => response.json())
+			                .then(data => {
+			                    loadingSwal.close();
+			                    submitButton.disabled = false; // Re-enable the button
+			                    if (data.success) {
+			                        $('#feedbackModal').modal('hide');
+			                        Swal.fire({
+			                            title: 'Success!',
+			                            text: 'Your feedback has been submitted successfully.',
+			                            icon: 'success',
+			                            allowOutsideClick: false, // Prevent closing when clicking outside
+			                                        allowEscapeKey: false, // Prevent closing when pressing escape key
+			                            customClass: {
+			                                popup: 'custom-swal-font'
+			                            },
+			                            confirmButtonText: 'OK'
+			                        }).then((result) => {
+			                            if (result.isConfirmed) {
+			                                    Swal.fire({
+			                                            html: 'We sincerely appreciate your feedback! Please find your feedback ticket details below.<br><br>' + 
+			                                    '<strong>' + feedbackTicket + '</strong>', // Display the feedback ticket on a new line
+			                                    allowOutsideClick: false, // Prevent closing when clicking outside
+			                                                allowEscapeKey: false, // Prevent closing when pressing escape key
+			                                    customClass: {
+			                                        popup: 'custom-swal-font'
+			                                    },
+			                                    confirmButtonText: 'OK'
+			                                });
+			                            }
+			                        });
+			                    } else {
+			                        Swal.fire({
+			                            title: 'Error!',
+			                            text: 'There was an error submitting your feedback.',
+			                            icon: 'error',
+			                            allowOutsideClick: false, // Prevent closing when clicking outside
+			                                        allowEscapeKey: false, // Prevent closing when pressing escape key
+			                            customClass: {
+			                                popup: 'custom-swal-font'
+			                            },
+			                            confirmButtonText: 'OK'
+			                        });
+			                    }
+			                })
+			                .catch(error => {
+			                    console.error('Error:', error);
+			                    loadingSwal.close();
+			                    submitButton.disabled = false; // Re-enable the button
+			                    Swal.fire({
+			                        title: 'Error!',
+			                        text: 'There was an error submitting your feedback.',
+			                        icon: 'error',
+			                        allowOutsideClick: false, // Prevent closing when clicking outside
+			                                    allowEscapeKey: false, // Prevent closing when pressing escape key
+			                        customClass: {
+			                            popup: 'custom-swal-font'
+			                        },
+			                        confirmButtonText: 'OK'
+			                    });
+			                });
+			        },
+			        error: function (xhr, status, error) {
+			            alert('Failed to fetch recently inserted feedback ticket: ' + error);
+			        }
+			    });
+			});
+
+
+			   // Clear form fields when the modal is closed
+			   document.getElementById('feedbackModal').addEventListener('hidden.bs.modal', function () {
+			       const feedbackForm = document.getElementById('feedbackForm');
+			       feedbackForm.reset(); // Reset the form fields
+			       document.getElementById('feedbackAttachment').value = ""; // Clear file input manually
+			   });
+	</script>
+
+	<script>
+		
+		function showToast(message, type = 'primary') {
+		    const toastEl = document.getElementById('deptToast');
+		    const toastBody = document.getElementById('deptToastBody');
+
+		    // Set message
+		    toastBody.textContent = message;
+
+		    // Set color type (success, danger, warning, primary)
+		    toastEl.className = `toast align-items-center text-bg-${type} border-0`;
+
+		    // Show toast with auto-hide (3 seconds)
+		    const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
+		    toast.show();
+		}
+
+
+
+		// Example usage:
+		// showToast("Department created successfully!", "success");
+		// showToast("Department already exists!", "error");
+
+
+		// Add click event listener to "Create Department" button
+		document.getElementById('createDeptBtn').addEventListener('click', async () => {
+
+		    const deptName = document.getElementById('newDeptName').value.trim();
+		    const deptDesc = document.getElementById('newDeptDesc').value.trim();
+
+		    if (!deptName) {
+		      showToast("Department name is required", "danger");
+		        return;
+		    }
+
+		    const payload = { deptName, deptDesc };
+
+		    try {
+		        const response = await fetch('/createbookofknowledgedepartment', {
+		            method: 'POST',
+		            headers: { 'Content-Type': 'application/json' },
+		            body: JSON.stringify(payload)
+		        });
+
+		        const data = await response.json();
+
+		        if (!response.ok) {
+		             showToast(data, "danger"); // error toast
+		        } else {
+		               showToast("Department created successfully!", "success");
+		            // Close modal
+		            const modalEl = document.getElementById('createDeptModal');
+		            const modal = bootstrap.Modal.getInstance(modalEl);
+		            modal.hide();
+
+		            // Clear inputs
+		            document.getElementById('newDeptName').value = '';
+		            document.getElementById('newDeptDesc').value = '';
+		        }
+		    } catch (error) {
+		        console.error("Error:", error);
+		        showToast('Error', 'Something went wrong!', 'error');
+		    }
+		});
+
+		let currentDeptId = null;
+	 /* window.addEventListener("DOMContentLoaded", async function () {
+	    const select = document.getElementById("docDepartment");
+	    if (!select) {
+	      console.error("Dropdown element not found.");
+	      return;
+	    }
+
+	    // Step 1: Fetch all departments
+	    const res = await fetch("/departmentsall");
+	    const departments = await res.json();
+
+	    // Populate the dropdown
+	    departments.forEach(dept => {
+	      const option = document.createElement("option");
+	      option.value = dept.dept_id;
+	      option.textContent = dept.deptName;
+	      select.appendChild(option);
+	    });
+
+	    // Step 2: Fetch current employee's department ID
+	    try {
+	      const deptRes = await fetch("/employee-department");
+	      const empDeptId = await deptRes.json();
+
+	      // Step 3: Set dropdown to that department
+	      select.value = empDeptId;
+		  // Step 4: Automatically fetch and display documents for that department
+		       fetchDocuments();
+	    } catch (error) {
+	      console.error("Error fetching employee department:", error);
+	    }
+	  });*/
+	  async function loadCreatedByOptions() {
+		//alert("oo");
+	      const res = await fetch(`/employees-under-manager`);
+		//  alert("res "+ res);
+	      if (!res.ok) {
+	          console.error("Failed to load employees.");
+	          return;
+	      }
+
+	      const data = await res.json();
+	      const select = document.getElementById("createdBy");
+	      select.innerHTML = '<option value="">Select Employee</option>';
+
+	      data.forEach(emp => {
+	          const option = document.createElement("option");
+	          option.value = emp.fullName; // if you want empid, return it in backend
+	          option.textContent = emp.fullName;
+			  
+	          select.appendChild(option);
+	      });
+	  }
+
+	  // Load when modal opens
+	  document.getElementById('uploadModal').addEventListener('show.bs.modal', loadCreatedByOptions);
+
+	  window.addEventListener("DOMContentLoaded", async function () {
+	      const container = document.getElementById("departmentCardsContainer");
+	      if (!container) return;
+
+	      const departmentIcons = {
+	          "Super Admin": "bi-shield-lock-fill",
+	          "IT": "bi-laptop-fill",
+	          "HR": "bi-people-fill",
+	          "Testing and Product Support": "bi-bug-fill",
+	          "Head Engineer": "bi-cpu-fill",
+	          "Marketing": "bi-megaphone-fill",
+	          "Accounts": "bi-cash-stack",
+	          "Design": "bi-brush-fill",
+	          "RF": "bi-broadcast-pin",
+	          "Director": "bi-person-badge-fill",
+	          "Hardware": "bi-hdd-stack-fill",
+	          "Supply Chain Management": "bi-truck",
+	          "IOT": "bi-router-fill",
+	          "Head-Technology": "bi-lightbulb-fill",
+	          "House Keeping": "bi-bucket-fill"
+	      };
+
+	      const pastelColors = [
+	          "#8BBEE8", // Soft powder blue
+	          "#A5A3F0", // Muted lavender
+	          "#E6A3DC", // Dusty pink
+	          "#F7C77E", // Warm sand gold
+	          "#A3D6B8", // Sage green
+	          "#82C8C1", // Teal mist
+	          "#F5A29A", // Soft coral
+	          "#F3E38E"  // Butter cream
+	      ];
+
+	      try {
+	          // Fetch both default and bookofknowledge departments
+	          const [res1, res2] = await Promise.all([
+	              fetch("/departmentsall"),
+	              fetch("/bookofknowledgedepartmentsall")
+	          ]);
+
+	          const deptList1 = await res1.json();
+	          const deptList2 = await res2.json();
+
+	          // Merge both lists, add a source flag
+	          const departments = [
+	              ...deptList1.map(d => ({ ...d, source: "default" })),
+	              ...deptList2.map(d => ({ ...d, source: "book" }))
+	          ];
+
+	          container.innerHTML = "";
+	          const fallbackIcons = ["bi-building", "bi-briefcase", "bi-diagram-3", "bi-journal-text"];
+
+	          departments.forEach((dept, index) => {
+	              const iconClass = departmentIcons[dept.deptName] || fallbackIcons[index % fallbackIcons.length];
+	              const iconBg = pastelColors[index % pastelColors.length];
+
+	              const card = document.createElement("div");
+	              card.className = "col-md-3 col-sm-6";
+	              card.innerHTML = `
+	                  <div class="dept-card text-center h-100" data-dept-id="${dept.dept_id}">
+	                      <div class="dept-icon mb-2" style="background: ${iconBg};">
+	                          <i class="${iconClass}"></i>
+	                      </div>
+	                      <h6 class="dept-name mb-1">${dept.deptName}</h6>
+	                      <small class="dept-desc">Tap to view documents</small>
+	                  </div>
+	              `;
+
+	              card.querySelector(".dept-card").addEventListener("click", function () {
+	                  const deptContainer = document.getElementById("departmentCardsContainer");
+	                  const docContainer = document.getElementById("documentCardContainer");
+	                  currentDeptId = dept.dept_id;
+	                  currentDeptSource = dept.source; // ✅ Track source
+	                  const backBtn = document.getElementById("backToDepartments");
+	                  const searchBar = document.getElementById("searchBarContainer");
+
+	                  deptContainer.classList.add("slide-out");
+
+	                  deptContainer.addEventListener("animationend", function handler() {
+	                      deptContainer.style.display = "none";
+	                      deptContainer.classList.remove("slide-out");
+
+	                      backBtn.style.display = "inline-block";
+	                      searchBar.style.display = "flex"; // show search bar
+
+	                      fetchDocuments(dept.dept_id, dept.source).then(() => {
+	                          docContainer.classList.add("slide-in");
+	                          docContainer.style.display = "flex";
+	                          setTimeout(() => docContainer.classList.remove("slide-in"), 400);
+	                      });
+
+	                      deptContainer.removeEventListener("animationend", handler);
+	                  });
+	              });
+
+	              container.appendChild(card);
+	          });
+
+	          // Back button click
+	          document.getElementById("backToDepartments").addEventListener("click", () => {
+	              document.getElementById("documentCardContainer").style.display = "none";
+	              document.getElementById("departmentCardsContainer").style.display = "flex";
+	              document.getElementById("backToDepartments").style.display = "none";
+				  document.getElementById("searchBarContainer").style.display = "none"; // hide search bar
+	          });
+
+	      } catch (error) {
+	          console.error("Error fetching departments:", error);
+	      }
+	  });
+
+	</script>
+
+
+
+
+	<script>
+	
+
+	async function fetchDocuments11() {
+		
+		  const dept = document.getElementById("docDepartment").value;
+		  const res = await fetch(`/${dept}`);
+		  const data = await res.json();
+
+		  const tbody = document.getElementById("documentTableBody");
+		  tbody.innerHTML = "";
+
+		 
+		  if (!data || data.length === 0) {
+		    tbody.innerHTML = `
+		      <tr>
+		        <td colspan="5" class="text-center">No data available</td>
+		      </tr>
+		    `;
+		    return;
+		  }
+		  data.forEach((doc, index) => {
+		    let rawDate = doc.updatedDate;
+
+		  
+		    if (rawDate && rawDate.includes('.')) {
+		      rawDate = rawDate.replace(/(\.\d{3})\d*/, '$1');  
+		    }
+
+		    const uploadedDate = rawDate ? new Date(rawDate) : null;
+
+		    const formattedDate = uploadedDate && !isNaN(uploadedDate)
+		      ? uploadedDate.toLocaleString('en-GB', {
+		          day: '2-digit',
+		          month: '2-digit',
+		          year: 'numeric',
+		          hour: '2-digit',
+		          minute: '2-digit',
+		          second: '2-digit',
+		          hour12: false
+		        })
+		      : 'Invalid Date';
+
+		    tbody.innerHTML += `
+		      <tr>
+		        <td>${index + 1}</td>
+		        <td class="wrap-text">${doc.title}</td>
+		        <td >${doc.fileName}</td>
+		        <td>${formattedDate}</td>
+				<td>${doc.fullName  || 'N/A'}</td>
+				<td>
+				    <button class="btn btn-sm btn-primary" onclick="viewDocument('${doc.id}', '${doc.fileName}')">View</button>
+				  </td>
+		      </tr>
+		    `;
+		  });
+		}
+		
+		async function fetchDocuments111() {
+		  const dept = document.getElementById("docDepartment").value;
+		  const res = await fetch(`/${dept}`);
+		  const data = await res.json();
+
+		  const container = document.getElementById("documentCardContainer");
+		  container.innerHTML = "";
+
+		  if (!data || data.length === 0) {
+		    container.innerHTML = `
+		      <div class="text-center text-muted">No data available</div>
+		    `;
+		    return;
+		  }
+
+		  data.forEach((doc, index) => {
+		    let rawDate = doc.updatedDate;
+
+		    if (rawDate && rawDate.includes('.')) {
+		      rawDate = rawDate.replace(/(\.\d{3})\d*/, '$1');
+		    }
+
+		    const uploadedDate = rawDate ? new Date(rawDate) : null;
+
+		    const formattedDate = uploadedDate && !isNaN(uploadedDate)
+		      ? uploadedDate.toLocaleString('en-GB', {
+		          day: '2-digit',
+		          month: '2-digit',
+		          year: 'numeric',
+		          hour: '2-digit',
+		          minute: '2-digit',
+		          second: '2-digit',
+		          hour12: false
+		        })
+		      : 'Invalid Date';
+
+
+			  container.innerHTML += `
+			    <div class="col-md-4 mb-3">
+			      <div class="doc-card position-relative shadow-sm rounded-4 glassmorph p-4 d-flex flex-column h-100">
+			        
+			        <div class="badge position-absolute top-0 end-0 m-2 bg-primary-subtle text-primary fw-semibold">
+			          <i class="bi bi-filetype-pdf me-1"></i>PDF
+			        </div>
+
+			        <div class="mb-3">
+			          <h6 class="doc-title fw-bold text-dark mb-0">${doc.title}</h6>
+			        </div>
+
+			        <div class="flex-grow-1">
+			          <p class="mb-2 small text-muted doc-uploader"><i class="bi bi-person-fill text-secondary me-1"></i> Uploaded by <strong>${doc.fullName || 'N/A'}</strong></p>
+			          <p class="mb-2 small text-muted  doc-date"><i class="bi bi-calendar2-week text-secondary me-1"></i> ${formattedDate}</p>
+			          <p class="mb-2 small text-muted"><i class="bi bi-paperclip text-secondary me-1"></i> ${doc.fileName}</p>
+			        </div>
+
+			        <div class="mt-auto text-end">
+			          <button class="btn btn-glass btn-sm rounded-pill px-3" onclick="viewDocument('${doc.id}', '${doc.fileName}')">
+			            <i class="bi bi-eye me-1"></i> View
+			          </button>
+			        </div>
+			      </div>
+			    </div>
+			  `;
+
+
+		  });
+		  // Call search after rendering new cards
+		  searchDocuments();
+		}
+		
+		
+		async function fetchDocuments77(deptId) {
+		    const container = document.getElementById("documentCardContainer");
+		    container.innerHTML = "";
+
+		    const res = await fetch(`/${deptId}`);
+		    const data = await res.json();
+
+		    if (!data || data.length === 0) {
+		        container.innerHTML = `<div class="text-center text-muted">No data available</div>`;
+		        return;
+		    }
+
+		    data.forEach(doc => {
+		        // Handle date formatting
+		        let rawDate = doc.updatedDate;
+		        if (rawDate && rawDate.includes('.')) {
+		            rawDate = rawDate.replace(/(\.\d{3})\d*/, '$1');
+		        }
+		        const uploadedDate = rawDate ? new Date(rawDate) : null;
+		        const formattedDate = uploadedDate && !isNaN(uploadedDate)
+		            ? uploadedDate.toLocaleString('en-GB', {
+		                day: '2-digit', month: '2-digit', year: 'numeric',
+		                hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+		            })
+		            : 'Invalid Date';
+
+		        // Card template
+				container.innerHTML += `
+				    <div class="col-sm-6 col-md-4 col-lg-3 mb-3">
+				        <div class="doc-card">
+				            <div class="doc-date">${formattedDate}</div>
+				            <h6 class="doc-title">${doc.title}</h6>
+				            <div class="doc-details">
+				                <p><i class="bi bi-upload"></i> Uploaded by: ${doc.fullName || 'N/A'}</p>
+				                <p><i class="bi bi-person-badge"></i> Created by: ${doc.createdBy || 'N/A'}</p>
+				            </div>
+				            <button class="btn-view" onclick="viewDocument('${doc.id}', '${doc.fileName}')">
+				                <i class="bi bi-eye me-1"></i> View
+				            </button>
+				        </div>
+				    </div>
+				`;
+
+		    });
+
+		    searchDocuments();
+		}
+		async function fetchDocumentspre(deptId) {
+			//alert("lllllllll");
+		    const container = document.getElementById("documentCardContainer");
+		    container.innerHTML = "";
+
+		    console.log("Fetching documents for deptId:", deptId);
+
+		    const res = await fetch(`/${deptId}`);
+		    const data = await res.json();
+
+		    console.log("Documents fetched:", data);
+
+		    if (!data || data.length === 0) {
+		        container.innerHTML = `<div class="text-center text-muted">No data available</div>`;
+		        return;
+		    }
+
+		    // Fetch view counts for all documents in parallel
+		    const viewCountPromises = data.map(doc => 
+		        fetch(`/documents/${doc.id}/viewers`)
+		            .then(res => res.json())
+		            .then(viewers => {
+		                console.log(`Viewers for document ${doc.id}:`, viewers);
+		                return viewers.length;
+		            })
+		            .catch(err => {
+		                console.error(`Error fetching viewers for document ${doc.id}:`, err);
+		                return 0;
+		            })
+		    );
+
+		    const viewCounts = await Promise.all(viewCountPromises);
+		    console.log("View counts:", viewCounts);
+
+		    data.forEach((doc, index) => {
+		        let rawDate = doc.updatedDate;
+		        if (rawDate && rawDate.includes('.')) {
+		            rawDate = rawDate.replace(/(\.\d{3})\d*/, '$1');
+		        }
+		        const uploadedDate = rawDate ? new Date(rawDate) : null;
+		        const formattedDate = uploadedDate && !isNaN(uploadedDate)
+		            ? uploadedDate.toLocaleString('en-GB', {
+		                day: '2-digit', month: '2-digit', year: 'numeric',
+		                hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+		            })
+		            : 'Invalid Date';
+
+		        container.innerHTML += `
+		            <div class="col-sm-6 col-md-4 col-lg-3 mb-3">
+		                <div class="doc-card">
+		                    <div class="doc-date">${formattedDate}</div>
+		                    <h6 class="doc-title">${doc.title}</h6>
+		                    <div class="doc-details">
+		                        <p class="doc-uploader"><i class="bi bi-upload"></i> Uploaded by: ${doc.fullName || 'N/A'}</p>
+		                        <p class="doc-createdBy"><i class="bi bi-person-badge"></i> Created by: ${doc.createdBy || 'N/A'}</p>
+		                        <p><i class="bi bi-eye"></i> Views: ${viewCounts[index]}</p>
+		                    </div>
+		                    <button class="btn-view" onclick="viewDocument('${doc.id}', '${doc.fileName}')">
+		                        <i class="bi bi-eye me-1"></i> View
+		                    </button>
+		                </div>
+		            </div>
+		        `;
+		    });
+
+		    console.log("Document cards rendered.");
+		    searchDocuments();
+		}
+		
+		async function fetchDocuments(deptId, source) {
+		    const container = document.getElementById("documentCardContainer");
+		    container.innerHTML = "";
+
+		    console.log("Fetching documents for deptId:", deptId, "source:", source);
+
+		    // ✅ Choose correct endpoint
+		    let url;
+		    if (source === "book") {
+		        url = `/bookofknowledgedocuments/${deptId}`;
+		    } else {
+		        url = `/${deptId}`;
+		    }
+
+		    const res = await fetch(url);
+		    let data = await res.json();
+
+		    console.log("Documents fetched:", data);
+
+			// ✅ Filter out docs where bookOfKnowledgeDeptId is not null
+			// ✅ Only filter for normal departments
+			if (source === "default") {
+			    data = data.filter(doc => !doc.bookOfKnowledgeDeptId);
+			}
+			
+		    if (!data || data.length === 0) {
+		        container.innerHTML = `<div class="text-center text-muted">No data available</div>`;
+		        return;
+		    }
+
+		    // Fetch view counts for all documents in parallel
+		    const viewCountPromises = data.map(doc =>
+		        fetch(`/documents/${doc.id}/viewers`)
+		            .then(res => res.json())
+		            .then(viewers => {
+		                console.log(`Viewers for document ${doc.id}:`, viewers);
+		                return viewers.length;
+		            })
+		            .catch(err => {
+		                console.error(`Error fetching viewers for document ${doc.id}:`, err);
+		                return 0;
+		            })
+		    );
+
+		    const viewCounts = await Promise.all(viewCountPromises);
+		    console.log("View counts:", viewCounts);
+
+		    data.forEach((doc, index) => {
+		        let rawDate = doc.updatedDate;
+		        if (rawDate && rawDate.includes('.')) {
+		            rawDate = rawDate.replace(/(\.\d{3})\d*/, '$1');
+		        }
+		        const uploadedDate = rawDate ? new Date(rawDate) : null;
+		        const formattedDate = uploadedDate && !isNaN(uploadedDate)
+		            ? uploadedDate.toLocaleString('en-GB', {
+		                day: '2-digit', month: '2-digit', year: 'numeric',
+		                hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+		            })
+		            : 'Invalid Date';
+
+		        container.innerHTML += `
+		            <div class="col-sm-6 col-md-4 col-lg-3 mb-3">
+		                <div class="doc-card">
+		                    <div class="doc-date">${formattedDate}</div>
+		                    <h6 class="doc-title">${doc.title}</h6>
+		                    <div class="doc-details">
+		                        <p class="doc-uploader"><i class="bi bi-upload"></i> Uploaded by: ${doc.fullName || 'N/A'}</p>
+		                        <p class="doc-createdBy"><i class="bi bi-person-badge"></i> Created by: ${doc.createdBy || 'N/A'}</p>
+		                        <p><i class="bi bi-eye"></i> Views: ${viewCounts[index]}</p>
+		                    </div>
+		                    <button class="btn-view" onclick="viewDocument('${doc.id}', '${doc.fileName}')">
+		                        <i class="bi bi-eye me-1"></i> View
+		                    </button>
+		                </div>
+		            </div>
+		        `;
+		    });
+
+		    console.log("Document cards rendered.");
+		    searchDocuments();
+		}
+		
+		
+		function searchDocuments() {
+		  const input = document.getElementById('searchInput').value.toLowerCase();
+		  const cards = document.querySelectorAll('#documentCardContainer .col-md-4');
+
+		  let visibleCount = 0;
+
+		  cards.forEach((card) => {
+		    const title = card.querySelector('.doc-title')?.textContent.toLowerCase() || '';
+		  
+			const uploader = card.querySelector('.doc-uploader')?.textContent.toLowerCase() || '';
+			const createdBy = card.querySelector('.doc-createdBy')?.textContent.toLowerCase() || '';
+			const date = card.querySelector('.doc-date')?.textContent.toLowerCase() || '';
+
+		    if (title.includes(input) || uploader.includes(input) || createdBy.includes(input) || date.includes(input)) {
+		      card.style.display = '';
+		      visibleCount++;
+		    } else {
+		      card.style.display = 'none';
+		    }
+		  });
+
+		  // Remove existing "no results" message
+		  const existingMessage = document.getElementById('noResultsMessage');
+		  if (existingMessage) existingMessage.remove();
+
+		  if (visibleCount === 0) {
+		    const container = document.getElementById('documentCardContainer');
+		    const message = document.createElement('div');
+		    message.id = 'noResultsMessage';
+		    message.className = 'col-12 text-center text-muted mt-4';
+		    message.innerHTML = '<strong>No matching documents found</strong>';
+		    container.appendChild(message);
+		  }
+		}
+
+
+		/*function viewDocument(docId) {
+		  const viewer = document.getElementById("documentFrame");
+		  viewer.src = `/view/${docId}#toolbar=0&zoom=133`;
+
+		  const modal = new bootstrap.Modal(document.getElementById('documentModal'));
+		  modal.show();
+		  
+		  fetch(`/documents/${docId}/view`, { method: 'POST' });
+
+		  fetch(`/documents/${docId}/viewers`)
+		    .then(res => res.json())
+		    .then(viewers => {
+		      const badge = document.getElementById("viewCountBadge");
+		      if (!badge) {
+		        console.error("Badge element not found!");
+		        return;
+		      }
+		      badge.innerHTML = `<i class="bi bi-eye me-1"></i> ${viewers.length}`;
+		      badge.dataset.viewers = JSON.stringify(viewers);
+		    })
+		    .catch(err => console.error("Error fetching viewers:", err));
+		}*/
+		
+		/*function viewDocument(docId) {
+		  const viewer = document.getElementById("documentFrame");
+		  viewer.src = `/view/${docId}#toolbar=0&zoom=133`;
+
+		  const documentModalEl = document.getElementById('documentModal');
+		  const documentModal = new bootstrap.Modal(documentModalEl);
+		  documentModal.show();
+
+		  // Store last opened docId globally so we can reopen later
+		  window.lastOpenedDocId = docId;
+
+		  // Record view
+		  fetch(`/documents/${docId}/view`, { method: 'POST' });
+
+		  // Fetch viewers
+		  fetch(`/documents/${docId}/viewers`)
+		    .then(res => res.json())
+		    .then(viewers => {
+		      const badge = document.getElementById("viewCountBadge");
+		      if (!badge) {
+		        console.error("Badge element not found!");
+		        return;
+		      }
+
+		      // Update view count
+		      badge.innerHTML = `<i class="bi bi-eye me-1"></i> ${viewers.length}`;
+
+			  badge.onclick = () => {
+			    const viewerListContent = document.getElementById("viewerListContent");
+
+			    if (!viewers.length) {
+			      viewerListContent.innerHTML = `<p class="text-center text-muted">No viewers yet.</p>`;
+			    } else {
+			      viewerListContent.innerHTML = viewers.map(v => {
+			        const initials = v.fullName
+			          ? v.fullName.split(" ").map(n => n[0]).join("").toUpperCase()
+			          : "U";
+
+			        return `
+			          <div class="viewer-item d-flex align-items-center p-2 rounded shadow-sm mb-2">
+			            <div class="avatar-circle me-3">${initials}</div>
+			            <div class="flex-grow-1">
+			              <div class="fw-bold">${v.fullName || "Unknown User"}</div>
+			              <div class="text-muted small">Viewed at: ${formatDate(v.viewTime)}</div>
+			            </div>
+			            <span class="badge bg-primary">${v.empId || ""}</span>
+			          </div>
+			        `;
+			      }).join("");
+			    }
+
+			    // Show viewer list modal above document modal without closing it
+			    const viewerListModalEl = document.getElementById('viewerListModal');
+			    const viewerListModal = new bootstrap.Modal(viewerListModalEl, {
+			      backdrop: false, // ❌ no second backdrop
+			      focus: true
+			    });
+			    viewerListModalEl.style.zIndex = "1065"; // higher than document modal (default ~1055)
+			    viewerListModal.show();
+			  };
+
+		    })
+		    .catch(err => console.error("Error fetching viewers:", err));
+		}
+
+		// Format ISO date to readable form
+		function formatDate(isoString) {
+		  const date = new Date(isoString);
+		  return date.toLocaleString();
+		}*/
+		
+	
+		function viewDocument(docId) {
+		  const viewer = document.getElementById("documentFrame");
+		  viewer.src = `/view/${docId}#toolbar=0&zoom=133`;
+
+		  const documentModalEl = document.getElementById('documentModal');
+		  const documentModal = new bootstrap.Modal(documentModalEl);
+		  documentModal.show();
+
+		  window.lastOpenedDocId = docId;
+
+		  fetch(`/documents/${docId}/view`, { method: 'POST' });
+
+		  // Fetch viewers and store in a global for later access
+		  fetch(`/documents/${docId}/viewers`)
+		    .then(res => res.json())
+		    .then(viewers => {
+		      const badge = document.getElementById("viewCountBadge");
+		      if (!badge) {
+		        console.error("Badge element not found!");
+		        return;
+		      }
+
+		      badge.innerHTML = `<i class="bi bi-eye me-1"></i> ${viewers.length}`;
+
+			  
+		      badge.onclick = () => {
+		        const viewerListContent = document.querySelector("#viewerListOffcanvas #viewerListContent");
+
+		        if (!viewers.length) {
+		          viewerListContent.innerHTML = `<p class="text-center text-muted">No viewers yet.</p>`;
+		        } else {
+		          viewerListContent.innerHTML = viewers.map(v => {
+		            const initials = v.fullName
+		              ? v.fullName.split(" ").map(n => n[0]).join("").toUpperCase()
+		              : "U";
+
+		            return `
+		              <div class="viewer-item d-flex align-items-center p-2 rounded shadow-sm mb-2">
+		                <div class="avatar-circle me-3">${initials}</div>
+		                <div class="flex-grow-1">
+		                  <div class="fw-bold">${v.fullName || "Unknown User"}</div>
+		                  <div class="text-muted small">Viewed at: ${formatDate(v.viewTime)}</div>
+		                </div>
+		                <span class="badge bg-primary">${v.empId || ""}</span>
+		              </div>
+		            `;
+		          }).join("");
+		        }
+
+		        const offcanvas = new bootstrap.Offcanvas('#viewerListOffcanvas');
+		        offcanvas.show();
+		      };
+		    })
+		    .catch(err => console.error("Error fetching viewers:", err));
+		}
+
+		function formatDate(isoString) {
+		  const date = new Date(isoString);
+		  return date.toLocaleString();
+		}
+		document.getElementById('documentModal')
+		  .addEventListener('hidden.bs.modal', () => {
+		    const viewerCanvasEl = document.getElementById('viewerListOffcanvas');
+		    const viewerCanvas   = bootstrap.Offcanvas.getInstance(viewerCanvasEl);
+		    if (viewerCanvas) viewerCanvas.hide();
+		  });
+
+
+
+		/*document.getElementById('viewerListModal').addEventListener('show.bs.modal', function () {
+			alert("kiii");
+		  const badge = document.getElementById("viewCountBadge");
+		  const container = document.getElementById("viewerList");
+		  
+		  if (!badge) {
+		    container.innerHTML = `<div class="text-danger">Error: Badge not found</div>`;
+		    return;
+		  }
+
+		  const viewers = JSON.parse(badge.dataset.viewers || "[]");
+		  // Alert the array in a readable format
+		     alert("Viewers:\n" + JSON.stringify(viewers, null, 2));
+		  if (!viewers.length) {
+		    container.innerHTML = `<div class="text-center text-muted p-3">
+		      <i class="bi bi-eye-slash"></i> No views yet
+		    </div>`;
+		    return;
+		  }
+
+		  container.innerHTML = `
+		    <div class="table-responsive">
+		      <table class="table table-hover table-sm align-middle">
+		        <thead class="table-light">
+		          <tr>
+		            <th><i class="bi bi-person"></i> Viewer</th>
+		            <th><i class="bi bi-person-badge"></i> Employee ID</th>
+		            <th><i class="bi bi-clock-history"></i> View Time</th>
+		          </tr>
+		        </thead>
+		        <tbody>
+		          ${viewers.map(v => `
+		            <tr>
+		              <td><strong>${v.fullName}</strong></td>
+		              <td>${v.empId}</td>
+		              <td>${new Date(v.viewTime).toLocaleString()}</td>
+		            </tr>
+		          `).join('')}
+		        </tbody>
+		      </table>
+		    </div>
+		  `;
+		});*/
+		
+		
+
+		
+		document.getElementById("uploadForm").addEventListener("submit", async function (e) {
+		  e.preventDefault();
+		  const file = document.getElementById("docFile").files[0];
+		  const title = document.getElementById("docTitle").value;
+		 // const department = document.getElementById("docDepartment").value;
+		  const createdBy = document.getElementById("createdBy").value;
+		  const manualDeptId = document.getElementById("deptSelect").value; // ✅ manual dept
+		 /* if (!file || !title || !department) {
+		    alert("Please fill all fields.");
+		    return;
+		  }*/
+
+		  const formData = new FormData();
+		  formData.append("file", file);
+		  formData.append("title", title);
+		 // formData.append("department", department);
+		  formData.append("createdBy", createdBy); // ✅ Add here
+
+		  if (manualDeptId && manualDeptId !== "undefined" && manualDeptId !== "") {
+		       formData.append("deptId", manualDeptId);  // ✅ safe append
+		     }
+
+		  
+		  const res = await fetch("/documentsupload", {
+		    method: "POST",
+		    body: formData
+		  });
+
+		  if (res.ok) {
+			// ✅ Close the modal
+			      const uploadModal = bootstrap.Modal.getInstance(document.getElementById("uploadModal"));
+			      uploadModal.hide();
+
+			      // ✅ Optionally reset the form
+			      e.target.reset();
+
+		   // alert("Document uploaded!");
+				    //this.reset();
+			// ✅ Show Toast
+			// ✅ Show custom Toast instead of alert
+			 const toastEl = document.getElementById("uploadToast");
+			 const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
+			 toast.show();
+			 fetchDocuments(currentDeptId);
+
+		  } else {
+			// Failure Toast
+			const toastEl = document.getElementById("uploadToast");
+			toastEl.classList.remove("text-bg-success");
+			toastEl.classList.add("text-bg-danger"); // red background
+			toastEl.querySelector(".toast-body").textContent = "❌ Upload failed.";
+			const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
+			toast.show();
+		  }
+		});
+
+
+
+	</script>
+
+	<script>
+		var loggedInRole = document.getElementById('roleValue').value;
+
+		if (loggedInRole === "HR") {
+			document.getElementById('employeeLink').style.display = "block";
+			document.getElementById('holidayForm').style.display = "block";
+			//document.getElementById('compProjectLink').style.display="none";
+			//document.getElementById('addEmployeeLink').style.display="block";
+		} else if (loggedInRole === "Super Admin") {
+			document.getElementById('employeeLink').style.display = "none";
+			document.getElementById('holidayForm').style.display = "none";
+			document.getElementById('holidayTable').style.width = "100%";
+			//document.getElementById('compProjectLink').style.display="block";
+			//document.getElementById('addEmployeeLink').style.display="none";
+		}
+	</script>
+	<script>
+	
+
+	</script>
+	<input type="hidden" id="emp_idSessionValue" th:value="${empId}" />
+
+	<script>
+		$.ajax({
+		    type: "GET",
+		    url: "fetchEmployeeDocumentDetailsOnlyByEmpId",
+		    data: {
+		        "emp_id": $('#emp_idSessionValue').val()
+		    },
+		    success: function(data) {
+		    	console.log("++++data"+JSON.stringify(data));
+		        $('#dynamicProfilePic').attr('src', `${data.profilePicPath}`);
+		    },
+		    error: function(xhr, status, error) {
+		        console.error("Error invoking data:", error);
+		    }
+		});
+	</script>
+
+	<script>
+		window.onload = function () {
+			var apprisalLink = document.getElementById("apprisalLink");
+			if (apprisalLink) {
+				apprisalLink.classList.add('blinking');  // Add blinking class
+				apprisalLink.focus();  // Set focus after animation
+			}
+		};
+	</script>
+	<script>
+		/*let inactivityTimeout;
+			const timeoutDuration = 14400000; // 10 minutes in milliseconds
+
+			function updateUserStatusAndLogout() {
+			    const emailElement = document.getElementById('loggedInMail');
+			    if (!emailElement) {
+			        console.error('Email element not found.');
+			        return;
+			    }
+			    
+			    const email = emailElement.value;
+
+			    fetch('/updateUserStatus', {
+			        method: 'POST',
+			        headers: { 'Content-Type': 'application/json' },
+			        body: JSON.stringify({ email: email }) // Corrected JSON structure
+			    }).then(() => {
+			        window.location.href = '/'; // Redirect to login page
+			    }).catch(error => console.error('Error updating user status:', error));
+			}
+
+		
+			// Reset inactivity timer on user activity
+			function resetInactivityTimer() {
+			    clearTimeout(inactivityTimeout);
+			    inactivityTimeout = setTimeout(updateUserStatusAndLogout, timeoutDuration);
+			}
+
+			// Attach event listeners
+			window.onload = resetInactivityTimer;
+			document.onmousemove = resetInactivityTimer;
+			document.onkeypress = resetInactivityTimer;
+			document.ontouchstart = resetInactivityTimer;
+			
+
+			let isNavigatingAway = false;
+
+							// Detect internal navigation (links clicked within the same domain)
+							document.addEventListener("click", function (event) {
+							    let target = event.target.closest("a");
+							    if (target && target.href.includes(window.location.origin)) {
+							        isNavigatingAway = true;
+							    }
+							});
+
+							// Handle back/forward navigation
+							window.addEventListener("popstate", function () {
+							    isNavigatingAway = true;
+							});
+
+
+							// Store session flag only when user reloads
+							
+							// Store session flag when the page loads
+							sessionStorage.setItem("isReloading", "true");
+
+							// Remove session flag on page load and check reload
+							window.addEventListener("load", function () {
+							    if (sessionStorage.getItem("isReloading") === "true") {
+									
+							       // alert("Page reloaded!"); // Debug alert for reload
+							        console.log("Page reload detected");
+									sendUserStatusUpdate();
+							        sessionStorage.removeItem("isReloading"); // Remove flag after detecting reload
+							    }
+							});
+
+							// Function to send status update on reload
+							function sendUserStatusUpdate() {
+							    const emailElement = document.getElementById("loggedInMail");
+							    if (!emailElement) {
+							        console.error("Email element not found.");
+							        return;
+							    }
+
+							    const email = emailElement.value;
+							    const formData = new FormData();
+							    formData.append("email", email);
+
+							    // Send API request on reload
+							    navigator.sendBeacon("/updateUserStatusOnReload", formData);
+							}
+							// Detect page visibility changes
+							document.addEventListener("visibilitychange", () => {
+							    if (document.visibilityState === "visible") {
+							        isNavigatingAway = false; // Reset if user is still on the site
+							    }
+							});
+
+							
+							// Handle tab/window close
+							function handleTabClose(event) {
+								
+								console.log("pkljj ");
+							    if (isNavigatingAway) {
+							        console.log("Navigating within site, not sending API request.");
+							        return; // Ignore if navigating within the site
+							    }
+
+							    const isReloading = sessionStorage.getItem("isReloading") === "true";
+							    const emailElement = document.getElementById("loggedInMail");
+								console.log("Checking isReloading:", isReloading);
+							    if (!emailElement) {
+							        console.error("Email element not found.");
+							        return;
+							    }
+
+							    const email = emailElement.value;
+							    const formData = new FormData();
+							    formData.append("email", email);
+
+							    if (isReloading) {
+							       // alert("Page is reloading, API request not sent."); // Alert for reload
+							        console.log("Reload detected, skipping API call.");
+							        return; // Do not send API call on reload
+							    }
+
+							   // alert("Tab or window closed! Sending API request."); // Alert for tab close
+							    console.log("Sending API request to /updateUserStatusOnClose for:", email);
+							    
+							    // Use sendBeacon for reliability
+							    navigator.sendBeacon("/updateUserStatusOnClose", formData);
+							}
+
+							// Use pagehide and beforeunload (for better reliability)
+							window.addEventListener("pagehide", handleTabClose);
+							window.addEventListener("beforeunload", handleTabClose);*/
+						
+	</script>
+
+	<script>
+		
+			</script>
+
+
+	<div class="chat-app" style="display: none;">
+		<div id="plist" class="people-list">
+			<div class="input-group mb-3">
+				<input type="text" id="searchInputModal" class="form-control" placeholder="Search..."
+					aria-label="Search">
+				<span class="input-group-text">
+					<i class="bi bi-search"></i>
+				</span>
+
+			</div>
+			<ul id="employeeNames" class="list-unstyled chat-list mt-2 mb-0">
+				<!-- Employee names will be dynamically populated here -->
+			</ul>
+		</div>
+
+		<div class="chat">
+			<div class="chat-header clearfix">
+				<div class="row w-100">
+
+					<!-- Employee Photo and Name Section -->
+					<div class="col-lg-6 d-flex align-items-center">
+						<div class="chat-about d-flex align-items-center">
+							<img id="employeePhoto" class="employee-photo" src="default-avatar.png"
+								alt="Employee Photo" />
+							<h6 class="m-b-0 ml-2" id="employeeName">Select an Employee</h6>
+						</div>
+					</div>
+					<!-- Right aligned three dots (Vertical) -->
+					<div class="col-lg-6 text-right">
+						<div class="dropdown custom-dropdown">
+							<button class="btn btn-outline-secondary" type="button" id="dropdownMenuButton"
+								data-bs-toggle="dropdown" aria-expanded="false">
+								<i class="fa fa-ellipsis-v"></i>
+							</button>
+							<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+								<li><a class="dropdown-item" href="#">Delete Chat</a></li>
+								<li><a class="dropdown-item" href="#">Mute</a></li>
+								<li><a class="dropdown-item" href="#">Contact Info</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="chat-window" class="chat-history">
+				<ul class="m-b-0">
+					<!-- Chat messages will be populated here dynamically -->
+
+				</ul>
+				<div id="message-icon-container" class="message-icon" style="display: none;">
+
+					<!-- Plain square message icon SVG (behind) -->
+					<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+						<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+						<g id="SVGRepo_iconCarrier">
+							<path
+								d="M10 9H17M10 13H17M7 9H7.01M7 13H7.01M21 20L17.6757 18.3378C17.4237 18.2118 17.2977 18.1488 17.1656 18.1044C17.0484 18.065 16.9277 18.0365 16.8052 18.0193C16.6672 18 16.5263 18 16.2446 18H6.2C5.07989 18 4.51984 18 4.09202 17.782C3.71569 17.5903 3.40973 17.2843 3.21799 16.908C3 16.4802 3 15.9201 3 14.8V7.2C3 6.07989 3 5.51984 3.21799 5.09202C3.40973 4.71569 3.71569 4.40973 4.09202 4.21799C4.51984 4 5.0799 4 6.2 4H17.8C18.9201 4 19.4802 4 19.908 4.21799C20.2843 4.40973 20.5903 4.71569 20.782 5.09202C21 5.51984 21 6.0799 21 7.2V20Z"
+								stroke="#94b7db" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+						</g>
+					</svg>
+
+					<!-- SVG with animation -->
+					<svg class="animated-icon" viewBox="0 0 374 374" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<g clip-path="url(#clip0)">
+							<path
+								d="M318.084 132.622C311.339 101.37 287.642 82 256.652 82C238.423 82 217.459 89.3248 197.954 102.509C191.574 106.904 182.642 106.904 176.079 102.672C155.298 88.9992 135.246 82 116.652 82C85.6626 82 61.9647 101.533 55.2199 133.111C44.2824 183.896 80.923 252.26 187.017 291C292.746 251.446 329.204 183.082 318.084 132.622Z" />
+							<path
+								d="M187.466 0C187.366 0 187.166 0 186.866 0C85.666 0 3.36603 82.3 3.36603 183.5C3.36603 224.8 17.466 264.9 43.266 297.2L16.566 359.3C14.366 364.4 16.766 370.3 21.766 372.4C23.566 373.2 25.566 373.4 27.466 373.1L125.366 355.9C144.966 363 165.566 366.6 186.366 366.5C287.566 366.5 369.866 284.2 369.866 183C370.066 82.1 288.366 0.1 187.466 0ZM192.966 269.8C188.966 271.3 184.666 271.3 180.666 269.8C149.066 257.1 124.466 238.3 109.466 215.4C95.966 194.7 90.766 171.4 94.866 149.9C100.466 121.4 121.866 102.3 148.266 102.3C160.966 102.3 173.866 106.5 186.766 114.7C199.366 106.5 212.466 102.3 225.066 102.3C251.866 102.3 272.866 120.9 278.466 149.6C286.066 188.8 262.666 241.3 192.966 269.8Z" />
+						</g>
+						<defs>
+							<clipPath id="clip0">
+								<rect width="373.232" height="373.232" fill="white" />
+							</clipPath>
+						</defs>
+					</svg>
+
+
+
+					<!-- Dots Animation -->
+					<div class="dots">
+						<div class="dot"></div>
+						<div class="dot"></div>
+						<div class="dot"></div>
+					</div>
+
+
+
+
+				</div>
+
+
+			</div>
+			<!-- Move the paragraph outside the chat window -->
+			<p id="logo-text"
+				style="text-align: center; font-size: 14px; color: #6c757d; margin-top: 10px; display: none;">
+				"Reach out to your colleagues and stay on top of your projects with quick, seamless communication."
+			</p>
+			<div class="chat-message clearfix">
+				<div class="custom-input-group mb-0">
+					<input type="text" id="message" class="custom-form-control" placeholder="Enter your message..." />
+					<div class="custom-input-group-append">
+						<button class="custom-send-btn" onclick="sendMessage()">
+							<i class="ri ri-send-plane-2-fill"></i>
+						</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<input type="hidden" th:value="${loggedInUserEmail}" id="loggedInMail">
+	<input type="hidden" id="loggedAdminEmpId2" th:value="${empId}">
+
+	<script>
+		    function fetchUnreadCount() {
+		        console.log("Fetching unread message count...");
+
+		        var userEmailElement = document.getElementById('loggedInMail');
+		        if (!userEmailElement) {
+		            console.error("Error: #loggedInMail element not found!");
+		            return;
+		        }
+
+		        var userEmail = userEmailElement.value;
+		        console.log("User email:", userEmail);
+
+		        if (!userEmail) {
+		            console.warn("No email found, skipping fetch.");
+		            return;
+		        }
+
+		        fetch(`/unread-count?email=${encodeURIComponent(userEmail)}`)
+		            .then(response => {
+		                console.log("Response received:", response);
+		                return response.json();
+		            })
+		            .then(count => {
+		                console.log("Unread count:", count);
+
+		                const badge = document.getElementById("unreadCountBadge");
+						
+						
+						
+		                if (!badge) {
+		                    console.error("Error: #unreadCountBadge element not found!");
+		                    return;
+		                }
+
+		                if (count > 0) {
+		                    badge.textContent = count;
+		                    badge.style.display = "inline-block";
+							
+							
+		                } else {
+		                    badge.style.display = "none";
+							
+		                }
+		            })
+		            .catch(error => console.error("Error fetching unread messages:", error));
+		    }
+
+		    setInterval(fetchUnreadCount, 5000); // Fetch count every 5 seconds
+		    fetchUnreadCount(); // Initial fetch
+		</script>
+
+	<script>
+		//CODE FOR CHATBOOT NOTIFICATION 
+		var stompClient = null;
+		var employeeMap = {}; // To store the mapping of employee names to emails
+		let employeePhotoMap = {};
+		let emailToNameMap = {}; // New map for email -> name lookup
+		var email = null;
+		var visibilityState = document.visibilityState; // Track tab visibility
+		var heartbeatInterval = null; // Track heartbeat interval
+
+		function connectWebSocket() {
+			
+			var socket = new SockJS('/chat-websocket');
+						  stompClient = Stomp.over(socket);
+
+						  var email = document.getElementById('loggedInMail').value;
+						  console.log(`Connecting WebSocket as: ${email}`);
+
+						  stompClient.connect({ 'email': email }, function (frame) {
+						      console.log('Connected to WebSocket:', frame);
+
+							 // subscribeToTypingEvents();
+						      // Mark user as active
+						      stompClient.send("/app/userConnected", {}, JSON.stringify({ email }));
+
+						      // Subscribe to active users list
+						      stompClient.subscribe('/topic/activeUsers', function (message) {
+						          var activeUsers = JSON.parse(message.body);
+						          updateActiveUserUI(activeUsers);
+						      });
+							  // Subscribe to user messages
+							        stompClient.subscribe('/user/queue/messages', function (message) {
+									//	loadMessages();
+									//	alert("po2");
+							            console.log('Raw WebSocket Message:11', message);
+							            var msg = JSON.parse(message.body);
+										//alert(msg);
+							            console.log('Parsed Messag111e:', msg);
+							            console.log(`Received messagesdsd: ${JSON.stringify(msg)}`);
+										//alert("(message.read"+msg.read);
+									
+							            // Display message if it matches the selected employee
+							            if (selectedEmployee === msg.senderEmail || selectedEmployee === msg.recipientEmail) {
+											console.log(`New message fromss ${msg.senderEmail}: ${msg.content}`);
+											console.log("plk "+selectedEmployee);
+											console.log("plk "+msg.senderEmail);
+											console.log("plk "+msg.recipientEmail);
+											//loadMessages();
+							                showMessage(
+							                    msg.id,               // Message ID
+							                    msg.senderEmail,      // Sender's email
+							                    msg.content,          // Message content
+							                    msg.recipientEmail,   // Recipient's email
+							                    msg.timestamp,        // Message timestamp
+							                    email,
+												msg.read                    // Logged-in user's email
+							                );
+							            }
+								
+										loadEmployees();
+										loadMessages();
+									 	
+							        });
+
+							        // Subscribe to notifications
+							        stompClient.subscribe('/user/queue/notifications', function (notification) {
+										//alert("00");
+							            console.log('New Notification:', notification.body);
+							            showToastNotification(notification.body);
+										loadEmployees();
+										//alert("01");
+							        });
+
+									//alert("Subscribing to chat updates...");
+									stompClient.subscribe('/user/queue/messages', function (message) {
+									    console.log('WebSocket Chat Update Received:', message.body); // Log raw message
+
+									    let parsedMessage = JSON.parse(message.body);
+									    console.log('Parsed Message:', parsedMessage); // Log parsed JSON
+
+									    if (Array.isArray(parsedMessage)) {
+									        parsedMessage.forEach(msg => {
+									            console.log(`Message ID: ${msg.id}, Read: ${msg.read}`);
+									            if (msg.read) {
+									                updateMessageUI(msg);
+									            }
+									        });
+									    } else {
+									        console.log("Unexpected message format:", parsedMessage);
+									    }
+
+									    // Refresh messages after a delay
+									    setTimeout(() => {
+									        console.log("Refreshing messages...");
+									        loadMessages();
+									    }, 3000);
+									});
+
+									stompClient.subscribe('/topic/typing', function (message) {
+									    console.log("📩 Typing notification received:", message.body);
+
+									    let typingData;
+									    try {
+									        typingData = JSON.parse(message.body);
+									        console.log("✅ Parsed Typing Data:", typingData);
+									    } catch (error) {
+									        console.error("❌ Error parsing typing notification message:", error);
+									        return;
+									    }
+
+									    let loggedInUserEmail = document.getElementById('loggedInMail')?.value;
+									    if (!loggedInUserEmail) return;
+
+									    if (loggedInUserEmail === typingData.recipientEmail && typingData.senderEmail === selectedEmployee) {
+									        // Fetch actual typing status from the backend
+									        fetch(`/getTypingStatus?senderEmail=${typingData.senderEmail}&recipientEmail=${typingData.recipientEmail}`)
+									            .then(response => response.json())
+									            .then(data => {
+									                console.log("🎯 Actual Typing Status from DB:", data.typing);
+													console.log("🎯 Actual Typing Status from DB:", data);
+													                console.log("ℹ️ Typing Status (0 or 1):", data.typing);
+													                
+									                let chatMessages = document.querySelector(".chat-history ul");
+									                let chatContainer = document.querySelector(".chat-history"); // The scrollable chat area
+
+									                let typingIndicator = document.getElementById("typingIndicator");
+									                
+									                if (!typingIndicator) {
+									                    typingIndicator = document.createElement("li");
+									                    typingIndicator.id = "typingIndicator";
+									                    typingIndicator.classList.add("typing-indicator");
+									                    typingIndicator.innerHTML = `
+									                        <img src="${employeePhotoMap[selectedEmployee] || 'default-profile.jpg'}" alt="User Photo" class="typing-photo">
+									                        <span>Typing...</span>
+									                    `;
+									                    chatMessages.appendChild(typingIndicator);
+									                }
+
+									                if (data.typing === 1) { // Ensure it checks the latest typing status
+									                    typingIndicator.style.display = "flex";
+
+									                    // Move typing indicator to the bottom
+									                    chatMessages.appendChild(typingIndicator);
+
+									                    // Auto-scroll to the bottom
+									                    setTimeout(() => {
+									                        chatContainer.scrollTop = chatContainer.scrollHeight;
+									                    }, 100);
+									                } else {
+									                    typingIndicator.style.display = "none";
+									                }
+									            })
+									            .catch(error => console.error("❌ Error fetching typing status:", error));
+									    }
+									});
+
+
+						      // Start heartbeat initially
+						      heartbeatInterval = setInterval(() => {
+						          if (stompClient && stompClient.connected) {
+						              stompClient.send("/app/userHeartbeat", {}, JSON.stringify({ email }));
+						              console.log("Heartbeat sent for user: " + email);
+						          }
+						      }, 20000); // 30 seconds
+
+						      // Detect tab visibility change
+						  /*    document.addEventListener("visibilitychange", function () {
+						          if (document.hidden) {
+						              console.log("User switched to another tab. Marking as inactive.");
+						              stompClient.send("/app/userInactive", {}, JSON.stringify({ email }));
+						              clearInterval(heartbeatInterval); // Stop heartbeat
+						              heartbeatInterval = null;
+						          } else {
+						              console.log("User returned to the application tab. Marking as active.");
+						              stompClient.send("/app/userConnected", {}, JSON.stringify({ email }));
+						              if (!heartbeatInterval) {
+						                  heartbeatInterval = setInterval(() => {
+						                      if (stompClient && stompClient.connected) {
+						                          stompClient.send("/app/userHeartbeat", {}, JSON.stringify({ email }));
+						                          console.log("Heartbeat sent for user: " + email);
+						                      }
+						                  }, 30000);
+						              }
+						          }
+						      });*/
+
+						      // Detect tab close or WebSocket disconnect
+						      socket.onclose = function () {
+						          console.log("WebSocket disconnected. Updating user status.");
+						          stompClient.send("/app/userDisconnected", {}, JSON.stringify({ email }));
+						      };
+
+						      window.addEventListener('beforeunload', function () {
+						          stompClient.send("/app/userDisconnected", {}, JSON.stringify({ email }));
+						      });
+
+						  });
+		}
+
+		function updateActiveUserUI(activeUsers) {
+		//	alert("1");
+		    const employeeItems = document.getElementById('employeeNames').getElementsByTagName('li');
+
+		    Array.from(employeeItems).forEach(item => {
+		        const employeeName = item.querySelector('span').textContent;
+		        const email = employeeMap[employeeName]; 
+		        const statusIndicator = item.querySelector('.status-indicator'); // Get the status dot
+
+		        if (activeUsers.includes(email)) {
+		            item.classList.add('active-user');
+		            statusIndicator.style.backgroundColor = '#66cc66'; // Green for active users
+		        } else {
+		            item.classList.remove('active-user');
+		            statusIndicator.style.backgroundColor = '#ff6666'; // Red for inactive users
+		        }
+
+		        // If this employee is currently selected, update chat header status
+				if (selectedEmployee === email) {
+				           const chatStatusIndicator = document.getElementById('chatStatusIndicator');
+				           if (activeUsers.includes(email)) {
+				               chatStatusIndicator.style.backgroundColor = '#66cc66'; // Green (Online)
+				           } else {
+				               chatStatusIndicator.style.backgroundColor = '#ff6666'; // Red (Offline)
+				           }
+				       }
+		    });
+		}
+
+
+		// Select an employee to chat with
+		function selectEmployee(employeeName) {
+			selectedEmployee = employeeMap[employeeName]; // Get the email from the map
+			console.log(`Employee selected: ${selectedEmployee}`);
+
+			// Highlight the selected employee
+			var employeeItems = document.querySelectorAll('#employeeNames li');
+			employeeItems.forEach(function (item) {
+				item.classList.remove('active');
+			});
+			var selectedItem = Array.from(employeeItems).find(item => item.innerHTML === employeeName);
+			if (selectedItem) {
+				selectedItem.classList.add('active');
+			}
+
+			// Update chat header with employee name and photo
+			document.querySelector('.chat-about h6').innerText = employeeName;
+			document.querySelector('#employeePhoto').src = employeePhotoMap[selectedEmployee] || 'default-profile.jpg';
+
+			// Hide the message icon and dots when an employee is selected
+			document.getElementById('message-icon-container').style.display = 'none';
+			// Hide the paragraph when an employee is selected
+			document.getElementById('logo-text').style.display = 'none';
+
+			// Load messages for the selected employee
+			loadMessages();
+		}
+
+		function loadEmployees() {
+			console.log("Loading employee names...");
+
+			// Fetch employee names from the endpoint
+			fetch('/employees/names')
+				.then(response => {
+					console.log("Response received:", response);
+					if (!response.ok) {
+						throw new Error(`HTTP error! status: ${response.status}`);
+					}
+					return response.json();
+				})
+				.then(data => {
+					console.log("Employee data fetched:", data); // Log the raw data
+
+					const employeeList = document.getElementById('employeeNames');
+					if (!employeeList) {
+						console.error("Element with ID 'employeeNames' not found.");
+						return;
+					}
+
+					employeeList.innerHTML = ''; // Clear the list before adding new items
+
+					// Iterate through employee data
+					data.forEach(employee => {
+						console.log("Processing employee:", employee);
+
+						// Create a list item for each employee
+						const li = document.createElement('li');
+						li.classList.add('d-flex', 'align-items-center', 'employee-item');
+
+						// Handle missing or empty profile photo paths
+						const profilePic = employeePhotoMap[employee.email] || '/static/default-profile.jpg';
+						console.log(`Profile picture for ${employee.name}: ${profilePic}`);
+
+						li.innerHTML = `
+			                    <img src="${profilePic}" 
+			                         alt="Employee Photo" 
+			                         class="employee-photo mr-2" />
+			                    <span>${employee.name}</span>
+			                `;
+
+						// Map employee name to email
+						employeeMap[employee.name] = employee.email;
+						console.log("Mapped employee:", employee.name, "->", employee.email);
+						// Add new reverse mapping (email -> name)
+						emailToNameMap[employee.email] = employee.name;
+						// Add click event to list item
+						li.onclick = () => {
+							console.log(`Selected employee: ${employee.name}`);
+							selectEmployee(employee.name);
+						};
+
+						// Append the list item to the employee list
+						employeeList.appendChild(li);
+
+					});
+
+					console.log("Employee names loaded successfully. Employee map:", employeeMap);
+					// Call the unread messages function after loading employee data
+					fetchUnreadMessages();
+
+					// Set interval to check for new messages every 10 seconds
+						setInterval(fetchUnreadMessages, 10000);
+				})
+				.catch(error => {
+					console.error("Error loading employees:", error);
+				});
+		}
+
+
+		function loadMessages() {
+			// alert("Loading messages...");
+			// Get the logged-in user's email and selected employee's email
+			var loggedInEmail = document.getElementById('loggedInMail').value;
+			var selectedEmployeeEmail = selectedEmployee; // Email is already stored in selectedEmployee
+
+			console.log(`Loading messages between: ${loggedInEmail} and ${selectedEmployeeEmail}`);
+
+			fetch(`/messages?loggedInEmail=${encodeURIComponent(loggedInEmail)}&selectedEmployeeEmail=${encodeURIComponent(selectedEmployeeEmail)}`)
+				.then(response => response.json())
+				.then(data => {
+					console.log("Chat messages loaded:", data);
+					// Clear the chat window before displaying messages
+					var chatWindow = document.getElementById('chat-window').querySelector('ul');
+					chatWindow.innerHTML = '';
+
+					// Display messages
+					data.forEach(function (msg) {
+						// showMessage(msg.senderEmail, msg.content, msg.recipientEmail, loggedInEmail);
+						showMessage(msg.id, msg.senderEmail, msg.content, msg.recipientEmail, msg.timestamp, loggedInEmail);
+					});
+				})
+				.catch(error => console.error("Error loading chat messages:", error));
+		}
+		let activeDeleteDropdown = null;
+		function showMessage(id, senderEmail, message, recipientEmail, timestamp, loggedInEmail) {
+			console.log("Message ID:", id);
+			console.log(`LoggedInEmailrrr: ${loggedInEmail}, SenderEmail: ${senderEmail}`);
+
+			const isSender = senderEmail === loggedInEmail;
+			const senderName = isSender ? "Me" : Object.keys(employeeMap).find(name => employeeMap[name] === senderEmail) || senderEmail;
+			const senderPhoto = employeePhotoMap[senderEmail] || 'default-avatar.png';
+			const formattedTime = new Date(timestamp).toLocaleString(); // Format timestamp
+
+			console.log(`Message ID: ${id}, Time: ${formattedTime}, From: ${senderEmail}, To: ${recipientEmail}, Content: "${message}"`);
+
+			var chatWindow = document.getElementById('chat-window').querySelector('ul');
+			var li = document.createElement('li');
+			li.className = isSender ? 'clearfix right' : 'clearfix left';
+
+			li.innerHTML = `
+					    <div class="message-container" data-message-id="${id}" onclick="toggleDeleteOption(this)">
+					        <img class="sender-photo" src="${senderPhoto}" alt="Sender Photo" />
+					        <div class="message ${isSender ? 'my-message' : 'other-message'}">
+					            <strong>${senderName}:</strong> ${message}
+					        </div>
+					    </div>
+					    <div class="timestamp" style="text-align: ${isSender ? 'right' : 'left'};">
+					        ${formattedTime}
+					    </div>
+					    ${isSender ? `
+					        <div class="message-action-dropdown" >
+					            <a class="dropdown-item" href="#" onclick="deleteMessage(this, ${id})">Delete Message</a>
+					        </div>
+					    ` : ''}`;
+
+			chatWindow.appendChild(li);
+			chatWindow.scrollTop = chatWindow.scrollHeight;
+		}
+
+		/*function fetchUnreadMessages() {
+			console.log("Fetching unread messages...");
+			var loggedInEmail = document.getElementById('loggedInMail').value;
+
+			fetch(`/unread?email=${loggedInEmail}`)
+				.then(response => response.json())
+				.then(messages => {
+					messages.forEach(message => {
+						let senderName = emailToNameMap[message.senderEmail] || message.senderEmail;
+
+						// Show notification with sender's email as a parameter
+						showToastNotification(`New message from ${senderName}: ${message.content}`, message.senderEmail);
+					});
+				})
+				.catch(error => console.error("Error fetching unread messages:", error));
+		}*/
+
+		let displayedMessageIds = new Set(); // Track displayed messages
+		let closedMessageIds = new Set(); // Track closed messages
+
+		function fetchUnreadMessages() {
+		    console.log("Fetching unread messages...");
+		    var loggedInEmail = document.getElementById('loggedInMail').value;
+
+		    fetch(`/unread?email=${loggedInEmail}`)
+		        .then(response => response.json())
+		        .then(messages => {
+		            messages.forEach(message => {
+		                console.log("Processing message ID:", message.id); // Print message ID to console
+		                
+		                // Ignore messages that were previously closed
+		                if (!displayedMessageIds.has(message.id) && !closedMessageIds.has(message.id)) {
+							//alert(1);
+		                    let senderName = emailToNameMap[message.senderEmail] || message.senderEmail;
+		                    showToastNotification(`New message from ${senderName}: ${message.content}`, message.id, message.senderEmail);
+		                    displayedMessageIds.add(message.id); // Mark message as displayed
+		                }
+						//alert(2);
+		            });
+		        })
+		        .catch(error => console.error("Error fetching unread messages:", error));
+		}
+		// Global flag to track if the user manually dismissed notifications
+
+		/*function showToastNotification(message, senderEmail) {
+			
+			var toastContainer = document.createElement('div');
+			toastContainer.className = 'toast-notification';
+
+			// Add message and close button
+			toastContainer.innerHTML = `<p>${message}</p> <span class="toast-close">✖</span>`;
+
+			document.body.appendChild(toastContainer);
+
+			// Animate in
+			setTimeout(() => {
+				toastContainer.classList.add('show');
+			}, 100);
+
+			// Auto-hide after 8 seconds
+			let autoHideTimeout = setTimeout(() => closeToast(toastContainer), 10000);
+
+			// Prevent opening chat when clicking the close button
+			toastContainer.querySelector('.toast-close').addEventListener('click', (event) => {
+				event.stopPropagation(); // Prevent click from bubbling to toastContainer
+				clearTimeout(autoHideTimeout);
+				
+				closeToast(toastContainer);
+			});
+
+			// Open chat when clicking on the notification
+			toastContainer.addEventListener('click', () => {
+				openChatWithSender(senderEmail);
+				closeToast(toastContainer); // Remove notification when chat opens
+			});
+		}*/
+		function showToastNotification(message, messageId, senderEmail) {
+			//alert(1);
+		    var toastContainer = document.createElement('div');
+		    toastContainer.className = 'toast-notification';
+		    toastContainer.innerHTML = `<p>${message}</p> <span class="toast-close">✖</span>`;
+
+		    document.body.appendChild(toastContainer);
+
+		    // Animate in
+		    setTimeout(() => {
+		        toastContainer.classList.add('show');
+		    }, 100);
+
+		    // Auto-hide after 8 seconds
+		    let autoHideTimeout = setTimeout(() => closeToast(toastContainer, messageId), 8000);
+
+		    // Prevent opening chat when clicking the close button
+		    toastContainer.querySelector('.toast-close').addEventListener('click', (event) => {
+		        event.stopPropagation(); // Prevent click from bubbling to toastContainer
+		        clearTimeout(autoHideTimeout);
+		        closedMessageIds.add(messageId); // Mark as closed so it won't be shown again
+		        closeToast(toastContainer, messageId);
+		    });
+
+		    // Open chat when clicking on the notification
+		    toastContainer.addEventListener('click', () => {
+		        openChatWithSender(senderEmail);
+		        closeToast(toastContainer, messageId); // Remove notification when chat opens
+		    });
+		}
+
+		// Function to handle toast closing
+		/*function closeToast(toast) {
+			toast.classList.remove('show');
+			setTimeout(() => toast.remove(), 300); // Faster fade-out
+		}*/
+		// Function to handle toast closing and mark as dismissed
+		// Function to handle toast closing
+		function closeToast(toast, messageId) {
+		    toast.classList.remove('show');
+		    setTimeout(() => toast.remove(), 300); // Faster fade-out
+		}
+		/*	function openChatWithSender(senderEmail) {
+				console.log("Opening chat with:", senderEmail);
+			    
+				// Construct the URL for the UserFavorite page with the senderEmail as a query parameter
+				const url = `/my-favorites?email=${encodeURIComponent(senderEmail)}`;
+			    
+				// Redirect to the UserFavorite page
+				window.location.href = url;
+			}*/
+
+		function openChatWithSender(senderEmail) {
+			console.log("Opening chat with:", senderEmail);
+
+			// Store sender email in sessionStorage
+			sessionStorage.setItem("chatSenderEmail", senderEmail);
+
+			// Redirect to the UserFavorite page
+			window.location.href = `/my-favorites`;
+		}
+
+		// Connect to the WebSocket server and load employees when the page is loaded
+		document.addEventListener('DOMContentLoaded', function () {
+			//fetchUnreadMessages();
+			loadEmployees();
+			connectWebSocket();
+		});
+	</script>
+
+</body>
+
+</html>

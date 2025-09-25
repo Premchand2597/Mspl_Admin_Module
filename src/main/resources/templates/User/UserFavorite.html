@@ -1,0 +1,5218 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="utf-8">
+	<meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+	<title>UserDashboard</title>
+	<meta content="" name="description">
+	<meta content="" name="keywords">
+
+	<!-- Favicons -->
+	<link href="assets/img/favicon.png" rel="icon">
+	<link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+	<!-- Google Fonts -->
+<!-- 	<link href="https://fonts.gstatic.com" rel="preconnect">
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+		rel="stylesheet"> -->
+		
+	<link rel="stylesheet" href="/assets/font/fonts.css">
+
+	<!-- Vendor CSS Files -->
+	<link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+	<link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+	<link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
+	<link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+	<link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+	<link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+	
+	<!-- Template Main CSS File -->
+	<link href="assets/css/style.css" rel="stylesheet">
+	<!-- <script src="https://code.highcharts.com/highcharts.js"></script> -->
+	<script src="assets/js/highcharts.js"></script>
+	
+	<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script> -->
+	<!-- 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> -->
+	<link rel="stylesheet" href="/css/all.min.css">
+	
+	<!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
+    <script src="assets/js/sweetalert2@11.js"></script>
+  
+	<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+	<script src="assets/js/jquery-3.6.4.min.js"></script> 
+
+	<!--CHAT BOOT-->
+	<!-- Include SockJS and Stomp.js libraries -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.3.0/sockjs.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
+	<!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" /> -->
+
+	<!-- Include Toastify CSS and JS -->
+    <!-- 	<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" /> -->
+	<link rel="stylesheet" href="/assets/css/toastr.min.css"> 
+
+	<style>
+		@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+		.card {
+			border: 1px solid #ddd;
+			border-radius: 8px;
+			padding: 15px;
+			margin-bottom: 20px;
+		}
+
+		.info-card {
+			background-color: #fff;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+		}
+
+		#attendence-chart {
+			width: 100%;
+			height: 190px;
+			/* Adjust the height as needed */
+		}
+
+		/* Example CSS to style disabled items */
+		.activity-item .disabled {
+			pointer-events: none;
+			/* Disable interactions */
+			opacity: 0.5;
+			/* Make the item appear grayed out */
+		}
+
+		.profile-picture {
+			width: 40px;
+			/* Adjust the size as needed */
+			height: 150px;
+			/* Ensure the height and width are the same */
+			border-radius: 50%;
+			/* This makes the image a circle */
+			object-fit: cover;
+			/* Ensures the image fits within the circle */
+		}
+
+		/* Styles for selected employee */
+
+		/* Container Styling */
+		#plist {
+			background: linear-gradient(135deg, #f3f4f6, #e9ecef);
+			border: 1px solid #ddd;
+			border-radius: 12px;
+			padding: 15px;
+			max-width: 400px;
+			margin: 0px auto;
+			/* Moved up slightly */
+			box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+			overflow: hidden;
+			position: relative;
+		}
+
+		/* Search Box */
+		#plist .input-group {
+			margin-bottom: 12px;
+			/* Reduced spacing */
+			border-radius: 8px;
+			overflow: hidden;
+			background-color: #f8f9fa;
+			/* Set background color to match the default input */
+			border: 1px solid #ccc;
+			/* Light border to define the box */
+		}
+
+		#plist .input-group .form-control {
+			border-radius: 8px;
+			box-shadow: none;
+			border: none;
+			/* Remove the border */
+			padding: 10px 15px;
+			font-size: 14px;
+			background-color: transparent;
+			/* Ensure the input background is transparent */
+		}
+
+		#plist .input-group .input-group-text {
+			background-color: transparent;
+			/* Make the background transparent */
+			color: #007bff;
+			/* Color for the icon */
+			border: none;
+			/* Remove border */
+			border-radius: 0 8px 8px 0;
+			/* Rounded corners only on the right */
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		/* Employee List */
+		#employeeNames {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+			overflow-y: auto;
+			max-height: 400px;
+			/* Scrollable when long */
+			border-radius: 10px;
+		}
+
+		#employeeNames::-webkit-scrollbar {
+			width: 8px;
+		}
+
+		#employeeNames::-webkit-scrollbar-thumb {
+			background-color: #bbb;
+			border-radius: 10px;
+		}
+
+		#employeeNames li {
+			display: flex;
+			align-items: center;
+			padding: 8px 12px;
+			margin-bottom: 5px;
+			background-color: #ffffff;
+			border-radius: 8px;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+		}
+
+		#employeeNames li:last-child {
+			margin-bottom: 0;
+		}
+
+		#employeeNames li:hover {
+			background-color: #e9f4ff;
+			transform: translateY(-3px);
+			box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+		}
+
+		/* Employee Photo */
+		.employee-photo {
+			width: 60px;
+			/* Increased size */
+			height: 60px;
+			/* Increased size */
+			border-radius: 50%;
+			object-fit: cover;
+			margin-right: 15px;
+			transition: all 0.3s ease;
+		}
+
+		#employeeNames li:hover .employee-photo {
+			transform: scale(1.1);
+		}
+
+		/* Active State */
+		#employeeNames li.active {
+			background-color: #007bff;
+			color: #fff;
+			transform: translateY(-2px);
+			box-shadow: 0 6px 15px rgba(0, 123, 255, 0.5);
+		}
+
+
+		/* Employee Name Text */
+		#employeeNames span {
+			font-size: 15.5px;
+			font-weight: normal;
+			color: #333;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		#employeeNames li.active span {
+			color: #fff;
+		}
+
+		/* Dropdown container */
+		.message-action-dropdown {
+			display: none;
+			position: absolute;
+			background-color: #fff;
+			box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+			z-index: 1;
+			width: 150px;
+			/* Adjust as needed */
+			border-radius: 4px;
+			margin-top: 5px;
+
+		}
+
+		/* Dropdown item styling */
+		.message-action-dropdown .dropdown-item {
+			padding: 8px 12px;
+			cursor: pointer;
+			text-decoration: none;
+			color: #333;
+			display: block;
+		}
+
+		.message-action-dropdown .dropdown-item:hover {
+			background-color: #f1f1f1;
+		}
+
+
+		.chat-app {
+			display: flex;
+			height: 70vh;
+			/* Adjust height as needed previously the height was 80vh */
+			overflow: hidden;
+		}
+
+		/* Class for hiding an element */
+		.not-visible {
+			display: none !important;
+		}
+
+		/* Class for showing an element */
+		.is-visible {
+			display: block !important;
+		}
+
+		.people-list {
+			width: 30%;
+			/* Adjust width for employee list */
+			overflow-y: auto;
+			border-right: 1px solid #ccc;
+			padding: 10px;
+			/* Add padding for aesthetics */
+		}
+
+		.chat {
+			width: 70%;
+			/* Adjust width for chat area */
+			display: flex;
+			flex-direction: column;
+		}
+
+		.employee-photo {
+			width: 40px;
+			/* Adjust the size of the photo */
+			height: 40px;
+			border-radius: 50%;
+			object-fit: cover;
+			margin-right: 10px;
+			/* Spacing between photo and name */
+		}
+
+		.chat-about h6 {
+			margin-left: 10px;
+			/* Add space between photo and name */
+			font-size: 18px;
+			/* Larger font size for better readability */
+			font-family: 'Arial', sans-serif;
+			/* Use a clean, modern font */
+		}
+
+		.chat-about img {
+			width: 50px;
+			/* Increase the size of the photo */
+			height: 50px;
+			/* Maintain the aspect ratio */
+			border-radius: 50%;
+			/* Keep the circular shape */
+			object-fit: cover;
+			/* Ensure the image covers the area without distortion */
+			padding: 0px;
+			/* Small padding for a visible border */
+
+			transition: transform 0.3s ease;
+			/* Smooth scale effect */
+		}
+
+		.chat-about img:hover {
+			transform: scale(1.1);
+			/* Slight zoom-in effect on hover */
+		}
+
+		.text-right {
+			text-align: right;
+		}
+
+		.btn-outline-secondary {
+			background-color: transparent;
+			/* No background color */
+			border: none;
+			/* Remove border */
+			padding: 10px;
+			/* Remove padding to make it compact */
+			font-size: 20px;
+			/* Larger size for the icon */
+			color: #333;
+			/* Icon color */
+			transition: background-color 0.3s ease;
+			/* Smooth transition for hover effect */
+		}
+
+		.btn-outline-secondary:hover {
+			background-color: #cce5ff;
+			/* Light blue color on hover */
+		}
+
+		.custom-dropdown {
+			position: relative;
+		}
+
+		.custom-dropdown .dropdown-toggle {
+			background-color: transparent;
+			border: none;
+			padding: 8px;
+			font-size: 18px;
+			color: white;
+			transition: all 0.3s ease;
+		}
+
+		.custom-dropdown .dropdown-toggle:hover {
+			color: #f8f9fa;
+			background-color: #ADD8E6;
+			/* Darker background when hovered */
+			border-radius: 50%;
+			/* Circular button for a modern feel */
+		}
+
+		.custom-dropdown .dropdown-menu {
+			min-width: 180px;
+			border-radius: 8px;
+
+			transition: all 0.2s ease;
+		}
+
+
+		.custom-dropdown .dropdown-item {
+			font-size: 14px;
+			padding: 10px 15px;
+			color: #333;
+			transition: background-color 0.3s ease;
+		}
+
+		.custom-dropdown .dropdown-item:hover {
+			background-color: #f1f1f1;
+			/* Light background on hover */
+			color: #ADD8E6;
+			/* Change text color on hover */
+		}
+
+		.chat-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		/*	 background: linear-gradient(135deg, #318CE7 30%, #66A3E0 100%);*/ /* Smooth gradient */
+			/* Light blue background for a softer look */
+			/*background:white;*/
+			
+			background-color:#e9ecef;
+			color:  #555;
+			/* White text for contrast */
+			padding: 7px 17px;
+			/* Add more padding for a spacious look */
+			border-radius: 2px;
+			/* Rounded corners for a softer look */
+		   border-bottom: 1px solid #ddd; /* Horizontal line */
+			/* Subtle shadow for depth */
+			transition: all 0.3s ease;
+			/* Smooth transition for hover and focus effects */
+		}
+
+		.chat-header:hover {
+			background-color: #f7f7f7;
+			/* Slightly darker blue on hover */
+		}
+
+
+		.chat-about {
+			display: flex;
+			align-items: center;
+			font-weight: bold;
+			/* Make employee name stand out */
+		}
+
+		.chat-history {
+			overflow-y: auto;
+			flex-grow: 1;
+			padding: 10px;
+			/* Add padding for aesthetics */
+		}
+
+		#chat-window ul {
+			list-style-type: none;
+			/* Removes the bullet points */
+			padding: 0;
+			/* Removes the default padding */
+			margin: 0;
+			/* Removes the default margin */
+		}
+
+		.chat-message {
+			padding: 10px;
+		}
+
+		.message {
+			padding: 10px;
+			border-radius: 5px;
+			margin: 5px 0;
+			word-wrap: break-word;
+			/* Ensure the message text wraps properly */
+			display: inline-block;/
+		}
+
+		.my-message {
+			background-color: #B9D9EB;
+			/* Light blue for sender messages */
+			padding: 5px 10px;
+			border-radius: 8px;
+			display: inline-block;
+			/* Shrinks to fit the message content */
+			
+			/* Limit the message width for better readability */
+			word-wrap: break-word;
+			/* Ensure long words wrap to the next line */
+			margin: 5px 0;
+		}
+
+		.other-message {
+			background-color: #f1f0f0;
+			/* Light gray for recipient messages */
+			padding: 5px 10px;
+			border-radius: 8px;
+			display: inline-block;
+			/* Shrinks to fit the message content */
+			max-width: 60%;
+			/* Limit the message width for better readability */
+			word-wrap: break-word;
+			/* Ensure long words wrap to the next line */
+			margin: 5px 0;
+		}
+
+		/* Ensures the container is aligned to the right */
+		.clearfix.right {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-end;
+			/* Align all child elements to the right */
+			justify-content: flex-end;
+			text-align: right !important;
+
+		}
+
+		.clearfix.left {
+			text-align: left;
+		}
+
+		.input-group {
+			margin-top: 10px;
+		}
+
+		/* Add custom styling for employee list */
+		#employeeNames li {
+			cursor: pointer;
+		}
+
+		#employeeNames li:hover {
+			background-color: #f0f0f0;
+			/* Highlight on hover */
+		}
+
+		.form-outline {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+		}
+
+		.form-control {
+			height: calc(2.5rem + 2px);
+			/* Standard height for form controls */
+		}
+
+		#crossword {
+			border: 1px solid #ccc;
+			padding: 10px;
+			margin-top: 20px;
+		}
+
+		#crossword p {
+			margin: 5px 0;
+		}
+
+		.startArea {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			margin-bottom: 20px;
+		}
+
+		.startBtn {
+			border: none;
+			outline: none;
+			color: #fff;
+			cursor: pointer;
+			padding: 10px 0;
+			font-size: 17px;
+			border-radius: 5px;
+			background: #3571AE;
+			transition: all 0.5s ease;
+		}
+
+		.startBtn:hover {
+			background: #707d8b;
+		}
+
+		.content {
+			display: none;
+			margin: 25px 20px 35px;
+		}
+
+		.content .word {
+			user-select: none;
+			font-size: 33px;
+			font-weight: 500;
+			text-align: center;
+			letter-spacing: 24px;
+			margin-right: -24px;
+			word-break: break-all;
+			text-transform: uppercase;
+		}
+
+		.details {
+			margin: 25px 0 20px;
+		}
+
+		.details p {
+			font-size: 18px;
+			margin-bottom: 10px;
+		}
+
+		.details p b {
+			font-weight: 500;
+		}
+
+		.content input {
+			width: 100%;
+			height: 60px;
+			outline: none;
+			padding: 0 16px;
+			font-size: 18px;
+			border-radius: 5px;
+			border: 1px solid #bfbfbf;
+		}
+
+		.content input:focus {
+			box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
+		}
+
+		.buttons {
+			display: flex;
+			margin-top: 20px;
+			justify-content: space-between;
+		}
+
+		.buttons button {
+			border: none;
+			outline: none;
+			color: #fff;
+			cursor: pointer;
+			padding: 15px 0;
+			font-size: 17px;
+			border-radius: 5px;
+			width: calc(100% / 2 - 8px);
+			transition: all 0.3s ease;
+		}
+
+		.buttons .refresh-word {
+			background: #6C757D;
+		}
+
+		.buttons .check-word {
+			background: #3571AE;
+		}
+
+		.score-area {
+			padding-top: 15px;
+			font-size: 18px;
+			color: black;
+		}
+
+		.score {
+			color: #3571AE;
+		}
+
+		/* The Modal */
+		.modal {
+			display: none;
+			position: fixed;
+			z-index: 1;
+			padding-top: 100px;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			overflow: auto;
+			background-color: rgba(0, 0, 0, 0.4);
+		}
+
+		.modal-content {
+			background-color: #fefefe;
+			margin: auto;
+			padding: 20px;
+			border: 1px solid #888;
+			width: 80%;
+		}
+
+		/* Close Button */
+		.close {
+			color: #aaaaaa;
+			float: right;
+			font-size: 28px;
+			font-weight: bold;
+		}
+
+		.close:hover,
+		.close:focus {
+			color: #000;
+			text-decoration: none;
+			cursor: pointer;
+		}
+
+		.modal-backdrop {
+			z-index: 1040 !important;
+		}
+
+		.modal {
+			z-index: 1050 !important;
+		}
+
+		/* Scrollable task list */
+		/* Scrollable task list */
+		#ex1-content {
+			max-height: 400px;
+			/* Adjust this height based on your design */
+			overflow-y: auto;
+		}
+
+		.row.d-flex {
+			max-width: 100%;
+			margin-top: -40px;
+			/* Ensure the parent container doesn't exceed the screen width */
+		}
+
+		/* Make the body take up the full height of the viewport */
+		body {
+			display: flex;
+			flex-direction: column;
+			min-height: 100vh;
+			margin: 0;
+		}
+
+		/* Ensure the main content takes up all available space */
+		main {
+			flex: 1;
+		}
+
+		/* Style the footer */
+		.footer {
+			background-color: #f8f9fa;
+			/* Light gray background */
+			text-align: center;
+			/* Center-align text */
+			padding: 10px 0;
+			/* Add some padding */
+			font-size: 14px;
+			/* Set font size */
+		}
+
+
+		/* Blinking animation */
+		@keyframes blink {
+
+			0%,
+			100% {
+				opacity: 1;
+				/* Fully visible */
+			}
+
+			50% {
+				opacity: 0;
+				/* Invisible */
+			}
+		}
+
+		/* Target only the Apprisal link for the blinking effect */
+		#apprisalLink.blinking {
+			animation: blink 0.5s ease-in-out 3;
+			/* Blinks 3 times in 0.5s intervals */
+		}
+
+		/* Custom width for the modal */
+
+		.message-container {
+			display: flex;
+			/* Ensures the photo and message are beside each other */
+			align-items: center;
+			/* Align items vertically in the middle */
+			margin-bottom: 5px;
+			/* Small space below the message */
+
+		}
+
+		.sender-photo {
+			width: 40px;
+			height: 40px;
+			border-radius: 50%;
+			margin-right: 10px;
+		}
+
+		.right .sender-photo {
+			order: 2;
+			margin-left: 10px;
+			margin-right: 0px;
+
+		}
+
+		.timestamp {
+			font-size: 0.85em;
+			/* Slightly smaller font size for the timestamp */
+			color: gray;
+			/* Subtle color to differentiate from message text */
+			display: block;
+			/* Ensures the timestamp spans a full row */
+			margin-top: 4px;
+			/* Space between the message and the timestamp */
+			margin-left: 50px;
+		}
+
+		.right .timestamp {
+			text-align: right;
+			font-size: 0.85em;
+			color: gray;
+			margin-right: 50px;
+			display: block !important;
+			margin-top: 0px;
+		}
+
+		/* Shared base styles for smaller dialogs */
+		.smaller-swal-popup,
+		.smaller-swal-success {
+			width: 280px !important;
+			/* Adjust width for smaller dialogs */
+			font-size: 0.9rem !important;
+			/* Adjust base font size */
+			border-radius: 12px !important;
+			/* Add rounded corners */
+			box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2) !important;
+			/* Add shadow */
+			padding: 20px !important;
+			/* Add padding inside the popup */
+		}
+
+		/* Title styles */
+		.smaller-swal-popup .swal2-title,
+		.smaller-swal-success .swal2-title {
+			font-size: 1.1rem !important;
+			/* Slightly smaller title */
+			font-weight: bold !important;
+			color: #444 !important;
+			/* Darker text color */
+			text-transform: capitalize;
+			/* Capitalized text */
+			margin-bottom: 10px !important;
+		}
+
+		/* Content/message styles */
+		.smaller-swal-popup .swal2-content,
+		.smaller-swal-success .swal2-content {
+			font-size: 0.85rem !important;
+			/* Adjust content font size */
+			color: #666 !important;
+			/* Subtle text color */
+			line-height: 1.4 !important;
+		}
+
+		/* Button styles */
+		.smaller-swal-popup .swal2-actions .swal2-confirm,
+		.smaller-swal-popup .swal2-actions .swal2-cancel,
+		.smaller-swal-success .swal2-actions .swal2-confirm {
+			font-size: 0.8rem !important;
+			/* Smaller button font size */
+			padding: 6px 12px !important;
+			/* Adjust button padding */
+			border-radius: 8px !important;
+			/* Rounded buttons */
+			border: none !important;
+			/* Remove default borders */
+			transition: all 0.2s ease-in-out !important;
+		}
+
+		/* Confirm button specific styling */
+		.smaller-swal-popup .swal2-actions .swal2-confirm,
+		.smaller-swal-success .swal2-actions .swal2-confirm {
+			background-color: #d33 !important;
+			/* Red background */
+			color: #fff !important;
+			/* White text */
+		}
+
+		.smaller-swal-popup .swal2-actions .swal2-confirm:hover,
+		.smaller-swal-success .swal2-actions .swal2-confirm:hover {
+			background-color: #b30000 !important;
+			/* Darker red on hover */
+			transform: scale(1.05) !important;
+			/* Slight hover effect */
+		}
+
+		/* Cancel button specific styling */
+		.smaller-swal-popup .swal2-actions .swal2-cancel {
+			background-color: #3085d6 !important;
+			/* Blue background */
+			color: #fff !important;
+			/* White text */
+		}
+
+		.smaller-swal-popup .swal2-actions .swal2-cancel:hover {
+			background-color: #2671b7 !important;
+			/* Darker blue on hover */
+			transform: scale(1.05) !important;
+			/* Slight hover effect */
+		}
+
+		/* Success-specific styles */
+		.smaller-swal-success {
+			background-color: #f9f9f9 !important;
+			/* Light background */
+			color: #444 !important;
+			/* Darker text color */
+		}
+
+		.smaller-swal-success .swal2-title {
+			color: #28a745 !important;
+			/* Green title for success */
+		}
+
+		.smaller-swal-success .swal2-actions .swal2-confirm {
+			background-color: #28a745 !important;
+			/* Green confirm button */
+			color: #fff !important;
+		}
+
+		.smaller-swal-success .swal2-actions .swal2-confirm:hover {
+			background-color: #218838 !important;
+			/* Darker green on hover */
+		}
+
+		#message-icon-container svg:first-of-type {
+			height: 110px;
+			width: 110px;
+			position: absolute;
+			left: 70%;
+			/* Moved 5% more to the right */
+			top: 55%;
+			/* Moved slightly down */
+			transform: translate(-50%, -50%);
+			fill: none;
+			/* Remove the fill color */
+			stroke: blue;
+			/* Add this line to change the outline color to blue */
+			stroke-width: 2;
+			/* Optional: Adjust the width of the outline */
+		}
+
+
+		svg {
+			height: 80px;
+			width: 80px;
+			position: absolute;
+			left: 65%;
+			/* Moved 5% to the left */
+			top: 55%;
+			/* Moved slightly down */
+			transform: translate(-50%, -50%);
+			fill: #1e88e5;
+		}
+
+		.dots {
+			display: flex;
+			position: absolute;
+			left: 65%;
+			/* Moved 5% to the left */
+			top: 55%;
+			/* Moved slightly down */
+			transform: translate(-50%, -50%);
+		}
+
+		.dot {
+			width: 10px;
+			height: 10px;
+			background-color: rgb(255, 255, 255);
+			border-radius: 1000px;
+			margin-right: 6px;
+
+			/* Keyframe Animation to make dots "dance" */
+			animation: bounce 1s ease-in-out infinite;
+
+			/* Adding a different delay for each dot to make them dance in sequence */
+			&:nth-child(1) {
+				animation-delay: 0s;
+			}
+
+			&:nth-child(2) {
+				animation-delay: 0.2s;
+			}
+
+			&:nth-child(3) {
+				animation-delay: 0.4s;
+			}
+		}
+
+		/* Bounce animation */
+		@keyframes bounce {
+
+			0%,
+			100% {
+				transform: translateY(0);
+			}
+
+			50% {
+				transform: translateY(-10px);
+			}
+		}
+
+		.custom-input-group {
+			position: relative;
+			width: 100%;
+			/* Ensures it takes up full width of its container */
+		}
+
+		.custom-input-group .custom-form-control {
+			width: calc(100% - 2px);
+			/* Adjust to take the remaining space beside the button */
+			padding-right: 50px;
+			/* Adjust padding to make room for the button */
+			height: 40px;
+			/* Increase height for better spacing */
+			border: 1px solid lightgray;
+			/* Light gray outline color */
+			border-radius: 5px;
+			box-shadow: none;
+			z-index: 1;
+			/* Keep input in front */
+			outline: none;
+			/* Remove default outline */
+			transition: border-color 0.3s ease;
+			/* Smooth transition for border color */
+		}
+
+		.custom-input-group-append {
+			position: absolute;
+			right: 10px;
+			top: 50%;
+			transform: translateY(-50%);
+			z-index: 2;
+			/* Ensure button stays above the input */
+			pointer-events: none;
+			/* Allow the input field to still be clickable */
+		}
+
+		.custom-input-group button {
+			background: none;
+			border: none;
+			color: #aaa;
+			cursor: pointer;
+			padding: 0;
+			font-size: 18px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			pointer-events: auto;
+			/* Ensure the button is clickable */
+		}
+
+		.custom-input-group button i {
+			font-size: 18px;
+			color: #555;
+		}
+
+		.custom-input-group button:hover i {
+			color: #aaa;
+		}
+
+
+
+		#logo-text {
+			text-align: center;
+			font-size: 14px;
+			color: #6c757d;
+			margin-top: 8px;
+			/* Adjusted for slightly higher position */
+			margin-bottom: 20px;
+			font-family: 'Arial', sans-serif;
+			line-height: 1.5;
+			font-weight: 400;
+			letter-spacing: 0.5px;
+			text-transform: capitalize;
+		}
+
+
+		.toast-notification {
+			position: fixed;
+			bottom: 20px;
+			right: 20px;
+			background: linear-gradient(135deg, #007bff, #00d4ff);
+			color: white;
+			padding: 15px 20px;
+			border-radius: 10px;
+			box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+			z-index: 1000;
+			opacity: 0;
+			transform: translateX(100%);
+			transition: opacity 0.3s ease, transform 0.3s ease-in-out;
+			font-family: 'Arial', sans-serif;
+			font-size: 14px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			min-width: 250px;
+			gap: 10px;
+		}
+
+		/* Fade-in effect */
+		.toast-notification.show {
+			opacity: 1;
+			transform: translateX(0);
+		}
+
+		/* Close button */
+		.toast-close {
+			cursor: pointer;
+			font-size: 16px;
+			opacity: 0.8;
+			transition: opacity 0.2s;
+		}
+
+		.toast-close:hover {
+			opacity: 1;
+		}
+
+		/* Fade-out effect */
+		.toast-notification:not(.show) {
+			opacity: 0;
+			transform: translateX(100%);
+			transition: opacity 0.3s ease, transform 0.3s ease-in-out;
+		}
+		
+		
+		/* Style for the new feature list item */
+			.nav-item.new-feature {
+			  position: relative; /* Needed for pseudo-element positioning */
+			}
+
+			
+			.no-shadow {
+			    box-shadow: none !important;
+			   
+			}
+			
+			.nav-tabsnew {
+			    margin-top: -22px; /* Adjust this value to move the tabs closer */
+			}
+			.row.d-flex {
+						max-width: 100%;
+						margin-top: -40px;
+						align-items: flex-start !important;
+						/* Ensure the parent container doesn't exceed the screen width */
+					}
+					
+					
+					.employee-photo-container {
+					    position: relative;
+					    display: flex;
+					    flex-direction: column;
+					    align-items: center;
+					}
+
+					.employee-photo {
+					    width: 50px; /* Adjust size as needed */
+					    height: 50px;
+					    border-radius: 50%;
+					    object-fit: cover;
+					    margin-bottom: 5px; /* Space between image and dot */
+					}
+
+					.status-indicator {
+					    width: 12px;
+					    height: 12px;
+					    border-radius: 50%;
+					    background-color: gray; /* Default color */
+					    position: absolute;
+					    bottom: 5px; /* Positioning below the image */
+					    left: 80%;
+					    transform: translateX(-50%);
+					    border: 2px solid white; /* Adds a nice border for clarity */
+					}
+
+					.active-user .status-indicator {
+					    background-color: #66cc66; /* Green for active users */
+					}
+
+					.inactive-user .status-indicator {
+					    background-color: #ff6666; /* Red for inactive users */
+					}
+
+					.employee-name {
+					    font-size: 14px;
+					    margin-top: 5px;
+					    text-align: center;
+					}
+					.chat-status-indicator {
+					    width: 10px;
+					    height: 10px;
+					    border-radius: 50%;
+					    margin-left: 10px;
+					    display: inline-block;
+					    background-color: #ff6666; /* Default red (offline) */
+					}
+
+					.newstatus-indicator{
+						width: 10px;
+						   height: 10px;
+						   border-radius: 50%;
+						   background-color: gray; /* Default color */
+						   position: absolute;
+						   bottom: 5px; /* Adjusted to place it below the image */
+						   left: 80%;
+						  transform: translateX(-50%);
+						
+					}
+					
+					
+					/* Ensure version number appears on a new line */
+								.release-note-text {
+								  display: flex;
+								  flex-direction: column; /* Stacks elements vertically */
+								  font-size: 0.9rem;
+								}
+
+								/* Optional: Adjust the version number styling */
+								.version-number {
+								  font-size: 0.8rem;
+								  font-weight: bold;
+								  color: #555;
+								}
+								.typing-indicator {
+								    display: flex;
+								    align-items: center;
+								    gap: 8px;
+								    padding: 8px;
+								}
+
+								.typing-photo {
+								    width: 30px;
+								    height: 30px;
+								    border-radius: 50%;
+								}
+								
+								.reply-icon {
+								    color: transparent;
+								    -webkit-text-stroke: 1px black; /* Creates an outline effect */
+									font-size: 16px;
+									transition: none !important; /* Ensures no hover transition */
+								  }
+								  .reply-icon:hover {
+								      color: transparent !important; /* Keeps the original state */
+								      -webkit-text-stroke: 1px black !important; /* Prevents color change */
+								      text-decoration: none !important;
+								      opacity: 1 !important;
+								  }
+								  .delete-btn {
+								        font-size: 18px; /* Adjust button text size */
+								        padding: 8px 12px; /* Adjust button padding */
+								    }
+					
+								    .delete-btn i {
+								        font-size: 18px; /* Adjust icon size */
+								    }
+								
+								.replied-message {
+								    padding: 5px;
+								    margin-bottom: 5px;
+								    font-size: 14px;
+								    color: #333;
+								    border-radius: 5px;
+								    border-left: 4px solid;
+								}
+
+								.right .replied-message { /* When the logged-in user is the sender */
+								    background-color: #e1f3ff; /* Light blue */
+								    border-left-color: #99d1ff; /* Slightly darker blue */
+								}
+
+								.left .replied-message { /* When the logged-in user is the recipient */
+								    background-color: #e2e2e2; /* Soft gray with a hint of white */
+								    border-left: 4px solid #bdbdbd; /* Slightly darker gray for subtle contrast */
+								}
+
+
+								#reply-box {
+								    display: none;
+								    align-items: center;
+								    justify-content: space-between;
+								    background-color: #f1f1f1;
+								    padding: 8px 12px;
+								    border: 1px solid #ccc;
+								    width: 100%; /* Make it the same width as the input */
+								    position: relative;
+								    border-radius: 0; /* Remove border radius */
+								}
+
+								#cancel-reply {
+								    background: none;
+								    border: none;
+								    font-size: 16px;
+								    font-weight: bold;
+								    cursor: pointer;
+								    margin-left: auto;
+								    color: black; /* Change cancel button color to black */
+								}
+								#messageSearch:focus {
+								    outline: none;
+								    box-shadow: none;
+								    border-bottom: 2px solid gray; /* Keeps the custom bottom border */
+								}
+
+
+	</style>
+</head>
+
+<body>
+
+<input type="hidden" id="loggedInDeptName" th:value="${empDetailsByEmpId.deptName}">
+<!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center" th:if="${empDetailsByEmpId.deptId>0}">
+
+   <!--  <div class="app-branding" style="width:100%; margin:0 0 0 10px; padding:5px;">
+				    <a class="app-logo" th:href=@{/dashboard}>
+				        <img class="logo-icon" src="assets/img/logo.png" alt="logo" style="width:200px; height:50px; max-width:100%; padding:0 2px 0 10px; margin:0;">
+				    </a>
+				</div> --><!-- End Logo -->
+	
+		   <div class="d-flex align-items-center logo-container" style="width:45%; margin:0 0 0 10px; padding:5px;">
+				    <a class="app-logo" th:href=@{/userDashboard}>
+				        <img class="d-none d-lg-block" src="assets/img/logo.png" alt="logo" style="width:200px; height:50px; max-width:100%; padding:0 2px 0 10px; margin:0;">
+				    </a>
+				    <!-- <i class="bi bi-chevron-double-left toggle-sidebar-btn" onclick="toggleIconRotation()"></i> -->
+			</div>
+				
+   <!--  <div class="search-bar">
+      <form class="search-form d-flex align-items-center" method="POST" action="#">
+        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+      </form>
+    </div> --><!-- End Search Bar -->
+
+	<div th:replace="fragments/header :: header" ></div>
+	
+  </header><!-- End Header -->
+  
+  <!-- =======Super Admin Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center" th:if="${empDetailsByEmpId.deptId == 0}">
+
+    <div class="d-flex align-items-center logo-container" style="width:45%; margin:0 0 0 10px; padding:5px;">
+				    <a class="app-logo" th:href=@{/navbar}>
+				        <img class="d-none d-lg-block" src="assets/img/logo.png" alt="logo" style="width:200px; height:50px; max-width:100%; padding:0 2px 0 10px; margin:0;">
+				    </a>
+				    <!-- <i class="bi bi-chevron-double-left toggle-sidebar-btn" onclick="toggleIconRotation()"></i> -->
+					</div><!-- End Logo -->
+				
+				    <!-- <div class="search-bar">
+				      <form class="search-form d-flex align-items-center" method="POST" action="#">
+				        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+				        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+				      </form>
+				    </div> --><!-- End Search Bar -->
+
+    <div th:replace="fragments/superAdminHeader :: header"></div>
+
+  </header><!-- End Header -->
+
+
+  <!-- ======= Sidebar ======= -->
+  
+<aside id="sidebar" class="sidebar">
+<input type="hidden" id="employee-id" th:value="${empDetailsByEmpId.deptId}">
+<input type="hidden" id="employeeId1" name="empId" th:value="${empDetailsByEmpId.empid}" />
+<input type="hidden" id="loggedEmpEmail" th:value="${empDetailsByEmpId.email}">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+		 
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/userDashboard}">
+                <i class="bi bi-grid"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link " th:href="@{/navbar}">
+		        <i class="bi bi-grid"></i>
+		        <span>Dashboard</span>
+		    </a>
+	    </li>
+	    <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+			<a class="nav-link" th:href="@{/Departmentdoc}">
+				<i class="bi bi-journal-bookmark"></i>
+				<span>MSPL DocVault</span>
+			</a>
+		</li>
+		
+		<li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+			<a class="nav-link" th:href="@{/Departmentdoc}">
+				<i class="bi bi-journal-bookmark"></i>
+				<span>MSPL DocVault</span>
+			</a>
+		</li>  
+		<li class="nav-item" th:if="${session.permissions.dispatch && empDetailsByEmpId.deptId==0}">
+            <a class="nav-link" th:href="@{/dispatchIframe}">
+                <i class="bi bi-truck"></i>
+                <span>Dispatched Details</span>
+            </a>
+        </li>
+         <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/viewAdminProfile(empid=${empDetailsByEmpId.empid})}">
+                <i class="bi bi-person"></i>
+                 <span>My Profile</span>
+            </a>
+        </li>  
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/attendanceLive(email=${empDetailsByEmpId.email})}">
+                <i class="bi bi-calendar3"></i>
+                <span>Attendence</span>
+            </a> 
+        </li>      
+       <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/groupMailId}">
+                <i class="bi bi-telephone"></i>
+                <span>Employee Contacts</span>
+            </a>
+        </li>
+       <!--  <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link " th:href="@{/InterCommDetails}">
+                <i class="bi bi-telephone"></i>
+                <span>InterComm Details</span>
+            </a>
+        </li> -->
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/adminHoliday}">
+                <i class="bi bi-calendar4-week"></i>
+                <span>Holiday List</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+		    <a class="nav-link" th:href="@{/employee}">
+		        <i class="bi bi-people"></i>	
+		        <span>Employee</span>
+		    </a>
+	   </li> 
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/viewAdminLeaves(empid=${empDetailsByEmpId.empid})}">
+                <i class="bi bi-card-text"></i>
+                <span>Team Leaves</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/events}">
+                <i class="bi bi-megaphone"></i>
+                <span>Announcement</span>
+            </a>
+        </li>               
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/asset}">
+                <i class="bi bi-wallet"></i>
+                <span>Assets</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/ongoingProject}">
+                <i class="bi bi-card-heading"></i>
+                <span>Projects</span>
+            </a>
+        </li>   
+         <!-- <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/viewAdminPayslip(empid=${empDetailsByEmpId.empid})}">
+                <i class="bi bi-file-text"></i>
+                <span>Payslip</span>
+            </a>
+        </li>     --> 
+         <!-- Loop through the permissions map -->
+       <li class="nav-item" th:if="${permissions.interviewAccess && empDetailsByEmpId.deptId>0}" >
+            <a class="nav-link" th:href="@{/moatIframe}">
+                <i class="bi bi-vector-pen"></i>
+                <span>Interview</span>
+            </a>
+        </li>
+         <li class="nav-item new-feature" th:if="${empDetailsByEmpId.deptId>0}">
+			    <a class="nav-link collapsed" data-bs-target="#presales-submenu" data-bs-toggle="collapse" href="#">
+			        <i class="bi bi-layout-text-window-reverse"></i>
+			        <span>Pre-sales</span>
+			        <i class="bi bi-chevron-down ms-auto"></i>
+			    </a> 
+			    <ul id="presales-submenu" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+			        <li>
+			            <a th:href="@{/crm}">
+			                <i class="bi bi-circle"></i><span>Activity</span>
+			            </a>
+			        </li>
+			        <li>
+			            <a th:href="@{/deals}">
+			                <i class="bi bi-circle"></i><span>Pipedrive</span>
+			            </a>
+			        </li>
+			    </ul>
+			</li>
+        <li class="nav-item" th:if="${permissions.sales && empDetailsByEmpId.deptId>0}" >
+            <a class="nav-link" th:href="@{/sales}">
+                <i class="bi bi-cart3"></i>
+                <span>Sales</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.accountsAccess && empDetailsByEmpId.deptId>0}" >
+            <a class="nav-link" th:href="@{/accounts}">
+                <i class="bi bi-person-vcard"></i>
+                <span>Accounts</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.storeAccess && empDetailsByEmpId.deptId>0}" >
+            <a class="nav-link" th:href="@{/store}">
+                <i class="bi bi-shop-window"></i>
+                <span>Store</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.apprisalAccess && empDetailsByEmpId.deptId>0}" >
+            <a class="nav-link" id="apprisalLink" th:href="@{/apprisal(empid=${empDetailsByEmpId.empid})}">
+		        <i class="bi bi-file-text"></i>
+		        <span>Appraisal</span>
+		    </a>
+        </li>
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+		    <a class="nav-link" id="apprisalLink" th:href="@{/employeeApprisal(empid=${empDetailsByEmpId.empid})}">
+		        <i class="bi bi-file-text"></i>
+		        <span>Employee Appraisal</span>
+		    </a>
+		</li>
+       	<li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+				<a class="nav-link active" th:href="@{/my-favorites}">
+					<i class="bi bi-layout-text-window-reverse"></i>
+					<span>To-Chat & Remind</span><span id="unreadCountBadge" class="badge bg-primary" style="display: none;"></span>
+				</a>
+		</li>
+        		<li class="nav-item new-feature" th:if="${empDetailsByEmpId.deptId>0}">
+					    <a class="nav-link" th:href="@{/releasenotes}">
+					        <i class="bi bi-layout-text-window-reverse"></i>
+					        <span class="release-note-text">
+					            Release Note 
+					            <span class="version-number">(V.0.1.2)</span>
+					        </span>
+					    </a>
+		</li>
+        
+	    <!-- <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+            <a class="nav-link" th:href="@{/attendanceLive(email=${empDetailsByEmpId.email})}">
+                <i class="bi bi-calendar3"></i>
+                <span>Attendence</span>
+            </a>
+        </li>  -->
+         <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link"  th:href="@{/adminHoliday}">
+		        <i class="bi bi-calendar4-week"></i>
+		        <span>Holiday List</span>
+		    </a>
+	 </li>	
+	 
+	<li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		     <a class="nav-link" th:href="@{/addInterComm}">
+                <i class="bi bi-telephone"></i>
+                <span>Communication</span>
+            </a>
+	 </li>
+	 <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		     <a class="nav-link" th:href="@{/groupMailId}">
+                <i class="bi bi-envelope-open"></i>
+                <span>Group Mail Id</span>
+            </a>
+	 </li>
+	 <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		<a class="nav-link" th:href="@{/hikeRatingForm}">
+			<i class="bi bi-arrow-up-circle"></i><span>Appraisal Ratings</span>
+		</a>
+	</li>
+	<li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		<a class="nav-link" th:href="@{/apprisalEmployee}">
+			<i class="bi bi-check-square"></i><span>Submitted Appraisals</span>
+		</a>
+	</li>
+	 <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+          <a class="nav-link" href="hrActivity">
+	        <i class="bi bi-file-lock"></i><span>Permissions</span>
+	    </a>
+      </li>
+	 <!--  <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+            <a class="nav-link"  th:href="@{/InterCommDetails}">
+                <i class="bi bi-telephone"></i>
+                <span>InterComm Details</span>
+            </a>
+      </li> -->
+      <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link"  th:href="@{/viewAdminLeaves(empid=${empDetailsByEmpId.empid})}">
+		        <i class="bi bi-calendar4-week"></i>
+		        <span>Employee Leaves</span>
+		    </a>
+	 </li>
+	 <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link" th:href="@{/events}">
+		        <i class="bi bi-megaphone"></i>
+		        <span>Announcement</span>
+		    </a>
+	 </li> 
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link" th:href="@{/addDepartment}">
+		        <i class="bi bi-calendar4-week"></i>
+		        <span>Department</span>
+		    </a>
+	   </li>
+	 <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link"  th:href="@{/addRole}">
+		        <i class="bi bi-receipt"></i>
+		        <span>Role</span>
+		    </a>
+	 </li>
+	 
+	 <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link" th:href="@{/employee}">
+		        <i class="bi bi-people"></i>
+		        <span>Employee</span>
+		    </a>
+	 </li> 
+     <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+            <a class="nav-link"  th:href="@{/ongoingProject}">
+                <i class="bi bi-calendar3"></i>
+                <span>Projects</span>
+            </a>
+      </li>  
+      <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+            <a class="nav-link"  th:href="@{/asset}">
+                <i class="bi bi-wallet"></i>
+                <span>Assets</span>
+            </a>
+      </li>  
+      <li class="nav-item" th:if="${permissions.interviewAccess && empDetailsByEmpId.deptId==0}" >
+            <a class="nav-link" th:href="@{/moatIframe}">
+                <i class="bi bi-vector-pen"></i>
+                <span>Interview</span>
+            </a>
+        </li>
+              <li class="nav-item new-feature" th:if="${empDetailsByEmpId.deptId==0}">
+			    <a class="nav-link collapsed" data-bs-target="#interview-summary-submenu" data-bs-toggle="collapse" href="#">
+			        <i class="bi bi-layout-text-window-reverse"></i>
+			        <span>Interview Summary</span>
+			        <i class="bi bi-chevron-down ms-auto"></i>
+			    </a> 
+			    <ul id="interview-summary-submenu" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+			        <li>
+		            <a href="totalCandidatesList">
+		              <i class="bi bi-circle"></i><span>Total Candidates</span>
+			            </a>
+			          </li>
+			        <li>
+		            <a href="selectedCandidatesList">
+		              <i class="bi bi-circle"></i><span>Selected Candidates</span>
+		            </a>
+		          </li>
+		          <li>
+		            <a href="rejectedCandidatesList">
+		              <i class="bi bi-circle"></i><span>Rejected Candidates</span>
+		            </a>
+		          </li>
+			    </ul>
+			</li>
+         <li class="nav-item new-feature" th:if="${empDetailsByEmpId.deptId==0}">
+			    <a class="nav-link collapsed" data-bs-target="#presales-submenu" data-bs-toggle="collapse" href="#">
+			        <i class="bi bi-layout-text-window-reverse"></i>
+			        <span>Pre-sales</span>
+			        <i class="bi bi-chevron-down ms-auto"></i>
+			    </a> 
+			    <ul id="presales-submenu" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+			        <li>
+			            <a th:href="@{/crm}">
+			                <i class="bi bi-circle"></i><span>Activity</span>
+			            </a>
+			        </li>
+			        <li>
+			            <a th:href="@{/deals}">
+			                <i class="bi bi-circle"></i><span>Pipedrive</span>
+			            </a>
+			        </li>
+			    </ul>
+			</li>
+        <li class="nav-item" th:if="${permissions.sales && empDetailsByEmpId.deptId==0}" >
+            <a class="nav-link" th:href="@{/sales}">
+                <i class="bi bi-cart3"></i>
+                <span>Sales</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.accountsAccess && empDetailsByEmpId.deptId==0}" >
+            <a class="nav-link" th:href="@{/accounts}">
+                <i class="bi bi-person-vcard"></i>
+                <span>Accounts</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.storeAccess && empDetailsByEmpId.deptId==0}" >
+            <a class="nav-link" th:href="@{/store}">
+                <i class="bi bi-shop-window"></i>
+                <span>Store</span>
+            </a>
+        </li> 
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+			    <a class="nav-link" href="feedbackReports">
+			        <i class="bi bi-chat-square-text"></i>
+			        <span>Feedback Reports</span>
+			    </a>
+		 </li>
+        <li class="nav-item" th:if="${permissions.storeAccess && empDetailsByEmpId.deptId==0}">
+				<a class="nav-link" th:classappend="${empDetailsByEmpId.deptId==0} ? ' active'" th:href="@{/my-favorites}" autofocus>
+					<i class="bi bi-layout-text-window-reverse"></i>
+					<span>To-Chat & Remind</span><span id="unreadCountBadge" class="badge bg-primary" style="display: none;"></span>
+				</a>
+		</li> 
+		<li class="nav-item new-feature"  th:if="${permissions.storeAccess && empDetailsByEmpId.deptId==0}">
+					    <a class="nav-link" th:href="@{/releasenotes}">
+					        <i class="bi bi-layout-text-window-reverse"></i>
+					        <span class="release-note-text">
+					            Release Note 
+					            <span class="version-number">(0.1.1)</span>
+					        </span>
+					    </a>
+		</li>
+    </ul>
+</aside>	
+<!-- <aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+
+      <li class="nav-item">
+		    <a class="nav-link" th:href="@{/navbar}">
+		        <i class="bi bi-grid"></i>
+		        <span>Dashboard</span>
+		    </a>
+	 </li>
+	 <li class="nav-item">
+		    <a class="nav-link" th:href="@{/addDepartment}">
+		        <i class="bi bi-grid"></i>
+		        <span>Department</span>
+		    </a>
+	 </li>
+	  <li class="nav-item">
+		    <a class="nav-link" th:href="@{/addRole}">
+		        <i class="bi bi-grid"></i>
+		        <span>Role</span>
+		    </a>
+		</li>
+		<li class="nav-item">
+		    <a class="nav-link" th:href="@{/employee}">
+		        <i class="bi bi-grid"></i>
+		        <span>Employee</span>
+		    </a>
+		</li><!-- End Dashboard Nav -->
+
+	<!--  <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-menu-button-wide"></i><span>Components</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="components-alerts.html">
+              <i class="bi bi-circle"></i><span>Alerts</span>
+            </a>
+          </li>
+          <li>
+            <a href="components-accordion.html">
+              <i class="bi bi-circle"></i><span>Accordion</span>
+            </a>
+          </li>
+          <li>
+            <a href="components-badges.html">
+              <i class="bi bi-circle"></i><span>Badges</span>
+            </a>
+          </li>
+          <li>
+            <a href="components-breadcrumbs.html">
+              <i class="bi bi-circle"></i><span>Breadcrumbs</span>
+            </a>
+          </li>
+          <li>
+            <a href="components-buttons.html">
+              <i class="bi bi-circle"></i><span>Buttons</span>
+            </a>
+          </li>
+          <li>
+            <a href="components-cards.html">
+              <i class="bi bi-circle"></i><span>Cards</span>
+            </a>
+          </li>
+          <li>
+            <a href="components-carousel.html">
+              <i class="bi bi-circle"></i><span>Carousel</span>
+            </a>
+          </li>
+          <li>
+            <a href="components-list-group.html">
+              <i class="bi bi-circle"></i><span>List group</span>
+            </a>
+          </li>
+          <li>
+            <a href="components-modal.html">
+              <i class="bi bi-circle"></i><span>Modal</span>
+            </a>
+          </li>
+          <li>
+            <a href="components-tabs.html">
+              <i class="bi bi-circle"></i><span>Tabs</span>
+            </a>
+          </li>
+          <li>
+            <a href="components-pagination.html">
+              <i class="bi bi-circle"></i><span>Pagination</span>
+            </a>
+          </li>
+          <li>
+            <a href="components-progress.html">
+              <i class="bi bi-circle"></i><span>Progress</span>
+            </a>
+          </li>
+          <li>
+            <a href="components-spinners.html">
+              <i class="bi bi-circle"></i><span>Spinners</span>
+            </a>
+          </li>
+          <li>
+            <a href="components-tooltips.html">
+              <i class="bi bi-circle"></i><span>Tooltips</span>
+            </a>
+          </li>
+        </ul>
+      </li>End Components Nav
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-journal-text"></i><span>Forms</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="forms-elements.html">
+              <i class="bi bi-circle"></i><span>Form Elements</span>
+            </a>
+          </li>
+          <li>
+            <a href="forms-layouts.html">
+              <i class="bi bi-circle"></i><span>Form Layouts</span>
+            </a>
+          </li>
+          <li>
+            <a href="forms-editors.html">
+              <i class="bi bi-circle"></i><span>Form Editors</span>
+            </a>
+          </li>
+          <li>
+            <a href="forms-validation.html">
+              <i class="bi bi-circle"></i><span>Form Validation</span>
+            </a>
+          </li>
+        </ul>
+      </li>End Forms Nav
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-layout-text-window-reverse"></i><span>Tables</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="tables-general.html">
+              <i class="bi bi-circle"></i><span>General Tables</span>
+            </a>
+          </li>
+          <li>
+            <a href="tables-data.html">
+              <i class="bi bi-circle"></i><span>Data Tables</span>
+            </a>
+          </li>
+        </ul>
+      </li>End Tables Nav
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-bar-chart"></i><span>Charts</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="charts-chartjs.html">
+              <i class="bi bi-circle"></i><span>Chart.js</span>
+            </a>
+          </li>
+          <li>
+            <a href="charts-apexcharts.html">
+              <i class="bi bi-circle"></i><span>ApexCharts</span>
+            </a>
+          </li>
+          <li>
+            <a href="charts-echarts.html">
+              <i class="bi bi-circle"></i><span>ECharts</span>
+            </a>
+          </li>
+        </ul>
+      </li>End Charts Nav
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#icons-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-gem"></i><span>Icons</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="icons-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="icons-bootstrap.html">
+              <i class="bi bi-circle"></i><span>Bootstrap Icons</span>
+            </a>
+          </li>
+          <li>
+            <a href="icons-remix.html">
+              <i class="bi bi-circle"></i><span>Remix Icons</span>
+            </a>
+          </li>
+          <li>
+            <a href="icons-boxicons.html">
+              <i class="bi bi-circle"></i><span>Boxicons</span>
+            </a>
+          </li>
+        </ul>
+      </li>End Icons Nav
+
+      <li class="nav-heading">Pages</li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="users-profile.html">
+          <i class="bi bi-person"></i>
+          <span>Profile</span>
+        </a>
+      </li>End Profile Page Nav
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="pages-faq.html">
+          <i class="bi bi-question-circle"></i>
+          <span>F.A.Q</span>
+        </a>
+      </li>End F.A.Q Page Nav
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="pages-contact.html">
+          <i class="bi bi-envelope"></i>
+          <span>Contact</span>
+        </a>
+      </li>End Contact Page Nav
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="pages-register.html">
+          <i class="bi bi-card-list"></i>
+          <span>Register</span>
+        </a>
+      </li>End Register Page Nav
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="pages-login.html">
+          <i class="bi bi-box-arrow-in-right"></i>
+          <span>Login</span>
+        </a>
+      </li>End Login Page Nav
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="pages-error-404.html">
+          <i class="bi bi-dash-circle"></i>
+          <span>Error 404</span>
+        </a>
+      </li>End Error 404 Page Nav
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="pages-blank.html">
+          <i class="bi bi-file-earmark"></i>
+          <span>Blank</span>
+        </a>
+      </li> --><!-- End Blank Page Nav -->
+
+
+	<main id="main" class="main">
+		  
+		  <input type="hidden" id="loggedAdminEmpId2" th:value="${session.loggedAdminEmpId}">
+		  <input type="hidden" th:value="${empDetailsByEmpId.email}" id="loggedInMail">
+		  <input type="hidden" id="loggedAdminEmailId2" th:value="${session.email}">
+		  
+		<div class="pagetitle d-flex mb-0">
+			<i class="bi bi-chevron-double-left toggle-sidebar-btn mb-1" onclick="toggleIconRotation()"
+				style="font-size:24px;color:#2F73B9;padding:0 10px;margin-left:-10px;margin-top:-10px"></i>
+			<nav>
+				<ol class="breadcrumb mb-0">
+					<li class="breadcrumb-item"><a href="userDashboard">Home</a></li>
+					<li class="breadcrumb-item active">My Favorite</li>
+				</ol>
+			</nav>
+		</div><!-- End Page Title -->
+
+		<section class="section dashboard" style="margin-left: 8px;">
+			<div class="card mt-0 pt-0 ">
+				<div class="card-body  mb-0" >
+					<h5 class="card-title mb-0">To-Chat & Remind</h5>
+
+					<!-- Bordered Tabs Justified -->
+					<ul class="nav nav-tabs nav-tabs-bordered d-flex" id="borderedTabJustified" role="tablist" >
+
+						<li class="nav-item flex-fill" role="presentation">
+							<button class="nav-link w-100 active" id="profile-tab" data-bs-toggle="tab"
+								data-bs-target="#bordered-justified-profile" type="button" role="tab"
+								aria-controls="profile" aria-selected="false">MSPL Chat</button>
+						</li>
+						<li class="nav-item flex-fill" role="presentation">
+							<button class="nav-link w-100 " id="home-tab" data-bs-toggle="tab"
+								data-bs-target="#bordered-justified-home" type="button" role="tab" aria-controls="home"
+								aria-selected="true">Reminders</button>
+						</li>
+						<!--   <li class="nav-item flex-fill" role="presentation">
+	                 <button class="nav-link w-100" id="contact-tab" data-bs-toggle="tab" data-bs-target="#bordered-justified-contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Word Scramble</button>
+	               </li>-->
+					</ul>
+					<!--hgghfgh-->
+
+					<div class="tab-content pt-2" id="borderedTabJustifiedContent">
+						<!-- Todo List Tab -->
+						<div class="tab-pane fade" id="bordered-justified-home" role="tabpanel"
+							aria-labelledby="home-tab">
+							<section class="vh-100 gradient-custom" >
+								<div class="container py-5 h-100">
+
+									<div class="row d-flex justify-content-center align-items-center h-100 " >
+										<div class="col col-xl-16 ">
+											<div class="todo-card card no-shadow move-up todo-card" >
+												<!-- Set max height and overflow for scrolling -->
+												<div class="card-body p-1" >
+													
+													<form class="todo-form d-flex justify-content-center align-items-center mb-4"
+														th:action="@{/todolist}" th:method="post">
+														<div class="form-outline flex-grow-1 me-2">
+															<input type="text" id="taskDescription"
+																name="taskDescription" class="form-control todo-input"
+																placeholder="Enter Your Note..." required
+																oninput="toggleAddButton()" />
+														</div>
+														<button type="button" class="btn btn-info todo-add-btn" id="addButton"
+															onclick="showDeadlineModal()" disabled>Add</button>
+
+														<!-- Modal for Deadline -->
+														<div class="modal fade" id="deadlineModal" tabindex="-1"
+															aria-labelledby="deadlineModalLabel" aria-hidden="true">
+															<div class="modal-dialog">
+																<div class="modal-content">
+																	<div class="modal-header">
+																		<h5 class="modal-title" id="deadlineModalLabel">
+																			Set Deadline</h5>
+																		<button type="button" class="btn-close"
+																			data-bs-dismiss="modal"
+																			aria-label="Close"></button>
+																	</div>
+																	<div class="modal-body">
+																		<div class="form-outline">
+																			<label for="deadlineDate"
+																				class="form-label">Choose Deadline
+																				Date</label>
+																			<input type="date" id="deadlineDate"
+																				name="deadlinedate" class="form-control"
+																				required />
+																		</div>
+																		<div class="form-outline mt-3">
+																			<label for="deadlineTime"
+																				class="form-label">Choose Deadline
+																				Time</label>
+																			<input type="time" id="deadlineTime"
+																				name="deadlinetime" class="form-control"
+																				required />
+																		</div>
+																	</div>
+																	<div class="modal-footer">
+																		<button type="button" class="btn btn-secondary"
+																			data-bs-dismiss="modal">Close</button>
+																		<button type="submit" class="btn btn-info">Save
+																			Task</button>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</form>
+
+													<!-- Tabs navs -->
+													<ul class="nav nav-tabs nav-tabs-bordered mb-4 w-100 nav-tabsnew" id="ex1"
+														role="tablist">
+														<li class="nav-item flex-fill" role="presentation">
+															<a class="nav-link text-center py-3 px-4 active"
+																id="ex1-tab-1" data-bs-toggle="tab" href="#ex1-tabs-1"
+																role="tab" aria-controls="ex1-tabs-1"
+																aria-selected="true">All Note</a>
+														</li>
+														<li class="nav-item flex-fill" role="presentation">
+															<a class="nav-link text-center py-3 px-4" id="ex1-tab-2"
+																data-bs-toggle="tab" href="#ex1-tabs-2" role="tab"
+																aria-controls="ex1-tabs-2" aria-selected="false">Active
+																Note</a>
+														</li>
+														<li class="nav-item flex-fill" role="presentation">
+															<a class="nav-link text-center py-3 px-4" id="ex1-tab-3"
+																data-bs-toggle="tab" href="#ex1-tabs-3" role="tab"
+																aria-controls="ex1-tabs-3"
+																aria-selected="false">Completed Note</a>
+														</li>
+													</ul>
+
+
+
+													<!-- Tabs content -->
+													<div class="tab-content" id="ex1-content">
+														<div class="tab-pane fade show active" id="ex1-tabs-1"
+															role="tabpanel" aria-labelledby="ex1-tab-1">
+															<ul id="taskList" class="list-group mb-0"></ul>
+														</div>
+
+														<div class="tab-pane fade" id="ex1-tabs-2" role="tabpanel"
+															aria-labelledby="ex1-tab-2">
+															<ul id="taskListActive" class="list-group mb-0"></ul>
+														</div>
+														<div class="tab-pane fade" id="ex1-tabs-3" role="tabpanel"
+															aria-labelledby="ex1-tab-3">
+															<ul id="taskListCompleted" class="list-group mb-0"></ul>
+														</div>
+													</div>
+													<!-- Tabs content -->
+
+												</div>
+											</div>
+										</div>
+									</div>
+
+								</div>
+							</section>
+						</div>
+
+
+						<script>
+							function toggleAddButton() {
+								const input = document.getElementById('taskDescription');
+								const addButton = document.getElementById('addButton');
+								addButton.disabled = input.value.trim() === ''; // Disable if input is empty
+							}
+						</script>
+						<script>
+							function updateDeadlineConstraints() {
+								const dateInput = document.getElementById('deadlineDate');
+								const timeInput = document.getElementById('deadlineTime');
+
+								// Get current date and time
+								const now = new Date();
+								const year = now.getFullYear();
+								const month = String(now.getMonth() + 1).padStart(2, '0');
+								const day = String(now.getDate()).padStart(2, '0');
+								const hours = String(now.getHours()).padStart(2, '0');
+								const minutes = String(now.getMinutes()).padStart(2, '0');
+
+								// Set minimum date to today's date
+								dateInput.min = `${year}-${month}-${day}`;
+
+								// Add event listener to disable past time when today's date is selected
+								dateInput.addEventListener('input', () => {
+									if (dateInput.value === `${year}-${month}-${day}`) {
+										// If today, set the minimum time to the current time
+										timeInput.min = `${hours}:${minutes}`;
+									} else {
+										// Otherwise, reset the time input constraints
+										timeInput.min = '';
+									}
+								});
+							}
+
+							// Call the function when the modal is shown
+							document.getElementById('deadlineModal').addEventListener('show.bs.modal', updateDeadlineConstraints);
+						</script>
+						<div class="tab-pane fade show active" id="bordered-justified-profile" role="tabpanel"
+							aria-labelledby="profile-tab">
+							<!--	Nesciunt totam et. Consequuntur magnam aliquid eos nulla dolor iure eos quia. Accusantium
+						distinctio omnis et atque fugiat. Itaque doloremque aliquid sint quasi quia distinctio
+						similique. Voluptate nihil recusandae mollitia dolores. Ut laboriosam voluptatum dicta.-->
+							<!--		<div id="employee-list">
+						
+						       <ul id="employeeNames"></ul>
+						   </div>
+						                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+						<div id="chat-window"></div>                                           
+						   <input type="text" id="message" placeholder="Enter your message..." />
+						   <button onclick="sendMessage()">Send</button>-->
+
+							<div class="chat-app">
+								<div id="plist" class="people-list">
+									<div class="input-group mb-3">
+										<input type="text" id="searchInputModal" class="form-control"
+											placeholder="Search..." aria-label="Search">
+										<span class="input-group-text">
+											<i class="bi bi-search"></i>
+										</span>
+
+									</div>
+									<ul id="employeeNames" class="list-unstyled chat-list mt-2 mb-0">
+										<!-- Employee names will be dynamically populated here -->
+									</ul>
+								</div>
+
+								<div class="chat">
+									<div class="chat-header clearfix">
+										<div class="row w-100">
+
+											<!-- Employee Photo and Name Section -->
+											<div class="col-lg-6 d-flex align-items-center">
+												<div class="chat-about d-flex align-items-center">
+													<div class="employee-photo-container">
+													            <img id="employeePhoto" class="employee-photo" src="default-avatar.png" alt="Employee Photo" />
+													            <div id="chatStatusIndicator" class="newstatus-indicator"></div> <!-- Status dot below the image -->
+													        </div>
+															<div class="ml-2 d-flex flex-column" >
+															           <h6 class="mb-1" id="employeeName" >Select an Employee</h6>
+															           <span id="lastSeen" class="text-muted small"  style="white-space: nowrap;"></span> <!-- Last seen text here -->
+																	<!--   <p id="typingIndicator" style="display: none; font-style: italic; color: gray;"></p>-->
+
+															       </div>
+														</div>
+														<div class="position-absolute end-0 w-100">
+														    <input type="text" id="messageSearch" class="form-control search-input" placeholder="Search messages..."
+														        style="width: 200px; position: absolute; right: 100px; top: -10px; border: none; border-bottom: 2px solid gray; background: transparent; outline: none; display: none;">
+														    <i id="searchIcon" class="fas fa-search position-absolute" style="right: 80px; top: -7px; cursor: pointer;display:none"></i>
+														</div>
+
+
+
+											</div>
+											<!-- Right aligned three dots (Vertical) -->
+											<!--   <div class="col-lg-6 text-right">
+						                       <div class="dropdown custom-dropdown">
+						                           <button class="btn btn-outline-secondary" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+						                               <i class="fa fa-ellipsis-v"></i>
+						                           </button>
+						                           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+						                               <li><a class="dropdown-item" href="#">Delete Chat</a></li>
+						                               <li><a class="dropdown-item" href="#">Mute</a></li>
+						                               <li><a class="dropdown-item" href="#">Contact Info</a></li>
+						                           </ul>
+						                       </div>
+						                   </div>-->
+										   
+										   <div class="col-lg-6 text-right">
+										             <div id="chat-actions" class="chat-actions" style="display: none;">
+										                 <button class="btn btn-outline-secondary action-btn" id="replyMessage">
+															<i class="fa fa-reply reply-icon"></i>
+
+
+
+										                 </button>
+										             <!--   <button class="btn btn-outline-secondary action-btn" id="forwardMessage">
+										                     <i class="fa fa-share"></i>
+										                 </button>
+										                 <button class="btn btn-outline-secondary action-btn" id="starMessage">
+										                     <i class="far fa-star"></i>
+										                 </button>-->
+										                 <button class="btn btn-outline action-btn delete-btn" id="deleteMessagenew">
+										                     <i class="fa fa-trash"></i>
+										                 </button>
+										             </div>
+										         </div>
+										</div>
+									</div>
+									<div id="chat-window" class="chat-history">
+									<!--	<p id="typingIndicator" style="display: none; font-style: italic; color: gray;"></p>-->
+
+										<ul class="m-b-0">
+											<!-- Chat messages will be populated here dynamically -->
+										
+										</ul>
+									
+										<div id="message-icon-container" class="message-icon" style="display: none;">
+
+											<!-- Plain square message icon SVG (behind) -->
+											<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+												<g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+												<g id="SVGRepo_tracerCarrier" stroke-linecap="round"
+													stroke-linejoin="round"></g>
+												<g id="SVGRepo_iconCarrier">
+													<path
+														d="M10 9H17M10 13H17M7 9H7.01M7 13H7.01M21 20L17.6757 18.3378C17.4237 18.2118 17.2977 18.1488 17.1656 18.1044C17.0484 18.065 16.9277 18.0365 16.8052 18.0193C16.6672 18 16.5263 18 16.2446 18H6.2C5.07989 18 4.51984 18 4.09202 17.782C3.71569 17.5903 3.40973 17.2843 3.21799 16.908C3 16.4802 3 15.9201 3 14.8V7.2C3 6.07989 3 5.51984 3.21799 5.09202C3.40973 4.71569 3.71569 4.40973 4.09202 4.21799C4.51984 4 5.0799 4 6.2 4H17.8C18.9201 4 19.4802 4 19.908 4.21799C20.2843 4.40973 20.5903 4.71569 20.782 5.09202C21 5.51984 21 6.0799 21 7.2V20Z"
+														stroke="#94b7db" stroke-width="2" stroke-linecap="round"
+														stroke-linejoin="round"></path>
+												</g>
+											</svg>
+
+											<!-- SVG with animation -->
+											<svg class="animated-icon" viewBox="0 0 374 374" fill="none"
+												xmlns="http://www.w3.org/2000/svg">
+												<g clip-path="url(#clip0)">
+													<path
+														d="M318.084 132.622C311.339 101.37 287.642 82 256.652 82C238.423 82 217.459 89.3248 197.954 102.509C191.574 106.904 182.642 106.904 176.079 102.672C155.298 88.9992 135.246 82 116.652 82C85.6626 82 61.9647 101.533 55.2199 133.111C44.2824 183.896 80.923 252.26 187.017 291C292.746 251.446 329.204 183.082 318.084 132.622Z" />
+													<path
+														d="M187.466 0C187.366 0 187.166 0 186.866 0C85.666 0 3.36603 82.3 3.36603 183.5C3.36603 224.8 17.466 264.9 43.266 297.2L16.566 359.3C14.366 364.4 16.766 370.3 21.766 372.4C23.566 373.2 25.566 373.4 27.466 373.1L125.366 355.9C144.966 363 165.566 366.6 186.366 366.5C287.566 366.5 369.866 284.2 369.866 183C370.066 82.1 288.366 0.1 187.466 0ZM192.966 269.8C188.966 271.3 184.666 271.3 180.666 269.8C149.066 257.1 124.466 238.3 109.466 215.4C95.966 194.7 90.766 171.4 94.866 149.9C100.466 121.4 121.866 102.3 148.266 102.3C160.966 102.3 173.866 106.5 186.766 114.7C199.366 106.5 212.466 102.3 225.066 102.3C251.866 102.3 272.866 120.9 278.466 149.6C286.066 188.8 262.666 241.3 192.966 269.8Z" />
+												</g>
+												<defs>
+													<clipPath id="clip0">
+														<rect width="373.232" height="373.232" fill="white" />
+													</clipPath>
+												</defs>
+											</svg>
+
+
+
+											<!-- Dots Animation -->
+											<div class="dots">
+												<div class="dot"></div>
+												<div class="dot"></div>
+												<div class="dot"></div>
+											</div>
+
+
+
+
+										</div>
+
+
+									</div>
+									<!-- Move the paragraph outside the chat window -->
+									<p id="logo-text"
+										style="text-align: center; font-size: 14px; color: #6c757d; margin-top: 10px; display: none;">
+										"Reach out to your colleagues and stay on top of your projects with quick,
+										seamless communication."
+									</p>
+									<div class="chat-message clearfix">
+										<div id="reply-box" style="display:none; background:#f1f1f1; padding:5px; border-left:4px solid #1a99aa; margin-bottom:5px;"></div>
+
+										<div class="custom-input-group mb-0">
+											<input type="text" id="message" class="custom-form-control"
+												placeholder="Enter your message..." />
+											<div class="custom-input-group-append">
+												<button class="custom-send-btn" onclick="sendMessage()">
+													<i class="ri ri-send-plane-2-fill"></i>
+												</button>
+											</div>
+										</div>
+
+									</div>
+								</div>
+							</div>
+						</div>
+						<div id="notification-area" style="position: fixed; top: 20px; right: 20px; z-index: 1000;">
+							<!-- Notifications will be dynamically added here -->
+						</div>
+
+						<div class="tab-pane fade" id="bordered-justified-contact" role="tabpanel"
+							aria-labelledby="contact-tab">
+
+							<!--  <div id="word-scramble-game">
+						         <p id="scrambled-word" class="h4"></p>
+						         <input type="text" id="user-input" class="form-control" placeholder="Unscramble the word" />
+						         <button id="submit-answer" class="btn btn-primary mt-2">Submit</button>
+						         <p id="result-message" class="mt-2"></p>
+						     </div>-->
+
+						</div>
+					</div><!-- End Bordered Tabs Justified -->
+
+
+
+
+
+				</div>
+			</div>
+
+			<!-- Edit Task Modal -->
+			<div class="modal fade" id="editTaskModal" tabindex="-1" aria-labelledby="editTaskModalLabel"
+				aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="editTaskModalLabel">Edit Task</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<div class="modal-body">
+							<input type="hidden" id="editTaskId">
+							<div class="mb-3">
+								<label for="editTaskDescription" class="form-label">Task Description</label>
+								<textarea class="form-control" id="editTaskDescription" rows="3"></textarea>
+							</div>
+							<div class="mb-3">
+								<label for="editTaskDeadlineDate" class="form-label">Deadline Date</label>
+								<input type="date" class="form-control" id="editTaskDeadlineDate">
+							</div>
+							<div class="mb-3">
+								<label for="editTaskDeadlineTime" class="form-label">Deadline Time</label>
+								<input type="time" class="form-control" id="editTaskDeadlineTime">
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+							<button type="button" class="btn btn-primary" id="saveTaskChanges">Save changes</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<script>
+				function updateEditTaskDeadlineConstraints() {
+					const dateInput = document.getElementById('editTaskDeadlineDate');
+					const timeInput = document.getElementById('editTaskDeadlineTime');
+
+					// Get current date and time
+					const now = new Date();
+					const year = now.getFullYear();
+					const month = String(now.getMonth() + 1).padStart(2, '0');
+					const day = String(now.getDate()).padStart(2, '0');
+					const hours = String(now.getHours()).padStart(2, '0');
+					const minutes = String(now.getMinutes()).padStart(2, '0');
+
+					// Set minimum date to today's date
+					dateInput.min = `${year}-${month}-${day}`;
+
+					// Add event listener to disable past time when today's date is selected
+					dateInput.addEventListener('input', () => {
+						if (dateInput.value === `${year}-${month}-${day}`) {
+							// If today, set the minimum time to the current time
+							timeInput.min = `${hours}:${minutes}`;
+						} else {
+							// Otherwise, reset the time input constraints
+							timeInput.min = '';
+						}
+					});
+				}
+
+				// Call the function when the modal is shown
+				document.getElementById('editTaskModal').addEventListener('show.bs.modal', updateEditTaskDeadlineConstraints);
+			</script>
+
+
+
+			<!-- Feedback Modal -->
+			<div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel"
+				aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered custom-modal-width "
+					style="max-height: 150vh; top: -15%;">
+					<div class="modal-content rounded-4 shadow-lg ">
+						<div class="modal-header border-0">
+							<h5 class="modal-title" id="feedbackModalLabel">Feedback Form</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<div class="modal-body">
+							<form id="feedbackForm" method="post" enctype="multipart/form-data">
+								<div class="mb-3" style="display: none;">
+									<label for="feedbackName" class="form-label fw-bold">Your Name</label>
+									<input type="text" class="form-control" id="feedbackName" name="name"
+										th:value="${empDetailsByEmpId.fullName}" readonly>
+								</div>
+								<div class="mb-3" style="display: none;">
+									<label for="feedbackEmail" class="form-label fw-bold">Your Email</label>
+									<input type="email" class="form-control" id="feedbackEmail" name="email"
+										th:value="${empDetailsByEmpId.email}" readonly>
+								</div>
+								<div class="mb-3">
+									<label for="feedbackEmailyy" class="form-label fw-bold">To</label>
+									<div class="to-field-container">
+										<span
+											class="to-field rounded-pill px-3 py-2 shadow-sm">bugs_msplconnect@melangesystems.com</span>
+									</div>
+								</div>
+								<div class="mb-3">
+									<label for="bugType" class="form-label fw-bold">Bug Type</label>
+									<select class="form-control" id="bugType" name="bugType" required>
+										<option value="MSPL Connect Application">MSPL Connect Application</option>
+										<option value="MSPL Connect New Feature">MSPL Connect New Feature</option>
+									</select>
+								</div>
+								<div class="mb-3">
+									<label for="feedbackMessage" class="form-label fw-bold">Message</label>
+									<textarea class="form-control" id="feedbackMessage" name="message" rows="4"
+										placeholder="Enter your feedback here..." required></textarea>
+								</div>
+								<div class="mb-3">
+									<label for="feedbackAttachment" class="form-label fw-bold">Attachment
+										(optional)</label>
+									<input type="file" class="form-control" id="feedbackAttachment" name="attachment"
+										accept=".png, .jpg, .jpeg" multiple>
+									<small class="text-muted">Max size: 5MB. You can upload multiple images.</small>
+								</div>
+								<button type="submit" class="btn btn-primary w-100 mt-3 py-2 shadow-sm"
+									id="submitFeedbackBtn">Submit Feedback</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main><!-- End #main -->
+
+	<script>
+		// Closing the modal and removing any extra backdrops
+		$('#feedbackModal').on('shown.bs.modal', function () {
+			$('.modal-backdrop').not(':first').remove();  // Ensure only one backdrop remains
+		});
+
+
+
+		document.getElementById("feedbackForm").addEventListener("submit", function (event) {
+		    event.preventDefault(); // Prevent default form submission
+
+		    $.ajax({
+		        url: 'recentlySavedTicketNumber',
+		        type: 'GET',
+		        success: function (response) {
+		            let recentlyInsertedTicketIdData = response;
+
+		            // Get the current date
+		            var today = new Date();
+		            var year = today.getFullYear();
+		            var month = today.getMonth() + 1; // JavaScript months are 0-based
+
+		            // Calculate the financial year
+		            var financialYearStart = month >= 4 ? year : year - 1; // Fiscal year starts in April
+		            var financialYearEnd = financialYearStart + 1;
+
+		            // Format as FYY-YY
+		            var financialYear = `F${financialYearStart % 100}-${financialYearEnd % 100}`;
+
+		            // Department Name
+		            var loggedInDeptName = $('#loggedInDeptName').val();
+
+		            let incrementedNumber = "0001"; // Default number if response is empty or null
+
+		            // Check if recentlyInsertedTicketIdData is not empty or null
+		            if (recentlyInsertedTicketIdData) {
+		                // Extract the last part of the ticket (e.g., 0001)
+		                let ticketParts = recentlyInsertedTicketIdData.split("/");
+		                let lastPart = ticketParts[ticketParts.length - 1];
+
+		                // Increment the extracted number
+		                let numericValue = parseInt(lastPart, 10) + 1;
+		                incrementedNumber = numericValue.toString().padStart(4, '0'); // Pad with leading zeros
+		            }
+
+		            // Construct the feedback ticket
+		            var feedbackTicket = `MSPL/FT/${financialYear}/${loggedInDeptName}/${incrementedNumber}`;
+
+		            // Add feedback ticket to the form data
+		            let formData = new FormData(document.getElementById("feedbackForm"));
+		            formData.append("id", feedbackTicket);
+		            formData.append("emp_id", $('#emp_idSessionValue').val());
+
+		            const submitButton = document.getElementById("submitFeedbackBtn");
+		            submitButton.disabled = true; // Disable the submit button to prevent multiple submissions
+
+		            const loadingSwal = Swal.fire({
+		                title: 'Submitting feedback...',
+		                text: 'Please wait while we submit your feedback.',
+		                showConfirmButton: false,
+		                allowOutsideClick: false, // Prevent closing when clicking outside
+		                            allowEscapeKey: false, // Prevent closing when pressing escape key
+		                didOpen: () => {
+		                    Swal.showLoading(); // Display the loading spinner
+		                }
+		            });
+
+		            // Append files to form data
+		            let files = document.getElementById("feedbackAttachment").files;
+		            if (files.length > 0) {
+		                for (let i = 0; i < files.length; i++) {
+		                    formData.append(`attachment[${i}]`, files[i]); // Use unique keys
+		                }
+		            }
+
+		            let bugType = document.getElementById("bugType").value;
+		            formData.append("bugTypeff", bugType); // Add the bug type to the form data
+
+		            // Debugging: Log formData entries before the fetch call
+		            console.log("Logging formData entries:");
+		            for (let [key, value] of formData.entries()) {
+		                if (value instanceof File) {
+		                    console.log(`Key: ${key}, File Name: ${value.name}, Size: ${value.size}`);
+		                } else {
+		                    console.log(`Key: ${key}, Value: ${value}`);
+		                }
+		            }
+
+		            // Make AJAX request to submit feedback
+		            fetch("/submitFeedback", {
+		                method: "POST",
+		                body: formData
+		            })
+		                .then(response => response.json())
+		                .then(data => {
+		                    loadingSwal.close();
+		                    submitButton.disabled = false; // Re-enable the button
+		                    if (data.success) {
+		                        $('#feedbackModal').modal('hide');
+		                        Swal.fire({
+		                            title: 'Success!',
+		                            text: 'Your feedback has been submitted successfully.',
+		                            icon: 'success',
+		                            allowOutsideClick: false, // Prevent closing when clicking outside
+		                                        allowEscapeKey: false, // Prevent closing when pressing escape key
+		                            customClass: {
+		                                popup: 'custom-swal-font'
+		                            },
+		                            confirmButtonText: 'OK'
+		                        }).then((result) => {
+		                            if (result.isConfirmed) {
+		                                    Swal.fire({
+		                                            html: 'We sincerely appreciate your feedback! Please find your feedback ticket details below.<br><br>' + 
+		                                    '<strong>' + feedbackTicket + '</strong>', // Display the feedback ticket on a new line
+		                                    allowOutsideClick: false, // Prevent closing when clicking outside
+		                                                allowEscapeKey: false, // Prevent closing when pressing escape key
+		                                    customClass: {
+		                                        popup: 'custom-swal-font'
+		                                    },
+		                                    confirmButtonText: 'OK'
+		                                });
+		                            }
+		                        });
+		                    } else {
+		                        Swal.fire({
+		                            title: 'Error!',
+		                            text: 'There was an error submitting your feedback.',
+		                            icon: 'error',
+		                            allowOutsideClick: false, // Prevent closing when clicking outside
+		                                        allowEscapeKey: false, // Prevent closing when pressing escape key
+		                            customClass: {
+		                                popup: 'custom-swal-font'
+		                            },
+		                            confirmButtonText: 'OK'
+		                        });
+		                    }
+		                })
+		                .catch(error => {
+		                    console.error('Error:', error);
+		                    loadingSwal.close();
+		                    submitButton.disabled = false; // Re-enable the button
+		                    Swal.fire({
+		                        title: 'Error!',
+		                        text: 'There was an error submitting your feedback.',
+		                        icon: 'error',
+		                        allowOutsideClick: false, // Prevent closing when clicking outside
+		                                    allowEscapeKey: false, // Prevent closing when pressing escape key
+		                        customClass: {
+		                            popup: 'custom-swal-font'
+		                        },
+		                        confirmButtonText: 'OK'
+		                    });
+		                });
+		        },
+		        error: function (xhr, status, error) {
+		            alert('Failed to fetch recently inserted feedback ticket: ' + error);
+		        }
+		    });
+		});
+
+
+		   // Clear form fields when the modal is closed
+		   document.getElementById('feedbackModal').addEventListener('hidden.bs.modal', function () {
+		       const feedbackForm = document.getElementById('feedbackForm');
+		       feedbackForm.reset(); // Reset the form fields
+		       document.getElementById('feedbackAttachment').value = ""; // Clear file input manually
+		   });
+		   
+	</script>
+
+	<script>
+	function fetchUnreadMessagesnewforcount() {
+		
+	    const userEmailElement = document.getElementById('loggedInMail');
+	    if (!userEmailElement) {
+	        console.error("Error: #loggedInMail element not found!");
+	        return;
+	    }
+
+	    const userEmail = userEmailElement.value;
+	    console.log("Fetching unread messages for:", userEmail);
+
+	    fetch(`/unread-messages?recipientEmail=${encodeURIComponent(userEmail)}`)
+	        .then(response => response.json())
+	        .then(unreadCounts => {
+	            console.log("Unread message counts per sender:", unreadCounts);
+
+	            document.querySelectorAll('.employee-item').forEach(li => {
+	                const employeeName = li.querySelector('.employee-name').textContent;
+	                const senderEmail = employeeMap[employeeName]; // Get sender email
+
+	                let badge = li.querySelector('.unread-badge');
+	                if (!badge) {
+	                    badge = document.createElement('span');
+	                    badge.classList.add('badge', 'bg-danger', 'unread-badge');
+	                    li.appendChild(badge);
+	                }
+
+	                const count = unreadCounts[senderEmail] || 0;
+	                if (count > 0) {
+	                    badge.textContent = count;
+	                    badge.style.display = "inline-block";
+	                } else {
+	                    badge.style.display = "none";
+	                }
+	            });
+	        })
+	        .catch(error => console.error("Error fetching unread messages:", error));
+	}
+	
+	// Function to fetch the recent chats
+	function fetchRecentChats() {
+	    // Get the logged-in user's email from the DOM element
+	    const userEmailElement = document.getElementById('loggedInMail');
+	    if (!userEmailElement) {
+	        console.error("Error: #loggedInMail element not found!");
+	        return;
+	    }
+
+	    const userEmail = userEmailElement.value;
+	    console.log("Fetching recent chats for:", userEmail);
+
+	    // Pass the email as a query parameter in the request
+	    return fetch(`/recent-chats?email=${encodeURIComponent(userEmail)}`)
+	        .then(response => {
+	            if (!response.ok) {
+	                throw new Error('Error fetching recent chats');
+	            }
+	            return response.json();
+	        })
+	        .then(chats => {
+	            return chats; // Returns the list of recent chat data
+	        })
+	        .catch(error => {
+	            console.error("Error fetching recent chats:", error);
+	        });
+	 }
+	
+		// Function to get the most recent chat for an employee based on their email
+		function getRecentChat(chats, employeeEmail) {
+			const employeeChats = chats.filter(chat => chat.recipient_email === employeeEmail || chat.sender_email === employeeEmail);
+			if (employeeChats.length === 0) {
+				return null; // No recent chat
+			}
+			// Sort chats by timestamp (latest first)
+			employeeChats.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+			// Return the most recent chat
+			return employeeChats[0];
+		}
+	</script>
+
+
+
+
+
+
+
+
+
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			// Fetch the tasks when the page loads
+			fetchTasks();
+
+			// Add event listener to handle task creation
+			/*  document.getElementById('addTaskForm').addEventListener('submit', function(e) {
+				  e.preventDefault();
+				  addTask();
+			  });*/
+
+
+			const saveButton = document.getElementById('saveTaskChanges');
+			console.log("Save button found:", saveButton); // Check if this logs the button element
+			if (saveButton) {
+				saveButton.addEventListener('click', function () {
+					console.log("Save changes button clicked");
+					const taskId = document.getElementById('editTaskId').value;
+					const newDescription = document.getElementById('editTaskDescription').value;
+					const newDeadlineDate = document.getElementById('editTaskDeadlineDate').value;
+					const newDeadlineTime = document.getElementById('editTaskDeadlineTime').value;
+					console.log(`Task ID: ${taskId}, New Description: ${newDescription}`);
+					updateTaskDescription(taskId, newDescription, newDeadlineDate, newDeadlineTime);
+					// Close the modal after saving
+					let modalElement = document.getElementById('editTaskModal');
+					let modal = bootstrap.Modal.getInstance(modalElement);
+					modal.hide();
+				});
+			} else {
+				console.error('Save button not found');
+			}
+
+
+
+		});
+
+
+
+		// Function to fetch the tasks using AJAX
+		function fetchTasks() {
+			fetch('/tasks', {
+				method: 'GET'
+			})
+				.then(response => response.json())
+				.then(tasks => {
+					updateTaskLists(tasks);
+				})
+				.catch(error => console.error('Error fetching tasks:', error));
+		}
+
+		// Function to update task lists for all tabs
+		function updateTaskLists(tasks) {
+			const taskListAll = document.getElementById('taskList');
+			const taskListActive = document.getElementById('taskListActive');
+			const taskListCompleted = document.getElementById('taskListCompleted');
+
+			// Clear the lists before appending new items
+			taskListAll.innerHTML = '';
+			taskListActive.innerHTML = '';
+			taskListCompleted.innerHTML = '';
+
+			tasks.forEach(task => {
+				const taskItem = createTaskItem(task);
+
+				// Append to the appropriate list based on completion status
+				taskListAll.innerHTML += taskItem;
+				if (task.completed) {
+					taskListCompleted.innerHTML += taskItem;
+				} else {
+					taskListActive.innerHTML += taskItem;
+				}
+			});
+
+			// Add event listeners to the checkboxes
+			document.querySelectorAll('.task-checkbox').forEach(checkbox => {
+				checkbox.addEventListener('change', function () {
+					const taskId = this.getAttribute('data-task-id');
+					const completed = this.checked;
+
+					// Send status update to the server
+					updateTaskStatus(taskId, completed);
+				});
+			});
+
+			// Add event listeners to edit buttons
+			document.querySelectorAll('.edit-task').forEach(editButton => {
+				editButton.addEventListener('click', function () {
+					const taskId = editButton.getAttribute('data-task-id');
+					openEditModal(taskId);
+				});
+			});
+
+			// Add event listeners to delete buttons
+			document.querySelectorAll('.delete-task').forEach(deleteButton => {
+				deleteButton.addEventListener('click', function () {
+					const taskId = deleteButton.getAttribute('data-task-id');
+					deleteTask(taskId);
+				});
+			});
+		}
+
+		function createTaskItem(task) {
+			return `
+		        <li class="list-group-item d-flex align-items-center justify-content-between border-0 mb-2 rounded" style="background-color: #f4f6f7;">
+		            <div class="d-flex align-items-center">
+		                <input class="form-check-input me-2 task-checkbox" type="checkbox" data-task-id="${task.id}" ${task.completed ? 'checked' : ''} />
+		                <span ${task.completed ? 'style="text-decoration: line-through;"' : ''}>${task.description}</span>
+		            </div>
+		            <div class="d-flex flex-row justify-content-end mb-1">
+		                <span class="text-muted ms-2">${task.deadlinedate} ${task.deadlinetime}</span> <!-- Display deadline -->
+		                <a href="#!" class="text-info edit-task" data-task-id="${task.id}" data-mdb-tooltip-init title="Edit todo">
+		                    <i class="fas fa-pencil-alt me-3"></i>
+		                </a>
+		                <a href="#!" class="text-danger delete-task" data-task-id="${task.id}" data-mdb-tooltip-init title="Delete todo">
+		                    <i class="fas fa-trash-alt"></i>
+		                </a>
+		            </div>
+		        </li>`;
+		}
+
+		// Function to show the deadline modal
+		function showDeadlineModal() {
+			// Show the modal using Bootstrap’s modal API
+			var myModal = new bootstrap.Modal(document.getElementById('deadlineModal'));
+			myModal.show();
+		}
+
+		// Function to open modal and populate it with task details
+		function openEditModal(taskId) {
+			fetch(`/getTask/${taskId}`, {
+				method: 'GET',
+			})
+				.then(response => response.json())
+				.then(task => {
+					// Populate modal with task details
+					document.getElementById('editTaskId').value = task.id;
+					document.getElementById('editTaskDescription').value = task.description;
+					document.getElementById('editTaskDeadlineDate').value = task.deadlinedate; // Populate deadline date
+					document.getElementById('editTaskDeadlineTime').value = task.deadlinetime; // Populate deadline time
+
+					// Show the modal
+					let editTaskModal = new bootstrap.Modal(document.getElementById('editTaskModal'));
+					editTaskModal.show();
+				})
+				.catch(error => console.error('Error fetching task details:', error));
+		}
+
+
+		// Function to update the task description on the server
+		function updateTaskDescription(taskId, newDescription, newDeadlineDate, newDeadlineTime) {
+			fetch('/updateTaskDescription', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					taskId: taskId,
+					description: newDescription,
+					deadlinedate: newDeadlineDate,
+					deadlinetime: newDeadlineTime
+				})
+			})
+				.then(response => response.text())
+				.then(result => {
+					console.log(result);
+					// Show success message
+					Swal.fire({
+						title: 'Saved!',
+						text: 'Your changes have been saved successfully.',
+						icon: 'success',
+						confirmButtonColor: '#3085d6'
+					}).then(() => {
+						// After showing success message, fetch updated tasks
+						fetchTasks();
+					});
+				})
+				.catch(error => console.error('Error updating task description:', error));
+		}
+
+		// Function to update the task status on the server
+		function updateTaskStatus(taskId, completed) {
+			fetch('/updateTaskStatus', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					taskId: taskId,
+					completed: completed
+				})
+			})
+				.then(response => response.text())
+				.then(result => {
+					console.log(result);
+					// After updating the task status, fetch the updated tasks
+					fetchTasks();
+				})
+				.catch(error => console.error('Error updating task status:', error));
+		}
+
+		// Function to delete a task with confirmation
+		function deleteTask(taskId) {
+			Swal.fire({
+				title: 'Are you sure?',
+				text: "You won't be able to revert this!",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Yes, delete it!',
+				cancelButtonText: 'Cancel'
+			}).then((result) => {
+				if (result.isConfirmed) {
+					fetch(`/deleteTask/${taskId}`, {
+						method: 'DELETE'
+					})
+						.then(response => response.text())
+						.then(result => {
+							console.log(result);
+							// After deleting the task, show success message and fetch the updated tasks
+							Swal.fire({
+								title: 'Deleted!',
+								text: 'Your task has been deleted successfully.',
+								icon: 'success',
+								confirmButtonColor: '#3085d6'
+							}).then(() => {
+								fetchTasks();
+							});
+						})
+						.catch(error => console.error('Error deleting task:', error));
+				}
+			});
+		}
+
+
+
+	</script>
+
+
+
+
+	<!-- ======= Footer ======= -->
+	<!-- ======= Footer ======= -->
+	<!--<footer id="footer" class="footer">
+			<div class="copyright">
+				Copyright &copy; <span id="currentYear"></span> <strong><span>Melange Systems Private
+						Limited</span></strong>. All Rights Reserved
+			</div>
+		</footer>-->
+
+	<script>
+		/*	var currentYear = new Date().getFullYear();
+			document.getElementById("currentYear").innerHTML = currentYear;*/
+	</script>
+
+	<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+			class="bi bi-arrow-up-short"></i></a>
+
+	<!-- Vendor JS Files -->
+	<script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+	<script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script src="assets/vendor/chart.js/chart.umd.js"></script>
+	<script src="assets/vendor/echarts/echarts.min.js"></script>
+	<script src="assets/vendor/quill/quill.js"></script>
+	<script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+	<script src="assets/vendor/tinymce/tinymce.min.js"></script>
+	<script src="assets/vendor/php-email-form/validate.js"></script>
+
+	<!-- Template Main JS File -->
+	<script src="assets/js/main.js"></script>
+	<!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
+	<script src="assets/js/chart.min.js"></script>
+
+	<script>
+		function getLeavePendingCount() {
+			$.ajax({
+				type: 'GET',
+				url: '/getProjectNames',
+				success: function (projectNames) {
+					console.log('Project namesssss:', projectNames);
+
+					if (projectNames.length > 0) {
+						projectNames.forEach(function (projectName) {
+							console.log('Fetching notifications for project:', projectName); // Debug log
+							getNotificationCounts(projectName); // Pass projectName here
+						});
+					} else {
+
+						console.error('No project names found for the given user.');
+						$('#notification_list_message').text('No projects found for your email.');
+						$('#defaultBox').show();
+						getDefaultNotificationCounts();
+
+					}
+				},
+				error: function (xhr, status, error) {
+					console.error('Error fetching project names:', error);
+					$('#notification_list_message').text('Error fetching project names. Please try again later.');
+					$('#defaultBox').show();
+					getDefaultNotificationCounts();
+
+				}
+			});
+		}
+
+
+
+		function getNotificationCounts(projectName) {
+			console.log('Inside getNotificationCounts for project:', projectName);
+			$.ajax({
+				type: 'GET',
+				url: 'fetchNotificationCountForAllPages',
+				data: {projectName: projectName},
+				success: function (data) {
+					console.log("=======" + JSON.stringify(data));
+
+					var totalNotificationCount = data.total_notification;
+					var leavePendingCountValue = data.leave_pending_count;
+					var newProjectCountValue = data.newProjectCount;
+					var appraisalCountValue = data.appraisalCountValue;
+					var appraisalTwoDaysCountValue = data.appraisalTwoDaysCountValue;
+					var appraisalOneDayCountValue = data.appraisalOneDayCountValue;
+					var ToDoListNotification = data.toDoListNotification;
+					var eventsNotification = data.eventsNotification;
+					var featuresNotification = data.featuresNotification;
+					var releaseNotification = data.releaseNotification;
+					
+
+					$('#notificationCount').text(totalNotificationCount);
+					updateNotificationDetailData(totalNotificationCount, leavePendingCountValue, newProjectCountValue, appraisalCountValue, appraisalTwoDaysCountValue, appraisalOneDayCountValue, ToDoListNotification, eventsNotification, featuresNotification,releaseNotification);
+				},
+				error: function (xhr, status, error) {
+					console.error('Error fetching data:', error);
+					console.log('Error fetching data. Please try again.');
+				}
+			});
+		}
+
+		function getDefaultNotificationCounts() {
+			//console.log('Fetching general notification counts.');
+			$.ajax({
+				type: 'GET',
+				url: 'fetchNotificationCountForAllPagesWithoutProject',
+				success: function (data) {
+					console.log("General notification data:", JSON.stringify(data));
+
+					var totalNotificationCount = data.total_notification || 0;
+					var leavePendingCountValue = data.leave_pending_count || 0;
+					var newProjectCountValue = data.newProjectCount || 0;
+					var appraisalCountValue = data.appraisalCountValue || 0;
+					var appraisalTwoDaysCountValue = data.appraisalTwoDaysCountValue || 0;
+					var appraisalOneDayCountValue = data.appraisalOneDayCountValue || 0;
+					var toDoListNotification = data.toDoListNotification || 0;
+					var eventsNotification = data.eventsNotification || 0;
+					var featuresNotification = data.featuresNotification || 0;
+					var releaseNotification = data.releaseNotification || 0;
+					$('#notificationCount').text(totalNotificationCount);
+					updateNotificationDetailData(totalNotificationCount, leavePendingCountValue, newProjectCountValue, appraisalCountValue, appraisalTwoDaysCountValue, appraisalOneDayCountValue, toDoListNotification, eventsNotification, featuresNotification,releaseNotification);
+				},
+				error: function (xhr, status, error) {
+					//console.error('Error fetching general notifications:', error);
+					$('#notification_list_message').text('Error fetching notifications. Please try again later.');
+				}
+			});
+		}
+
+
+		$(document).ready(function () {
+			getLeavePendingCount();
+			//setInterval(getLeavePendingCount, 1000);
+		});
+
+		function updateNotificationDetailData(totalNotificationCount, leavePendingCountValue, newprojectCountValue, appraisalCountValue, appraisalTwoDaysCountValue, appraisalOneDayCountValue, ToDoListNotification, eventsNotification, featuresNotification,releaseNotification) {
+			var emptyNotifyDiv = $('#emptyNotifyDiv');
+			//var leaveRequestNotifyDiv = $('#leaveRequestNotifyDiv');
+
+			var leaveRequestNotifyDiv = $('#leaveRequestNotifyDiv');
+			var leaveRequestNotifyDivHorizontalRow = $('#leaveRequestNotifyDivHorizontalRow');
+
+			var moatNewCandidateNotifyDiv = $('#moatNewCandidateNotifyDiv');
+			var moatNewCandidateNotifyDivHorizontalRow = $('#moatNewCandidateNotifyDivHorizontalRow');
+
+			var appraisalNotifyDiv = $('#appraisalNotifyDiv');
+			var appraisalNotifyDivHorizontalRow = $('#appraisalNotifyDivHorizontalRow');
+
+			var appraisalTwoDaysNotifyDiv = $('#appraisalTwoDaysNotifyDiv');
+			var appraisalTwoDaysNotifyDivHorizontalRow = $('#appraisalTwoDaysNotifyDivHorizontalRow');
+
+			var appraisalOneDayNotifyDiv = $('#appraisalOneDayNotifyDiv');
+			var appraisalOneDayNotifyDivHorizontalRow = $('#appraisalOneDayNotifyDivHorizontalRow');
+
+			var ToDoListNotifyDiv = $('#ToDoListNotifyDiv');
+			var ToDoListNotifyDivHorizontalRow = $('#ToDoListNotifyDivHorizontalRow');
+
+			var EventNotifyDiv = $('#EventNotifyDiv');
+			var EventNotifyDivHorizontalRow = $('#EventNotifyDivHorizontalRow');
+
+			var FeaturesNotifyDiv = $('#FeaturesNotifyDiv');
+			var FeaturesNotifyDivHorizontalRow = $('#FeaturesNotifyDivHorizontalRow');
+
+			var ReleaseNotifyDiv = $('#ReleaseNotifyDiv');
+						var ReleaseNotifyDivHorizontalRow = $('#ReleaseNotifyDivHorizontalRow');
+
+
+			if (totalNotificationCount > 0) {
+				$("#bellIcon").show();
+				$("#emptyNotifyDiv").hide();
+				$('#emptyNotificationHeaderMessage').text("");
+
+				if (leavePendingCountValue > 0) {
+					leaveRequestNotifyDiv.show();
+					$('#leaveNotificationMessage').text("You have " + leavePendingCountValue + " new leave Notification");
+					$('#leaveNotificationNumberHeader').text("Leave Request!");
+				} else {
+					leaveRequestNotifyDiv.hide();
+				}
+				if (newprojectCountValue > 0) {
+					moatNewCandidateNotifyDiv.show();
+					moatNewCandidateNotifyDivHorizontalRow.show();
+					$('#moatNewCandidateNotificationMessage').text("There is " + newprojectCountValue + " New Project Task Assigned");
+					$('#moatNewCandidateNumberHeader').text("Project!");
+				} else {
+					moatNewCandidateNotifyDiv.hide();
+
+				} if (appraisalCountValue > 0) {
+					appraisalNotifyDiv.show();
+					appraisalNotifyDivHorizontalRow.show();
+					$('#appraisalNotificationMessage').text("There is " + appraisalCountValue + " Appraisal Form Assigned");
+					$('#appraisalNumberHeader').text("Appraisal!");
+				} else {
+					appraisalNotifyDiv.hide();
+				} if (appraisalTwoDaysCountValue > 0) {
+					appraisalTwoDaysNotifyDiv.show();
+					appraisalTwoDaysNotifyDivHorizontalRow.show();
+					$('#appraisalTwoDaysNotificationMessage').text("Reminder: Complete and submit your appraisal form at your earliest convenience.");
+					$('#appraisalTwoDaysNumberHeader').text("Appraisal!");
+				} else {
+					appraisalTwoDaysNotifyDiv.hide();
+				} if (appraisalOneDayCountValue > 0) {
+					appraisalOneDayNotifyDiv.show();
+					appraisalOneDayNotifyDivHorizontalRow.show();
+					$('#appraisalOneDayNotificationMessage').text("Reminder: Just one more day until the appraisal form submission deadline. Please take action!");
+					$('#appraisalOneDayNumberHeader').text("Appraisal!");
+				} else {
+					appraisalOneDayNotifyDiv.hide();
+				} if (ToDoListNotification > 0) {
+					ToDoListNotifyDiv.show();
+					ToDoListNotifyDivHorizontalRow.show();
+					$('#ToDoListNotificationMessage').text("Time is ticking! Don't forget to complete your task before the deadline.");
+					$('#ToDoListNumberHeader').text("Reminder!");
+				} else {
+					ToDoListNotifyDiv.hide();
+				} if (eventsNotification > 0) {
+					EventNotifyDiv.show();
+					EventNotifyDivHorizontalRow.show();
+					$('#EventNotificationMessage').text("There is  " + eventsNotification + " new event has been scheduled. Mark your calendars!");
+					$('#EventNumberHeader').text("Announcements!");
+				} else {
+					EventNotifyDiv.hide();
+				} if (featuresNotification > 0) {
+					FeaturesNotifyDiv.show();
+					FeaturesNotifyDivHorizontalRow.show();
+					$('#FeaturesNotificationMessage').text("There is  " + featuresNotification + " new feature update is now available! explore the latest enhancements.");
+					$('#FeaturesNumberHeader').text("Latest Update!");
+				} else {
+					FeaturesNotifyDiv.hide();
+				}				if (releaseNotification > 0) {
+									ReleaseNotifyDiv.show();
+									ReleaseNotifyDivHorizontalRow.show();
+									$('#ReleaseNotificationMessage').html(
+									    'There is a latest release available! Click here to see the details. Version: <b>V.0.1.0</b>'
+									);	$('#ReleaseNumberHeader').text("Latest Release!");
+								} else {
+									ReleaseNotifyDiv.hide();
+								}
+			} else {
+				$("#bellIcon").hide();
+				$("#emptyNotifyDiv").show();
+				$('#emptyNotificationHeaderMessage').text("Currently there are no notifications");
+			}
+		}
+
+
+
+
+
+	</script>
+
+	<input type="hidden" th:value="${loggedInUserEmail}" id="loggedInMail">
+	<input type="hidden" id="emp_idSessionValue" th:value="${empDetailsByEmpId.empid}">
+	<!--CHAT BOOT-->
+
+	<script>
+		/*    var stompClient = null;
+			var selectedEmployee = null;
+			var chatHistory = {}; // Object to store chat history for each employee
+			var employeeMap = {}; // To store the mapping of employee names to emails
+	
+			// Connect to the WebSocket server
+			function connect() {
+				var socket = new SockJS('/chat-websocket');
+				stompClient = Stomp.over(socket);
+	
+				// Get the logged-in user's email from the hidden input
+				var email = document.getElementById('loggedInMail').value;
+				console.log(`Connecting as: ${email}`);
+	
+				// Include email in the headers
+				stompClient.connect({ 'email': email }, function (frame) {
+					console.log('Connected: ' + frame);
+					stompClient.subscribe('/user/queue/messages', function (message) {
+						var msg = JSON.parse(message.body);
+						console.log(`Received message in subscription: ${JSON.stringify(msg)}`);
+						showMessage(msg.sender, msg.content);
+					});
+				});
+			}
+	
+			// Load employee names from the server
+			function loadEmployees() {
+				console.log("Loading employee names...");
+				fetch('/employees/names')
+					.then(response => response.json())
+					.then(data => {
+						var employeeList = document.getElementById('employeeNames');
+						employeeList.innerHTML = ''; // Clear the list before adding new items
+						data.forEach(function (employee) { // Assuming data is an array of {name: "...", email: "..."}
+							var li = document.createElement('li');
+							li.innerHTML = employee.name; // Display the name
+							employeeMap[employee.name] = employee.email; // Store the mapping
+							li.onclick = function () { 
+								console.log(`Selected employee: ${employee.name}`);
+								selectEmployee(employee.name); 
+							}; // Use name for selection
+							employeeList.appendChild(li);
+						});
+						console.log("Employee names loaded:", employeeMap);
+					})
+					.catch(error => console.error("Error loading employees:", error));
+			}
+	
+			// Load previous messages for the selected employee
+			function loadMessages() {
+				// Get the logged-in user's email
+				var email = document.getElementById('loggedInMail').value; 
+				console.log(`Loading messages for: ${email}`);
+	
+				fetch(`/messages?email=${encodeURIComponent(email)}`)
+					.then(response => response.json())
+					.then(data => {
+						console.log("Previous messages loaded:", data);
+						data.forEach(function (msg) {
+							showMessage(msg.senderEmail, msg.content); // Display messages using sender's email
+						});
+					})
+					.catch(error => console.error("Error loading messages:", error));
+			}
+	
+			// Select an employee to chat with
+			function selectEmployee(employeeName) {
+				selectedEmployee = employeeMap[employeeName]; // Get the email from the map
+				console.log(`Employee selected: ${selectedEmployee}`);
+	
+				// Highlight the selected employee
+				var employeeItems = document.querySelectorAll('#employeeNames li');
+				employeeItems.forEach(function (item) {
+					item.classList.remove('active');
+				});
+				var selectedItem = Array.from(employeeItems).find(item => item.innerHTML === employeeName);
+				if (selectedItem) {
+					selectedItem.classList.add('active');
+				}
+	
+				// Update chat header
+				document.querySelector('.chat-about h6').innerText = employeeName;
+	
+				// Load previous messages if they exist
+				loadChatHistory();
+			}
+	
+			// Send a message to the selected employee
+			function sendMessage() {
+				var messageContent = document.getElementById('message').value;
+				var loggedInEmail = document.getElementById('loggedInMail').value; // Get the logged-in user's email
+	
+				if (messageContent && stompClient && selectedEmployee) {
+					var chatMessage = {
+						content: messageContent,
+						recipientEmail: selectedEmployee, // Email of the recipient
+						senderEmail: loggedInEmail // Include the sender's email
+					};
+					console.log(`Sending message: "${messageContent}" to ${selectedEmployee}`); // Log message sending
+					console.log("Chat message object:", chatMessage); // Log the chat message object
+	
+					stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
+					showMessage("You", messageContent); // Show sent message in the chat window
+					storeMessage(selectedEmployee, "You", messageContent); // Store the sent message
+					document.getElementById('message').value = ''; // Clear the input field
+				} else {
+					alert("Please select an employee to send a message.");
+				}
+			}
+	
+			// Show a message in the chat window
+			// Show a message in the chat window
+			function showMessage(senderEmail, message) {
+				console.log(`Received message from ${senderEmail}: "${message}"`); // Log message received
+	
+				// Get the sender's full name using the employeeMap
+				const senderName = Object.keys(employeeMap).find(name => employeeMap[name] === senderEmail) || senderEmail;
+	
+				console.log("---"+senderName)
+				var chatWindow = document.getElementById('chat-window').querySelector('ul');
+				var li = document.createElement('li');
+				li.className = 'clearfix';
+				li.innerHTML = `<div class="message"><strong>${senderName}:</strong> ${message}</div>`;
+				chatWindow.appendChild(li);
+				chatWindow.scrollTop = chatWindow.scrollHeight; // Scroll to the bottom
+			}
+	
+	
+			// Store a message in the chat history
+			function storeMessage(employeeName, sender, message) {
+				if (!chatHistory[employeeName]) {
+					chatHistory[employeeName] = [];
+				}
+				chatHistory[employeeName].push({ sender: sender, content: message });
+			}
+	
+			// Load previous messages for the selected employee
+			function loadChatHistory() {
+				var chatWindow = document.getElementById('chat-window').querySelector('ul');
+				chatWindow.innerHTML = ''; // Clear the chat window
+	
+				if (chatHistory[selectedEmployee]) {
+					console.log(`Loading chat history for: ${selectedEmployee}`);
+					chatHistory[selectedEmployee].forEach(function (msg) {
+						showMessage(msg.sender, msg.content);
+					});
+				}
+			}
+	
+			// Connect to the WebSocket server and load employees when the page is loaded
+			window.onload = function () {
+				connect();
+				loadEmployees();
+				loadMessages();
+			};*/
+	</script>
+	
+	<!--CHAT BOOT-->
+
+	
+	<!--CHAT BOOT-->
+
+	<script>
+	    function fetchUnreadCount() {
+	        console.log("Fetching unread message count...");
+
+	        var userEmailElement = document.getElementById('loggedInMail');
+	        if (!userEmailElement) {
+	            console.error("Error: #loggedInMail element not found!");
+	            return;
+	        }
+
+	        var userEmail = userEmailElement.value;
+	        console.log("User email:", userEmail);
+
+	        if (!userEmail) {
+	            console.warn("No email found, skipping fetch.");
+	            return;
+	        }
+
+	        fetch(`/unread-count?email=${encodeURIComponent(userEmail)}`)
+	            .then(response => {
+	                console.log("Response received:", response);
+	                return response.json();
+	            })
+	            .then(count => {
+	                console.log("Unread count:", count);
+
+	                const badge = document.getElementById("unreadCountBadge");
+					
+					
+					
+	                if (!badge) {
+	                    console.error("Error: #unreadCountBadge element not found!");
+	                    return;
+	                }
+
+	                if (count > 0) {
+	                    badge.textContent = count;
+	                    badge.style.display = "inline-block";
+						
+						
+	                } else {
+	                    badge.style.display = "none";
+						
+	                }
+	            })
+	            .catch(error => console.error("Error fetching unread messages:", error));
+	    }
+
+	    setInterval(fetchUnreadCount, 5000); // Fetch count every 5 seconds
+	    fetchUnreadCount(); // Initial fetch
+		
+		function fetchUnreadMessagesnewforcount() {
+			
+		    const userEmailElement = document.getElementById('loggedInMail');
+		    if (!userEmailElement) {
+		        console.error("Error: #loggedInMail element not found!");
+		        return;
+		    }
+
+		    const userEmail = userEmailElement.value;
+		    console.log("Fetching unread messages for:", userEmail);
+
+		    fetch(`/unread-messages?recipientEmail=${encodeURIComponent(userEmail)}`)
+		        .then(response => response.json())
+		        .then(unreadCounts => {
+		            console.log("Unread message counts per sender:", unreadCounts);
+
+		            document.querySelectorAll('.employee-item').forEach(li => {
+		                const employeeName = li.querySelector('.employee-name').textContent;
+		                const senderEmail = employeeMap[employeeName]; // Get sender email
+
+		                let badge = li.querySelector('.unread-badge');
+		                if (!badge) {
+		                    badge = document.createElement('span');
+		                    badge.classList.add('badge', 'bg-danger', 'unread-badge');
+		                    li.appendChild(badge);
+		                }
+
+		                const count = unreadCounts[senderEmail] || 0;
+		                if (count > 0) {
+		                    badge.textContent = count;
+		                    badge.style.display = "inline-block";
+		                } else {
+		                    badge.style.display = "none";
+		                }
+		            });
+		        })
+		        .catch(error => console.error("Error fetching unread messages:", error));
+		}
+
+		// Function to fetch the recent chats
+		function fetchRecentChats() {
+			//alert("called");
+		    // Get the logged-in user's email from the DOM element
+		    const userEmailElement = document.getElementById('loggedInMail');
+		    if (!userEmailElement) {
+		        console.error("Error: #loggedInMail element not found!");
+		        return;
+		    }
+
+		    const userEmail = userEmailElement.value;
+		    console.log("Fetching recent chats for:", userEmail);
+
+		    // Pass the email as a query parameter in the request
+		    return fetch(`/recent-chats?email=${encodeURIComponent(userEmail)}`)
+		        .then(response => {
+		            if (!response.ok) {
+		                throw new Error('Error fetching recent chats');
+		            }
+		            return response.json();
+		        })
+		        .then(chats => {
+		            return chats; // Returns the list of recent chat data
+		        })
+		        .catch(error => {
+		            console.error("Error fetching recent chats:", error);
+		        });
+		}
+
+		
+		// Function to get the most recent chat for an employee based on their email
+		// Function to get the most recent chat for an employee based on their email
+		function getRecentChat(chats, employeeEmail) {
+			const employeeChats = chats.filter(chat => chat.recipient_email === employeeEmail || chat.sender_email === employeeEmail);
+			if (employeeChats.length === 0) {
+				return null; // No recent chat
+			}
+			// Sort chats by timestamp (latest first)
+			employeeChats.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+			// Return the most recent chat
+			return employeeChats[0];
+		}
+		
+		document.addEventListener("DOMContentLoaded", function () {
+		    let searchIcon = document.getElementById("searchIcon");
+		    let searchInput = document.getElementById("messageSearch");
+		    let chatWindow = document.querySelector("#chat-window ul");
+
+			// Create "No messages found" element
+			let noMessagesText = document.createElement("li");
+			noMessagesText.textContent = "No messages found";
+			noMessagesText.style.display = "none"; // Initially hidden
+			noMessagesText.style.position = "absolute";
+			noMessagesText.style.top = "50%";
+			noMessagesText.style.left = "65%";
+			noMessagesText.style.transform = "translate(-50%, -50%)";
+			noMessagesText.style.color = "#888";
+			noMessagesText.style.fontSize = "16px";
+			noMessagesText.style.fontWeight = "bold";
+			noMessagesText.style.padding = "10px";
+			noMessagesText.classList.add("no-messages");
+
+			// Append to chat window
+			document.getElementById("chat-window").appendChild(noMessagesText);
+
+		    // Show search input when search icon is clicked
+		    searchIcon.addEventListener("click", function () {
+		        searchInput.style.display = "block";  
+		        searchInput.focus();  
+		    });
+
+		    // Close search bar when clicking outside
+		    document.addEventListener("click", function (event) {
+		        if (!searchIcon.contains(event.target) && !searchInput.contains(event.target)) {
+		            searchInput.style.display = "none";
+		            searchInput.value = ""; // Clear the input field
+		            resetMessages(); // Restore all messages
+		        }
+		    });
+
+		    // Close search bar on pressing Escape key
+		    searchInput.addEventListener("keydown", function (event) {
+		        if (event.key === "Escape") {
+		            searchInput.style.display = "none";
+		            searchInput.value = "";
+		            resetMessages();
+		        }
+		    });
+
+		    // Function to filter messages
+		    searchInput.addEventListener("input", function () {
+		        let searchQuery = searchInput.value.toLowerCase();
+		        let messages = document.querySelectorAll("#chat-window ul li:not(.no-messages)"); // Exclude "No messages found"
+		        let found = false;
+
+		        messages.forEach(msg => {
+					
+		            let messageText = msg.textContent.toLowerCase();
+		            if (messageText.includes(searchQuery)) {
+		                msg.style.visibility = "visible";
+		                msg.style.height = "auto";
+		                msg.style.opacity = "1";
+		                found = true;
+		            } else {
+		                msg.style.visibility = "hidden";
+		                msg.style.height = "0px";
+		                msg.style.opacity = "0";
+		            }
+		        });
+
+		        // Show or hide "No messages found"
+		        noMessagesText.style.display = found ? "none" : "block";
+				
+		    });
+
+		    // Function to reset message visibility
+		    function resetMessages() {
+		        let messages = document.querySelectorAll("#chat-window ul li:not(:last-child)"); // Exclude "No messages found"
+		        messages.forEach(msg => {
+		            msg.style.visibility = "visible";
+		            msg.style.height = "auto";
+		            msg.style.opacity = "1";
+		        });
+
+		        noMessagesText.style.display = "none"; // Hide "No messages found"
+		    }
+		});
+
+	</script>
+
+<script>
+var stompClient = null;
+var selectedEmployee = null;
+var chatHistory = {}; // Object to store chat history for each employee
+var employeeMap = {}; // To store the mapping of employee names to emails
+let employeePhotoMap = {};
+let emailToNameMap = {}; // New map for email -> name lookup
+let selectedChatMessage = null;
+// Object to store draft messages
+let drafts = {};
+
+let typingTimer;
+const TYPING_DELAY = 1000; // 2 seconds delay
+
+
+
+function fetchEmployeePhotos() {
+	console.log("Fetching employee photos...");
+	fetch('/fetchEmployeeDetails')
+		.then(response => response.json())
+		.then(data => {
+			data.forEach(emp => {
+				// Map each employee's email to their photo path
+				employeePhotoMap[emp.email] = emp.profilePicPath || 'default-avatar.png';
+			});
+			console.log("Employee photos fetched:", employeePhotoMap);
+		})
+		.catch(error => console.error("Error fetching employee photos:", error));
+}
+
+
+
+function connect() {
+	//alert("A");
+	
+	var socket = new SockJS('/chat-websocket');
+				  stompClient = Stomp.over(socket);
+
+				  var email = document.getElementById('loggedInMail').value;
+				  console.log(`Connecting WebSocket as: ${email}`);
+
+				  stompClient.connect({ 'email': email }, function (frame) {
+				      console.log('Connected to WebSocket:', frame);
+
+					 // subscribeToTypingEvents();
+				      // Mark user as active
+				      stompClient.send("/app/userConnected", {}, JSON.stringify({ email }));
+
+				      // Subscribe to active users list
+				      stompClient.subscribe('/topic/activeUsers', function (message) {
+				          var activeUsers = JSON.parse(message.body);
+				          updateActiveUserUI(activeUsers);
+				      });
+					  // Subscribe to user messages
+					        stompClient.subscribe('/user/queue/messages', function (message) {
+							//	loadMessages();
+							//	alert("po2");
+					            console.log('Raw WebSocket Message:11', message);
+					            var msg = JSON.parse(message.body);
+								//alert(msg);
+					            console.log('Parsed Messag111e:', msg);
+					            console.log(`Received messagesdsd: ${JSON.stringify(msg)}`);
+								//alert("(message.read"+msg.read);
+							
+					            // Display message if it matches the selected employee
+					            if (selectedEmployee === msg.senderEmail || selectedEmployee === msg.recipientEmail) {
+									console.log(`New message fromss ${msg.senderEmail}: ${msg.content}`);
+									console.log("plk "+selectedEmployee);
+									console.log("plk "+msg.senderEmail);
+									console.log("plk "+msg.recipientEmail);
+									//loadMessages();
+					                showMessage(
+					                    msg.id,               // Message ID
+					                    msg.senderEmail,      // Sender's email
+					                    msg.content,          // Message content
+					                    msg.recipientEmail,   // Recipient's email
+					                    msg.timestamp,        // Message timestamp
+					                    email,
+										msg.read                    // Logged-in user's email
+					                );
+					            }
+						
+								loadEmployees();
+								loadMessages();
+							 	
+					        });
+
+					        // Subscribe to notifications
+					        stompClient.subscribe('/user/queue/notifications', function (notification) {
+								//alert("00");
+					            console.log('New Notification:', notification.body);
+					            showToastNotification(notification.body);
+								loadEmployees();
+								//alert("01");
+					        });
+							
+							// **Subscribe to user messages**
+						/*	stompClient.subscribe('/user/queue/messages', function (message) {
+							//	alert("po1");
+						//	alert("(message.read"+msg.read);
+							    var msg = JSON.parse(message.body);
+							    console.log(`Received message22: ${JSON.stringify(msg)}`);
+								// Ensure messages are marked as read if they are from the logged-in user
+																		
+							    if (selectedEmployee === msg.senderEmail || selectedEmployee === msg.recipientEmail) {
+									//loadMessages();
+							        showMessage(
+							            msg.id,
+							            msg.senderEmail,
+							            msg.content,
+							            msg.recipientEmail,
+							            msg.timestamp,
+							            document.getElementById('loggedInMail').value
+							        );
+							    }
+
+							    // Call API to mark messages as read when they are received
+							    loadMessages();  
+							});*/
+							
+
+							//alert("Subscribing to chat updates...");
+							stompClient.subscribe('/user/queue/messages', function (message) {
+							    console.log('WebSocket Chat Update Received:', message.body); // Log raw message
+
+							    let parsedMessage = JSON.parse(message.body);
+							    console.log('Parsed Message:', parsedMessage); // Log parsed JSON
+
+							    if (Array.isArray(parsedMessage)) {
+							        parsedMessage.forEach(msg => {
+							            console.log(`Message ID: ${msg.id}, Read: ${msg.read}`);
+							            if (msg.read) {
+							                updateMessageUI(msg);
+							            }
+							        });
+							    } else {
+							        console.log("Unexpected message format:", parsedMessage);
+							    }
+
+							    // Refresh messages after a delay
+							    setTimeout(() => {
+							        console.log("Refreshing messages...");
+							        loadMessages();
+							    }, 3000);
+							});
+
+						
+
+							/*stompClient.subscribe('/topic/typing', function (message) {
+							    console.log("📩 Typing notification received:", message.body);
+
+							    let typingData;
+							    try {
+							        typingData = JSON.parse(message.body);
+							        console.log("✅ Parsed Typing Data:", typingData);
+							    } catch (error) {
+							        console.error("❌ Error parsing typing notification message:", error);
+							        return;
+							    }
+
+							    let loggedInUserEmail = document.getElementById('loggedInMail')?.value;
+							    if (!loggedInUserEmail) return;
+
+							    if (loggedInUserEmail === typingData.recipientEmail && typingData.senderEmail === selectedEmployee) {
+									
+							        let chatMessages = document.querySelector(".chat-history ul");
+							        let chatContainer = document.querySelector(".chat-history"); // The scrollable chat area
+
+							        let typingIndicator = document.getElementById("typingIndicator");
+							        
+							        if (!typingIndicator) {
+							            typingIndicator = document.createElement("li");
+							            typingIndicator.id = "typingIndicator";
+							            typingIndicator.classList.add("typing-indicator");
+							            typingIndicator.innerHTML = `
+							                <img src="${employeePhotoMap[selectedEmployee] || 'default-profile.jpg'}" alt="User Photo" class="typing-photo">
+							                <span>Typing...</span>
+							            `;
+							            chatMessages.appendChild(typingIndicator);
+							        }
+
+							        if (typingData.typing) {
+							            typingIndicator.style.display = "flex";
+
+							            // Move typing indicator to the bottom
+							            chatMessages.appendChild(typingIndicator);
+
+							            // Auto-scroll to the bottom
+							            setTimeout(() => {
+							                chatContainer.scrollTop = chatContainer.scrollHeight;
+							            }, 100);
+							        } else {
+							            typingIndicator.style.display = "none";
+							        }
+							    }
+							});*/
+							stompClient.subscribe('/topic/typing', function (message) {
+							    console.log("📩 Typing notification received:", message.body);
+
+							    let typingData;
+							    try {
+							        typingData = JSON.parse(message.body);
+							        console.log("✅ Parsed Typing Data:", typingData);
+							    } catch (error) {
+							        console.error("❌ Error parsing typing notification message:", error);
+							        return;
+							    }
+
+							    let loggedInUserEmail = document.getElementById('loggedInMail')?.value;
+							    if (!loggedInUserEmail) return;
+
+							    if (loggedInUserEmail === typingData.recipientEmail && typingData.senderEmail === selectedEmployee) {
+							        // Fetch actual typing status from the backend
+							        fetch(`/getTypingStatus?senderEmail=${typingData.senderEmail}&recipientEmail=${typingData.recipientEmail}`)
+							            .then(response => response.json())
+							            .then(data => {
+							                console.log("🎯 Actual Typing Status from DB:", data.typing);
+											console.log("🎯 Actual Typing Status from DB:", data);
+											                console.log("ℹ️ Typing Status (0 or 1):", data.typing);
+											                
+							                let chatMessages = document.querySelector(".chat-history ul");
+							                let chatContainer = document.querySelector(".chat-history"); // The scrollable chat area
+
+							                let typingIndicator = document.getElementById("typingIndicator");
+							                
+							                if (!typingIndicator) {
+							                    typingIndicator = document.createElement("li");
+							                    typingIndicator.id = "typingIndicator";
+							                    typingIndicator.classList.add("typing-indicator");
+							                    typingIndicator.innerHTML = `
+							                        <img src="${employeePhotoMap[selectedEmployee] || 'default-profile.jpg'}" alt="User Photo" class="typing-photo">
+							                        <span>Typing...</span>
+							                    `;
+							                    chatMessages.appendChild(typingIndicator);
+							                }
+
+							                if (data.typing === 1) { // Ensure it checks the latest typing status
+							                    typingIndicator.style.display = "flex";
+
+							                    // Move typing indicator to the bottom
+							                    chatMessages.appendChild(typingIndicator);
+
+							                    // Auto-scroll to the bottom
+							                    setTimeout(() => {
+							                        chatContainer.scrollTop = chatContainer.scrollHeight;
+							                    }, 100);
+							                } else {
+							                    typingIndicator.style.display = "none";
+							                }
+							            })
+							            .catch(error => console.error("❌ Error fetching typing status:", error));
+							    }
+							});
+
+
+				      // Start heartbeat initially
+				      heartbeatInterval = setInterval(() => {
+				          if (stompClient && stompClient.connected) {
+				              stompClient.send("/app/userHeartbeat", {}, JSON.stringify({ email }));
+				              console.log("Heartbeat sent for user: " + email);
+				          }
+				      }, 20000); // 30 seconds
+
+				      // Detect tab visibility change
+				      document.addEventListener("visibilitychange", function () {
+				          if (document.hidden) {
+				              console.log("User switched to another tab. Marking as inactive.");
+				              stompClient.send("/app/userInactive", {}, JSON.stringify({ email }));
+				              clearInterval(heartbeatInterval); // Stop heartbeat
+				              heartbeatInterval = null;
+				          } else {
+				              console.log("User returned to the application tab. Marking as active.");
+				              stompClient.send("/app/userConnected", {}, JSON.stringify({ email }));
+				              if (!heartbeatInterval) {
+				                  heartbeatInterval = setInterval(() => {
+				                      if (stompClient && stompClient.connected) {
+				                          stompClient.send("/app/userHeartbeat", {}, JSON.stringify({ email }));
+				                          console.log("Heartbeat sent for user: " + email);
+				                      }
+				                  }, 30000);
+				              }
+				          }
+				      });
+
+				      // Detect tab close or WebSocket disconnect
+				      socket.onclose = function () {
+				          console.log("WebSocket disconnected. Updating user status.");
+				          stompClient.send("/app/userDisconnected", {}, JSON.stringify({ email }));
+				      };
+
+				      window.addEventListener('beforeunload', function () {
+				          stompClient.send("/app/userDisconnected", {}, JSON.stringify({ email }));
+				      });
+
+				  });
+}
+
+function sendTypingStatus(isTyping) {
+//	alert("typing..1.");
+    if (stompClient && stompClient.connected) {
+	//	alert("typing..2.");
+        let typingMessage = {
+            senderEmail: document.getElementById('loggedInMail').value,
+            recipientEmail: selectedEmployee,
+            typing: isTyping
+        };
+		console.log("Sending typing status:", typingMessage);
+        stompClient.send("/app/userTyping", {}, JSON.stringify(typingMessage));
+    }
+}
+
+
+// Detect when the user starts typing
+document.getElementById('message').addEventListener('keydown', function () {
+    clearTimeout(typingTimer);
+    sendTypingStatus(true);
+});
+
+// Detect when the user stops typing
+document.getElementById('message').addEventListener('keyup', function () {
+    clearTimeout(typingTimer);
+    typingTimer = setTimeout(() => sendTypingStatus(false), TYPING_DELAY);
+});
+
+
+function checkTypingStatus() {
+    console.log("✅ checkTypingStatus function executed");
+
+    let loggedInUserEmail = document.getElementById('loggedInMail')?.value;
+    if (!loggedInUserEmail) {
+        console.log("❌ Logged-in user email not found.");
+        return;
+    }
+	let senderEmail = selectedEmployee;
+	let recipientEmail = loggedInUserEmail;
+	
+	console.log("📌 loggedInUserEmail:", loggedInUserEmail);
+	console.log("📌 selectedEmployee (recipientEmail):", selectedEmployee);
+	console.log("📌 senderEmail:", senderEmail);
+
+   /* if (!typingData || !typingData.senderEmail || !typingData.recipientEmail) {
+        console.log("⚠️ Typing data is missing or incomplete.");
+        return;
+    }
+*/
+     if (senderEmail && recipientEmail) {
+		
+		//alert("hii");
+       // console.log(`🔍 Checking typing status for sender: ${typingData.senderEmail}, recipient: ${typingData.recipientEmail}`);
+		console.log(`🔍 Checking typing status for sender: ${senderEmail}, recipient: ${recipientEmail}`);
+
+      //  fetch(`/getTypingStatus?senderEmail=${typingData.senderEmail}&recipientEmail=${typingData.recipientEmail}`)
+	  fetch(`/getTypingStatus?senderEmail=${senderEmail}&recipientEmail=${recipientEmail}`)
+	         
+            .then(response => response.json())
+            .then(data => {
+                console.log("🎯 Actual Typing Status from DB:", data);
+                console.log("ℹ️ Typing Status (0 or 1):", data.typing);
+
+                let chatMessages = document.querySelector(".chat-history ul");
+                let chatContainer = document.querySelector(".chat-history");
+                let typingIndicator = document.getElementById("typingIndicator");
+
+                if (!chatMessages) {
+                    console.error("❌ Chat message container not found.");
+                    return;
+                }
+
+                if (!typingIndicator) {
+                    typingIndicator = document.createElement("li");
+                    typingIndicator.id = "typingIndicator";
+                    typingIndicator.classList.add("typing-indicator");
+                    typingIndicator.innerHTML = `
+                        <img src="${employeePhotoMap[selectedEmployee] || 'default-profile.jpg'}" alt="User Photo" class="typing-photo">
+                        <span>Typing...</span>
+                    `;
+                    chatMessages.appendChild(typingIndicator);
+                }
+
+                if (data.typing === 1) {
+                    console.log("📝 User is typing...");
+                    typingIndicator.style.display = "flex";
+                    chatMessages.appendChild(typingIndicator);
+                    setTimeout(() => {
+                        chatContainer.scrollTop = chatContainer.scrollHeight;
+                    }, 100);
+                } else {
+                    console.log("✅ User stopped typing.");
+                    typingIndicator.style.display = "none";
+                }
+            })
+            .catch(error => console.error("❌ Error fetching typing status:", error));
+    }
+}
+
+// Ensure the function runs every second
+let typingStatusInterval = setInterval(() => {
+    try {
+        checkTypingStatus();
+    } catch (error) {
+        console.error("❌ Error in setInterval execution:", error);
+    }
+}, 1000);
+
+
+
+
+
+function updateMessageUI(msg) {
+    let messageElement = document.querySelector(`[data-message-id="${msg.id}"]`);
+    if (messageElement) {
+        let seenTick = messageElement.querySelector('.seen-tick');
+        if (seenTick) {
+            seenTick.style.visibility = 'visible'; // Ensure tick is shown
+        }
+    }
+}
+
+
+
+/* function updateActiveUserUI(activeUsers) {
+//	alert("ui");
+    const employeeItems = document.getElementById('employeeNames').getElementsByTagName('li');
+
+    Array.from(employeeItems).forEach(item => {
+        const employeeName = item.querySelector('span').textContent;
+        const email = employeeMap[employeeName]; 
+        const statusIndicator = item.querySelector('.status-indicator'); // Get the status dot
+
+		// Default to inactive color (red) to avoid grey
+		  //     statusIndicator.style.backgroundColor = '#ff6666'; 
+
+        if (activeUsers.includes(email)) {
+            item.classList.add('active-user');
+            statusIndicator.style.backgroundColor = '#66cc66'; // Green for active users
+        } else {
+            item.classList.remove('active-user');
+            statusIndicator.style.backgroundColor = '#ff6666'; // Red for inactive users
+        }
+
+        // If this employee is currently selected, update chat header status and fetch last seen
+        if (selectedEmployee === email) {
+            const chatStatusIndicator = document.getElementById('chatStatusIndicator');
+            if (activeUsers.includes(email)) {
+                chatStatusIndicator.style.backgroundColor = '#66cc66'; // Green (Online)
+                document.getElementById("lastSeen").innerText = "Online"; // Update last seen immediately
+                document.getElementById("lastSeen").style.color = "green";
+            } else {
+                chatStatusIndicator.style.backgroundColor = '#ff6666'; // Red (Offline)
+                fetchLastSeen(email); // Fetch last seen status for offline users
+            }
+        }
+    });
+} */
+
+function updateActiveUserUI(activeUsers) {
+	    //alert("ui");
+	    const employeeItems = document.getElementById('employeeNames').getElementsByTagName('li');
+
+	    Array.from(employeeItems).forEach(item => {
+	        const employeeName = item.querySelector('span').textContent;
+	        const email = employeeMap[employeeName]; 
+	        const statusIndicator = item.querySelector('.status-indicator'); // Get the status dot
+
+			// Default to inactive color (red) to avoid grey
+			  //     statusIndicator.style.backgroundColor = '#ff6666'; 
+
+	        if (activeUsers.includes(email)) {
+	            item.classList.add('active-user');
+	            statusIndicator.style.backgroundColor = '#66cc66'; // Green for active users
+	        } else {
+	            item.classList.remove('active-user');
+	            statusIndicator.style.backgroundColor = '#ff6666'; // Red for inactive users
+	        }
+
+	        // If this employee is currently selected, update chat header status and fetch last seen
+	        if (selectedEmployee === email) {
+	            const chatStatusIndicator = document.getElementById('chatStatusIndicator');
+	            if (activeUsers.includes(email)) {
+	                chatStatusIndicator.style.backgroundColor = '#66cc66'; // Green (Online)
+	                document.getElementById("lastSeen").innerText = "Online"; // Update last seen immediately
+	                document.getElementById("lastSeen").style.color = "green";
+	            } else {
+	                chatStatusIndicator.style.backgroundColor = '#ff6666'; // Red (Offline)
+	                fetchLastSeen(email); // Fetch last seen status for offline users
+	            }
+	        }
+	    });
+	}
+
+
+function fetchLastSeen(email) {
+    fetch(`/last-seen/${email}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log("API Response:", data); // Debugging
+
+            const lastSeenElement = document.getElementById("lastSeen");
+
+            if (data.online === true) { 
+                lastSeenElement.innerText = "Online";
+                lastSeenElement.style.color = "green";
+                return;
+            }
+
+            if (data.lastSeen) {
+                const lastSeenDate = new Date(data.lastSeen);
+                const now = new Date();
+                const timeDiff = Math.floor((now - lastSeenDate) / 1000); // Difference in seconds
+
+                let displayText;
+                if (timeDiff < 60) {
+                    displayText = `Last seen just now`; // Directly show 1 min ago
+                } else if (timeDiff < 3600) {
+                    const minutesAgo = Math.floor(timeDiff / 60);
+                    displayText = `Last seen ${minutesAgo} min ago`;
+                } else if (timeDiff < 86400) {
+                    const hoursAgo = Math.floor(timeDiff / 3600);
+                    displayText = `Last seen ${hoursAgo} hr ago`;
+                } else {
+                    const formattedDate = lastSeenDate.toLocaleDateString("en-US", {
+                        weekday: "short",
+                        month: "short",
+                        day: "2-digit",
+                        year: "numeric"
+                    });
+                    const formattedTime = lastSeenDate.toLocaleTimeString("en-US", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true
+                    });
+
+                    displayText = `Last seen: ${formattedDate} at ${formattedTime}`;
+                }
+
+                lastSeenElement.innerText = displayText;
+                lastSeenElement.style.color = "gray";
+            } else {
+                lastSeenElement.innerText = "Status unavailable";
+            }
+        })
+        .catch(error => {
+            console.error("Error fetching last seen:", error);
+            document.getElementById("lastSeen").innerText = "Status unavailable";
+        });
+}
+
+
+
+
+// Store reference to the search input and employee list
+const searchInput = document.getElementById('searchInputModal');
+const employeeList = document.getElementById('employeeNames');
+
+// Add an event listener to handle input in the search bar
+searchInput.addEventListener('input', filterEmployees);
+
+function filterEmployees() {
+	const searchQuery = searchInput.value.toLowerCase().trim();  // Get search query and remove extra spaces
+	console.log("Search query:", searchQuery);
+
+	const employeeItems = employeeList.getElementsByTagName('li');
+	console.log("Employee list items:", employeeItems.length); // Log the number of items in the list
+
+	// Iterate over the list items and hide those that do not match the search query
+	Array.from(employeeItems).forEach(item => {
+		const employeeName = item.querySelector('span').textContent.toLowerCase();
+		console.log(`Checking if "${employeeName}" matches "${searchQuery}"`);
+
+		if (employeeName.includes(searchQuery)) {
+			item.classList.remove('not-visible');  // Show the item
+			item.classList.add('is-visible');      // Add visible class
+			console.log(`Showing: ${employeeName}`);
+		} else {
+			item.classList.remove('is-visible');  // Hide the item
+			item.classList.add('not-visible');    // Add hidden class
+			console.log(`Hiding: ${employeeName}`);
+		}
+
+		// Force reflow to apply changes correctly
+		item.offsetTop;  // Trigger reflow
+	});
+}
+
+
+function loadEmployees() {
+    const uniqueEmails = new Set(); // Track emails to avoid duplicates
+    //alert("hi");
+console.log("Loading employee names...");
+
+return fetch('/employees/names') // Ensure fetch is returned
+    .then(response => {
+        console.log("Response received:", response);
+        if (!response.ok) {
+            console.error(`HTTP error! Status: ${response.status}`);
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log("Employee data fetched:", data);
+
+        const employeeList = document.getElementById('employeeNames');
+        if (!employeeList) {
+            console.error("Element with ID 'employeeNames' not found.");
+            return;
+        }
+
+        employeeList.innerHTML = ''; // Clear the list
+
+        const userEmailElement = document.getElementById('loggedInMail');
+        if (!userEmailElement) {
+            console.error("Error: #loggedInMail element not found!");
+            return;
+        }
+        const userEmail = userEmailElement.value;
+        console.log("Logged-in user email:", userEmail);
+
+        return fetchRecentChats().then(recentChats => { // Ensure this is returned
+            console.log("Recent chats fetched:", recentChats);
+
+            const recentChatTimestamps = new Map();
+
+            recentChats.forEach(chat => {
+                const otherEmail = chat.senderEmail === userEmail ? chat.recipientEmail : chat.senderEmail;
+                const timestamp = new Date(chat.timestamp).getTime();
+
+                if (!recentChatTimestamps.has(otherEmail) || recentChatTimestamps.get(otherEmail) < timestamp) {
+                    recentChatTimestamps.set(otherEmail, timestamp);
+                }
+            });
+
+            const recentChatEmployees = new Set(recentChatTimestamps.keys());
+
+            data.sort((a, b) => {
+                const timeA = recentChatTimestamps.get(a.email) || 0;
+                const timeB = recentChatTimestamps.get(b.email) || 0;
+
+                if (timeA && !timeB) return -1;
+                if (!timeA && timeB) return 1;
+                if (timeA !== timeB) return timeB - timeA;
+
+                return a.name.localeCompare(b.name);
+            });
+
+           /* const finalSortedEmployees = [
+                ...data.filter(emp => recentChatEmployees.has(emp.email)),
+                ...data.filter(emp => !recentChatEmployees.has(emp.email))
+            ];*/
+                            const finalSortedEmployees = [
+                                ...data.filter(emp => {
+                                    if (recentChatEmployees.has(emp.email)) {
+                                        uniqueEmails.add(emp.email);
+                                        return true;
+                                    }
+                                    return false;
+                                }),
+                                ...data.filter(emp => {
+                                    if (!recentChatEmployees.has(emp.email) && !uniqueEmails.has(emp.email)) {
+                                        uniqueEmails.add(emp.email);
+                                        return true;
+                                    }
+                                    return false;
+                                })
+                            ];
+
+            finalSortedEmployees.forEach(employee => {
+                const profilePic = employeePhotoMap[employee.email] || '/static/default-profile.jpg';
+
+                const li = document.createElement('li');
+                li.classList.add('d-flex', 'align-items-center', 'employee-item');
+
+                if (recentChatTimestamps.has(employee.email)) {
+                    li.classList.add('recent-chat');
+                }
+
+                li.innerHTML = `
+                    <div class="employee-photo-container">
+                        <img src="${profilePic}" alt="Employee Photo" class="employee-photo" />
+                        <div class="status-indicator"></div>
+                    </div>
+                    <span class="employee-name">${employee.name}</span>
+                    <span class="badge bg-primary unread-badge" style="display: none; color: white; font-size: 10px; margin-left: 10px;"></span>
+                `;
+
+                employeeMap[employee.name] = employee.email;
+                emailToNameMap[employee.email] = employee.name;
+
+                li.onclick = () => selectEmployee(employee.name);
+
+                employeeList.appendChild(li);
+            });
+                            
+            console.log("Employee names loaded successfully.");
+            fetchUnreadMessagesnewforcount();
+            setInterval(fetchUnreadMessagesnewforcount, 2000);
+            fetchUnreadMessages();
+            setInterval(fetchUnreadMessages, 2000);
+        });
+    })
+    .catch(error => {
+        console.error("Error loading employees:", error);
+    });
+}
+
+// Select an employee to chat with
+function selectEmployee(employeeName) {			
+	
+	selectedEmployee = employeeMap[employeeName]; // Get the email from the map
+	console.log(`Employee selectedsss: ${selectedEmployee}`);
+	
+	// Highlight the selected employee
+	var employeeItems = document.querySelectorAll('#employeeNames li');
+	employeeItems.forEach(function (item) {
+		item.classList.remove('active');
+	});
+	var selectedItem = Array.from(employeeItems).find(item => item.innerHTML === employeeName);
+	if (selectedItem) {
+		selectedItem.classList.add('active');
+	}
+
+	// Update chat header with employee name and photo
+	document.querySelector('.chat-about h6').innerText = employeeName;
+	document.querySelector('#employeePhoto').src = employeePhotoMap[selectedEmployee] || 'default-profile.jpg';
+
+	
+	// Hide the message icon and dots when an employee is selected
+	document.getElementById('message-icon-container').style.display = 'none';
+	// Hide the paragraph when an employee is selected
+	document.getElementById('logo-text').style.display = 'none';
+		// **Show the search icon when an employee is selected**
+			   document.getElementById('searchIcon').style.display = 'block';
+			   // **Show the status dot**
+		document.getElementById('chatStatusIndicator').style.display = 'block';
+
+			// Fetch last seen and update UI
+			   fetchLastSeen(selectedEmployee);
+
+	// Fetch latest active users and update UI
+	    stompClient.send("/app/getActiveUsers", {}, JSON.stringify({}));
+	    
+	    setTimeout(() => {
+	        updateActiveUserUI(activeUsers);
+	    }, 1000); // Small delay to ensure activeUsers gets updated
+		//alert("normal");
+	// Load messages for the selected employee
+	loadMessages();
+	// Load the draft message if available
+	    if (drafts[selectedEmployee]) {
+	        document.getElementById('message').value = drafts[selectedEmployee]; // Set the draft message
+	        console.log(`Loaded draft for ${selectedEmployee}:`, drafts[selectedEmployee]);
+	    } else {
+	        document.getElementById('message').value = ''; // Clear input if no draft
+	    }
+	
+}
+// Listen for input events and save draft messages
+document.getElementById('message').addEventListener('input', function () {
+    if (selectedEmployee) {
+        drafts[selectedEmployee] = this.value;  // Save the draft message
+        console.log(`Saving draft for ${selectedEmployee}:`, drafts[selectedEmployee]);
+    }
+});
+
+function initializeChat() {
+	// Update chat header and photo
+	document.querySelector('.chat-about h6').innerText = 'Select an Employee';
+	document.querySelector('#employeePhoto').src = 'assets/img/default-profile.jpg';
+
+	// Show the message icon (with dots) when no employee is selected
+	document.getElementById('message-icon-container').style.display = 'block';
+
+	// Show the paragraph with the logo text
+	document.getElementById('logo-text').style.display = 'block';
+}
+
+
+// Load previous messages for the selected employee
+/*  function loadMessages() {
+	  // Get the logged-in user's email
+	  var email = document.getElementById('loggedInMail').value; 
+	  console.log(`Loading messages for: ${email}`);
+
+	  fetch(`/messages?email=${encodeURIComponent(email)}`)
+		  .then(response => response.json())
+		  .then(data => {
+			  console.log("Previous messages loaded:", data);
+			  data.forEach(function (msg) {
+				  showMessage(msg.senderEmail, msg.content); // Display messages using sender's email
+			  });
+		  })
+		  .catch(error => console.error("Error loading messages:", error));
+  }*/
+function loadMessages() {
+    //alert("Loading messages...");
+	// Get the logged-in user's email and selected employee's email
+	var loggedInEmail = document.getElementById('loggedInMail').value;
+	var selectedEmployeeEmail = selectedEmployee; // Email is already stored in selectedEmployee
+
+	console.log(`Loading messages between: ${loggedInEmail} and ${selectedEmployeeEmail}`);
+
+	fetch(`/messages?loggedInEmail=${encodeURIComponent(loggedInEmail)}&selectedEmployeeEmail=${encodeURIComponent(selectedEmployeeEmail)}`)
+		.then(response => response.json())
+		.then(data => {
+			//alert("Chat messages loaded:"+ JSON.stringify(data));
+			console.log("Chat messages loaded:"+ JSON.stringify(data));
+			// Clear the chat window before displaying messages
+			var chatWindow = document.getElementById('chat-window').querySelector('ul');
+			chatWindow.innerHTML = '';
+
+			// Display messages
+			data.forEach(function (msg) {
+				
+				// showMessage(msg.senderEmail, msg.content, msg.recipientEmail, loggedInEmail);
+				//alert("09");
+				showMessage(msg.id, msg.senderEmail, msg.content, msg.recipientEmail, msg.timestamp, loggedInEmail,msg.read, msg.repliedMessage );
+				//alert("090");
+			});
+		})
+		.catch(error => console.error("Error loading chat messages:", error));
+}
+
+/*imp	function showMessage(senderEmail, message, recipientEmail, loggedInEmail) {
+		// Log the email values to ensure they're correct
+		console.log(`LoggedInEmail: ${loggedInEmail}, SenderEmail: ${senderEmail}`);
+	    
+		// Determine the alignment of the message
+		const isSender = senderEmail === loggedInEmail;  // Check if sender is the logged-in user
+		const senderName = isSender ? "Me" : Object.keys(employeeMap).find(name => employeeMap[name] === senderEmail) || senderEmail;
+		const senderPhoto = employeePhotoMap[senderEmail] || 'default-avatar.png';  // Use default photo if not available
+	    
+		console.log(`Message from ${senderEmail} to ${recipientEmail}: "${message}"`);
+
+		// Create the message element
+		var chatWindow = document.getElementById('chat-window').querySelector('ul');
+		var li = document.createElement('li');
+		li.className = isSender ? 'clearfix right' : 'clearfix left';  // Align the message based on sender
+
+		li.innerHTML = `
+			<div class="message-container">
+				<img class="sender-photo" src="${senderPhoto}" alt="Sender Photo" />
+				<div class="message ${isSender ? 'my-message' : 'other-message'}">
+					<strong>${senderName}:</strong> ${message}
+				</div>
+			</div>`;
+
+		// Append the message and scroll to the bottom
+		chatWindow.appendChild(li);
+		chatWindow.scrollTop = chatWindow.scrollHeight;
+	}*/
+let activeDeleteDropdown = null;
+/*function showMessage(id, senderEmail, message, recipientEmail, timestamp, loggedInEmail, read) {
+	//alert("2");
+	console.log("Message ID:", id);
+	console.log(`LoggedInEmailrrr: ${loggedInEmail}, SenderEmail: ${senderEmail}`);
+	console.log(`Message ID: ${id}, Read Status: ${read}`);
+
+	const isSender = senderEmail === loggedInEmail;
+	const senderName = isSender ? "Me" : Object.keys(employeeMap).find(name => employeeMap[name] === senderEmail) || senderEmail;
+	const senderPhoto = employeePhotoMap[senderEmail] || 'default-avatar.png';
+	const formattedTime = new Date(timestamp).toLocaleString(); // Format timestamp
+
+	console.log(`Message ID: ${id}, Time: ${formattedTime}, From: ${senderEmail}, To: ${recipientEmail}, Content: "${message}"`);
+	console.log(`Read Receipt Condition: ${isSender && read ? '✔✔ Shown' : 'No Read Receipt'}`);
+
+	var chatWindow = document.getElementById('chat-window').querySelector('ul');
+	var li = document.createElement('li');
+	li.className = isSender ? 'clearfix right' : 'clearfix left';
+
+	// Add read receipt for sent messages
+	 //   const readReceipt = isSender && read ? `<span class="read-receipt">✔✔</span>` : '';
+	// const readReceipt = isSender && read ? `<div class="read-receipt" style="text-align: right; font-size: 12px; color: gray;">✔✔ Seen</div>` : '';
+	
+	li.innerHTML = `
+	    <div class="message-container" data-message-id="${id}" onclick="toggleDeleteOption(this)">
+	        <img class="sender-photo" src="${senderPhoto}" alt="Sender Photo" />
+	        <div class="message ${isSender ? 'my-message' : 'other-message'}">
+	            <strong>${senderName}:</strong> ${message}
+	        </div>
+	    </div>
+		<div class="timestamp" style="text-align: ${isSender ? 'right' : 'left'};">
+		           ${formattedTime}  ${isSender && read ? '<span class="read-receipt" style="font-size: 12px; color: gray; margin-left: 2px; display: inline;position: relative; top: -2px;">✔️</span>' : ''}
+		       </div>
+	
+	    ${isSender ? `
+	        <div class="message-action-dropdown" >
+	            <a class="dropdown-item" href="#" onclick="deleteMessage(this, ${id})">Delete Message</a>
+	        </div>
+	    ` : ''}`;
+
+
+
+
+
+	chatWindow.appendChild(li);
+	//chatWindow.scrollTop = chatWindow.scrollHeight;
+	li.scrollIntoView({  block: "end" });
+}*/
+
+function showMessage(id, senderEmail, message, recipientEmail, timestamp, loggedInEmail, read, repliedMessage) {
+    console.log("Message ID:", id);
+    console.log(`LoggedInEmail: ${loggedInEmail}, SenderEmail: ${senderEmail}`);
+    console.log(`Message ID: ${id}, Read Status: ${read}`);
+
+    const isSender = senderEmail === loggedInEmail;
+    const senderName = isSender ? "Me" : Object.keys(employeeMap).find(name => employeeMap[name] === senderEmail) || senderEmail;
+    const senderPhoto = employeePhotoMap[senderEmail] || 'default-avatar.png';
+    const formattedTime = new Date(timestamp).toLocaleString(); // Format timestamp
+
+    var chatWindow = document.getElementById('chat-window').querySelector('ul');
+    var li = document.createElement('li');
+    li.className = isSender ? 'clearfix right' : 'clearfix left';
+
+	let replySection = "";
+	if (repliedMessage) {
+	    const isReplySender = repliedMessage.senderEmail === loggedInEmail;
+	    const repliedSenderName = isReplySender ? "Me" : Object.keys(employeeMap).find(name => employeeMap[name] === repliedMessage.senderEmail) || repliedMessage.senderEmail;
+
+	    replySection = `
+	        <div class="replied-message ${isSender ? 'right' : 'left'}">
+	            <strong>${repliedSenderName}:</strong> ${repliedMessage.content}
+	        </div>`;
+	}
+
+
+    li.innerHTML = `
+        <div class="message-container" data-message-id="${id}" >
+            <img class="sender-photo" src="${senderPhoto}" alt="Sender Photo" />
+            <div class="message ${isSender ? 'my-message' : 'other-message'}">
+                ${replySection} <!-- Show the replied message if available -->
+                <strong>${senderName}:</strong> ${message}
+            </div>
+			
+        </div>
+        <div class="timestamp" style="text-align: ${isSender ? 'right' : 'left'};">
+            ${formattedTime} ${isSender && read ? '<span class="read-receipt" style="font-size: 12px; color: gray; margin-left: 2px; display: inline;position: relative; top: -2px;">✔️</span>' : ''}
+        </div>
+        ${isSender ? `
+            <div class="message-action-dropdown">
+                <a class="dropdown-item" href="#" onclick="deleteMessage(this, ${id})">Delete Message</a>
+            </div>
+        ` : ''}
+    `;
+
+    chatWindow.appendChild(li);
+    li.scrollIntoView({ block: "end" });
+}
+
+
+
+
+/*	let replyMessageId = null;
+let replyMessageText = "";
+let touchStartX = 0;
+let touchEndX = 0;
+let touchedMessage = null;
+
+function enableReply(messageElement, messageId, messageText, senderName) {
+    replyMessageId = messageId;
+    replyMessageText = messageText;
+
+    const replyBox = document.getElementById("reply-box");
+    replyBox.innerHTML = `<strong>Replying to ${senderName}:</strong> ${messageText} <span onclick="clearReply()" style="cursor:pointer; color:red;">✖</span>`;
+    replyBox.style.display = "block";
+    console.log("Reply enabled for message:", messageText);
+}
+
+function clearReply() {
+    replyMessageId = null;
+    replyMessageText = "";
+    document.getElementById("reply-box").style.display = "none";
+    console.log("Reply cleared.");
+}*/
+
+/*document.addEventListener("DOMContentLoaded", function () {
+    const chatWindow = document.getElementById("chat-window");
+
+    // Double Tap Event
+  /*  chatWindow.addEventListener("dblclick", function (event) {
+        let messageElement = event.target.closest(".message-container");
+        if (!messageElement) return;
+
+        let messageId = messageElement.getAttribute("data-message-id");
+        let messageText = messageElement.querySelector(".message").innerText;
+        let senderName = messageElement.querySelector("strong").innerText;
+
+        enableReply(messageElement, messageId, messageText, senderName);
+    });
+	// Double Click Event for Emoji Reaction
+	// Emoji selection list
+	   const emojiList = ["👍", "😂", "❤️", "🔥", "😢", "👏", "😡", "🎉", "💯", "🤔"];
+
+	   // Function to create the emoji picker
+	   function showEmojiPicker(messageElement) {
+	       let existingPicker = document.getElementById("emoji-picker");
+	       if (existingPicker) existingPicker.remove(); // Remove any existing picker before adding a new one
+
+	       let emojiPicker = document.createElement("div");
+	       emojiPicker.id = "emoji-picker";
+	       emojiPicker.style.position = "absolute";
+	       emojiPicker.style.background = "#fff";
+	       emojiPicker.style.border = "1px solid #ccc";
+	       emojiPicker.style.borderRadius = "10px";
+	       emojiPicker.style.padding = "5px";
+	       emojiPicker.style.boxShadow = "0px 2px 10px rgba(0, 0, 0, 0.2)";
+	       emojiPicker.style.display = "flex";
+	       emojiPicker.style.gap = "5px";
+	       emojiPicker.style.cursor = "pointer";
+	       emojiPicker.style.zIndex = "1000";
+	       emojiPicker.style.fontSize = "18px";
+
+	       // Position picker below the message
+	       let rect = messageElement.getBoundingClientRect();
+	       emojiPicker.style.left = `${rect.left}px`;
+	       emojiPicker.style.top = `${rect.bottom + window.scrollY + 5}px`;
+
+	       // Add emojis to the picker
+	       emojiList.forEach(emoji => {
+	           let emojiSpan = document.createElement("span");
+	           emojiSpan.innerText = emoji;
+	           emojiSpan.style.padding = "5px";
+	           emojiSpan.style.cursor = "pointer";
+
+	           emojiSpan.addEventListener("click", function () {
+	               addEmojiReaction(messageElement, emoji);
+	               emojiPicker.remove(); // Remove picker after selection
+	           });
+
+	           emojiPicker.appendChild(emojiSpan);
+	       });
+
+	       document.body.appendChild(emojiPicker);
+
+	       // Remove picker if clicking outside
+	       document.addEventListener("click", function removePicker(event) {
+	           if (!emojiPicker.contains(event.target)) {
+	               emojiPicker.remove();
+	               document.removeEventListener("click", removePicker);
+	           }
+	       });
+	   }
+
+	   // Function to add emoji reaction to a message
+	   function addEmojiReaction(messageElement, emoji) {
+	       let emojiContainer = messageElement.querySelector(".emoji-reactions");
+	       if (!emojiContainer) {
+	           emojiContainer = document.createElement("div");
+	           emojiContainer.className = "emoji-reactions";
+	           emojiContainer.style.marginTop = "5px";
+	           emojiContainer.style.fontSize = "18px";
+	           emojiContainer.style.display = "flex";
+	           emojiContainer.style.gap = "5px";
+	           messageElement.appendChild(emojiContainer);
+	       }
+
+	       // Check if emoji is already present, then increment count
+	       let existingEmoji = [...emojiContainer.children].find(span => span.innerText.startsWith(emoji));
+	       if (existingEmoji) {
+	           let count = parseInt(existingEmoji.getAttribute("data-count")) || 1;
+	           count++;
+	           existingEmoji.innerText = `${emoji} ${count}`;
+	           existingEmoji.setAttribute("data-count", count);
+	       } else {
+	           let emojiSpan = document.createElement("span");
+	           emojiSpan.innerText = emoji;
+	           emojiSpan.setAttribute("data-count", "1");
+	           emojiContainer.appendChild(emojiSpan);
+	       }
+	   }
+
+	   // Double Click Event for Emoji Picker
+	   chatWindow.addEventListener("dblclick", function (event) {
+	       let messageElement = event.target.closest(".message-container");
+	       if (!messageElement) return;
+
+	       showEmojiPicker(messageElement);
+	   });
+
+
+});*/
+
+document.addEventListener("DOMContentLoaded", function () {
+    console.log("DOM fully loaded and parsed");
+
+    const chatWindow = document.getElementById("chat-window");
+    const chatActions = document.getElementById("chat-actions");
+    const messageInput = document.getElementById("message");
+    const replyBox = document.getElementById("reply-box");
+    const searchIcon = document.getElementById("searchIcon");
+   // let selectedMessage = null;
+
+		    // Show chat actions near the selected message
+		    function showChatActions(messageElement, isSender) {
+		        console.log("Showing chat actions for:", messageElement.innerText);
+				// Hide search icon when chat actions appear
+				       if (searchIcon) {
+				           searchIcon.style.display = "none";
+				       }
+				
+		        chatActions.style.display = "block";
+		        let rect = messageElement.getBoundingClientRect();
+		        chatActions.style.left = `${rect.left}px`;
+		        chatActions.style.top = `${rect.bottom + window.scrollY + 5}px`;
+		        selectedChatMessage = messageElement;
+				// Get message ID
+				 let messageId = messageElement.getAttribute("data-message-id");
+
+				// Toggle buttons based on sender or recipient
+				 //   document.getElementById("replyMessage").style.display = isSender ? "none" : "inline-block"; // Show Reply only for recipient messages
+				    document.getElementById("deleteMessagenew").style.display = isSender ? "inline-block" : "none"; // Show Delete only for own messages
+					
+					// Attach delete function to delete button
+					        document.getElementById("deleteMessagenew").onclick = function () {
+					            deleteMessage(selectedChatMessage, messageId);
+					        };
+		    }
+
+		    // Hide chat actions
+		    function hideChatActions() {
+		        console.log("Hiding chat actions");
+		        chatActions.style.display = "none";
+		        selectedChatMessage  = null;
+				
+
+				// Show search icon again when chat actions disappear
+				if (searchIcon) {
+				    searchIcon.style.display = "block";
+				}
+		    }
+
+		    // Message selection event
+		    chatWindow.addEventListener("click", function (event) {
+		        let messageElement = event.target.closest(".message-container");
+		        if (!messageElement) {
+		            hideChatActions();
+		            return;
+		        }
+				// Determine if the message belongs to the logged-in user
+				        let isSender = messageElement.querySelector(".message").classList.contains("my-message");
+						console.log("Message selected:", messageElement.innerText, "Is sender:", isSender);
+						     
+		        console.log("Message selected:", messageElement.innerText);
+		        document.querySelectorAll(".message-container").forEach(msg => msg.classList.remove("selected-message"));
+		        messageElement.classList.add("selected-message");
+		        showChatActions(messageElement,isSender);
+		    });
+
+		    // Click outside messages to hide actions, but keep reply box active when typing
+		    document.addEventListener("click", function (event) {
+		        if (!event.target.closest(".message-container") && !chatActions.contains(event.target) && !document.getElementById("replyMessage").contains(event.target) && !replyBox.contains(event.target) && !messageInput.contains(event.target)) {
+		            console.log("Clicked outside, hiding chat actions");
+		            hideChatActions();
+		            clearReply();
+		        }
+		    });
+
+		
+			// Reply to Message
+			document.getElementById("replyMessage").addEventListener("click", function (event) {
+			    if (selectedChatMessage) {
+			        let senderElement = selectedChatMessage.querySelector(".sender");
+			        let sender = senderElement ? senderElement.innerText : ""; // Get sender name if exists
+			        let messageText = selectedChatMessage.querySelector(".message").innerText;
+
+			        console.log("Replying to:", sender, ":", messageText);
+
+			        // Show Reply Box with formatted sender name in bold
+			        replyBox.style.display = "flex"; 
+			        replyBox.innerHTML = sender 
+			            ? `<strong style="font-weight: bold;">${sender}:</strong> ${messageText} <button id="cancel-reply">x</button>` 
+			            : `${messageText} <button id="cancel-reply">x</button>`;  // If no sender, just show message text
+
+			        // Focus on Message Input
+			        messageInput.focus();
+
+
+					// **Scroll chat window to the bottom**
+					chatWindow.scrollTop = chatWindow.scrollHeight;  // Scrolls to the bottom
+
+			        // Stop Event Propagation
+			        event.stopPropagation();
+			    }
+			});
+
+
+    // Prevent reply box from closing when clicking inside it
+    replyBox.addEventListener("click", function (event) {
+        event.stopPropagation();
+    });
+
+    // Prevent input field from triggering hide event
+    messageInput.addEventListener("click", function (event) {
+        event.stopPropagation();
+    });
+
+    // Cancel Reply Button Click
+    replyBox.addEventListener("click", function (event) {
+        if (event.target.id === "cancel-reply") {
+            console.log("Cancel reply clicked");
+            clearReply();
+        }
+    });
+
+    // Clear Reply Box
+    function clearReply() {
+        console.log("Clearing reply box");
+        replyBox.style.display = "none";
+        replyBox.innerHTML = "";
+		selectedChatMessage = null;
+    }
+});
+
+
+
+
+function toggleDeleteOption(messageContainer) {
+	const dropdown = messageContainer.nextElementSibling.nextElementSibling; // Get the dropdown
+
+	// If the dropdown is currently active, hide it
+	if (activeDeleteDropdown && activeDeleteDropdown !== dropdown) {
+		activeDeleteDropdown.style.display = 'none'; // Hide the previous dropdown
+	}
+
+	// Toggle the current dropdown
+	if (dropdown) {
+		dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none'; // Toggle display
+		activeDeleteDropdown = dropdown.style.display === 'block' ? dropdown : null; // Update active dropdown
+	}
+}
+
+
+function deleteMessage(deleteButton, messageId) {
+	// Check if the message ID is valid
+	if (!messageId) {
+		console.error('Message ID is invalid or undefined.');
+		return;
+	}
+
+	// Show confirmation dialog before proceeding
+	Swal.fire({
+		title: 'Delete message for you?',
+		text: "This will remove the message only for you!",
+		icon: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#d33',
+		cancelButtonColor: '#3085d6',
+		confirmButtonText: 'Yes, delete it!',
+		customClass: {
+			popup: 'smaller-swal-popup', // Apply custom CSS class
+		},
+	}).then((result) => {
+		if (result.isConfirmed) {
+			// Proceed with deletion if confirmed
+			console.log(`Sending DELETE request for message ID: ${messageId}`);
+
+			// Find the parent `li` containing the message
+			const messageElement = deleteButton.closest('li');
+			console.log('Message container (li):', messageElement);
+
+			if (!messageElement) {
+				console.error('Could not find the message container (li).');
+				return;
+			}
+			var loggedInEmail = document.getElementById('loggedInMail').value;
+			// Send an AJAX request to delete the message from the backend
+			fetch(`/deleteMessage/${messageId}?loggedInEmail=${loggedInEmail}`, {
+				method: 'DELETE',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			})
+				.then((response) => {
+					if (response.ok) {
+						// Remove the message from the chat window
+						messageElement.remove();
+						console.log(`Message ID ${messageId} deleted successfully`);
+
+						// Show smaller success message
+						Swal.fire({
+							title: 'Deleted!',
+							text: 'Your message has been deleted.',
+							icon: 'success',
+							customClass: {
+								popup: 'smaller-swal-success', // Apply custom CSS class for success message
+							},
+						});
+					} else {
+						console.error(
+							`Failed to delete the message with ID ${messageId}`
+						);
+					}
+				})
+				.catch((error) => {
+					console.error('Error deleting message:', error);
+				});
+		}
+	});
+}
+
+
+
+
+
+
+
+
+// Store a message in the chat history
+function storeMessage(employeeName, sender, message) {
+	if (!chatHistory[employeeName]) {
+		chatHistory[employeeName] = [];
+	}
+	chatHistory[employeeName].push({sender: sender, content: message});
+}
+
+// Load previous messages for the selected employee
+function loadChatHistory() {
+	var chatWindow = document.getElementById('chat-window').querySelector('ul');
+	chatWindow.innerHTML = ''; // Clear the chat window
+
+	if (chatHistory[selectedEmployee]) {
+		console.log(`Loading chat history for: ${selectedEmployee}`);
+		chatHistory[selectedEmployee].forEach(function (msg) {
+			showMessage(msg.sender, msg.content);
+		});
+	}
+}
+
+let displayedMessageIds = new Set(); // Track displayed messages
+	let closedMessageIds = new Set(); // Track closed messages
+
+
+function fetchUnreadMessages() {
+	//alert("1");
+	console.log("Fetching unread messages...");
+	var loggedInEmail = document.getElementById('loggedInMail').value;
+
+	fetch(`/unread?email=${loggedInEmail}`)
+		.then(response => response.json())
+		.then(messages => {
+			messages.forEach(message => {
+				//let senderName = emailToNameMap[message.senderEmail] || message.senderEmail;
+
+				// Show notification with sender's email as a parameter
+				//showToastNotification(`New message from ${senderName}: ${message.content}`, message.senderEmail);
+				// Ignore messages that were previously closed
+					                if (!displayedMessageIds.has(message.id) && !closedMessageIds.has(message.id)) {
+										//alert(1);
+					                    let senderName = emailToNameMap[message.senderEmail] || message.senderEmail;
+					                    showToastNotification(`New message from ${senderName}: ${message.content}`, message.id, message.senderEmail);
+					                    displayedMessageIds.add(message.id); // Mark message as displayed
+										loadEmployees();
+										// Check if the selected employee is the sender and the logged-in user is the recipient
+										                    if (selectedEmployee === message.senderEmail && loggedInEmail === message.recipientEmail) {
+															//	alert("fetchunread");
+										                        console.log("New message from selected employee, loading messages...");
+										                        loadMessages();
+										                    }
+															
+															// Call showMessage if the sender is the logged-in user
+															                   if (message.senderEmail === loggedInEmail) {
+																				//alert("1");
+																				//loadMessages();
+															                       showMessage(
+															                           message.id, 
+															                           message.senderEmail, 
+															                           message.content, 
+															                           message.recipientEmail, 
+															                           message.timestamp, 
+															                           loggedInEmail, 
+															                           message.read
+															                       );
+															                   }
+					                }
+			});
+		})
+		.catch(error => console.error("Error fetching unread messages:", error));
+}
+
+/*function showToastNotification(message, senderEmail) {
+	var toastContainer = document.createElement('div');
+	toastContainer.className = 'toast-notification';
+
+	// Add message and close button
+	toastContainer.innerHTML = `<p>${message}</p> <span class="toast-close">✖</span>`;
+
+	document.body.appendChild(toastContainer);
+
+	// Animate in
+	setTimeout(() => {
+		toastContainer.classList.add('show');
+	}, 100);
+
+	// Auto-hide after 8 seconds
+	let autoHideTimeout = setTimeout(() => closeToast(toastContainer), 10000);
+
+	// Prevent opening chat when clicking the close button
+	toastContainer.querySelector('.toast-close').addEventListener('click', (event) => {
+		event.stopPropagation(); // Prevent click from bubbling to toastContainer
+		clearTimeout(autoHideTimeout);
+		closeToast(toastContainer);
+	});
+
+	// Open chat when clicking on the notification
+	toastContainer.addEventListener('click', () => {
+		openChatWithSender(senderEmail);
+		closeToast(toastContainer); // Remove notification when chat opens
+	});
+}*/
+
+
+function showToastNotification(message, messageId, senderEmail) {
+	//alert(1);
+    var toastContainer = document.createElement('div');
+    toastContainer.className = 'toast-notification';
+    toastContainer.innerHTML = `<p>${message}</p> <span class="toast-close">✖</span>`;
+
+    document.body.appendChild(toastContainer);
+
+    // Animate in
+    setTimeout(() => {
+        toastContainer.classList.add('show');
+    }, 100);
+
+    // Auto-hide after 8 seconds
+    let autoHideTimeout = setTimeout(() => closeToast(toastContainer, messageId), 8000);
+
+    // Prevent opening chat when clicking the close button
+    toastContainer.querySelector('.toast-close').addEventListener('click', (event) => {
+        event.stopPropagation(); // Prevent click from bubbling to toastContainer
+        clearTimeout(autoHideTimeout);
+        closedMessageIds.add(messageId); // Mark as closed so it won't be shown again
+        closeToast(toastContainer, messageId);
+    });
+
+    // Open chat when clicking on the notification
+    toastContainer.addEventListener('click', () => {
+        openChatWithSender(senderEmail);
+        closeToast(toastContainer, messageId); // Remove notification when chat opens
+    });
+}
+
+function closeToast(toast) {
+	toast.classList.remove('show');
+	setTimeout(() => toast.remove(), 300); // Faster fade-out
+}
+
+
+
+function openChatWithSender(senderEmail) {
+	console.log("Opening chat with:", senderEmail);
+
+	// Find employee name from email
+	let employeeName = Object.keys(employeeMap).find(name => employeeMap[name] === senderEmail);
+
+	if (!employeeName) {
+		console.warn("Employee name not found for email:", senderEmail);
+		employeeName = senderEmail; // Fallback to email if name not found
+	}
+
+	// Update UI with selected employee
+	selectEmployee(employeeName);
+}
+document.getElementById('message').addEventListener('keypress', function (event) {
+    if (event.key === 'Enter') {
+        event.preventDefault(); // Prevent default behavior (like form submission)
+        sendMessage();
+		
+		
+    }
+});
+
+function sendMessage() {
+	var messageContent = document.getElementById('message').value;
+	var loggedInEmail = document.getElementById('loggedInMail').value; // Get the logged-in user's email
+	var repliedMessageId = selectedChatMessage  ? selectedChatMessage .getAttribute('data-message-id') : null;
+
+	if (messageContent && stompClient && selectedEmployee) {
+		var chatMessage = {
+			content: messageContent,
+			recipientEmail: selectedEmployee, // Email of the recipient
+			senderEmail: loggedInEmail, // Include the sender's email
+			repliedMessage: repliedMessageId ? { id: repliedMessageId } : null
+			
+		};
+		console.log(`Sending message: "${messageContent}" to ${selectedEmployee}`); // Log message sending
+		console.log("Chat message object:", chatMessage); // Log the chat message object
+
+		stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
+		
+		// Simulating the server response (this should come from the backend after the message is stored):
+		// Assuming the backend sends a response message with an ID after saving
+		/*  const timestamp = new Date().toISOString(); // Get the current timestamp
+		  showMessage(
+			  null, // Placeholder for now, to be updated with the generated ID
+			  loggedInEmail,
+			  messageContent,
+			  selectedEmployee,
+			  timestamp,
+			  loggedInEmail
+		  );*/
+		// Listen for the response from the backend
+		// Clear reply box after sending the message
+		      
+
+		// Clear the draft after the message is sent
+		if (drafts[selectedEmployee]) {
+		    delete drafts[selectedEmployee];  // Remove the draft for the selected employee
+		    console.log(`Draft cleared for ${selectedEmployee}`);
+		}
+
+		// Clear the input field
+		document.getElementById('message').value = '';
+
+		document.getElementById('message').value = ''; // Clear the input field
+		// Refresh the page after sending a message
+		    //  location.reload();
+			clearReplynew(); 
+	} else {
+		alert("Please select an employee to send a message.");
+	}
+}
+
+function clearReplynew() {
+    var replyBox = document.getElementById('reply-box');
+    if (replyBox) {
+        replyBox.style.display = "none";
+        replyBox.innerHTML = ""; // Clear the reply box content
+        selectedChatMessage = null;
+    }
+}
+
+// Connect to the WebSocket server and load employees when the page is loaded
+document.addEventListener('DOMContentLoaded', function () {
+	//alert("second");
+	fetchEmployeePhotos();
+	connect();
+	//loadEmployees();
+	
+	loadMessages();
+	initializeChat();
+	
+});
+//setInterval(loadEmployees, 10000);
+
+document.addEventListener("DOMContentLoaded", function () {
+    loadEmployees()
+        .then(() => {
+            if (!stompClient || !stompClient.connected) {
+                console.log("Waiting for STOMP connection...");
+                setTimeout(() => initializeChatSession(), 300);
+            } else {
+                initializeChatSession();
+            }
+        })
+        .catch(error => {
+            console.error("Error in loadEmployees:", error);
+        });
+});
+
+function initializeChatSession() {
+    const senderEmail = sessionStorage.getItem("chatSenderEmail");
+    console.log("Opening chat with:", senderEmail);
+
+    if (senderEmail) {
+        const senderName = emailToNameMap[senderEmail] || senderEmail;
+        console.log(`Employee selected: ${senderName}`);
+
+        selectEmployee(senderName); // Call function only when ready
+        sessionStorage.removeItem("chatSenderEmail");
+    }
+}
+
+
+
+
+	
+
+
+	</script>
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+		    const urlParams = new URLSearchParams(window.location.search);
+		    const activeTab = urlParams.get("activeTab");
+		
+		    if (activeTab === "reminders") {
+		        document.getElementById("home-tab").click(); // Trigger click on Reminders tab
+		    }
+		});
+	</script>
+	<!-- Include Toastr JS -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+	
+	<!-- script for profile pic -->
+<script>
+$.ajax({
+    type: "GET",
+    url: "fetchEmployeeDocumentDetailsOnlyByEmpId",
+    data: {
+        "emp_id": $('#emp_idSessionValue').val()
+    },
+    success: function(data) {
+    	console.log("++++data"+JSON.stringify(data));
+        $('#dynamicProfilePic').attr('src', `${data.profilePicPath}`);
+    },
+    error: function(xhr, status, error) {
+        console.error("Error invoking data:", error);
+    }
+});
+</script>
+
+<!-- script to focuse the side nav link when page gets loaded -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let activeLink = document.querySelector(".nav-link.active");
+        if (activeLink) {
+            activeLink.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+    });
+</script>
+</body>
+
+</html>

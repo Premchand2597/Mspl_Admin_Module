@@ -1,0 +1,1673 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Announcements</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <!-- =======================================================
+  * Template Name: NiceAdmin
+  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+  * Updated: Apr 20 2024 with Bootstrap v5.3.3
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+  <style>
+  
+	  .main{
+	  	font-size: 14px;
+	  }
+  
+       .info-card {
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        #attendence-chart{
+            width: 100%;
+            height: 190px; /* Adjust the height as needed */
+        }
+        /* Example CSS to style disabled items */
+		.activity-item .disabled {
+		    pointer-events: none; /* Disable interactions */
+		    opacity: 0.5; /* Make the item appear grayed out */
+		}
+		
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+       
+        .info-card {
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        #attendence-chart{
+            width: 100%;
+            height: 190px; /* Adjust the height as needed */
+        }
+        
+        /* Example CSS to style disabled items */
+		.activity-item .disabled {
+		    pointer-events: none; /* Disable interactions */
+		    opacity: 0.5; /* Make the item appear grayed out */
+		}
+		.eventCardsRow{
+			display: flex;
+		    flex-wrap: wrap;  /* Allow wrapping to the next line */
+		    width: 100%; 
+		    height: auto;
+		    margin-top: 10px;
+		    /* background-color: red; */
+		}
+
+		.eventsHiddenCards {
+		    width: calc(32% - 3px);  /* Ensure 3 cards per row, adjust for margin */
+		    cursor: default;
+		    height: 100%;
+		    /*background-color: green;*/
+		    margin-left: 10px;
+		    margin-bottom: 10px;
+		}
+
+		/*.eventsCardBody{
+			padding: 10px 15px;
+			height: 100%;
+			width: 100%;
+			background: blue;
+			border-radius: 10px;
+		}*/
+
+		.eventImageAndEventHeadingMerger{
+			/* background: red; */
+			display: flex;
+			align-items: center;
+		}
+
+		.imageViewBox{
+			width: 110px;
+			height: 90px;
+			/* background: gray; */
+			border-radius: 10px;
+			overflow: hidden;
+		}
+
+		.event_image_pic {
+		    width: 100%; /* Ensures the image scales properly */
+		    height: 100%;
+		}
+
+		.eventHeadingBox{
+			/* background: green; */
+			margin-left: 10px;
+		}
+
+		.eventHeadingBox p{
+			font-size: 15px;
+			font-weight: bold;
+			/* background: red; */
+			margin: 0;
+		}
+
+		.eventHeadingBox .eventStatusPara{
+			color: #b3b6b7;
+			font-weight: bold;
+			font-size: 14px;
+			/* background: yellow; */
+		}
+
+		.eventDescriptionMerger{
+			display: flex;
+			/* background: green; */
+			margin-top: 10px;
+			gap: 10px;
+		}
+
+		.eventDateBox,.eventFromTimeBox,.eventToTimeBox{
+			width: 33%;
+			height: auto;
+			/* background: yellow; */
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 5px;
+			padding: 2px;
+		}
+
+		.eventDateBox p,.eventFromTimeBox p,.eventToTimeBox p{
+			margin: 0;
+			font-size: 14px;
+			font-weight: bold;
+		}
+
+		.eventDateBox h6,.eventFromTimeBox h6,.eventToTimeBox h6{
+			color: #b3b6b7;
+			font-weight: bold;
+		}
+
+		.viewEventLinkBox{
+			/* background: red; */
+			padding: 5px;
+			text-align: center;
+			border-top: 1px solid #b3b6b7;
+			margin-top: 5px;
+		}
+
+		.viewEventLinkBox a{
+			font-size: 14px;
+			font-weight: bold;
+		}    
+		
+		.profile-picture {
+					width: 40px;
+					/* Adjust the size as needed */
+					height: 150px;
+					/* Ensure the height and width are the same */
+					border-radius: 50%;
+					/* This makes the image a circle */
+					object-fit: cover;
+					/* Ensures the image fits within the circle */
+				}
+				.compProjectHiddenCards,.eventsHiddenCards {
+				    width: calc(25% - 10px);  /* Ensure 4 cards per row, adjust for margin */
+				    cursor: default;
+				    height: 100%;
+				    display: flex;
+				    justify-content: center;
+				    margin: 5px;  /* Add margin to ensure spacing between cards */
+				    /*background-color: green;*/
+				}
+				.eventCard_dateDetail_box{
+					width: 30%;
+					height: 100%;
+					/*background-color: #7DCEA0;*/
+					text-align: center;
+					color: #fff;
+				}
+
+				.eventCard_headingDetail_box{
+					width: 70%;
+					height: 100%;
+					background-color: #fff;
+					font-size: 14px;
+					overflow: auto;
+				}
+
+				.eventLeftDetailBox{
+					/*background-color: orange;*/
+					width: 100%;
+					height: 85%;
+					margin-top: 8px;
+				}
+
+				.eventDateNumberPara{
+					/*background-color: red;*/
+					padding: 2px;
+					font-size: 30px;
+					margin: 0;
+					font-weight: bold;
+				}
+
+				.eventMonthYearPara{
+					/*background-color: green;*/
+					padding: 2px;
+					font-size: 14px;
+					margin: 0;
+				}
+
+				.eventStartTimePara{
+					/*background-color: blue;*/
+					padding: 2px;
+					font-size: 14px;
+					margin: 0;
+				}
+
+				.eventHeadingPara{
+					/*background-color: red;*/
+					padding: 4px 6px;
+					margin: 5px 0 0 0;
+					cursor: pointer;
+				}
+
+				.eventHeadingPara:hover{
+					text-decoration: underline;
+					color: red;
+				}
+
+				.eventLocationPara{
+					/*background-color: yellow;*/
+					padding: 4px 6px;
+					margin: 0;
+					color: #BDC3C7;
+				}
+
+				.event_location_img{
+					width: 12px;
+					height: 12px;
+					margin-top: -4px;
+					/*background-color: red;*/
+				}
+
+				.eventStatusPara{
+					/*background-color: yellow;*/
+					padding: 4px 6px;
+					margin: 20px 0 0 0;
+				}
+				
+				.eventImage {
+				    width: 100%;
+				    height: auto;
+				    border-radius: 8px;
+				    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+				    transition: transform 0.3s ease-in-out;
+				}
+
+				.eventImage:hover {
+				    transform: scale(1.05);
+				}
+
+				.eventVideoBox video {
+				    width: 100%;
+				    border-radius: 8px;
+				    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+				    transition: transform 0.3s ease-in-out;
+				}
+
+				.eventVideoBox video:hover {
+				    transform: scale(1.05);
+				}
+
+				.eventCardsBody {
+				    display: flex;
+				    flex-wrap: wrap;
+				    gap: 20px;
+				}
+
+				/*.eventsHiddenCards {
+				    width: 300px;
+				}*/
+
+				.eventsHiddenCards {
+				    width: calc(32% - 3px); /* Ensures 3 cards per row */
+				    cursor: default;
+				    margin-left: 10px;
+				    margin-bottom: 10px;
+				    height: auto; /* Allow the card to expand based on content */
+				}
+				
+				/*.eventsCardBody {
+				    padding: 20px;
+				    border: 1px solid #ddd;
+				    border-radius: 10px;
+				    background-color: #fff;
+					max-height: auto;
+					
+				}*/
+				.eventsCardBody {
+				    padding: 10px 10px;
+				    width: 100%;
+				    background: #fff;
+				    border-radius: 10px;
+				    height: auto; /* Let the content dictate the height */
+				}
+				.modal {
+				    display: none; /* Hidden by default */
+				    position: fixed; /* Stay in place */
+				    z-index: 1; /* Sit on top */
+				    left: 0;
+				    top: 0;
+				    width: 100%; /* Full width */
+				    height: 100%; /* Full height */
+				    overflow: auto; /* Enable scroll if needed */
+				    background-color: rgb(0,0,0); /* Fallback color */
+				    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+				}
+
+				.modal-content {
+				    background-color: #fefefe;
+				    margin: 1.75rem auto; /* Adjust margin to give more space at the top */
+				    padding: 1.5rem; /* Adjust padding for a more compact appearance */
+				    border: 1px solid #888;
+				    width: 800px; /* Set width to match Bootstrap large modal */
+				    max-width: 90%; /* Set a maximum width for responsiveness */
+				}
+
+				.close-button {
+				    color: #aaa;
+				    float: right;
+				    font-size: 28px;
+				    font-weight: bold;
+				}
+
+				.close-button:hover,
+				.close-button:focus {
+				    color: black;
+				    text-decoration: none;
+				    cursor: pointer;
+				}
+
+				 
+				/* Adjust image size inside the modal */
+				.modal-image-box img {
+				    max-width: 100px; /* Make image smaller */
+				    height: auto; /* Maintain aspect ratio */
+				    border-radius: 8px;
+				}
+
+				/* Align modal content (title, date, time) next to the image */
+				
+
+				.modal-date-time h4 {
+				    margin: 0;
+				    font-size: 1.25rem;
+				}
+
+				.modal-date-time p {
+				    margin: 0;
+				    font-size: 1rem;
+				    color: #666; /* Optional: Add some styling for the text */
+				} 
+				/* Adjust the video box */
+				.modal-video-box {
+				    margin-top: 20px; /* Space above the video */
+				}
+
+				.modal-video-box video {
+				    max-height: 250px; /* Adjust the height of the video */
+				    border-radius: 8px;
+				}
+
+				/* Ensure modal elements stack properly */
+				.modal-content {
+				    padding: 1.5rem;
+				}
+
+				/* Optional styling for modal header */
+				.modal-header h5 {
+				    font-size: 1.5rem;
+				    margin: 0;
+				}
+				
+				/* Ensure modal is displayed above the backdrop */
+				.modal {
+				    z-index: 1050 !important; /* Standard Bootstrap modal z-index */
+				}
+
+				/* Ensure the modal backdrop is behind the modal content */
+				.modal-backdrop {
+				    z-index: 1040 !important; /* Backdrop should be lower than the modal */
+				}
+				
+				/* Fullscreen overlay with dim background */
+				#loadingPopup {
+				    position: fixed;
+				    top: 0;
+				    left: 0;
+				    width: 100%;
+				    height: 100%;
+				    background: rgba(0, 0, 0, 0.5); /* Dim background */
+				    display: flex;
+				    flex-direction: column;
+				    justify-content: center;
+				    align-items: center;
+				    z-index: 9999;
+				    font-family: Arial, sans-serif;
+				    color: white; /* Text color for better contrast */
+				}
+				
+				/* Spinner animation */
+				.spinner {
+				    width: 50px;
+				    height: 50px;
+				    border: 6px solid rgba(255, 255, 255, 0.3); /* Semi-transparent border */
+				    border-top-color: white; /* Bright top border */
+				    border-radius: 50%;
+				    animation: spin 1s linear infinite;
+				}
+				
+				/* Loading text */
+				#loadingPopup p {
+				    margin-top: 20px;
+				    font-size: 18px;
+				    font-weight: bold;
+				    color: white;
+				}
+				/* Spinner keyframe animation */
+				@keyframes spin {
+				    to {
+				        transform: rotate(360deg);
+				    }
+				}
+
+  </style>
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center" th:if="${empDetailsByEmpId.deptId>0}">
+
+   <!--  <div class="app-branding" style="width:100%; margin:0 0 0 10px; padding:5px;">
+				    <a class="app-logo" th:href=@{/dashboard}>
+				        <img class="logo-icon" src="assets/img/logo.png" alt="logo" style="width:200px; height:50px; max-width:100%; padding:0 2px 0 10px; margin:0;">
+				    </a>
+				</div> --><!-- End Logo -->
+	
+		   <div class="d-flex align-items-center" style="width:100%; margin:0 0 0 10px; padding:5px;">
+				    <a class="app-logo" th:href=@{/dashboard}>
+				        <img class="d-none d-lg-block" src="assets/img/logo.png" alt="logo" style="width:200px; height:50px; max-width:100%; padding:0 2px 0 10px; margin:0;">
+				    </a>
+				   <!--  <i class="bi bi-chevron-double-left toggle-sidebar-btn" onclick="toggleIconRotation()"></i> -->
+			</div>
+				
+   <!--  <div class="search-bar">
+      <form class="search-form d-flex align-items-center" method="POST" action="#">
+        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+      </form>
+    </div> --><!-- End Search Bar -->
+
+	<div th:replace="fragments/header :: header" ></div>
+	
+  </header><!-- End Header -->
+  
+  <!-- =======Super Admin Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center" th:if="${empDetailsByEmpId.deptId == 0}">
+
+    <div class="d-flex align-items-center" style="width:100%; margin:0 0 0 10px; padding:5px;">
+				    <a class="app-logo" th:href=@{/dashboard}>
+				        <img class="d-none d-lg-block" src="assets/img/logo.png" alt="logo" style="width:200px; height:50px; max-width:100%; padding:0 2px 0 10px; margin:0;">
+				    </a>
+				   <!--  <i class="bi bi-chevron-double-left toggle-sidebar-btn" onclick="toggleIconRotation()"></i> -->
+	</div><!-- End Logo -->
+
+    <!-- <div class="search-bar">
+      <form class="search-form d-flex align-items-center" method="POST" action="#">
+        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+      </form>
+    </div> --><!-- End Search Bar -->
+
+    <div th:replace="fragments/superAdminHeader :: header"></div>
+
+  </header><!-- End Header -->
+
+  <!-- ======= Sidebar ======= -->
+  
+<aside id="sidebar" class="sidebar">
+<input type="hidden" id="employee-id" th:value="${empDetailsByEmpId.deptId}">
+    <ul class="sidebar-nav" id="sidebar-nav">
+		 
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/userDashboard}">
+                <i class="bi bi-grid"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+         <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/viewAdminProfile(empid=${empDetailsByEmpId.empid})}">
+                <i class="bi bi-person"></i>
+                 <span>My Profile</span>
+            </a>
+        </li>  
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/attendanceLive(email=${empDetailsByEmpId.email})}">
+                <i class="bi bi-calendar3"></i>
+                <span>Attendence</span>
+            </a> 
+        </li>      
+       <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/groupMailId}">
+                <i class="bi bi-telephone"></i>
+                <span>Employee Contacts</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/adminHoliday}">
+                <i class="bi bi-calendar4-week"></i>
+                <span>Holiday List</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+		    <a class="nav-link" th:href="@{/employee}">
+		        <i class="bi bi-people"></i>	
+		        <span>Employee</span>
+		    </a>
+	   </li> 
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/viewAdminLeaves(empid=${empDetailsByEmpId.empid})}">
+                <i class="bi bi-card-text"></i>
+                <span>Team Leaves</span>
+            </a>
+        </li> 
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link active" th:href="@{/events}">
+                <i class="bi bi-megaphone"></i>
+                <span>Announcement</span>
+            </a>
+        </li>               
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/asset}">
+                <i class="bi bi-wallet"></i>
+                <span>Assets</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/ongoingProject}">
+                <i class="bi bi-card-heading"></i>
+                <span>Projects</span>
+            </a>
+        </li>   
+         <!-- <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/viewAdminPayslip(empid=${empDetailsByEmpId.empid})}">
+                <i class="bi bi-file-text"></i>
+                <span>Payslip</span>
+            </a>
+        </li>  -->    
+         <!-- Loop through the permissions map -->
+       <li class="nav-item" th:if="${permissions.interviewAccess && empDetailsByEmpId.deptId>0}" >
+            <a class="nav-link" th:href="@{/moatIframe}">
+                <i class="bi bi-vector-pen"></i>
+                <span>Interview</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.sales && empDetailsByEmpId.deptId>0}" >
+            <a class="nav-link" th:href="@{/sales}">
+                <i class="bi bi-cart3"></i>
+                <span>Sales</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.accountsAccess && empDetailsByEmpId.deptId>0}" >
+            <a class="nav-link" th:href="@{/accounts}">
+                <i class="bi bi-person-vcard"></i>
+                <span>Accounts</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.storeAccess && empDetailsByEmpId.deptId>0}" >
+            <a class="nav-link" th:href="@{/store}">
+                <i class="bi bi-shop-window"></i>
+                <span>Store</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.apprisalAccess && empDetailsByEmpId.deptId>0}" >
+            <a class="nav-link" id="apprisalLink" th:href="@{/apprisal(empid=${empDetailsByEmpId.empid})}">
+		        <i class="bi bi-file-text"></i>
+		        <span>Appraisal</span>
+		    </a>
+        </li>
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+		    <a class="nav-link" id="apprisalLink" th:href="@{/employeeApprisal(empid=${empDetailsByEmpId.empid})}">
+		        <i class="bi bi-file-text"></i>
+		        <span>Employee Appraisal</span>
+		    </a>
+		</li>
+		<li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+				<a class="nav-link" th:href="@{/my-favorites}">
+					<i class="bi bi-layout-text-window-reverse"></i>
+					<span>To-Chat & Remind</span>
+				</a>
+		</li>
+        
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link " th:href="@{/navbar}">
+		        <i class="bi bi-grid"></i>
+		        <span>Dashboard</span>
+		    </a>
+	    </li>
+	    <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+            <a class="nav-link" th:href="@{/attendanceLive(email=${empDetailsByEmpId.email})}">
+                <i class="bi bi-calendar3"></i>
+                <span>Attendence</span>
+            </a>
+      </li> 
+      <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link" th:href="@{/adminHoliday}">
+		        <i class="bi bi-calendar4-week"></i>
+		        <span>Holiday List</span>
+		    </a>
+	 </li>	
+	<li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link" th:href="@{/groupMailId}">
+		        <i class="bi bi-telephone"></i>
+		        <span>Employee Contacts</span>
+		    </a>
+	 </li>
+	  <!-- <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+            <a class="nav-link" th:href="@{/InterCommDetails}">
+                <i class="bi bi-telephone"></i>
+                <span>InterComm Details</span>
+            </a>
+      </li> -->
+      <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link"  th:href="@{/viewAdminLeaves(empid=${empDetailsByEmpId.empid})}">
+		        <i class="bi bi-calendar4-week"></i>
+		        <span>Team Leaves</span>
+		    </a>
+	 </li> 
+	 <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link" th:classappend="${empDetailsByEmpId.deptId==0} ? ' active'"  th:href="@{/events}">
+		        <i class="bi bi-megaphone"></i>
+		        <span>Announcement</span>
+		    </a>
+	 </li> 
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link" th:href="@{/addDepartment}">
+		        <i class="bi bi-calendar4-week"></i>
+		        <span>Department</span>
+		    </a>
+	   </li>
+	 <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link"  th:href="@{/addRole}">
+		        <i class="bi bi-receipt"></i>
+		        <span>Role</span>
+		    </a>
+	 </li>
+	 <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link" th:href="@{/employee}">
+		        <i class="bi bi-people"></i>
+		        <span>Employee</span>
+		    </a>
+	 </li> 
+	 
+      <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+            <a class="nav-link"  th:href="@{/ongoingProject}">
+                <i class="bi bi-calendar3"></i>
+                <span>Projects</span>
+            </a>
+      </li>  
+      <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+            <a class="nav-link"  th:href="@{/asset}">
+                <i class="bi bi-wallet"></i>
+                <span>Assets</span>
+            </a>
+      </li> 
+      <li class="nav-item" th:if="${permissions.interviewAccess && empDetailsByEmpId.deptId==0}" >
+            <a class="nav-link" th:href="@{/moatIframe}">
+                <i class="bi bi-vector-pen"></i>
+                <span>Interview</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.sales && empDetailsByEmpId.deptId==0}" >
+            <a class="nav-link" th:href="@{/sales}">
+                <i class="bi bi-cart3"></i>
+                <span>Sales</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.accountsAccess && empDetailsByEmpId.deptId==0}" >
+            <a class="nav-link" th:href="@{/accounts}">
+                <i class="bi bi-person-vcard"></i>
+                <span>Accounts</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.storeAccess && empDetailsByEmpId.deptId==0}" >
+            <a class="nav-link" th:href="@{/store}">
+                <i class="bi bi-shop-window"></i>
+                <span>Store</span>
+            </a>
+        </li> 
+        <li class="nav-item" th:if="${permissions.storeAccess && empDetailsByEmpId.deptId==0}">
+				<a class="nav-link" th:href="@{/my-favorites}">
+					<i class="bi bi-layout-text-window-reverse"></i>
+					<span>To-Chat & Remind</span>
+				</a>
+		</li>  
+    </ul>
+</aside>
+
+
+<div id="loadingPopup">
+    <div class="spinner"></div>
+    <p>Loading, please wait...</p>
+</div>
+
+
+  <main id="main" class="main" style="display: none;">
+<input type="hidden" id="emp_idSessionValue" th:value="${empDetailsByEmpId.empid}">
+    
+   <!--  <div class="pagetitle"  th:if="${empDetailsByEmpId.deptId==0}">
+     <i class="bi bi-chevron-double-left toggle-sidebar-btn mb-1" onclick="toggleIconRotation()" style="font-size:24px;color:#2F73B9;padding:0 10px;margin-left:-10px;margin-top:-10px"></i>
+      
+      <nav class="d-flex justify-content-between">
+        <ol class="breadcrumb mb-1">
+          <li class="breadcrumb-item"><a th:href="@{/navbar}">Home</a></li>
+          <li class="breadcrumb-item active">Events</li>
+        </ol>
+        
+       <button type="button" style="font-size: 14px;" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalDialogScrollable">Create Announcement</button>
+      </nav>
+    </div>End Page Title  -->
+    
+    <div class="pagetitle mb-0 d-flex" th:if="${empDetailsByEmpId.deptId==0}">
+     <i class="bi bi-chevron-double-left toggle-sidebar-btn mb-1" onclick="toggleIconRotation()" style="font-size:24px;color:#2F73B9;padding:0 10px;margin-left:-10px;margin-top:-10px"></i>
+      
+      <nav class="d-flex justify-content-between">
+        <ol class="breadcrumb mb-1">
+          <li class="breadcrumb-item"><a th:href="@{/navbar}">Home</a></li>
+          <li class="breadcrumb-item active">Events</li>
+        </ol>
+        <!--  <button type="button" style="font-size: 14px;" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalDialogScrollable">Create Announcement</button>-->
+      </nav> 
+    </div><!-- End Page Title -->
+    
+    <div class="pagetitle mb-0 d-flex" th:if="${empDetailsByEmpId.deptId>0}">
+     <i class="bi bi-chevron-double-left toggle-sidebar-btn mb-1" onclick="toggleIconRotation()" style="font-size:24px;color:#2F73B9;padding:0 10px;margin-left:-10px;margin-top:-10px"></i>
+      
+      <nav class="d-flex justify-content-between">
+        <ol class="breadcrumb mb-1">
+          <li class="breadcrumb-item"><a th:href="@{/userDashboard}">Home</a></li>
+          <li class="breadcrumb-item active">Events</li>
+        </ol>
+        <!--  <button type="button" style="font-size: 14px;" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalDialogScrollable">Create Announcement</button>-->
+      </nav> 
+    </div><!-- End Page Title -->
+    
+    <input type="hidden" id="roleValue" th:value="${session.role_name}">
+    
+    <section class="section dashboard">
+      <div class="row">
+
+				<div class="card p-2" style="margin:0 15px;">
+					<h5 class="card-title">Announcements & Events</h5>
+					<!-- Bordered Tabs Justified -->
+					<ul class="nav nav-tabs nav-tabs-bordered d-flex"
+						id="borderedTabJustified" role="tablist">
+						
+						<li class="nav-item flex-fill" role="presentation">
+							<button class="nav-link w-100 active" id="profile-tab"
+								data-bs-toggle="tab"
+								data-bs-target="#bordered-justified-profile" type="button"
+								role="tab" aria-controls="profile" aria-selected="false">Announcement</button>
+						</li>
+						<li class="nav-item flex-fill" role="presentation">
+							<button class="nav-link w-100" id="home-tab"
+								data-bs-toggle="tab" data-bs-target="#bordered-justified-home"
+								type="button" role="tab" aria-controls="home"
+								aria-selected="true">Events</button>
+						</li>
+					</ul>
+					<div class="tab-content pt-2" id="borderedTabJustifiedContent">
+						
+						<div class="tab-pane fade show active" id="bordered-justified-profile"
+							role="tabpanel" th:if="${empDetailsByEmpId.deptId!=74}"
+							aria-labelledby="profile-tab">
+							
+								<div class="eventCardsRow" id="announcment">
+						
+					           </div>
+						</div>
+						<!-- Home Tab Content -->
+						<div class="tab-pane fade "
+							id="bordered-justified-home" role="tabpanel"
+							aria-labelledby="home-tab">
+							<div class="col-lg-12">
+								<div class="eventCardsBody">
+									<div class="eventCardsRow" id="eventCardsRow">
+									
+										<div th:each="event : ${events}" class="eventsHiddenCards">
+											<div class="eventsCardBody shadow">
+												<div class="eventImageAndEventHeadingMerger">
+													<div class="imageViewBox">
+														<img th:src="${event.eventConvertedPic}" alt="Event Image"
+															class="eventImage" />
+													</div>
+													<div class="eventHeadingBox">
+														<p th:text="${event.eventTitle}"></p>
+													</div>
+												</div>
+
+												<div class="eventDescriptionMerger">
+													<div class="eventDateBox">
+														<p th:text="${event.eventDate}"></p>
+														<h6>Date</h6>
+													</div>
+													<div class="eventFromTimeBox">
+														<p th:text="${event.fromTime}"></p>
+														<h6>From</h6>
+													</div>
+													<div class="eventToTimeBox">
+														<p th:text="${event.toTime}"></p>
+														<h6>To</h6>
+													</div>
+												</div>
+
+												<!-- Display Event Video -->
+												<div class="eventVideoBox">
+													<video width="320" height="240" controls autoplay muted>
+														<source th:src="${event.eventVideo}" type="video/mp4">
+													</video>
+												</div>
+
+												<div class="viewEventLinkBox">
+													<a href="#">View Event</a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- Bootstrap Modal Structure -->
+				<div id="eventModal" class="modal fade" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
+				    <div class="modal-dialog modal-md custom-modal" style="max-width: 700px;">
+				        <div class="modal-content">
+				            <div class="modal-header">
+				                <h5 class="modal-title" id="eventModalLabel">Event Details</h5>
+				                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				            </div>
+				            <div class="modal-body d-flex" style="align-items: center; gap: 20px;">
+				                <!-- Flexbox container for image and date/time -->
+				                <div class="modal-image-box me-3 text-center" style="flex: 1;">
+				                    <img id="modalEventImage" alt="Event Image" class="img-fluid" />
+				                </div>
+				                <div class="modal-date-time" style="flex: 1;">
+				                    <h2 id="modalEventTitle" class="mt-3"></h2>
+				                    <p id="modalEventDate"></p>
+				                    <p id="modalEventFromTime"></p>
+				                    <p id="modalEventToTime"></p>
+				                </div>
+				            </div>
+				            <div class="modal-video-box mt-3">
+				                <video id="modalEventVideo" class="w-100" controls></video>
+				            </div>
+				        </div>
+				    </div>
+				</div>
+				<!-- Feedback Modal -->
+			<div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+			    <div class="modal-dialog">
+			        <div class="modal-content rounded-4 shadow-lg p-0">
+			            <div class="modal-header border-0">
+			                <h5 class="modal-title" id="feedbackModalLabel">Feedback Form</h5>
+			                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			            </div>
+			            <div class="modal-body">
+			                <form id="feedbackForm" method="post" enctype="multipart/form-data">
+			                    <div class="mb-3" style="display: none;">
+			                        <label for="feedbackName" class="form-label fw-bold">Your Name</label>
+			                        <input type="text" class="form-control" id="feedbackName" name="name" th:value="${empDetailsByEmpId.fullName}" readonly>
+			                    </div>
+			                    <div class="mb-3" style="display: none;">
+			                        <label for="feedbackEmail" class="form-label fw-bold">Your Email</label>
+			                        <input type="email" class="form-control" id="feedbackEmail" name="email" th:value="${empDetailsByEmpId.email}" readonly>
+			                    </div>
+			                    <div class="mb-3">
+			                        <label for="feedbackEmailyy" class="form-label fw-bold">To</label>
+			                        <div class="to-field-container">
+			                            <span class="to-field rounded-pill px-3 py-2 shadow-sm">bugs_msplconnect@melangesystems.com</span>
+			                        </div>
+			                    </div>
+								<div class="mb-3">
+								    <label for="bugType" class="form-label fw-bold">Bug Type</label>
+								    <select class="form-control" id="bugType" name="bugType" required>
+								        <option value="About Application">About Application</option>
+								        <option value="New Feature">New Feature</option>
+								    </select>
+								</div>
+
+			                    <div class="mb-3">
+			                        <label for="feedbackMessage" class="form-label fw-bold">Message</label>
+			                        <textarea class="form-control" id="feedbackMessage" name="message" rows="4" placeholder="Enter your feedback here..." required></textarea>
+			                    </div>
+			                    <div class="mb-3">
+			                        <label for="feedbackAttachment" class="form-label fw-bold">Attachment (optional)</label>
+			                        <input type="file" class="form-control" id="feedbackAttachment" name="attachment" accept=".png, .jpg, .jpeg" multiple>
+			                        <small class="text-muted">Max size: 5MB. You can upload multiple images.</small>
+			                    </div>
+			                    <button type="submit" class="btn btn-primary w-100 mt-3 py-2 shadow-sm" id="submitFeedbackBtn">Submit Feedback</button>
+			                </form>
+			            </div>
+			        </div>
+			    </div>
+			</div>
+
+			</div>
+			
+    </section>
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+    <div class="copyright">
+       Copyright &copy; <span id="currentYear"></span> <strong><span>Melange Systems Private Limited</span></strong>. All Rights Reserved
+    </div>
+  </footer>
+  
+  <script>
+      var currentYear = new Date().getFullYear();
+      document.getElementById("currentYear").innerHTML = currentYear;
+  </script>
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/chart.js/chart.umd.js"></script>
+  <script src="assets/vendor/echarts/echarts.min.js"></script>
+  <script src="assets/vendor/quill/quill.js"></script>
+  <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+  <script src="assets/vendor/tinymce/tinymce.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+
+<script>
+	var loggedInRole = document.getElementById('roleValue').value;
+	
+	if(loggedInRole === "HR"){
+		document.getElementById('employeeLink').style.display="block";
+		document.getElementById('groupMailIdForm').style.display="block";
+		//document.getElementById('compProjectLink').style.display="none";
+		//document.getElementById('addEmployeeLink').style.display="block";
+	}else if(loggedInRole === "Super Admin"){
+		document.getElementById('employeeLink').style.display="none";
+		document.getElementById('groupMailIdForm').style.display="none";
+		document.getElementById('groupMailIdTable').style.width="100%";
+		//document.getElementById('addEmployeeLink').style.display="none";
+	}
+</script>  
+
+<!-- script to notification -->
+<script>
+//Function to fetch flag value from the backend
+function fetchFlag() {
+    $.get("/flag", function(response) {
+    	console.log("admin");
+        var leaveRequestCountValue = response;
+        console.log(leaveRequestCountValue);
+       // If total notification count is greater than 0, show the bell icon
+        if (leaveRequestCountValue.totalNotificationCount > 0) {
+            $("#notificationBellIcon").show();  // Show bell icon
+        } else {
+            $("#notificationBellIcon").hide();  // Hide bell icon if no notifications
+        }
+
+        if (leaveRequestCountValue.leaveRequestFlagCount > 0) {
+            $("#notificationBellIcon").show();  // Show bell icon
+            $("#leaveRequestNotification").show();  // Show specific notification
+            
+            $("#leaveRequestMessage").text(leaveRequestCountValue.leaveRequestFlagCount + " leave request(s)");
+            $(".badge-number").text(leaveRequestCountValue.leaveRequestFlagCount);
+            $("#leaveRequestFlagCount").text(leaveRequestCountValue.leaveRequestFlagCount);
+        }
+        //display the asset notifu=ication based on asset count value
+        if(leaveRequestCountValue.asseteRequestFlagCount>0){
+        	 
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#assetRequestNotification").show();  // Show specific notification
+              
+             $("#assetRequestMessage").text(leaveRequestCountValue.asseteRequestFlagCount + " asset request(s)");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+             $("#asseteRequestFlagCount").text(leaveRequestCountValue.asseteRequestFlagCount);
+        	 	
+        }
+        
+        //display the new project notification based on asset count value
+        if(leaveRequestCountValue.newPrjectValueCount>0){
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#newProjectNotification").show();  // Show specific notification
+             
+             $("#newProjectMessage").text(leaveRequestCountValue.newPrjectValueCount + " project request(s)");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+             $("#newPrjectValueCount").text(leaveRequestCountValue.asseteRequestFlagCount);
+        }
+        //display the appraisal from HR notification ]
+        if(leaveRequestCountValue.appraisalCount>0){
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#hrAppraisal").show();  // Show specific notification
+             
+             $("#newProjectMessage").text(leaveRequestCountValue.appraisalCount + " Appraisal Form");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+             $("#newPrjectValueCount").text(leaveRequestCountValue.asseteRequestFlagCount);
+        }
+      //display the appraisal from employee notification 
+        if(leaveRequestCountValue.empAppraisalflag>0){
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#empAppraisal").show();  // Show specific notification
+             
+             $("#apprisalempNotification").text(leaveRequestCountValue.empAppraisalflag + " employees sent appraisal");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+             $("#newPrjectValueCount").text(leaveRequestCountValue.asseteRequestFlagCount);
+        }
+        
+        //display the appraisal Due date notification 
+        if(leaveRequestCountValue.adminAppraisalDuedate>0){
+        	 $("#dueAppraisal").show();  // Show bell icon
+             $("#empAppraisal").show();  // Show specific notification
+             
+             $("#apprisalDueNotification").text("Tomorrow is the due date for submit appraisal");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+             $("#newPrjectValueCount").text(leaveRequestCountValue.asseteRequestFlagCount);
+        }
+      //display the announcement notification based on asset count value
+        if(leaveRequestCountValue.announcementNotification>0){
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#newAnnouncementNotification").show();  // Show specific notification
+             
+             $("#newannouncement").text(leaveRequestCountValue.announcementNotification + " announcement(s)");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+        }
+        //display the leave request status change notification
+        if(leaveRequestCountValue.leaveRequestStatusChangeValue > 0){
+        	 
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#leaveRequestSatusChangeNotification").show();  // Show specific notification
+             
+             $("#leaveRequestSatusChangeMessage").text("Your leave request status has been");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);             
+        	 	
+        } 
+       
+    });
+}
+
+// Periodically fetch flag value every second (adjust as needed)
+setInterval(fetchFlag, 1000);
+
+//Function to fetch flag value from the backend
+function fetchsuperAdminFlag() {
+    $.get("/flag", function(response) {
+    	console.log("Super admin");
+        var requestCount = response;
+         
+        // If total notification count is greater than 0, show the bell icon and notifications
+        if (requestCount.totalNotificationCount > 0) {
+            $("#notificationBellIcon").show();  // Show bell icon
+            $("#leaveRequestNotification").show();  // Show specific notification
+            
+            $("#leaveRequestMessage").text(requestCount.leaveRequestFlagCount + " leave request(s)");
+            $(".badge-number").text(requestCount.totalNotificationCount);
+            $("#leaveRequestFlagCount").text(requestCount.leaveRequestFlagCount);
+        } else {
+            // If total notification count is 0, hide the bell icon and notification
+            $("#notificationBellIcon").hide();
+        }
+        //display the asset notifu=ication based on asset count value
+        if(requestCount.asseteRequestFlagCount>0){
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#assetRequestNotification").show();  // Show specific notification
+             
+             $("#assetRequestMessage").text(requestCount.asseteRequestFlagCount + " asset request(s)");
+             $(".badge-number").text(requestCount.totalNotificationCount);
+             $("#asseteRequestFlagCount").text(requestCount.asseteRequestFlagCount);
+        		
+        }
+        else {
+            // If total notification count is 0, hide the bell icon and notification
+            $("#assetRequestNotification").hide();
+        }
+    });
+}
+
+// Periodically fetch flag value every second (adjust as needed)
+const employeeId = document.getElementById('employee-id').value; // This is a string
+console.log(employeeId);
+
+if(employeeId === "0") {
+	//alert("hii");
+	setInterval(fetchsuperAdminFlag, 1000);
+}
+else{
+	setInterval(fetchFlag, 1000);
+}
+
+
+</script>
+
+
+<!-- script to notification link redirect -->
+<script th:inline="javascript">
+    function redirectToLeaveRequest() {
+        var empid = /*[[${empDetailsByEmpId.empid}]]*/ 'defaultEmpId';
+        window.location.href = '/viewAdminLeaves?empid=' + empid;
+    }
+    function redirectToAsset() {
+        //var empid = /*[[${empDetailsByEmpId.empid}]]*/ 'defaultEmpId';
+        window.location.href = '/asset';
+    }
+    function redirectToProject() {
+        //var empid = /*[[${empDetailsByEmpId.empid}]]*/ 'defaultEmpId';
+        window.location.href = '/ongoingProject';
+    }    
+    function redirectToAppraisal() {
+    	var empid = /*[[${empDetailsByEmpId.empid}]]*/ 'defaultEmpId';
+    	window.location.href = '/apprisal?empid=' + empid;
+    }    
+    function redirectToemployeeAppraisal() {
+    	var empid = /*[[${empDetailsByEmpId.empid}]]*/ 'defaultEmpId';
+    	window.location.href = '/employeeApprisal?empid=' + empid;
+    }    
+    function redirectToAnnouncement() {
+    	var empid = /*[[${empDetailsByEmpId.empid}]]*/ 'defaultEmpId';
+    	window.location.href = '/events';
+    }
+    
+    function redirectToAttendence() {
+    	var email = /*[[${empDetailsByEmpId.email}]]*/ 'defaultEmpId';
+    	window.location.href = '/attendanceLive?email=' +email;
+    }
+</script>
+
+<!-- script for events -->
+ <script>
+      var currentYear = new Date().getFullYear();
+      document.getElementById("currentYear").innerHTML = currentYear;
+  </script>
+  
+  
+    <script>
+      // Add click event to each "View Event" link
+    /*  document.querySelectorAll('.viewEventLinkBox a').forEach((link) => {
+          link.addEventListener('click', (event) => {
+              event.preventDefault();
+              const eventCard = link.closest('.eventsCardBody');
+
+              // Get event data
+              const imageSrc = eventCard.querySelector('.eventImage').src;
+              const title = eventCard.querySelector('.eventHeadingBox p').innerText;
+              const date = eventCard.querySelector('.eventDateBox p').innerText;
+              const fromTime = eventCard.querySelector('.eventFromTimeBox p').innerText;
+              const toTime = eventCard.querySelector('.eventToTimeBox p').innerText;
+              const videoSrc = eventCard.querySelector('video source').src;
+
+              // Populate modal with event data
+              document.getElementById('modalEventImage').src = imageSrc;
+              document.getElementById('modalEventTitle').innerText = title;
+              document.getElementById('modalEventDate').innerText = 'Date: ' + date;
+              document.getElementById('modalEventFromTime').innerText = 'From: ' + fromTime;
+              document.getElementById('modalEventToTime').innerText = 'To: ' + toTime;
+              document.getElementById('modalEventVideo').src = videoSrc;
+
+              // Display the modal
+              document.getElementById('eventModal').style.display = 'block';
+          });
+      });
+
+      // Close modal when the close button is clicked
+      document.querySelector('.close-button').addEventListener('click', () => {
+          document.getElementById('eventModal').style.display = 'none';
+      });
+
+      // Close modal when clicking outside of the modal
+      window.onclick = (event) => {
+          const modal = document.getElementById('eventModal');
+          if (event.target === modal) {
+              modal.style.display = 'none';
+          }
+      };*/
+	  
+	  // Add click event to each "View Event" link
+	  document.querySelectorAll('.viewEventLinkBox a').forEach((link) => {
+	      link.addEventListener('click', (event) => {
+	          event.preventDefault();
+	          const eventCard = link.closest('.eventsCardBody');
+
+	          // Get event data
+	          const imageSrc = eventCard.querySelector('.eventImage').src;
+	          const title = eventCard.querySelector('.eventHeadingBox p').innerText;
+	          const date = eventCard.querySelector('.eventDateBox p').innerText;
+	          const fromTime = eventCard.querySelector('.eventFromTimeBox p').innerText;
+	          const toTime = eventCard.querySelector('.eventToTimeBox p').innerText;
+	          const videoSrc = eventCard.querySelector('video source').src;
+
+	          // Populate modal with event data
+	          document.getElementById('modalEventImage').src = imageSrc;
+	          document.getElementById('modalEventTitle').innerText = title;
+	          document.getElementById('modalEventDate').innerText = 'Date: ' + date;
+	          document.getElementById('modalEventFromTime').innerText = 'From: ' + fromTime;
+	          document.getElementById('modalEventToTime').innerText = 'To: ' + toTime;
+	          document.getElementById('modalEventVideo').src = videoSrc;
+
+	          // Show the modal using Bootstrap's modal method
+	          const eventModal = new bootstrap.Modal(document.getElementById('eventModal'));
+	          eventModal.show();
+	      });
+	  });
+
+
+  </script>
+  
+  <script>
+
+
+$(document).ready(function() {
+    $('.addEventsBtn').on('click', function(e) {
+        e.preventDefault(); // Prevent default form submission
+        
+        
+     // Get the values from the form
+	    let fromTime = document.getElementById('event_from_time').value;
+	   // const fromPeriod = document.getElementById('event_from_period').value;
+	    let toTime = document.getElementById('event_to_time').value;
+	  //  const toPeriod = document.getElementById('event_to_period').value;
+	
+	    // Convert to 12-hour format
+	    let fromTime12 = convertTo12HourFormat(fromTime);
+	    //const fromTime24 = convertTo24Hour(fromTime, fromPeriod);
+	    let toTime12 = convertTo12HourFormat(toTime);
+	
+	    // Check if time values are valid
+	    if (fromTime12 && toTime12) {
+	        document.getElementById('assignedSubmitDate').value = new Date().toISOString().split('T')[0]; // Set assignedSubmitDate
+	    } else {
+	        // Show an error message
+	        document.getElementById('eventFromTime_error').textContent = 'Invalid time format.';
+	        document.getElementById('eventToTime_error').textContent = 'Invalid time format.';
+	    }
+	    
+	    
+	    var hiddenFromTimeValue = document.getElementById('hiddenFromTimeValue');
+		var hiddenToTimeValue = document.getElementById('hiddenToTimeValue');
+		
+		hiddenFromTimeValue.value = fromTime12;
+		hiddenToTimeValue.value = toTime12;
+
+        // Get the form data
+        var formData = new FormData($('.addCompProjectForm')[0]);
+
+        // Send the data via AJAX
+        $.ajax({
+            url: '/saveEventsData', // Endpoint to call
+            type: 'POST',
+            data: formData,
+            processData: false, // Important for file uploads
+            contentType: false, // Important for file uploads
+            success: function(response) {
+                alert('Event added successfully');
+                // Handle success (optional: reset form, close modal, etc.)
+                $('.addCompProjectForm')[0].reset(); // Clear the form
+            },
+            error: function(error) {
+                alert('Failed to add event');
+                // Handle error
+                console.log(error);
+            }
+        });
+    });
+});
+
+
+function convertTo12HourFormat(time) {
+    let [hours, minutes] = time.split(':');
+    let period = 'AM';
+
+    if (hours >= 12) {
+        period = 'PM';
+        hours = hours > 12 ? hours - 12 : hours;
+    } else if (hours == 0) {
+        hours = 12;
+    }
+    
+   // alert(`${hours.toString().padStart(2, '0')}:${minutes},${period}`);
+
+    return `${hours.toString().padStart(2, '0')}:${minutes},${period}`;
+}
+
+
+	
+			$.ajax({
+			    type: 'GET', 
+			    url: 'getEventDetails', 
+			    success: function(data) {
+					//alert(JSON.stringify(data));
+					updateEventsDetailsUsingCardsData(data);
+					},
+			    error: function(xhr, status, error) {
+			        console.error('Error fetching data:', error);
+			        console.log('Error fetching data. Please try again.');
+			    }
+			});
+	    
+	    
+	    function updateEventsDetailsUsingCardsData(data){
+	    	//console.log(JSON.stringify(data));
+	        var cardContainer = document.getElementById("announcment");
+	        cardContainer.innerHTML = ''; 
+	        
+	        // Array to convert month number to three-letter abbreviation
+	        var monthNames = ["Jan", "Feb", "Mar", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+	        for (var i = 0; i < data.length; i++) {
+	            var eventDate = new Date(data[i].event_date);
+	            var day = eventDate.getDate();
+	            var month = monthNames[eventDate.getMonth()];
+	            var year = eventDate.getFullYear();
+	            var dayMonthYear = day + '-' + month + '-' + year;
+	            
+	            var formattedFromTime = data[i].from_time.replace(',', ' ');
+	            var formattedToTime = data[i].to_time.replace(',', ' ');
+	            
+	            var eventTitle = data[i].event_title;
+	            
+	            // Check if image is available, else use a default image
+	            let eventPicBase64 = data[i].event_pic_base64 ? `${data[i].event_pic_base64}` : "path/to/default_image.png"; // Default image path
+
+	            var dynamicStatusColor, eventStatusSymbol;
+	            
+	            var viewEventText, viewEventTextColor;
+
+	            if(data[i].event_status === "Upcoming"){
+	                dynamicStatusColor = 'color: #85C1E9';
+	                eventStatusSymbol = " !";
+	            } else if(data[i].event_status === "Ongoing"){
+	                dynamicStatusColor = 'color: #F8C471';
+	                eventStatusSymbol = "...";
+	            } else if(data[i].event_status === "Completed"){
+	                dynamicStatusColor = 'color: #7DCEA0';
+	                eventStatusSymbol = "";
+	            }
+	            
+	            
+	            if(data[i].event_status === "Completed" && (data[i].announcement_converted_flag === "1" || data[i].announcement_converted_flag === "" || data[i].announcement_converted_flag === null)){
+	            	viewEventText = "Convert to Event?";
+	            	viewEventTextColor = "#e74c3c";
+	            }else if(data[i].event_status === "Upcoming" && (data[i].announcement_converted_flag === "1" || data[i].announcement_converted_flag === "" || data[i].announcement_converted_flag === null)){
+	            	viewEventText = "New Announcement !";
+	            	viewEventTextColor = "blue";
+	            }else if(data[i].event_status === "Ongoing" && (data[i].announcement_converted_flag === "1" || data[i].announcement_converted_flag === "" || data[i].announcement_converted_flag === null)){
+	            	viewEventText = "Announcement is Live...";
+	            	viewEventTextColor = "#b9770e";
+	            }else if(data[i].event_status === "Completed" && data[i].announcement_converted_flag === "0"){
+	            	viewEventText = "";
+	            	viewEventTextColor = "#1e8449";
+	            }
+	            
+	         	// Set the anchor text based on event status
+	            //var viewEventText = (data[i].event_status === "Completed" && (data[i].announcement_converted_flag === "1" || data[i].announcement_converted_flag === "" || data[i].announcement_converted_flag === null)) ? "Convert as an Event?" : "<p></p>"; 
+
+	            var cardDiv = document.createElement("div");
+	            cardDiv.className = "eventsHiddenCards";
+	            cardDiv.innerHTML = 
+	                '<div class="eventsCardBody shadow">' +
+	                //'<input type="text" value="' + data[i].id + '">' +
+	                    '<div class="eventImageAndEventHeadingMerger">' +
+	                        '<div class="imageViewBox">' +
+	                            '<img src="' + eventPicBase64 + '" alt="Event Image" class="event_image_pic">' +
+	                        '</div>' +
+	                        '<div class="eventHeadingBox">'+
+	                            '<p>'+ eventTitle +'</p>'+
+	                            //'<p class="eventLocationPara"><img class="event_location_img" src="assets/img/location-pointer.png" alt="location_img">' + data[i].event_location + '</p>' +
+	                            '<p class="eventLocationPara"><i class="bi bi-geo-alt-fill"></i>' + data[i].event_location + '</p>' +
+	                            '<p class="eventStatusPara" style="'+ dynamicStatusColor + '">' + data[i].event_status + '<span>' + eventStatusSymbol + '</span></p>'+
+	                        '</div>' +
+	                    '</div>' +
+	                    '<div class="eventDescriptionMerger">' +
+	                        '<div class="eventDateBox">'+
+	                            '<p>'+ dayMonthYear +'</p>'+
+	                            '<h6>Date</h6>' +
+	                        '</div>' +
+	                        '<div class="eventFromTimeBox">'+
+	                            '<p>'+ formattedFromTime +'</p>'+
+	                            '<h6>From</h6>' +
+	                        '</div>' +
+	                        '<div class="eventToTimeBox">'+
+	                            '<p>'+ formattedToTime +'</p>'+
+	                            '<h6>To</h6>' +
+	                        '</div>' +
+	                    '</div>' +
+	                    '<div class="viewEventLinkBox" style="color: ' + viewEventTextColor + '; font-weight: bold;">' +
+	                    (viewEventText === 'Convert to Event?' ? '<a style="color: ' + viewEventTextColor + '; text-decoration: underline;" href="#" onclick="showEditPopup(' + data[i].id + ', \'' + data[i].event_status + '\');">' + viewEventText + '</a>' : viewEventText) +
+	                    '</div>' +
+	                '</div>';
+
+	            cardContainer.appendChild(cardDiv); 
+	        }
+	    }
+	    
+	    function formatDates() {
+	        var dateElements = document.querySelectorAll('.dateFormatter');
+	        dateElements.forEach(function(dateElement) {
+	            var dateStr = dateElement.innerText; // Get the date string in yyyy-mm-dd format
+	            var dateParts = dateStr.split('-'); // Split the date string into parts
+	            
+	           // alert("A = " +dateParts);
+
+	            // Format the date as dd-mm-yyyy
+	            if(dateParts.length === 3) {
+	                var formattedDate = dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0];
+	                // Update the text of the date element
+	            //    alert(formattedDate);
+	                dateElement.innerText = formattedDate;
+	            }
+	        });
+	    }
+				
+</script>
+
+<script>
+		/* function getLeavePendingCount() {
+				$.ajax({
+					type: 'GET',
+					url: '/getProjectNames',
+					success: function (projectNames) {
+						console.log('Project namesssss:', projectNames);
+						if (projectNames.length > 0) {
+							projectNames.forEach(function (projectName) {
+								console.log('Fetching notifications for project:', projectName); // Debug log
+								getNotificationCounts(projectName); // Pass projectName here
+							});
+						} else {
+							console.error('No project names found for the given user.');
+							$('#notification_list_message').text('No projects found for your email.');
+							$('#defaultBox').show();
+						}
+					},
+					error: function (xhr, status, error) {
+						console.error('Error fetching project names:', error);
+						$('#notification_list_message').text('Error fetching project names. Please try again later.');
+						$('#defaultBox').show();
+					}
+				});
+			}
+
+			function getNotificationCounts(projectName) {
+				console.log('Inside getNotificationCounts for project:', projectName);
+				$.ajax({
+					type: 'GET',
+					url: 'fetchNotificationCountForAllPages',
+					data: {projectName: projectName},
+					success: function (data) {
+						// alert(JSON.stringify(data));
+
+						var totalNotificationCount = data.total_notification;
+						var leavePendingCountValue = data.leave_pending_count;
+						var newProjectCountValue = data.newProjectCount;
+
+						$('#notificationCount').text(totalNotificationCount);
+						updateNotificationDetailData(totalNotificationCount, leavePendingCountValue, newProjectCountValue);
+					},
+					error: function (xhr, status, error) {
+						console.error('Error fetching data:', error);
+						console.log('Error fetching data. Please try again.');
+					}
+				});
+			}
+
+			$(document).ready(function () {
+				getLeavePendingCount();
+				setInterval(getLeavePendingCount, 1000);
+			});
+
+			function updateNotificationDetailData(totalNotificationCount, leavePendingCountValue, newprojectCountValue) {
+				var emptyNotifyDiv = $('#emptyNotifyDiv');
+				//var leaveRequestNotifyDiv = $('#leaveRequestNotifyDiv');
+
+				var leaveRequestNotifyDiv = $('#leaveRequestNotifyDiv');
+				var leaveRequestNotifyDivHorizontalRow = $('#leaveRequestNotifyDivHorizontalRow');
+
+				var moatNewCandidateNotifyDiv = $('#moatNewCandidateNotifyDiv');
+				var moatNewCandidateNotifyDivHorizontalRow = $('#moatNewCandidateNotifyDivHorizontalRow');
+
+
+				if (totalNotificationCount > 0) {
+					$("#bellIcon").show();
+					$("#emptyNotifyDiv").hide();
+					$('#emptyNotificationHeaderMessage').text("");
+
+					if (leavePendingCountValue > 0) {
+						leaveRequestNotifyDiv.show();
+						$('#leaveNotificationMessage').text("You have " + leavePendingCountValue + " new leave request");
+						$('#leaveNotificationNumberHeader').text("Leave Request!");
+					} else {
+						leaveRequestNotifyDiv.hide();
+					}
+					if (newprojectCountValue > 0) {
+						moatNewCandidateNotifyDiv.show();
+						moatNewCandidateNotifyDivHorizontalRow.show();
+						$('#moatNewCandidateNotificationMessage').text("There is " + newprojectCountValue + " New Project Task Assigned");
+						$('#moatNewCandidateNumberHeader').text("Project!");
+					} else {
+						moatNewCandidateNotifyDiv.hide();
+					}
+				} else {
+					$("#bellIcon").hide();
+					$("#emptyNotifyDiv").show();
+					$('#emptyNotificationHeaderMessage').text("Currently there are no notifications");
+				}
+			} */
+		</script>
+		
+
+
+<script>
+function closeEditPopup1(){
+	$('#compProjectEditPopupOuterBox').hide();
+}
+
+function showEditPopup(id, status){
+	//alert(id);
+	$('#compProjectEditPopupOuterBox').show();
+	
+	$.ajax({
+        type: 'GET', 
+        url: 'getEventDetailsById', 
+        data:{"id": id},
+        success: function(data) {
+			console.log(JSON.stringify(data));
+			
+            let eventTitle = data.event_title ? data.event_title : "-";
+    		/* let eventDate = data.event_date ? data.event_date : "-";
+    		let formattedFromTime = data.from_time.replace(',', ' ') ? data.from_time.replace(',', ' ') : "-";
+    		let formattedToTime = data.to_time.replace(',', ' ') ? data.to_time.replace(',', ' ') : "-";
+    		let currentStatus = status ? status : "-";
+    		let eventDesc = data.event_desc ? data.event_desc : "-";
+    		let eventLocation = data.event_location ? data.event_location : "-";
+    		let announcedDate = data.announced_date ? data.announced_date : "-"; */
+    		let eventPicBase64 = data.event_pic_base64 ? data.event_pic_base64 : null;
+            //let eventVideoBase64 = data.event_video_base64 ? data.event_video_base64 : null;
+    		
+    		$('#event_title_value').val(eventTitle);
+			/* $('#eventDatePopup').text(eventDate);
+			$('#fromTimePopup').text(formattedFromTime);
+			$('#toTimePopup').text(formattedToTime);
+			$('#eventStatusPopup').text(currentStatus);
+			$('#eventDescPopup').html("<u><b>Event Description:</b></u><br>"+eventDesc);
+			$('#eventLocationPopup').text(eventLocation);
+			$('#announcedDatePopup').text(announcedDate); */
+			
+			if (eventPicBase64) {
+                $('.eventPicBox').html('<img src="data:image/png;base64,' + eventPicBase64 + '" alt="Event Image" class="event_image_pic" width="100%" height="100%">');
+            } else {
+                $('.eventPicBox').html('<p style="color: #EC7063;">No Image Available</p>');
+            }
+
+            /* if (eventVideoBase64) {
+                $('.eventVideoBox').html('<video controls autoplay muted><source src="data:video/mp4;base64,' + eventVideoBase64 + '" type="video/mp4">Your browser does not support the video tag.</source></video>');
+            } else {
+                $('.eventVideoBox').html('<p style="color: #EC7063;">No Video Available</p>');
+            }
+             */
+            //formatDates();
+            
+           // closeLoadingModal2();
+			
+			},
+        error: function(xhr, status, error) {
+            console.error('Error fetching data:', error);
+            console.log('Error fetching data. Please try again.');
+           // closeLoadingModal2();
+        }
+    });
+}
+</script>
+
+
+
+<!-- script for profile pic -->
+<script>
+$.ajax({
+    type: "GET",
+    url: "fetchEmployeeDocumentDetailsOnlyByEmpId",
+    data: {
+        "emp_id": $('#emp_idSessionValue').val()
+    },
+    success: function(data) {
+    	console.log("++++data"+JSON.stringify(data));
+        $('#dynamicProfilePic').attr('src', `${data.profilePicPath}`);
+    },
+    error: function(xhr, status, error) {
+        console.error("Error invoking data:", error);
+    }
+});
+</script>
+
+<!-- script for spinner -->
+<script>
+
+document.addEventListener('DOMContentLoaded', function () {
+    const loadingPopup = document.getElementById('loadingPopup');
+    const mainContent = document.getElementById('main');
+
+    // Timer to display the loading popup
+    const delayTimeout = setTimeout(() => {
+        loadingPopup.style.display = 'flex'; // Show the popup
+    }, 1000); // Delay of 1 second (adjust as needed)
+
+    // Event listener for page load
+    window.addEventListener('load', function () {
+        clearTimeout(delayTimeout); // Cancel the timer if the page loads quickly
+        loadingPopup.style.display = 'none'; // Ensure the popup is hidden
+        mainContent.style.display = 'block'; // Show the main content
+    });
+});
+
+
+</script>
+</body>
+</html>

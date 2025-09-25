@@ -1,0 +1,19 @@
+implements/bugs clear
+
+1. pay slip implementation
+2. removed birthdays and work anneversery for super admin and some managers 
+
+
+
+
+test cases for payslip
+--------------------------
+1. how much time its taking time to send 100 mails
+2. if internet gone in between
+3. what if excel is wrong..?
+
+
+
+
+
+

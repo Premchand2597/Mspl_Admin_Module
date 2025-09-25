@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Master</title>
+    
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+	
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+    	 /* Navbar container */
+	.navbar {
+		    position: fixed;
+		    top: 0;
+		    right: 0;
+		    background-color: #EBECF0; /* Darker shade for a professional look */
+		    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+		    z-index: 1000;
+		    width: 100%; /* Full width navbar */
+		    padding: 12px 4px;
+		    display: flex;
+		    align-items: center;
+		    justify-content: flex-start; /* Align entire content to the right */
+		    box-sizing: border-box;
+		}
+		
+		/* Navbar list style */
+		.navbar ul {
+		    display: flex;
+		    justify-content: flex-end; /* Align items to the right */
+		    padding: 0;
+		    margin: 0;
+		    list-style: none;
+		    gap: 5px;
+		}
+		
+		/* Navbar item */
+		.navbar li {
+		    padding: 10px 18px;
+		    border-radius: 5px;
+		    cursor: pointer;
+		    color: black; /* Light color text */
+		    font-size: 14px;
+		    font-weight: 600;
+		    transition: background-color 0.3s ease, transform 0.2s ease;
+		}
+		
+		.navbar li a{
+			text-decoration:none;
+			color:black;
+		}
+		/* Hover effect */
+		.navbar li:hover {
+		    background-color: #F8F8FF; /* Bright blue for hover effect */
+		    color: white;
+		    transform: translateY(-2px); /* Slightly lift on hover */
+		}
+		
+/* Active link style */
+.navbar li.active {
+    background-color: #F8F8FF; /* Bright blue for hover effect */
+	font-weight: bold;
+}
+		
+		/* Navbar icons */
+		.navbar li i {
+		    margin-right: 8px;
+		}
+		
+		/* Optional: Add a little space between the navbar and the top of the page */
+		body {
+		    margin-top: 70px; /* Adjust based on navbar height */
+		}
+		
+		/* Mobile responsiveness (optional) */
+		@media (max-width: 768px) {
+		    .navbar {
+		        width: 100%;
+		        border-radius: 0;
+		    }
+		
+		    .navbar ul {
+		        justify-content: center; /* Center content on smaller screens */
+		    }
+		
+		    .navbar li {
+		        margin: 0 10px;
+		    }
+		}
+    	.form-section {
+            width: 70%;
+            margin: 6% auto 1% auto;
+            padding: 10px;
+            background: #fff;
+            border-radius: 8px;
+            /* box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1); */
+            position: relative; 
+        }
+
+        .border-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .border-line::before,
+        .border-line::after {
+            content: "";
+            flex-grow: 1;
+            height: 5px;
+            background-color: #0000A0;
+        }
+        .icon-container {
+            background: white;
+            padding: 0 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .icon-container i {
+            font-size: 28px;
+            color: #0000A0;
+            background: white;
+            padding: 3px 8px;
+            border-radius: 50%;
+            border: 2px solid #0000A0;
+            
+        }
+
+        .form-section h2 {
+            color: #C71585;
+            font-size: 18px;
+            margin-top: 15px; 
+            margin-bottom: 18px;
+            font-weight: bold;
+            text-align:center;
+        }
+
+        .form-label {
+            font-weight: bold;
+            color: Black; 
+            font-size: 14px;
+            text-align:left;
+        }
+
+        .form-section .row .col-md-6 {
+            margin-bottom: 10px; 
+        }
+
+        .btn-custom {
+            background-color: #0000A0;
+            border-color: #0000A0;
+            color: white;
+            width: 120px;
+            height: 45px;
+            font-size: 16px;
+        }
+
+        .btn-custom:hover {
+            background-color: #00008B; 
+            color:white;
+        }
+          @media (max-width: 768px) {
+            .form-section {
+                width: 95%;
+                padding: 15px;
+            }
+
+            .col-md-6 {
+                width: 100%;
+            }
+
+            .btn-custom {
+                width: 100%;
+                margin-bottom:7px;
+            }
+
+            .icon-container i {
+                font-size: 20px;
+                padding: 2px 6px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .form-label {
+                font-size: 14px;
+            }
+
+            .form-section {
+                margin: 20px auto;
+                padding: 6px;
+            }
+        }
+        
+        	#buttonContainer {
+				    position: fixed;
+				    top: 100px;       
+				    right: 20px;
+				    z-index: 1000;
+				}
+				
+				#addUserTable {
+			    display: none; 
+			    /* margin-bottom: 100px;  */
+				/* margin-left: 5px;  */
+			    width: 85%; 
+			    margin-left: auto;
+			    margin-right: auto;
+			}			
+		        
+		    .tables-container {
+			    display: flex;
+			    flex-direction: column;
+			    gap: 5px; 
+			    width: 100%;
+			    flex: 1;             
+			    padding: 20px;
+			    overflow-x: auto;
+			    margin-top:30px;
+			}
+			    .table-box {
+			        width: 100%;
+			        background: white;
+			        padding: 10px;
+			        box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.1);
+				    border: 1px solid #ccc;
+				    box-sizing: border-box;
+				    height: 480px;
+				    overflow: auto;
+						    }
+		
+				.table-header {
+				    /* display: flex;
+				    justify-content: space-between;
+				    align-items: center; */
+				    background: white;
+				    padding: 8px 10px; 
+				    /* font-size: 16px;  */
+				    white-space: nowrap; 
+				     margin-bottom: 10px;
+				}
+				
+				.table-header h3 {
+				    margin: 0;
+				    font-size: 18px; 
+				    color:#C71585;
+				    text-align: center;
+				}
+				
+				.table-header button {
+				    padding: 5px 10px; 
+				    font-size: 14px;
+				}
+				
+				th{
+				background:#DBDBEA;
+				color:#2f73b9;
+				}
+				
+				.hidden-row {
+			        display: none;
+			    }
+			    table {
+				    width: 100%;
+				    border-collapse: collapse;
+				}
+				
+				th, td {
+				    padding: 8px;
+				    /* border: 1px solid #ddd; */
+				    text-align: left;
+				    font-size: 14px;
+				}
+				
+				thead th {
+				    position: sticky;
+				    top: 0;
+				    background-color: #f5f5f5;
+				    z-index: 1;
+				}
+				
+				.user-dropdown {
+    position: absolute;
+    top: 50px; /* adjust as needed */
+    left: 10px;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    border-radius: 8px;
+    z-index: 1000;
+    width: auto;
+}
+
+.user-dropdown ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+     display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.user-dropdown ul li {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.user-dropdown ul li:hover {
+    background-color: #F8F8FF; /* Bright blue for hover effect */
+    color: #000;
+}
+
+.user-dropdown ul li:last-child {
+    border-bottom: none;
+}
+
+.user-dropdown ul li a {
+    text-decoration: none;
+    color: #333;
+}
+
+.user-dropdown ul li a i {
+    margin-right: 10px;
+}
+
+.dispatch_subDropDown {
+    display: none;
+    position: absolute;
+    background-color: #EBECF0;
+    width: auto;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    z-index: 1000;
+    top: 50px; /* adjust as needed */
+}
+
+.dispatch_subDropDown ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.dispatch_subDropDown ul li {
+    padding: 5px;
+    border-bottom: 1px solid #eee;
+}
+
+.dispatch_subDropDown ul li:hover {
+    background-color: #F8F8FF; /* Bright blue for hover effect */
+    color: #000;
+}
+
+.dispatch_subDropDown ul li:last-child {
+    border-bottom: none;
+}
+
+.dispatch_subDropDown ul li a {
+    text-decoration: none;
+    color: #333;
+}			
+        
+</style>
+</head>
+<body>
+   
+    <div class="content">
+        <div class="navbar">
+        <!-- <i class="fa-solid fa-circle-user text-primary" style="font-size: 24px; padding-right: 15px; cursor: pointer;"></i> -->
+        <div class="user-dropdown" id="userDropdown" style="display: none;">
+<ul>
+			        <li><a><i class="fas fa-user"></i><span th:text="${session.full_name}"></span></a></li>
+			        <li><a href="/logout"><i class="fas fa-sign-out-alt"></i> Sign Out</a></li>
+			    </ul>
+			</div>
+		   <ul>
+		    <li>
+		        <a th:href="@{/dashboard}">
+		            <i class="fas fa-home"></i> Home
+		        </a>
+		    </li>
+		    <li>
+		        <a href="#" id="dispatchMenu">
+		            <i class="fas fa-file-import"></i> Dispatch <i style="padding-left: 5px;" class="fa-solid fa-caret-down"></i>
+		        </a>
+		        <div class="dropdown-menu dispatch_subDropDown">
+			      <ul>
+			        <li><a class="dropdown-item" th:href="@{/form}">Add</a></li>
+			        <li><a class="dropdown-item" th:href="@{/view-dispatch}">View</a></li>
+			      </ul>
+			    </div>
+		    </li>
+		    <li>
+		         <a th:href="@{/import}">
+		            <i class="fas fa-arrow-down"></i> Import
+		        </a>
+		    </li>
+		    <!-- <li>
+		         <a th:href="@{/view-dispatch}">
+		            <i class="fas fa-eye"></i> View Dispatch
+		        </a>
+		    </li> -->
+		    <li>
+		        <a th:href="@{/calendar}">
+		            <i class="fas fa-calendar"></i> Calendar
+		        </a>
+		    </li>
+		    
+		    <li>
+		        <a href="#" id="masterMenu">
+		            <i class="fas fa-building"></i> Master <i style="padding-left: 5px;" class="fa-solid fa-caret-down"></i>
+		        </a>
+		        <div class="dropdown-menu dispatch_subDropDown master_subDropDown">
+			      <ul>
+			        <!-- <li><a class="dropdown-item" th:href="@{/adduser}">User Master</a></li> -->
+			        <li><a class="dropdown-item" th:href="@{/product}">Product Master</a></li>
+			        <li><a class="dropdown-item" th:href="@{/customer}">Customer Master</a></li>
+			      </ul>
+			    </div>
+		    </li>
+		    
+		    <!-- <li>
+		        <a th:href="@{/adduser}">
+		            <i class="fas fa-users"></i> Add Users
+		        </a>
+		    </li>
+		    <li>
+		        <a th:href="@{/product}">
+		            <i class="fas fa-box"></i> Product Master
+		        </a>
+		    </li>
+		    <li>
+		        <a th:href="@{/customer}">
+		            <i class="fas fa-building"></i> Customer Master
+		        </a>
+		    </li> -->
+		    <li>
+		        <a th:href="@{/dcDispatchData}">
+		            <i class="fa-solid fa-file"></i> Generated DC
+		        </a>
+		    </li>
+		    <li>
+		        <a th:href="@{/audit-log}">
+		            <i class="fas fa-cogs"></i> Track Info
+		        </a>
+		    </li>
+		</ul>
+
+	 </div>
+
+
+<div id="buttonContainer" class="mb-3">
+    <button id="openFormBtn" class="btn btn-primary btn-sm me-2" onclick="toggleUserView('form')" style="display: none;">Open Form</button>
+    <button id="viewProductsBtn" class="btn btn-primary btn-sm" onclick="toggleUserView('table')">View Users</button>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="dispatchModal" tabindex="-1" aria-labelledby="dispatchModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content" style="overflow-y: auto;">
+      <form th:action="@{/submitEditedUser}" method="post">
+        <div class="modal-header">
+          <h5 class="modal-title" id="dispatchModalLabel">Edit User</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+			<div class="form-section" style="width: 100%;">
+			    <div class="row">
+			    	<input type="hidden" id="auto_idPopup" class="form-control" name="id">
+		           <div class="col-md-6">
+		                <label class="form-label">Employee Name<span style="padding-left: 5px; color: red;">*</span></label>
+		                <input type="text" id="firstNamePopup" class="form-control" name="firstName" autocomplete="off" required>
+		            </div>
+		            <!-- <div class="col-md-6">
+		                <label class="form-label">Last Name</label>
+		                <input type="text" id="lastNamePopup" class="form-control" name="lastName" required>
+		            </div> -->
+		            <div class="col-md-6">
+		                <label class="form-label">User Name(should be unique)<span style="padding-left: 5px; color: red;">*</span></label>
+		                <input type="text" onchange="checkDataExistsOrNotPopup(this.value);" id="userNamePopup" class="form-control" name="userName" autocomplete="off" required>
+		            	<span id="uniqueUsernameErrorPopup"></span>
+		            </div>
+		            <div class="col-md-6">
+		                <label class="form-label">Contact Number<span style="padding-left: 5px; color: red;">*</span></label>
+		                <input type="number" id="contactNoPopup" onchange="checkContactNoExistsOrNotPopup(this.value);" class="form-control" name="contactNo" autocomplete="off" required>
+		            	<span id="uniqueContactNoErrorPopup"></span>
+		            </div>
+		             <div class="col-md-6">
+		                <label class="form-label">Email<span style="padding-left: 5px; color: red;">*</span></label>
+		                <input type="email" id="emailIdPopup" onchange="checkEmailExistsOrNotPopup(this.value);" class="form-control" name="emailId" autocomplete="off" required>
+		            	<span id="uniqueEmailErrorPopup"></span>
+		            </div>
+		            <div class="col-md-6">
+		                <label class="form-label">Password<span style="padding-left: 5px; color: red;">*</span></label>
+		                <input type="password" id="passwordPopup" autocomplete="off" class="form-control" name="password" required>
+		            </div>
+		            
+		            <div class="col-md-12">
+		                <label class="form-label">Address<span style="padding-left: 5px; color: red;">*</span></label>
+		                <textarea class="form-control" id="addressPopup" rows="2" name="address" autocomplete="off" required></textarea>
+		            </div>
+		        </div>
+              </div>
+        	</div>
+
+        <div class="modal-footer">
+          <button type="submit" style="font-size: 14px;" id="addBtnPopup" class="btn btn-success">Submit</button>
+          <button type="button" style="font-size: 14px;" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+            <div id="addUserForm">
+                 <form th:action="@{/submitAddUser}" th:object="${addUser}" method="post">
+                <div class="form-section shadow">
+                    <h2>User Master</h2>
+                    <div class="row">
+                     <div class="col-md-6">
+                <label class="form-label">Employee Name<span style="padding-left: 5px; color: red;">*</span></label>
+                <input type="text" class="form-control" th:field="*{firstName}" autocomplete="off" required>
+            </div>
+            <!-- <div class="col-md-6">
+                <label class="form-label">Last Name</label>
+                <input type="text" class="form-control" th:field="*{lastName}" required>
+            </div> -->
+            <div class="col-md-6">
+                <label class="form-label">User Name(should be unique)<span style="padding-left: 5px; color: red;">*</span></label>
+                <input type="text" class="form-control" onblur="checkDataExistsOrNot(this.value);" th:field="*{userName}" autocomplete="off" required>
+                <span id="uniqueUsernameError"></span>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Contact Number<span style="padding-left: 5px; color: red;">*</span></label>
+                <input type="number" onblur="checkContactNoExistsOrNot(this.value);" class="form-control" th:field="*{contactNo}" autocomplete="off" required>
+                <span id="uniqueContactNoError"></span>
+            </div>
+             <div class="col-md-6">
+                <label class="form-label">Email<span style="padding-left: 5px; color: red;">*</span></label>
+                <input type="email" onblur="checkEmailDataExistsOrNot(this.value);" class="form-control" th:field="*{emailId}" autocomplete="off" required>
+                <span id="uniqueUserEmailError"></span>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Password<span style="padding-left: 5px; color: red;">*</span></label>
+                <input type="password" class="form-control" th:field="*{password}" autocomplete="off" required>
+            </div>
+            
+            <div class="col-md-12">
+                <label class="form-label">Address<span style="padding-left: 5px; color: red;">*</span></label>
+                <textarea class="form-control" rows="2" th:field="*{address}" autocomplete="off" required></textarea>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <button type="submit" style="font-size: 14px;" id="addBtn" class="btn btn-success">Add</button>
+            <button type="reset" style="font-size: 14px;" class="btn btn-secondary">Clear</button>
+        </div> 
+                </div>
+            </form>
+            </div>
+ 
+  <div id="addUserTable" style="display:none;" class="scrollable-table">       
+      <div class="tables-container">
+        <div class="table-box">
+    
+        <div class="table-header" style="display: flex; justify-content: space-between; align-items: center;">
+	         <h3>View User</h3>
+	         <input type="text" class="form-control" id="searchInput" placeholder="Search..." style="padding: 5px; width: 20%;" />
+	     </div>
+    
+    <table class="table table-hover" id="tableData">
+               <thead>
+                        <tr>
+                        	<th colspan="2">Action</th>
+                        	<th>SL. No</th>
+                            <th>Employee Name</th>
+                            <!-- <th>Last Name</th> -->
+                            <th>User Name</th>
+                            <th>Password</th>
+                            <th>Contact No</th>
+                            <th>Email Id</th>
+                            <th>Address</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+	                    <!-- Display this row if the events list is empty -->
+				        <tr th:if="${#lists.isEmpty(addUserList)}">
+				            <td colspan="30" class="text-center">No data available</td>
+				        </tr>
+                        <tr th:each="a,iterate : ${addUserList}">
+                        	<td><i title="Edit" th:attr="onclick=|openEditBox('${a.id}')|" style="font-size: 14px; cursor: pointer;" class="fas fa-pen text-primary"></i></td>
+                        	<td><i title="Delete" th:attr="onclick=|deleteById('${a.id}')|" style="font-size: 14px; cursor: pointer;" class="fas fa-trash text-danger"></i></td>
+                        	<td th:text="${iterate.count}"></td>
+                            <td th:text="${a.firstName != null ? a.firstName : '-'}">FName</td>
+                            <!-- <td th:text="${a.lastName}">Lname</td> -->
+                            <td th:text="${a.userName != null ? a.userName : '-'}">Username</td>
+                            <td th:text="${a.password != null ? a.password : '-'}">Password</td>
+                            <td th:text="${a.contactNo != null ? a.contactNo : '-'}">ContactNo</td>
+                            <td th:text="${a.emailId != null ? a.emailId : '-'}">Email id</td>
+                            <td th:text="${a.address != null ? a.address : '-'}">Address</td>
+                        </tr>
+                    </tbody>
+                </table>
+         
+</div>
+</div>
+</div>
+</div>
+ 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    const sidebarLinks = document.querySelectorAll(".sidebar ul li a");
+
+    sidebarLinks.forEach(link => {
+        link.addEventListener("click", function () {
+
+            sidebarLinks.forEach(l => l.classList.remove("active"));
+            this.classList.add("active");
+        });
+    });
+    
+    
+    function toggleUserView(view) {
+        const form = document.getElementById('addUserForm');
+        const table = document.getElementById('addUserTable');
+        const openFormBtn = document.getElementById('openFormBtn');
+        const viewProductsBtn = document.getElementById('viewProductsBtn');
+
+        if (view === 'form') {
+            form.style.display = 'block';
+            table.style.display = 'none';
+            openFormBtn.style.display = 'none';
+            viewProductsBtn.style.display = 'inline-block';
+        } else {
+            form.style.display = 'none';
+            table.style.display = 'block';
+            openFormBtn.style.display = 'inline-block';
+            viewProductsBtn.style.display = 'none';
+        }
+    }
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const currentPath = window.location.pathname;
+    const navLinks = document.querySelectorAll('.navbar ul li a');
+
+    navLinks.forEach(link => {
+        const linkHref = link.getAttribute('href');
+
+        if (linkHref === currentPath) {
+            // Highlight the current link
+            link.parentElement.classList.add('active');
+
+            // Check if it's a submenu item and activate the main menu as well
+            let parentMenu = link.closest('.dropdown-menu');
+            if (parentMenu) {
+                // Find the parent <li> of the main menu that contains this dropdown
+                let mainMenuLi = parentMenu.parentElement;
+                if (mainMenuLi && mainMenuLi.tagName === 'LI') {
+                    mainMenuLi.classList.add('active');
+                }
+            }
+        }
+    });
+});
+</script>
+
+<script>
+function openEditBox(id){
+	//alert(id);
+	$.ajax({
+   	    type: 'GET', 
+   	    url: '/fetchDetailsBasedOnId', 
+   	    data: {
+   	    	id: id
+   	    },
+   	    success: function(data) {
+   	    	$('#auto_idPopup').val(data.id);
+   	    	$('#firstNamePopup').val(data.firstName);
+   	    	$('#lastNamePopup').val(data.lastName);
+   	    	$('#userNamePopup').val(data.userName);
+   	    	$('#contactNoPopup').val(data.contactNo);
+   	    	$('#emailIdPopup').val(data.emailId);
+   	    	$('#passwordPopup').val(data.password);
+   	    	$('#addressPopup').val(data.address);
+   				},
+   	    error: function(xhr, status, error) {
+   	        console.error('Error fetching data for user details:', error);
+   	        console.log('Error fetching data for user details. Please try again.');
+   	    }
+   	});
+	
+	// Show the modal
+    const dispatchModal = new bootstrap.Modal(document.getElementById('dispatchModal'));
+    dispatchModal.show();
+}
+
+function deleteById(id){
+	//alert(id);
+	Swal.fire({
+		title: "Are you sure?",
+		text: "You want to delete!",
+		icon: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#007bff",
+		cancelButtonColor: "#EC7063",
+		confirmButtonText: "Yes, delete it!",
+	}).then((result) => {
+		if (result.isConfirmed) {
+			$.ajax({
+		   	    type: 'POST', 
+		   	    url: '/deleteUserById', 
+		   	    data: {
+		   	    	id: id
+		   	    },
+		   	    success: function(data) {
+				   	    	Swal.fire({
+					   	 		title: "Data deleted",
+					   	 		icon: "success",
+					   	 		showCancelButton: false,
+					   	 		confirmButtonColor: "#007bff",
+					   	 		cancelButtonColor: "#EC7063",
+					   	 		confirmButtonText: "OK",
+						   	 	allowOutsideClick: false,
+								allowEscapeKey: false,
+					   	 	}).then((result) => {
+					   			if (result.isConfirmed) {
+					   				location.reload();
+					   			}
+					   		});
+		   				},
+		   	    error: function(xhr, status, error) {
+		   	        console.error('Error deleting data for user details:', error);
+		   	        console.log('Error deleting data for user details. Please try again.');
+		   	    }
+		   	});
+		}
+	});
+}
+</script>
+
+  	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  	<script>
+    const searchInput = document.getElementById('searchInput');
+    const table = document.getElementById('tableData');
+    const rows = table.getElementsByTagName('tr');
+
+    searchInput.addEventListener('keyup', function () {
+        const filter = searchInput.value.toLowerCase();
+
+        for (let i = 1; i < rows.length; i++) {
+            const cells = rows[i].getElementsByTagName('td');
+            let match = false;
+
+            for (let j = 0; j < cells.length; j++) {
+                const cellText = cells[j].textContent.toLowerCase();
+                if (cellText.includes(filter)) {
+                    match = true;
+                    break;
+                }
+            }
+
+            rows[i].style.display = match ? '' : 'none';
+        }
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const userIcon = document.querySelector(".fa-circle-user");
+        const dropdown = document.getElementById("userDropdown");
+
+        userIcon.addEventListener("click", function () {
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        });
+
+        // Optional: Close dropdown when clicking outside
+        document.addEventListener("click", function (e) {
+            if (!userIcon.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.style.display = "none";
+            }
+        });
+    });
+    
+    document.addEventListener("DOMContentLoaded", function () {
+        const userIcon = document.querySelector("#dispatchMenu");
+        const dropdown = document.querySelector(".dispatch_subDropDown");
+
+        userIcon.addEventListener("click", function () {
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        });
+
+        // Optional: Close dropdown when clicking outside
+        document.addEventListener("click", function (e) {
+            if (!userIcon.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.style.display = "none";
+            }
+        });
+    });
+    
+    document.addEventListener("DOMContentLoaded", function () {
+        const userIcon = document.querySelector("#masterMenu");
+        const dropdown = document.querySelector(".master_subDropDown");
+
+        userIcon.addEventListener("click", function () {
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        });
+
+        // Optional: Close dropdown when clicking outside
+        document.addEventListener("click", function (e) {
+            if (!userIcon.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.style.display = "none";
+            }
+        });
+    });
+</script>
+
+<script>
+let isUsernameValid = true;
+let isEmailValid = true;
+let isContactNoValid = true;
+
+let isUsernameValidPopup = true;
+let isEmailValidPopup = true;
+let isContactNoValidPopup = true;
+
+function checkAddButtonStatus() {
+    if (isUsernameValid && isEmailValid && isContactNoValid) {
+        $('#addBtn').prop("disabled", false);
+    } else {
+        $('#addBtn').prop("disabled", true);
+    }
+}
+
+function checkAddButtonStatusPopup() {
+    if (isUsernameValidPopup && isEmailValidPopup && isContactNoValidPopup) {
+        $('#addBtnPopup').prop("disabled", false);
+    } else {
+        $('#addBtnPopup').prop("disabled", true);
+    }
+}
+
+function checkDataExistsOrNot(name) {
+    if (name) {
+        $.ajax({
+            type: 'GET',
+            url: '/checkUserNameExists',
+            data: { name: name },
+            success: function (data) {
+                if (data === true) {
+                    $('#uniqueUsernameError').text("User name already exists!");
+                    $('#uniqueUsernameError').css({ "font-size": "14px", "color": "red" });
+                    isUsernameValid = false;
+                } else {
+                    $('#uniqueUsernameError').text("");
+                    isUsernameValid = true;
+                }
+                checkAddButtonStatus();
+            },
+            error: function () {
+                console.error('Error checking username.');
+            }
+        });
+    } else {
+        $('#uniqueUsernameError').text("");
+        isUsernameValid = true;
+        checkAddButtonStatus();
+    }
+}
+
+function checkEmailDataExistsOrNot(email) {
+    if (email) {
+        $.ajax({
+            type: 'GET',
+            url: '/checkUserEmailExists',
+            data: { email: email },
+            success: function (data) {
+                if (data === true) {
+                    $('#uniqueUserEmailError').text("User email already exists!");
+                    $('#uniqueUserEmailError').css({ "font-size": "14px", "color": "red" });
+                    isEmailValid = false;
+                } else {
+                    $('#uniqueUserEmailError').text("");
+                    isEmailValid = true;
+                }
+                checkAddButtonStatus();
+            },
+            error: function () {
+                console.error('Error checking email.');
+            }
+        });
+    } else {
+        $('#uniqueUserEmailError').text("");
+        isEmailValid = true;
+        checkAddButtonStatus();
+    }
+}
+
+function checkContactNoExistsOrNot(contactNo) {
+    if (contactNo) {
+        $.ajax({
+            type: 'GET',
+            url: '/checkContactNoExists',
+            data: { contact_no: contactNo },
+            success: function (data) {
+                if (data === true) {
+                    $('#uniqueContactNoError').text("Contact No already exists!");
+                    $('#uniqueContactNoError').css({ "font-size": "14px", "color": "red" });
+                    isContactNoValid = false;
+                } else {
+                    $('#uniqueContactNoError').text("");
+                    isContactNoValid = true;
+                }
+                checkAddButtonStatus();
+            },
+            error: function () {
+                console.error('Error checking email.');
+            }
+        });
+    } else {
+        $('#uniqueContactNoError').text("");
+        isContactNoValid = true;
+        checkAddButtonStatus();
+    }
+}
+
+function checkDataExistsOrNotPopup(name) {
+    if (name) {
+        $.ajax({
+            type: 'GET',
+            url: '/checkUserNameExists',
+            data: { name: name },
+            success: function (data) {
+                if (data === true) {
+                    $('#uniqueUsernameErrorPopup').text("User name already exists!");
+                    $('#uniqueUsernameErrorPopup').css({ "font-size": "14px", "color": "red" });
+                    isUsernameValidPopup = false;
+                } else {
+                    $('#uniqueUsernameErrorPopup').text("");
+                    isUsernameValidPopup = true;
+                }
+                checkAddButtonStatusPopup();
+            },
+            error: function () {
+                console.error('Error checking username.');
+            }
+        });
+    } else {
+        $('#uniqueUsernameErrorPopup').text("");
+        isUsernameValidPopup = true;
+        checkAddButtonStatusPopup();
+    }
+}
+
+function checkEmailExistsOrNotPopup(email) {
+    if (email) {
+        $.ajax({
+            type: 'GET',
+            url: '/checkUserEmailExists',
+            data: { email: email },
+            success: function (data) {
+                if (data === true) {
+                    $('#uniqueEmailErrorPopup').text("User email already exists!");
+                    $('#uniqueEmailErrorPopup').css({ "font-size": "14px", "color": "red" });
+                    isEmailValidPopup = false;
+                } else {
+                    $('#uniqueEmailErrorPopup').text("");
+                    isEmailValidPopup = true;
+                }
+                checkAddButtonStatusPopup();
+            },
+            error: function () {
+                console.error('Error checking email.');
+            }
+        });
+    } else {
+        $('#uniqueEmailErrorPopup').text("");
+        isEmailValidPopup = true;
+        checkAddButtonStatusPopup();
+    }
+}
+
+function checkContactNoExistsOrNotPopup(contactNo) {
+    if (contactNo) {
+        $.ajax({
+            type: 'GET',
+            url: '/checkContactNoExists',
+            data: { contact_no: contactNo },
+            success: function (data) {
+                if (data === true) {
+                    $('#uniqueContactNoErrorPopup').text("Contact No already exists!");
+                    $('#uniqueContactNoErrorPopup').css({ "font-size": "14px", "color": "red" });
+                    isContactNoValidPopup = false;
+                } else {
+                    $('#uniqueContactNoErrorPopup').text("");
+                    isContactNoValidPopup = true;
+                }
+                checkAddButtonStatusPopup();
+            },
+            error: function () {
+                console.error('Error checking email.');
+            }
+        });
+    } else {
+        $('#uniqueContactNoErrorPopup').text("");
+        isContactNoValidPopup = true;
+        checkAddButtonStatusPopup();
+    }
+}
+</script>
+    
+</body>
+</html>
