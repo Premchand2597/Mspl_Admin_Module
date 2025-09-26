@@ -106,7 +106,7 @@ public class Login_Controller {
 	                        String generatedOTPData = loginService.generateOTP(email);
 	                        System.out.println("generatedOTPData==="+generatedOTPData);
 	                        //String emailSentResponse = loginService.sendEmailWithOTP(email, generatedOTPData);
-	                    //    String emailSentResponse = loginService.sendEmailWithOTP(email, generatedOTPData, loggedInDataWithEmployeeType.getEmp_name(), loggedInDataWithEmployeeType.getGender());
+	                        String emailSentResponse = loginService.sendEmailWithOTP(email, generatedOTPData, loggedInDataWithEmployeeType.getEmp_name(), loggedInDataWithEmployeeType.getGender());
 							
                             response.put("otpRequired", true);
                             
