@@ -1,0 +1,4056 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+	<title>UserDashboard</title>
+	<meta content="" name="description">
+	<meta content="" name="keywords">
+
+	<!-- Favicons -->
+	<link href="assets/img/favicon.png" rel="icon">
+	<link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+	<!-- Google Fonts -->
+	<link href="https://fonts.gstatic.com" rel="preconnect">
+	<link
+		href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+		rel="stylesheet">
+
+	<!-- Vendor CSS Files -->
+	<link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+	<link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+	<link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
+	<link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+	<link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+	<link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+	<!-- Template Main CSS File -->
+	<link href="assets/css/style.css" rel="stylesheet">
+	<script src="https://code.highcharts.com/highcharts.js"></script>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+	<!--CHAT BOOT-->
+
+	<!-- Include SockJS and Stomp.js libraries -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.3.0/sockjs.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+	<!-- Include Toastify CSS and JS -->
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+	<!-- =======================================================
+  * Template Name: NiceAdmin
+  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+  * Updated: Apr 20 2024 with Bootstrap v5.3.3
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+	<style>
+		@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+		.card {
+			border: 1px solid #ddd;
+			border-radius: 8px;
+			padding: 15px;
+			margin-bottom: 20px;
+		}
+
+		.info-card {
+			background-color: #fff;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+		}
+
+		#attendence-chart {
+			width: 100%;
+			height: 190px;
+			/* Adjust the height as needed */
+		}
+
+		/* Example CSS to style disabled items */
+		.activity-item .disabled {
+			pointer-events: none;
+			/* Disable interactions */
+			opacity: 0.5;
+			/* Make the item appear grayed out */
+		}
+
+		.profile-picture {
+			width: 40px;
+			/* Adjust the size as needed */
+			height: 150px;
+			/* Ensure the height and width are the same */
+			border-radius: 50%;
+			/* This makes the image a circle */
+			object-fit: cover;
+			/* Ensures the image fits within the circle */
+		}
+
+		/* Styles for selected employee */
+
+		/* Container Styling */
+		#plist {
+			background: linear-gradient(135deg, #f3f4f6, #e9ecef);
+			border: 1px solid #ddd;
+			border-radius: 12px;
+			padding: 15px;
+			max-width: 400px;
+			margin: 0px auto;
+			/* Moved up slightly */
+			box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+			overflow: hidden;
+			position: relative;
+		}
+
+		/* Search Box */
+		#plist .input-group {
+			margin-bottom: 12px;
+			/* Reduced spacing */
+			border-radius: 8px;
+			overflow: hidden;
+			background-color: #f8f9fa;
+			/* Set background color to match the default input */
+			border: 1px solid #ccc;
+			/* Light border to define the box */
+		}
+
+		#plist .input-group .form-control {
+			border-radius: 8px;
+			box-shadow: none;
+			border: none;
+			/* Remove the border */
+			padding: 10px 15px;
+			font-size: 14px;
+			background-color: transparent;
+			/* Ensure the input background is transparent */
+		}
+
+		#plist .input-group .input-group-text {
+			background-color: transparent;
+			/* Make the background transparent */
+			color: #007bff;
+			/* Color for the icon */
+			border: none;
+			/* Remove border */
+			border-radius: 0 8px 8px 0;
+			/* Rounded corners only on the right */
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		/* Employee List */
+		#employeeNames {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+			overflow-y: auto;
+			max-height: 400px;
+			/* Scrollable when long */
+			border-radius: 10px;
+		}
+
+		#employeeNames::-webkit-scrollbar {
+			width: 8px;
+		}
+
+		#employeeNames::-webkit-scrollbar-thumb {
+			background-color: #bbb;
+			border-radius: 10px;
+		}
+
+		#employeeNames li {
+			display: flex;
+			align-items: center;
+			padding: 12px 15px;
+			margin-bottom: 5px;
+			background-color: #ffffff;
+			border-radius: 10px;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+		}
+
+		#employeeNames li:last-child {
+			margin-bottom: 0;
+		}
+
+		#employeeNames li:hover {
+			background-color: #e9f4ff;
+			transform: translateY(-3px);
+			box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+		}
+
+		/* Employee Photo */
+		.employee-photo {
+			width: 60px;
+			/* Increased size */
+			height: 60px;
+			/* Increased size */
+			border-radius: 50%;
+			object-fit: cover;
+			margin-right: 15px;
+			transition: all 0.3s ease;
+		}
+
+		#employeeNames li:hover .employee-photo {
+			transform: scale(1.1);
+		}
+
+		/* Active State */
+		#employeeNames li.active {
+			background-color: #007bff;
+			color: #fff;
+			transform: translateY(-2px);
+			box-shadow: 0 6px 15px rgba(0, 123, 255, 0.5);
+		}
+
+
+		/* Employee Name Text */
+		#employeeNames span {
+			font-size: 16px;
+			font-weight: normal;
+			color: #333;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		#employeeNames li.active span {
+			color: #fff;
+		}
+
+		/* Dropdown container */
+		.message-action-dropdown {
+			display: none;
+			position: absolute;
+			background-color: #fff;
+			box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+			z-index: 1;
+			width: 150px;
+			/* Adjust as needed */
+			border-radius: 4px;
+			margin-top: 5px;
+
+		}
+
+		/* Dropdown item styling */
+		.message-action-dropdown .dropdown-item {
+			padding: 8px 12px;
+			cursor: pointer;
+			text-decoration: none;
+			color: #333;
+			display: block;
+		}
+
+		.message-action-dropdown .dropdown-item:hover {
+			background-color: #f1f1f1;
+		}
+
+
+		.chat-app {
+			display: flex;
+			height: 80vh;
+			/* Adjust height as needed */
+			overflow: hidden;
+		}
+
+		/* Class for hiding an element */
+		.not-visible {
+			display: none !important;
+		}
+
+		/* Class for showing an element */
+		.is-visible {
+			display: block !important;
+		}
+
+		.people-list {
+			width: 30%;
+			/* Adjust width for employee list */
+			overflow-y: auto;
+			border-right: 1px solid #ccc;
+			padding: 10px;
+			/* Add padding for aesthetics */
+		}
+
+		.chat {
+			width: 70%;
+			/* Adjust width for chat area */
+			display: flex;
+			flex-direction: column;
+		}
+
+		.employee-photo {
+			width: 40px;
+			/* Adjust the size of the photo */
+			height: 40px;
+			border-radius: 50%;
+			object-fit: cover;
+			margin-right: 10px;
+			/* Spacing between photo and name */
+		}
+
+		.chat-about h6 {
+			margin-left: 10px;
+			/* Add space between photo and name */
+			font-size: 18px;
+			/* Larger font size for better readability */
+			font-family: 'Arial', sans-serif;
+			/* Use a clean, modern font */
+		}
+
+		.chat-about img {
+			width: 50px;
+			/* Increase the size of the photo */
+			height: 50px;
+			/* Maintain the aspect ratio */
+			border-radius: 50%;
+			/* Keep the circular shape */
+			object-fit: cover;
+			/* Ensure the image covers the area without distortion */
+			padding: 0px;
+			/* Small padding for a visible border */
+
+			transition: transform 0.3s ease;
+			/* Smooth scale effect */
+		}
+
+		.chat-about img:hover {
+			transform: scale(1.1);
+			/* Slight zoom-in effect on hover */
+		}
+
+		.text-right {
+			text-align: right;
+		}
+
+		.btn-outline-secondary {
+			background-color: transparent;
+			/* No background color */
+			border: none;
+			/* Remove border */
+			padding: 10px;
+			/* Remove padding to make it compact */
+			font-size: 20px;
+			/* Larger size for the icon */
+			color: #333;
+			/* Icon color */
+			transition: background-color 0.3s ease;
+			/* Smooth transition for hover effect */
+		}
+
+		.btn-outline-secondary:hover {
+			background-color: #cce5ff;
+			/* Light blue color on hover */
+		}
+
+		.custom-dropdown {
+			position: relative;
+		}
+
+		.custom-dropdown .dropdown-toggle {
+			background-color: transparent;
+			border: none;
+			padding: 8px;
+			font-size: 18px;
+			color: white;
+			transition: all 0.3s ease;
+		}
+
+		.custom-dropdown .dropdown-toggle:hover {
+			color: #f8f9fa;
+			background-color: #ADD8E6;
+			/* Darker background when hovered */
+			border-radius: 50%;
+			/* Circular button for a modern feel */
+		}
+
+		.custom-dropdown .dropdown-menu {
+			min-width: 180px;
+			border-radius: 8px;
+
+			transition: all 0.2s ease;
+		}
+
+
+		.custom-dropdown .dropdown-item {
+			font-size: 14px;
+			padding: 10px 15px;
+			color: #333;
+			transition: background-color 0.3s ease;
+		}
+
+		.custom-dropdown .dropdown-item:hover {
+			background-color: #f1f1f1;
+			/* Light background on hover */
+			color: #ADD8E6;
+			/* Change text color on hover */
+		}
+
+		.chat-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			background-color: #87CEEB;
+			/* Light blue background for a softer look */
+			color: white;
+			/* White text for contrast */
+			padding: 12px 20px;
+			/* Add more padding for a spacious look */
+			border-radius: 8px;
+			/* Rounded corners for a softer look */
+			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+			/* Subtle shadow for depth */
+			transition: all 0.3s ease;
+			/* Smooth transition for hover and focus effects */
+		}
+
+		.chat-header:hover {
+			background-color: #ADD8E6;
+			/* Slightly darker blue on hover */
+		}
+
+
+		.chat-about {
+			display: flex;
+			align-items: center;
+			font-weight: bold;
+			/* Make employee name stand out */
+		}
+
+		.chat-history {
+			overflow-y: auto;
+			flex-grow: 1;
+			padding: 10px;
+			/* Add padding for aesthetics */
+		}
+
+		#chat-window ul {
+			list-style-type: none;
+			/* Removes the bullet points */
+			padding: 0;
+			/* Removes the default padding */
+			margin: 0;
+			/* Removes the default margin */
+		}
+
+		.chat-message {
+			padding: 10px;
+		}
+
+		.message {
+			padding: 10px;
+			border-radius: 5px;
+			margin: 5px 0;
+			word-wrap: break-word;
+			/* Ensure the message text wraps properly */
+			display: inline-block;/
+		}
+
+		.my-message {
+			background-color: #B9D9EB;
+			/* Light blue for sender messages */
+			padding: 5px 10px;
+			border-radius: 8px;
+			display: inline-block;
+			/* Shrinks to fit the message content */
+			max-width: 60%;
+			/* Limit the message width for better readability */
+			word-wrap: break-word;
+			/* Ensure long words wrap to the next line */
+			margin: 5px 0;
+		}
+
+		.other-message {
+			background-color: #f1f0f0;
+			/* Light gray for recipient messages */
+			padding: 5px 10px;
+			border-radius: 8px;
+			display: inline-block;
+			/* Shrinks to fit the message content */
+			max-width: 60%;
+			/* Limit the message width for better readability */
+			word-wrap: break-word;
+			/* Ensure long words wrap to the next line */
+			margin: 5px 0;
+		}
+
+		/* Ensures the container is aligned to the right */
+		.clearfix.right {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-end;
+			/* Align all child elements to the right */
+			justify-content: flex-end;
+			text-align: right !important;
+
+		}
+
+		.clearfix.left {
+			text-align: left;
+		}
+
+		.input-group {
+			margin-top: 10px;
+		}
+
+		/* Add custom styling for employee list */
+		#employeeNames li {
+			cursor: pointer;
+		}
+
+		#employeeNames li:hover {
+			background-color: #f0f0f0;
+			/* Highlight on hover */
+		}
+
+		.form-outline {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+		}
+
+		.form-control {
+			height: calc(2.5rem + 2px);
+			/* Standard height for form controls */
+		}
+
+		#crossword {
+			border: 1px solid #ccc;
+			padding: 10px;
+			margin-top: 20px;
+		}
+
+		#crossword p {
+			margin: 5px 0;
+		}
+
+		.startArea {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			margin-bottom: 20px;
+		}
+
+		.startBtn {
+			border: none;
+			outline: none;
+			color: #fff;
+			cursor: pointer;
+			padding: 10px 0;
+			font-size: 17px;
+			border-radius: 5px;
+			background: #3571AE;
+			transition: all 0.5s ease;
+		}
+
+		.startBtn:hover {
+			background: #707d8b;
+		}
+
+		.content {
+			display: none;
+			margin: 25px 20px 35px;
+		}
+
+		.content .word {
+			user-select: none;
+			font-size: 33px;
+			font-weight: 500;
+			text-align: center;
+			letter-spacing: 24px;
+			margin-right: -24px;
+			word-break: break-all;
+			text-transform: uppercase;
+		}
+
+		.details {
+			margin: 25px 0 20px;
+		}
+
+		.details p {
+			font-size: 18px;
+			margin-bottom: 10px;
+		}
+
+		.details p b {
+			font-weight: 500;
+		}
+
+		.content input {
+			width: 100%;
+			height: 60px;
+			outline: none;
+			padding: 0 16px;
+			font-size: 18px;
+			border-radius: 5px;
+			border: 1px solid #bfbfbf;
+		}
+
+		.content input:focus {
+			box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
+		}
+
+		.buttons {
+			display: flex;
+			margin-top: 20px;
+			justify-content: space-between;
+		}
+
+		.buttons button {
+			border: none;
+			outline: none;
+			color: #fff;
+			cursor: pointer;
+			padding: 15px 0;
+			font-size: 17px;
+			border-radius: 5px;
+			width: calc(100% / 2 - 8px);
+			transition: all 0.3s ease;
+		}
+
+		.buttons .refresh-word {
+			background: #6C757D;
+		}
+
+		.buttons .check-word {
+			background: #3571AE;
+		}
+
+		.score-area {
+			padding-top: 15px;
+			font-size: 18px;
+			color: black;
+		}
+
+		.score {
+			color: #3571AE;
+		}
+
+		/* The Modal */
+		.modal {
+			display: none;
+			position: fixed;
+			z-index: 1;
+			padding-top: 100px;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			overflow: auto;
+			background-color: rgba(0, 0, 0, 0.4);
+		}
+
+		.modal-content {
+			background-color: #fefefe;
+			margin: auto;
+			padding: 20px;
+			border: 1px solid #888;
+			width: 80%;
+		}
+
+		/* Close Button */
+		.close {
+			color: #aaaaaa;
+			float: right;
+			font-size: 28px;
+			font-weight: bold;
+		}
+
+		.close:hover,
+		.close:focus {
+			color: #000;
+			text-decoration: none;
+			cursor: pointer;
+		}
+
+		.modal-backdrop {
+			z-index: 1040 !important;
+		}
+
+		.modal {
+			z-index: 1050 !important;
+		}
+
+		/* Scrollable task list */
+		/* Scrollable task list */
+		#ex1-content {
+			max-height: 400px;
+			/* Adjust this height based on your design */
+			overflow-y: auto;
+		}
+
+		.row.d-flex {
+			max-width: 100%;
+			margin-top: -40px;
+			/* Ensure the parent container doesn't exceed the screen width */
+		}
+
+		/* Make the body take up the full height of the viewport */
+		body {
+			display: flex;
+			flex-direction: column;
+			min-height: 100vh;
+			margin: 0;
+		}
+
+		/* Ensure the main content takes up all available space */
+		main {
+			flex: 1;
+		}
+
+		/* Style the footer */
+		.footer {
+			background-color: #f8f9fa;
+			/* Light gray background */
+			text-align: center;
+			/* Center-align text */
+			padding: 10px 0;
+			/* Add some padding */
+			font-size: 14px;
+			/* Set font size */
+		}
+
+
+		/* Blinking animation */
+		@keyframes blink {
+
+			0%,
+			100% {
+				opacity: 1;
+				/* Fully visible */
+			}
+
+			50% {
+				opacity: 0;
+				/* Invisible */
+			}
+		}
+
+		/* Target only the Apprisal link for the blinking effect */
+		#apprisalLink.blinking {
+			animation: blink 0.5s ease-in-out 3;
+			/* Blinks 3 times in 0.5s intervals */
+		}
+
+		/* Custom width for the modal */
+
+		.message-container {
+			display: flex;
+			/* Ensures the photo and message are beside each other */
+			align-items: center;
+			/* Align items vertically in the middle */
+			margin-bottom: 5px;
+			/* Small space below the message */
+
+		}
+
+		.sender-photo {
+			width: 40px;
+			height: 40px;
+			border-radius: 50%;
+			margin-right: 10px;
+		}
+
+		.right .sender-photo {
+			order: 2;
+			margin-left: 10px;
+			margin-right: 0px;
+
+		}
+
+		.timestamp {
+			font-size: 0.85em;
+			/* Slightly smaller font size for the timestamp */
+			color: gray;
+			/* Subtle color to differentiate from message text */
+			display: block;
+			/* Ensures the timestamp spans a full row */
+			margin-top: 4px;
+			/* Space between the message and the timestamp */
+			margin-left: 50px;
+		}
+
+		.right .timestamp {
+			text-align: right;
+			font-size: 0.85em;
+			color: gray;
+			margin-right: 50px;
+			display: block !important;
+			margin-top: 0px;
+		}
+
+		/* Shared base styles for smaller dialogs */
+		.smaller-swal-popup,
+		.smaller-swal-success {
+			width: 280px !important;
+			/* Adjust width for smaller dialogs */
+			font-size: 0.9rem !important;
+			/* Adjust base font size */
+			border-radius: 12px !important;
+			/* Add rounded corners */
+			box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2) !important;
+			/* Add shadow */
+			padding: 20px !important;
+			/* Add padding inside the popup */
+		}
+
+		/* Title styles */
+		.smaller-swal-popup .swal2-title,
+		.smaller-swal-success .swal2-title {
+			font-size: 1.1rem !important;
+			/* Slightly smaller title */
+			font-weight: bold !important;
+			color: #444 !important;
+			/* Darker text color */
+			text-transform: capitalize;
+			/* Capitalized text */
+			margin-bottom: 10px !important;
+		}
+
+		/* Content/message styles */
+		.smaller-swal-popup .swal2-content,
+		.smaller-swal-success .swal2-content {
+			font-size: 0.85rem !important;
+			/* Adjust content font size */
+			color: #666 !important;
+			/* Subtle text color */
+			line-height: 1.4 !important;
+		}
+
+		/* Button styles */
+		.smaller-swal-popup .swal2-actions .swal2-confirm,
+		.smaller-swal-popup .swal2-actions .swal2-cancel,
+		.smaller-swal-success .swal2-actions .swal2-confirm {
+			font-size: 0.8rem !important;
+			/* Smaller button font size */
+			padding: 6px 12px !important;
+			/* Adjust button padding */
+			border-radius: 8px !important;
+			/* Rounded buttons */
+			border: none !important;
+			/* Remove default borders */
+			transition: all 0.2s ease-in-out !important;
+		}
+
+		/* Confirm button specific styling */
+		.smaller-swal-popup .swal2-actions .swal2-confirm,
+		.smaller-swal-success .swal2-actions .swal2-confirm {
+			background-color: #d33 !important;
+			/* Red background */
+			color: #fff !important;
+			/* White text */
+		}
+
+		.smaller-swal-popup .swal2-actions .swal2-confirm:hover,
+		.smaller-swal-success .swal2-actions .swal2-confirm:hover {
+			background-color: #b30000 !important;
+			/* Darker red on hover */
+			transform: scale(1.05) !important;
+			/* Slight hover effect */
+		}
+
+		/* Cancel button specific styling */
+		.smaller-swal-popup .swal2-actions .swal2-cancel {
+			background-color: #3085d6 !important;
+			/* Blue background */
+			color: #fff !important;
+			/* White text */
+		}
+
+		.smaller-swal-popup .swal2-actions .swal2-cancel:hover {
+			background-color: #2671b7 !important;
+			/* Darker blue on hover */
+			transform: scale(1.05) !important;
+			/* Slight hover effect */
+		}
+
+		/* Success-specific styles */
+		.smaller-swal-success {
+			background-color: #f9f9f9 !important;
+			/* Light background */
+			color: #444 !important;
+			/* Darker text color */
+		}
+
+		.smaller-swal-success .swal2-title {
+			color: #28a745 !important;
+			/* Green title for success */
+		}
+
+		.smaller-swal-success .swal2-actions .swal2-confirm {
+			background-color: #28a745 !important;
+			/* Green confirm button */
+			color: #fff !important;
+		}
+
+		.smaller-swal-success .swal2-actions .swal2-confirm:hover {
+			background-color: #218838 !important;
+			/* Darker green on hover */
+		}
+
+		#message-icon-container svg:first-of-type {
+			height: 110px;
+			width: 110px;
+			position: absolute;
+			left: 70%;
+			/* Moved 5% more to the right */
+			top: 55%;
+			/* Moved slightly down */
+			transform: translate(-50%, -50%);
+			fill: none;
+			/* Remove the fill color */
+			stroke: blue;
+			/* Add this line to change the outline color to blue */
+			stroke-width: 2;
+			/* Optional: Adjust the width of the outline */
+		}
+
+
+		svg {
+			height: 80px;
+			width: 80px;
+			position: absolute;
+			left: 65%;
+			/* Moved 5% to the left */
+			top: 55%;
+			/* Moved slightly down */
+			transform: translate(-50%, -50%);
+			fill: #1e88e5;
+		}
+
+		.dots {
+			display: flex;
+			position: absolute;
+			left: 65%;
+			/* Moved 5% to the left */
+			top: 55%;
+			/* Moved slightly down */
+			transform: translate(-50%, -50%);
+		}
+
+		.dot {
+			width: 10px;
+			height: 10px;
+			background-color: rgb(255, 255, 255);
+			border-radius: 1000px;
+			margin-right: 6px;
+
+			/* Keyframe Animation to make dots "dance" */
+			animation: bounce 1s ease-in-out infinite;
+
+			/* Adding a different delay for each dot to make them dance in sequence */
+			&:nth-child(1) {
+				animation-delay: 0s;
+			}
+
+			&:nth-child(2) {
+				animation-delay: 0.2s;
+			}
+
+			&:nth-child(3) {
+				animation-delay: 0.4s;
+			}
+		}
+
+		/* Bounce animation */
+		@keyframes bounce {
+
+			0%,
+			100% {
+				transform: translateY(0);
+			}
+
+			50% {
+				transform: translateY(-10px);
+			}
+		}
+
+		.custom-input-group {
+			position: relative;
+			width: 100%;
+			/* Ensures it takes up full width of its container */
+		}
+
+		.custom-input-group .custom-form-control {
+			width: calc(100% - 2px);
+			/* Adjust to take the remaining space beside the button */
+			padding-right: 50px;
+			/* Adjust padding to make room for the button */
+			height: 40px;
+			/* Increase height for better spacing */
+			border: 1px solid lightgray;
+			/* Light gray outline color */
+			border-radius: 5px;
+			box-shadow: none;
+			z-index: 1;
+			/* Keep input in front */
+			outline: none;
+			/* Remove default outline */
+			transition: border-color 0.3s ease;
+			/* Smooth transition for border color */
+		}
+
+		.custom-input-group-append {
+			position: absolute;
+			right: 10px;
+			top: 50%;
+			transform: translateY(-50%);
+			z-index: 2;
+			/* Ensure button stays above the input */
+			pointer-events: none;
+			/* Allow the input field to still be clickable */
+		}
+
+		.custom-input-group button {
+			background: none;
+			border: none;
+			color: #aaa;
+			cursor: pointer;
+			padding: 0;
+			font-size: 18px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			pointer-events: auto;
+			/* Ensure the button is clickable */
+		}
+
+		.custom-input-group button i {
+			font-size: 18px;
+			color: #555;
+		}
+
+		.custom-input-group button:hover i {
+			color: #aaa;
+		}
+
+
+
+		#logo-text {
+			text-align: center;
+			font-size: 14px;
+			color: #6c757d;
+			margin-top: 8px;
+			/* Adjusted for slightly higher position */
+			margin-bottom: 20px;
+			font-family: 'Arial', sans-serif;
+			line-height: 1.5;
+			font-weight: 400;
+			letter-spacing: 0.5px;
+			text-transform: capitalize;
+		}
+
+
+		.toast-notification {
+			position: fixed;
+			bottom: 20px;
+			right: 20px;
+			background: linear-gradient(135deg, #007bff, #00d4ff);
+			color: white;
+			padding: 15px 20px;
+			border-radius: 10px;
+			box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+			z-index: 1000;
+			opacity: 0;
+			transform: translateX(100%);
+			transition: opacity 0.3s ease, transform 0.3s ease-in-out;
+			font-family: 'Arial', sans-serif;
+			font-size: 14px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			min-width: 250px;
+			gap: 10px;
+		}
+
+		/* Fade-in effect */
+		.toast-notification.show {
+			opacity: 1;
+			transform: translateX(0);
+		}
+
+		/* Close button */
+		.toast-close {
+			cursor: pointer;
+			font-size: 16px;
+			opacity: 0.8;
+			transition: opacity 0.2s;
+		}
+
+		.toast-close:hover {
+			opacity: 1;
+		}
+
+		/* Fade-out effect */
+		.toast-notification:not(.show) {
+			opacity: 0;
+			transform: translateX(100%);
+			transition: opacity 0.3s ease, transform 0.3s ease-in-out;
+		}
+		
+		
+		/* Style for the new feature list item */
+			.nav-item.new-feature {
+			  position: relative; /* Needed for pseudo-element positioning */
+			}
+
+			/* Create the "New" badge with a pseudo-element */
+			.nav-item.new-feature::after {
+			  content: 'New';
+			  position: absolute;
+			  top: -8px;
+			  right: -10px;
+			  background-color: #28a745;
+			  color: #fff;
+			  font-size: 0.7rem;
+			  font-weight: bold;
+			  padding: 2px 6px;
+			  border-radius: 10px;
+			  animation: pulse 2s infinite;
+			}
+
+			/* Keyframes for a simple pulsating effect */
+			@keyframes pulse {
+			  0% {
+			    transform: scale(1);
+			    opacity: 1;
+			  }
+			  50% {
+			    transform: scale(1.1);
+			    opacity: 0.8;
+			  }
+			  100% {
+			    transform: scale(1);
+			    opacity: 1;
+			  }
+			}
+			
+
+	</style>
+</head>
+
+<body>
+
+	<!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center" th:if="${empDetailsByEmpId.deptId>0}">
+
+   <!--  <div class="app-branding" style="width:100%; margin:0 0 0 10px; padding:5px;">
+				    <a class="app-logo" th:href=@{/dashboard}>
+				        <img class="logo-icon" src="assets/img/logo.png" alt="logo" style="width:200px; height:50px; max-width:100%; padding:0 2px 0 10px; margin:0;">
+				    </a>
+				</div> --><!-- End Logo -->
+	
+		   <div class="d-flex align-items-center" style="width:100%; margin:0 0 0 10px; padding:5px;">
+				    <a class="app-logo" th:href=@{/dashboard}>
+				        <img class="d-none d-lg-block" src="assets/img/logo.png" alt="logo" style="width:200px; height:50px; max-width:100%; padding:0 2px 0 10px; margin:0;">
+				    </a>
+				    <!-- <i class="bi bi-chevron-double-left toggle-sidebar-btn" onclick="toggleIconRotation()"></i> -->
+			</div>
+				
+   <!--  <div class="search-bar">
+      <form class="search-form d-flex align-items-center" method="POST" action="#">
+        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+      </form>
+    </div> --><!-- End Search Bar -->
+
+	<div th:replace="fragments/header :: header" ></div>
+	
+  </header><!-- End Header -->
+  
+  <!-- =======Super Admin Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center" th:if="${empDetailsByEmpId.deptId == 0}">
+
+    <div class="d-flex align-items-center" style="width:100%; margin:0 0 0 10px; padding:5px;">
+				    <a class="app-logo" th:href=@{/dashboard}>
+				        <img class="d-none d-lg-block" src="assets/img/logo.png" alt="logo" style="width:200px; height:50px; max-width:100%; padding:0 2px 0 10px; margin:0;">
+				    </a>
+				    <!-- <i class="bi bi-chevron-double-left toggle-sidebar-btn" onclick="toggleIconRotation()"></i> -->
+	</div><!-- End Logo -->
+
+    <!-- <div class="search-bar">
+      <form class="search-form d-flex align-items-center" method="POST" action="#">
+        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+      </form>
+    </div> --><!-- End Search Bar -->
+
+    <div th:replace="fragments/superAdminHeader :: header"></div>
+
+  </header><!-- End Header -->
+
+
+  <!-- ======= Sidebar ======= -->
+  
+<aside id="sidebar" class="sidebar">
+<input type="hidden" id="employee-id" th:value="${empDetailsByEmpId.deptId}">
+    <ul class="sidebar-nav" id="sidebar-nav">
+		 
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/userDashboard}">
+                <i class="bi bi-grid"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+         <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/viewAdminProfile(empid=${empDetailsByEmpId.empid})}">
+                <i class="bi bi-person"></i>
+                 <span>My Profile</span>
+            </a>
+        </li>  
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/attendanceLive(email=${empDetailsByEmpId.email})}">
+                <i class="bi bi-calendar3"></i>
+                <span>Attendence</span>
+            </a> 
+        </li>      
+       <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/groupMailId}">
+                <i class="bi bi-telephone"></i>
+                <span>Employee Contacts</span>
+            </a>
+        </li>
+       <!--  <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link " th:href="@{/InterCommDetails}">
+                <i class="bi bi-telephone"></i>
+                <span>InterComm Details</span>
+            </a>
+        </li> -->
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/adminHoliday}">
+                <i class="bi bi-calendar4-week"></i>
+                <span>Holiday List</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+		    <a class="nav-link" th:href="@{/employee}">
+		        <i class="bi bi-people"></i>	
+		        <span>Employee</span>
+		    </a>
+	   </li> 
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/viewAdminLeaves(empid=${empDetailsByEmpId.empid})}">
+                <i class="bi bi-card-text"></i>
+                <span>Team Leaves</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/events}">
+                <i class="bi bi-megaphone"></i>
+                <span>Announcement</span>
+            </a>
+        </li>               
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/asset}">
+                <i class="bi bi-wallet"></i>
+                <span>Assets</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/ongoingProject}">
+                <i class="bi bi-card-heading"></i>
+                <span>Projects</span>
+            </a>
+        </li>   
+         <!-- <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/viewAdminPayslip(empid=${empDetailsByEmpId.empid})}">
+                <i class="bi bi-file-text"></i>
+                <span>Payslip</span>
+            </a>
+        </li>     --> 
+         <!-- Loop through the permissions map -->
+       <li class="nav-item" th:if="${permissions.interviewAccess && empDetailsByEmpId.deptId>0}" >
+            <a class="nav-link" th:href="@{/moatIframe}">
+                <i class="bi bi-vector-pen"></i>
+                <span>Interview</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.sales && empDetailsByEmpId.deptId>0}" >
+            <a class="nav-link" th:href="@{/sales}">
+                <i class="bi bi-cart3"></i>
+                <span>Sales</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.accountsAccess && empDetailsByEmpId.deptId>0}" >
+            <a class="nav-link" th:href="@{/accounts}">
+                <i class="bi bi-person-vcard"></i>
+                <span>Accounts</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.storeAccess && empDetailsByEmpId.deptId>0}" >
+            <a class="nav-link" th:href="@{/store}">
+                <i class="bi bi-shop-window"></i>
+                <span>Store</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.apprisalAccess && empDetailsByEmpId.deptId>0}" >
+            <a class="nav-link" id="apprisalLink" th:href="@{/apprisal(empid=${empDetailsByEmpId.empid})}">
+		        <i class="bi bi-file-text"></i>
+		        <span>Appraisal</span>
+		    </a>
+        </li>
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+		    <a class="nav-link" id="apprisalLink" th:href="@{/employeeApprisal(empid=${empDetailsByEmpId.empid})}">
+		        <i class="bi bi-file-text"></i>
+		        <span>Employee Appraisal</span>
+		    </a>
+		</li>
+       	<li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+				<a class="nav-link" th:href="@{/my-favorites}">
+					<i class="bi bi-layout-text-window-reverse"></i>
+					<span>To-Chat & Remind</span>
+				</a>
+		</li>
+        
+        
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link " th:href="@{/navbar}">
+		        <i class="bi bi-grid"></i>
+		        <span>Dashboard</span>
+		    </a>
+	    </li>
+	    <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+            <a class="nav-link" th:href="@{/attendanceLive(email=${empDetailsByEmpId.email})}">
+                <i class="bi bi-calendar3"></i>
+                <span>Attendence</span>
+            </a>
+        </li> 
+         <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link"  th:href="@{/adminHoliday}">
+		        <i class="bi bi-calendar4-week"></i>
+		        <span>Holiday List</span>
+		    </a>
+	 </li>	
+	 
+	<li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link" th:href="@{/groupMailId}">
+		        <i class="bi bi-telephone"></i>
+		        <span>Employee Contacts</span>
+		    </a>
+	 </li>
+	 <!--  <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+            <a class="nav-link"  th:href="@{/InterCommDetails}">
+                <i class="bi bi-telephone"></i>
+                <span>InterComm Details</span>
+            </a>
+      </li> -->
+      <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link"  th:href="@{/viewAdminLeaves(empid=${empDetailsByEmpId.empid})}">
+		        <i class="bi bi-calendar4-week"></i>
+		        <span>Team Leaves</span>
+		    </a>
+	 </li>
+	 <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link" th:href="@{/events}">
+		        <i class="bi bi-megaphone"></i>
+		        <span>Announcement</span>
+		    </a>
+	 </li> 
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link" th:href="@{/addDepartment}">
+		        <i class="bi bi-calendar4-week"></i>
+		        <span>Department</span>
+		    </a>
+	   </li>
+	 <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link"  th:href="@{/addRole}">
+		        <i class="bi bi-receipt"></i>
+		        <span>Role</span>
+		    </a>
+	 </li>
+	 
+	 <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link" th:href="@{/employee}">
+		        <i class="bi bi-people"></i>
+		        <span>Employee</span>
+		    </a>
+	 </li> 
+     <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+            <a class="nav-link"  th:href="@{/ongoingProject}">
+                <i class="bi bi-calendar3"></i>
+                <span>Projects</span>
+            </a>
+      </li>  
+      <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+            <a class="nav-link"  th:href="@{/asset}">
+                <i class="bi bi-wallet"></i>
+                <span>Assets</span>
+            </a>
+      </li>  
+      <li class="nav-item" th:if="${permissions.interviewAccess && empDetailsByEmpId.deptId==0}" >
+            <a class="nav-link" th:href="@{/moatIframe}">
+                <i class="bi bi-vector-pen"></i>
+                <span>Interview</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.sales && empDetailsByEmpId.deptId==0}" >
+            <a class="nav-link" th:href="@{/sales}">
+                <i class="bi bi-cart3"></i>
+                <span>Sales</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.accountsAccess && empDetailsByEmpId.deptId==0}" >
+            <a class="nav-link" th:href="@{/accounts}">
+                <i class="bi bi-person-vcard"></i>
+                <span>Accounts</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.storeAccess && empDetailsByEmpId.deptId==0}" >
+            <a class="nav-link" th:href="@{/store}">
+                <i class="bi bi-shop-window"></i>
+                <span>Store</span>
+            </a>
+        </li> 
+        <li class="nav-item" th:if="${permissions.storeAccess && empDetailsByEmpId.deptId==0}">
+				<a class="nav-link" th:classappend="${empDetailsByEmpId.deptId==0} ? ' active'" th:href="@{/my-favorites}" autofocus>
+					<i class="bi bi-layout-text-window-reverse"></i>
+					<span>To-Chat & Remind</span>
+				</a>
+		</li> 
+    </ul>
+</aside>
+	<!-- <aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+
+      <li class="nav-item">
+		    <a class="nav-link" th:href="@{/navbar}">
+		        <i class="bi bi-grid"></i>
+		        <span>Dashboard</span>
+		    </a>
+	 </li>
+	 <li class="nav-item">
+		    <a class="nav-link" th:href="@{/addDepartment}">
+		        <i class="bi bi-grid"></i>
+		        <span>Department</span>
+		    </a>
+	 </li>
+	  <li class="nav-item">
+		    <a class="nav-link" th:href="@{/addRole}">
+		        <i class="bi bi-grid"></i>
+		        <span>Role</span>
+		    </a>
+		</li>
+		<li class="nav-item">
+		    <a class="nav-link" th:href="@{/employee}">
+		        <i class="bi bi-grid"></i>
+		        <span>Employee</span>
+		    </a>
+		</li><!-- End Dashboard Nav -->
+
+	<!--  <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-menu-button-wide"></i><span>Components</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="components-alerts.html">
+              <i class="bi bi-circle"></i><span>Alerts</span>
+            </a>
+          </li>
+          <li>
+            <a href="components-accordion.html">
+              <i class="bi bi-circle"></i><span>Accordion</span>
+            </a>
+          </li>
+          <li>
+            <a href="components-badges.html">
+              <i class="bi bi-circle"></i><span>Badges</span>
+            </a>
+          </li>
+          <li>
+            <a href="components-breadcrumbs.html">
+              <i class="bi bi-circle"></i><span>Breadcrumbs</span>
+            </a>
+          </li>
+          <li>
+            <a href="components-buttons.html">
+              <i class="bi bi-circle"></i><span>Buttons</span>
+            </a>
+          </li>
+          <li>
+            <a href="components-cards.html">
+              <i class="bi bi-circle"></i><span>Cards</span>
+            </a>
+          </li>
+          <li>
+            <a href="components-carousel.html">
+              <i class="bi bi-circle"></i><span>Carousel</span>
+            </a>
+          </li>
+          <li>
+            <a href="components-list-group.html">
+              <i class="bi bi-circle"></i><span>List group</span>
+            </a>
+          </li>
+          <li>
+            <a href="components-modal.html">
+              <i class="bi bi-circle"></i><span>Modal</span>
+            </a>
+          </li>
+          <li>
+            <a href="components-tabs.html">
+              <i class="bi bi-circle"></i><span>Tabs</span>
+            </a>
+          </li>
+          <li>
+            <a href="components-pagination.html">
+              <i class="bi bi-circle"></i><span>Pagination</span>
+            </a>
+          </li>
+          <li>
+            <a href="components-progress.html">
+              <i class="bi bi-circle"></i><span>Progress</span>
+            </a>
+          </li>
+          <li>
+            <a href="components-spinners.html">
+              <i class="bi bi-circle"></i><span>Spinners</span>
+            </a>
+          </li>
+          <li>
+            <a href="components-tooltips.html">
+              <i class="bi bi-circle"></i><span>Tooltips</span>
+            </a>
+          </li>
+        </ul>
+      </li>End Components Nav
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-journal-text"></i><span>Forms</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="forms-elements.html">
+              <i class="bi bi-circle"></i><span>Form Elements</span>
+            </a>
+          </li>
+          <li>
+            <a href="forms-layouts.html">
+              <i class="bi bi-circle"></i><span>Form Layouts</span>
+            </a>
+          </li>
+          <li>
+            <a href="forms-editors.html">
+              <i class="bi bi-circle"></i><span>Form Editors</span>
+            </a>
+          </li>
+          <li>
+            <a href="forms-validation.html">
+              <i class="bi bi-circle"></i><span>Form Validation</span>
+            </a>
+          </li>
+        </ul>
+      </li>End Forms Nav
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-layout-text-window-reverse"></i><span>Tables</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="tables-general.html">
+              <i class="bi bi-circle"></i><span>General Tables</span>
+            </a>
+          </li>
+          <li>
+            <a href="tables-data.html">
+              <i class="bi bi-circle"></i><span>Data Tables</span>
+            </a>
+          </li>
+        </ul>
+      </li>End Tables Nav
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-bar-chart"></i><span>Charts</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="charts-chartjs.html">
+              <i class="bi bi-circle"></i><span>Chart.js</span>
+            </a>
+          </li>
+          <li>
+            <a href="charts-apexcharts.html">
+              <i class="bi bi-circle"></i><span>ApexCharts</span>
+            </a>
+          </li>
+          <li>
+            <a href="charts-echarts.html">
+              <i class="bi bi-circle"></i><span>ECharts</span>
+            </a>
+          </li>
+        </ul>
+      </li>End Charts Nav
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#icons-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-gem"></i><span>Icons</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="icons-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="icons-bootstrap.html">
+              <i class="bi bi-circle"></i><span>Bootstrap Icons</span>
+            </a>
+          </li>
+          <li>
+            <a href="icons-remix.html">
+              <i class="bi bi-circle"></i><span>Remix Icons</span>
+            </a>
+          </li>
+          <li>
+            <a href="icons-boxicons.html">
+              <i class="bi bi-circle"></i><span>Boxicons</span>
+            </a>
+          </li>
+        </ul>
+      </li>End Icons Nav
+
+      <li class="nav-heading">Pages</li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="users-profile.html">
+          <i class="bi bi-person"></i>
+          <span>Profile</span>
+        </a>
+      </li>End Profile Page Nav
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="pages-faq.html">
+          <i class="bi bi-question-circle"></i>
+          <span>F.A.Q</span>
+        </a>
+      </li>End F.A.Q Page Nav
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="pages-contact.html">
+          <i class="bi bi-envelope"></i>
+          <span>Contact</span>
+        </a>
+      </li>End Contact Page Nav
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="pages-register.html">
+          <i class="bi bi-card-list"></i>
+          <span>Register</span>
+        </a>
+      </li>End Register Page Nav
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="pages-login.html">
+          <i class="bi bi-box-arrow-in-right"></i>
+          <span>Login</span>
+        </a>
+      </li>End Login Page Nav
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="pages-error-404.html">
+          <i class="bi bi-dash-circle"></i>
+          <span>Error 404</span>
+        </a>
+      </li>End Error 404 Page Nav
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="pages-blank.html">
+          <i class="bi bi-file-earmark"></i>
+          <span>Blank</span>
+        </a>
+      </li> --><!-- End Blank Page Nav -->
+
+
+	<main id="main" class="main">
+
+		<div class="pagetitle d-flex mb-0">
+			<i class="bi bi-chevron-double-left toggle-sidebar-btn mb-1" onclick="toggleIconRotation()"
+				style="font-size:24px;color:#2F73B9;padding:0 10px;margin-left:-10px;margin-top:-10px"></i>
+			<nav>
+				<ol class="breadcrumb mb-0">
+					<li class="breadcrumb-item"><a href="userDashboard">Home</a></li>
+					<li class="breadcrumb-item active">My Favorite</li>
+				</ol>
+			</nav>
+		</div><!-- End Page Title -->
+
+
+		<section class="section dashboard" style="margin-left: 8px;">
+			<div class="card mt-0 pt-0 ">
+				<div class="card-body  mb-0" >
+					<h5 class="card-title mb-0">To-Chat & Remind</h5>
+
+					<!-- Bordered Tabs Justified -->
+					<ul class="nav nav-tabs nav-tabs-bordered d-flex" id="borderedTabJustified" role="tablist">
+
+						<li class="nav-item flex-fill" role="presentation">
+							<button class="nav-link w-100 active" id="profile-tab" data-bs-toggle="tab"
+								data-bs-target="#bordered-justified-profile" type="button" role="tab"
+								aria-controls="profile" aria-selected="false">MSPL Chat</button>
+						</li>
+						<li class="nav-item flex-fill" role="presentation">
+							<button class="nav-link w-100 " id="home-tab" data-bs-toggle="tab"
+								data-bs-target="#bordered-justified-home" type="button" role="tab" aria-controls="home"
+								aria-selected="true">Todo List</button>
+						</li>
+						<!--   <li class="nav-item flex-fill" role="presentation">
+	                 <button class="nav-link w-100" id="contact-tab" data-bs-toggle="tab" data-bs-target="#bordered-justified-contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Word Scramble</button>
+	               </li>-->
+					</ul>
+					<!--hgghfgh-->
+
+					<div class="tab-content pt-2" id="borderedTabJustifiedContent">
+						<!-- Todo List Tab -->
+						<div class="tab-pane fade" id="bordered-justified-home" role="tabpanel"
+							aria-labelledby="home-tab">
+							<section class="vh-100 gradient-custom">
+								<div class="container py-5 h-100">
+
+									<div class="row d-flex justify-content-center align-items-center h-100">
+										<div class="col col-xl-12">
+											<div class="card shadow-none">
+												<!-- Set max height and overflow for scrolling -->
+												<div class="card-body p-2">
+													<p class="h1 text-center mt-2 mb-4 pb-3 text-primary">
+														<i class="fas fa-check-square me-1"></i>
+														<u>My Todo-s</u>
+													</p>
+													<form class="d-flex justify-content-center align-items-center mb-4"
+														th:action="@{/todolist}" th:method="post">
+														<div class="form-outline flex-grow-1 me-2">
+															<input type="text" id="taskDescription"
+																name="taskDescription" class="form-control"
+																placeholder="Enter Your TodoList..." required
+																oninput="toggleAddButton()" />
+														</div>
+														<button type="button" class="btn btn-info" id="addButton"
+															onclick="showDeadlineModal()" disabled>Add</button>
+
+														<!-- Modal for Deadline -->
+														<div class="modal fade" id="deadlineModal" tabindex="-1"
+															aria-labelledby="deadlineModalLabel" aria-hidden="true">
+															<div class="modal-dialog">
+																<div class="modal-content">
+																	<div class="modal-header">
+																		<h5 class="modal-title" id="deadlineModalLabel">
+																			Set Deadline</h5>
+																		<button type="button" class="btn-close"
+																			data-bs-dismiss="modal"
+																			aria-label="Close"></button>
+																	</div>
+																	<div class="modal-body">
+																		<div class="form-outline">
+																			<label for="deadlineDate"
+																				class="form-label">Choose Deadline
+																				Date</label>
+																			<input type="date" id="deadlineDate"
+																				name="deadlinedate" class="form-control"
+																				required />
+																		</div>
+																		<div class="form-outline mt-3">
+																			<label for="deadlineTime"
+																				class="form-label">Choose Deadline
+																				Time</label>
+																			<input type="time" id="deadlineTime"
+																				name="deadlinetime" class="form-control"
+																				required />
+																		</div>
+																	</div>
+																	<div class="modal-footer">
+																		<button type="button" class="btn btn-secondary"
+																			data-bs-dismiss="modal">Close</button>
+																		<button type="submit" class="btn btn-info">Save
+																			Task</button>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</form>
+
+													<!-- Tabs navs -->
+													<ul class="nav nav-tabs nav-tabs-bordered mb-4 w-100" id="ex1"
+														role="tablist">
+														<li class="nav-item flex-fill" role="presentation">
+															<a class="nav-link text-center py-3 px-4 active"
+																id="ex1-tab-1" data-bs-toggle="tab" href="#ex1-tabs-1"
+																role="tab" aria-controls="ex1-tabs-1"
+																aria-selected="true">All Note</a>
+														</li>
+														<li class="nav-item flex-fill" role="presentation">
+															<a class="nav-link text-center py-3 px-4" id="ex1-tab-2"
+																data-bs-toggle="tab" href="#ex1-tabs-2" role="tab"
+																aria-controls="ex1-tabs-2" aria-selected="false">Active
+																Note</a>
+														</li>
+														<li class="nav-item flex-fill" role="presentation">
+															<a class="nav-link text-center py-3 px-4" id="ex1-tab-3"
+																data-bs-toggle="tab" href="#ex1-tabs-3" role="tab"
+																aria-controls="ex1-tabs-3"
+																aria-selected="false">Completed Note</a>
+														</li>
+													</ul>
+
+
+
+													<!-- Tabs content -->
+													<div class="tab-content" id="ex1-content">
+														<div class="tab-pane fade show active" id="ex1-tabs-1"
+															role="tabpanel" aria-labelledby="ex1-tab-1">
+															<ul id="taskList" class="list-group mb-0"></ul>
+														</div>
+
+														<div class="tab-pane fade" id="ex1-tabs-2" role="tabpanel"
+															aria-labelledby="ex1-tab-2">
+															<ul id="taskListActive" class="list-group mb-0"></ul>
+														</div>
+														<div class="tab-pane fade" id="ex1-tabs-3" role="tabpanel"
+															aria-labelledby="ex1-tab-3">
+															<ul id="taskListCompleted" class="list-group mb-0"></ul>
+														</div>
+													</div>
+													<!-- Tabs content -->
+
+												</div>
+											</div>
+										</div>
+									</div>
+
+								</div>
+							</section>
+						</div>
+
+
+						<script>
+							function toggleAddButton() {
+								const input = document.getElementById('taskDescription');
+								const addButton = document.getElementById('addButton');
+								addButton.disabled = input.value.trim() === ''; // Disable if input is empty
+							}
+						</script>
+						<script>
+							function updateDeadlineConstraints() {
+								const dateInput = document.getElementById('deadlineDate');
+								const timeInput = document.getElementById('deadlineTime');
+
+								// Get current date and time
+								const now = new Date();
+								const year = now.getFullYear();
+								const month = String(now.getMonth() + 1).padStart(2, '0');
+								const day = String(now.getDate()).padStart(2, '0');
+								const hours = String(now.getHours()).padStart(2, '0');
+								const minutes = String(now.getMinutes()).padStart(2, '0');
+
+								// Set minimum date to today's date
+								dateInput.min = `${year}-${month}-${day}`;
+
+								// Add event listener to disable past time when today's date is selected
+								dateInput.addEventListener('input', () => {
+									if (dateInput.value === `${year}-${month}-${day}`) {
+										// If today, set the minimum time to the current time
+										timeInput.min = `${hours}:${minutes}`;
+									} else {
+										// Otherwise, reset the time input constraints
+										timeInput.min = '';
+									}
+								});
+							}
+
+							// Call the function when the modal is shown
+							document.getElementById('deadlineModal').addEventListener('show.bs.modal', updateDeadlineConstraints);
+						</script>
+						<div class="tab-pane fade show active" id="bordered-justified-profile" role="tabpanel"
+							aria-labelledby="profile-tab">
+							<!--	Nesciunt totam et. Consequuntur magnam aliquid eos nulla dolor iure eos quia. Accusantium
+						distinctio omnis et atque fugiat. Itaque doloremque aliquid sint quasi quia distinctio
+						similique. Voluptate nihil recusandae mollitia dolores. Ut laboriosam voluptatum dicta.-->
+							<!--		<div id="employee-list">
+						
+						       <ul id="employeeNames"></ul>
+						   </div>
+						                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+						<div id="chat-window"></div>                                           
+						   <input type="text" id="message" placeholder="Enter your message..." />
+						   <button onclick="sendMessage()">Send</button>-->
+
+							<div class="chat-app">
+								<div id="plist" class="people-list">
+									<div class="input-group mb-3">
+										<input type="text" id="searchInputModal" class="form-control"
+											placeholder="Search..." aria-label="Search">
+										<span class="input-group-text">
+											<i class="bi bi-search"></i>
+										</span>
+
+									</div>
+									<ul id="employeeNames" class="list-unstyled chat-list mt-2 mb-0">
+										<!-- Employee names will be dynamically populated here -->
+									</ul>
+								</div>
+
+								<div class="chat">
+									<div class="chat-header clearfix">
+										<div class="row w-100">
+
+											<!-- Employee Photo and Name Section -->
+											<div class="col-lg-6 d-flex align-items-center">
+												<div class="chat-about d-flex align-items-center">
+													<img id="employeePhoto" class="employee-photo"
+														src="default-avatar.png" alt="Employee Photo" />
+													<h6 class="m-b-0 ml-2" id="employeeName">Select an Employee</h6>
+												</div>
+											</div>
+											<!-- Right aligned three dots (Vertical) -->
+											<!--   <div class="col-lg-6 text-right">
+						                       <div class="dropdown custom-dropdown">
+						                           <button class="btn btn-outline-secondary" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+						                               <i class="fa fa-ellipsis-v"></i>
+						                           </button>
+						                           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+						                               <li><a class="dropdown-item" href="#">Delete Chat</a></li>
+						                               <li><a class="dropdown-item" href="#">Mute</a></li>
+						                               <li><a class="dropdown-item" href="#">Contact Info</a></li>
+						                           </ul>
+						                       </div>
+						                   </div>-->
+										</div>
+									</div>
+									<div id="chat-window" class="chat-history">
+										<ul class="m-b-0">
+											<!-- Chat messages will be populated here dynamically -->
+
+										</ul>
+										<div id="message-icon-container" class="message-icon" style="display: none;">
+
+											<!-- Plain square message icon SVG (behind) -->
+											<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+												<g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+												<g id="SVGRepo_tracerCarrier" stroke-linecap="round"
+													stroke-linejoin="round"></g>
+												<g id="SVGRepo_iconCarrier">
+													<path
+														d="M10 9H17M10 13H17M7 9H7.01M7 13H7.01M21 20L17.6757 18.3378C17.4237 18.2118 17.2977 18.1488 17.1656 18.1044C17.0484 18.065 16.9277 18.0365 16.8052 18.0193C16.6672 18 16.5263 18 16.2446 18H6.2C5.07989 18 4.51984 18 4.09202 17.782C3.71569 17.5903 3.40973 17.2843 3.21799 16.908C3 16.4802 3 15.9201 3 14.8V7.2C3 6.07989 3 5.51984 3.21799 5.09202C3.40973 4.71569 3.71569 4.40973 4.09202 4.21799C4.51984 4 5.0799 4 6.2 4H17.8C18.9201 4 19.4802 4 19.908 4.21799C20.2843 4.40973 20.5903 4.71569 20.782 5.09202C21 5.51984 21 6.0799 21 7.2V20Z"
+														stroke="#94b7db" stroke-width="2" stroke-linecap="round"
+														stroke-linejoin="round"></path>
+												</g>
+											</svg>
+
+											<!-- SVG with animation -->
+											<svg class="animated-icon" viewBox="0 0 374 374" fill="none"
+												xmlns="http://www.w3.org/2000/svg">
+												<g clip-path="url(#clip0)">
+													<path
+														d="M318.084 132.622C311.339 101.37 287.642 82 256.652 82C238.423 82 217.459 89.3248 197.954 102.509C191.574 106.904 182.642 106.904 176.079 102.672C155.298 88.9992 135.246 82 116.652 82C85.6626 82 61.9647 101.533 55.2199 133.111C44.2824 183.896 80.923 252.26 187.017 291C292.746 251.446 329.204 183.082 318.084 132.622Z" />
+													<path
+														d="M187.466 0C187.366 0 187.166 0 186.866 0C85.666 0 3.36603 82.3 3.36603 183.5C3.36603 224.8 17.466 264.9 43.266 297.2L16.566 359.3C14.366 364.4 16.766 370.3 21.766 372.4C23.566 373.2 25.566 373.4 27.466 373.1L125.366 355.9C144.966 363 165.566 366.6 186.366 366.5C287.566 366.5 369.866 284.2 369.866 183C370.066 82.1 288.366 0.1 187.466 0ZM192.966 269.8C188.966 271.3 184.666 271.3 180.666 269.8C149.066 257.1 124.466 238.3 109.466 215.4C95.966 194.7 90.766 171.4 94.866 149.9C100.466 121.4 121.866 102.3 148.266 102.3C160.966 102.3 173.866 106.5 186.766 114.7C199.366 106.5 212.466 102.3 225.066 102.3C251.866 102.3 272.866 120.9 278.466 149.6C286.066 188.8 262.666 241.3 192.966 269.8Z" />
+												</g>
+												<defs>
+													<clipPath id="clip0">
+														<rect width="373.232" height="373.232" fill="white" />
+													</clipPath>
+												</defs>
+											</svg>
+
+
+
+											<!-- Dots Animation -->
+											<div class="dots">
+												<div class="dot"></div>
+												<div class="dot"></div>
+												<div class="dot"></div>
+											</div>
+
+
+
+
+										</div>
+
+
+									</div>
+									<!-- Move the paragraph outside the chat window -->
+									<p id="logo-text"
+										style="text-align: center; font-size: 14px; color: #6c757d; margin-top: 10px; display: none;">
+										"Reach out to your colleagues and stay on top of your projects with quick,
+										seamless communication."
+									</p>
+									<div class="chat-message clearfix">
+										<div class="custom-input-group mb-0">
+											<input type="text" id="message" class="custom-form-control"
+												placeholder="Enter your message..." />
+											<div class="custom-input-group-append">
+												<button class="custom-send-btn" onclick="sendMessage()">
+													<i class="ri ri-send-plane-2-fill"></i>
+												</button>
+											</div>
+										</div>
+
+									</div>
+								</div>
+							</div>
+
+						</div>
+						<div id="notification-area" style="position: fixed; top: 20px; right: 20px; z-index: 1000;">
+							<!-- Notifications will be dynamically added here -->
+						</div>
+
+						<div class="tab-pane fade" id="bordered-justified-contact" role="tabpanel"
+							aria-labelledby="contact-tab">
+
+							<!--  <div id="word-scramble-game">
+						         <p id="scrambled-word" class="h4"></p>
+						         <input type="text" id="user-input" class="form-control" placeholder="Unscramble the word" />
+						         <button id="submit-answer" class="btn btn-primary mt-2">Submit</button>
+						         <p id="result-message" class="mt-2"></p>
+						     </div>-->
+
+						</div>
+					</div><!-- End Bordered Tabs Justified -->
+
+
+
+
+
+				</div>
+			</div>
+
+			<!-- Edit Task Modal -->
+			<div class="modal fade" id="editTaskModal" tabindex="-1" aria-labelledby="editTaskModalLabel"
+				aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="editTaskModalLabel">Edit Task</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<div class="modal-body">
+							<input type="hidden" id="editTaskId">
+							<div class="mb-3">
+								<label for="editTaskDescription" class="form-label">Task Description</label>
+								<textarea class="form-control" id="editTaskDescription" rows="3"></textarea>
+							</div>
+							<div class="mb-3">
+								<label for="editTaskDeadlineDate" class="form-label">Deadline Date</label>
+								<input type="date" class="form-control" id="editTaskDeadlineDate">
+							</div>
+							<div class="mb-3">
+								<label for="editTaskDeadlineTime" class="form-label">Deadline Time</label>
+								<input type="time" class="form-control" id="editTaskDeadlineTime">
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+							<button type="button" class="btn btn-primary" id="saveTaskChanges">Save changes</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<script>
+				function updateEditTaskDeadlineConstraints() {
+					const dateInput = document.getElementById('editTaskDeadlineDate');
+					const timeInput = document.getElementById('editTaskDeadlineTime');
+
+					// Get current date and time
+					const now = new Date();
+					const year = now.getFullYear();
+					const month = String(now.getMonth() + 1).padStart(2, '0');
+					const day = String(now.getDate()).padStart(2, '0');
+					const hours = String(now.getHours()).padStart(2, '0');
+					const minutes = String(now.getMinutes()).padStart(2, '0');
+
+					// Set minimum date to today's date
+					dateInput.min = `${year}-${month}-${day}`;
+
+					// Add event listener to disable past time when today's date is selected
+					dateInput.addEventListener('input', () => {
+						if (dateInput.value === `${year}-${month}-${day}`) {
+							// If today, set the minimum time to the current time
+							timeInput.min = `${hours}:${minutes}`;
+						} else {
+							// Otherwise, reset the time input constraints
+							timeInput.min = '';
+						}
+					});
+				}
+
+				// Call the function when the modal is shown
+				document.getElementById('editTaskModal').addEventListener('show.bs.modal', updateEditTaskDeadlineConstraints);
+			</script>
+
+
+
+			<!-- Feedback Modal -->
+			<div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel"
+				aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered custom-modal-width "
+					style="max-height: 150vh; top: -15%;">
+					<div class="modal-content rounded-4 shadow-lg ">
+						<div class="modal-header border-0">
+							<h5 class="modal-title" id="feedbackModalLabel">Feedback Form</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<div class="modal-body">
+							<form id="feedbackForm" method="post" enctype="multipart/form-data">
+								<div class="mb-3" style="display: none;">
+									<label for="feedbackName" class="form-label fw-bold">Your Name</label>
+									<input type="text" class="form-control" id="feedbackName" name="name"
+										th:value="${empDetailsByEmpId.fullName}" readonly>
+								</div>
+								<div class="mb-3" style="display: none;">
+									<label for="feedbackEmail" class="form-label fw-bold">Your Email</label>
+									<input type="email" class="form-control" id="feedbackEmail" name="email"
+										th:value="${empDetailsByEmpId.email}" readonly>
+								</div>
+								<div class="mb-3">
+									<label for="feedbackEmailyy" class="form-label fw-bold">To</label>
+									<div class="to-field-container">
+										<span
+											class="to-field rounded-pill px-3 py-2 shadow-sm">bugs_msplconnect@melangesystems.com</span>
+									</div>
+								</div>
+								<div class="mb-3">
+									<label for="bugType" class="form-label fw-bold">Bug Type</label>
+									<select class="form-control" id="bugType" name="bugType" required>
+										<option value="MSPL Connect Application">MSPL Connect Application</option>
+										<option value="MSPL Connect New Feature">MSPL Connect New Feature</option>
+									</select>
+								</div>
+								<div class="mb-3">
+									<label for="feedbackMessage" class="form-label fw-bold">Message</label>
+									<textarea class="form-control" id="feedbackMessage" name="message" rows="4"
+										placeholder="Enter your feedback here..." required></textarea>
+								</div>
+								<div class="mb-3">
+									<label for="feedbackAttachment" class="form-label fw-bold">Attachment
+										(optional)</label>
+									<input type="file" class="form-control" id="feedbackAttachment" name="attachment"
+										accept=".png, .jpg, .jpeg" multiple>
+									<small class="text-muted">Max size: 5MB. You can upload multiple images.</small>
+								</div>
+								<button type="submit" class="btn btn-primary w-100 mt-3 py-2 shadow-sm"
+									id="submitFeedbackBtn">Submit Feedback</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+
+		</section>
+
+	</main><!-- End #main -->
+
+	<script>
+
+
+
+		// Closing the modal and removing any extra backdrops
+		$('#feedbackModal').on('shown.bs.modal', function () {
+			$('.modal-backdrop').not(':first').remove();  // Ensure only one backdrop remains
+		});
+
+
+
+		document.getElementById("feedbackForm").addEventListener("submit", function (event) {
+			event.preventDefault(); // Prevent default form submission
+
+			const submitButton = document.getElementById("submitFeedbackBtn");
+			submitButton.disabled = true; // Disable the submit button to prevent multiple submissions
+
+			const loadingSwal = Swal.fire({
+				title: 'Submitting feedback...',
+				text: 'Please wait while we submit your feedback.',
+				showConfirmButton: false,
+				allowOutsideClick: false,
+				didOpen: () => {
+					Swal.showLoading(); // Display the loading spinner
+				}
+			});
+
+			// Prepare form data
+			let formData = new FormData(this);
+
+			// Append files only once with unique keys
+			let files = document.getElementById("feedbackAttachment").files;
+			if (files.length > 0) {
+				for (let i = 0; i < files.length; i++) {
+					formData.append(`attachment[${i}]`, files[i]); // Use unique keys
+				}
+			}
+
+			let bugType = document.getElementById("bugType").value;
+			formData.append("bugTypeff", bugType); // Add the bug type to the form data
+
+			// Debugging: Log formData entries before the fetch call
+			console.log("Logging formData entries:");
+			for (let [key, value] of formData.entries()) {
+				if (value instanceof File) {
+					console.log(`Key: ${key}, File Name: ${value.name}, Size: ${value.size}`);
+				} else {
+					console.log(`Key: ${key}, Value: ${value}`);
+				}
+			}
+
+			// Make AJAX request
+			fetch("/submitFeedback", {
+				method: "POST",
+				body: formData
+			})
+				.then(response => response.json())
+				.then(data => {
+					loadingSwal.close();
+					submitButton.disabled = false; // Re-enable the button
+					if (data.success) {
+						$('#feedbackModal').modal('hide');
+						document.body.classList.remove('modal-open');
+						document.querySelector('.modal-backdrop')?.remove();
+						Swal.fire({
+							title: 'Success!',
+							text: 'Your feedback has been submitted successfully.',
+							icon: 'success',
+							confirmButtonText: 'OK'
+						});
+					} else {
+						Swal.fire({
+							title: 'Error!',
+							text: 'There was an error submitting your feedback.',
+							icon: 'error',
+							confirmButtonText: 'OK'
+						});
+					}
+				})
+				.catch(error => {
+					console.error('Error:', error);
+					loadingSwal.close();
+					submitButton.disabled = false; // Re-enable the button
+					Swal.fire({
+						title: 'Error!',
+						text: 'There was an error submitting your feedback.',
+						icon: 'error',
+						confirmButtonText: 'OK'
+					});
+				});
+		});
+
+		// Clear form fields when the modal is closed
+		document.getElementById('feedbackModal').addEventListener('hidden.bs.modal', function () {
+			const feedbackForm = document.getElementById('feedbackForm');
+			feedbackForm.reset(); // Reset the form fields
+			document.getElementById('feedbackAttachment').value = ""; // Clear file input manually
+		});
+	</script>
+
+	<script>
+
+		/*	 async function fetchRandomCity() {
+				 try {
+					 const response = await fetch('https://random-data-api.com/api/city/random_city');
+					 if (!response.ok) {
+						 throw new Error('Network response was not ok');
+					 }
+					 const data = await response.json();
+					 return data.city; // Returns the random city name
+				 } catch (error) {
+					 console.error('Error fetching random city:', error);
+				 }
+			 }
+	
+			 // Example usage within your game structure
+			 let currentWord = '';
+			 let usedWords = []; // Array to track used words
+			 let timer;
+			 let score = 0;
+	
+			 // Function to start the game
+			 async function start() {
+				 score = 0; // Reset score
+				 document.querySelector('.score').textContent = score;
+				 document.querySelector('.content').style.display = 'block'; // Show game content
+				 await fetchWord(); // Fetch initial word
+				 startTimer(30); // Start the timer
+			 }
+	
+			 // Function to fetch a random city and set it as the current word
+			 async function fetchWord() {
+				 if (usedWords.length >= 30) { // Change this condition as needed
+					 showModal('All words have been used. Please refresh to try again.'); // All words used
+					 return;
+				 }
+	
+				 let randomCity;
+				 do {
+					 randomCity = await fetchRandomCity(); // Fetch a new random city
+				 } while (usedWords.includes(randomCity)); // Avoid used words
+	
+				 currentWord = randomCity; // Get the random city
+				 usedWords.push(currentWord); // Add to used words
+				 const scrambledWord = scrambleWord(currentWord); // Scramble the word
+				 displayWord(scrambledWord); // Display the scrambled word
+			 }
+	
+			 // Function to scramble the word
+			 function scrambleWord(word) {
+				 const scrambledArray = word.split('');
+				 for (let i = scrambledArray.length - 1; i > 0; i--) {
+					 const j = Math.floor(Math.random() * (i + 1));
+					 [scrambledArray[i], scrambledArray[j]] = [scrambledArray[j], scrambledArray[i]];
+				 }
+				 return scrambledArray.join('');
+			 }
+	
+			 // Function to display the scrambled word
+			 function displayWord(scrambledWord) {
+				 document.querySelector('.word').textContent = scrambledWord;
+			 }
+	
+			 // Timer function
+			 function startTimer(duration) {
+				 let timerDisplay = document.querySelector('.time span b');
+				 timer = duration;
+				 const interval = setInterval(() => {
+					 if (timer <= 0) {
+						 clearInterval(interval);
+						 showModal('Time is up! Your score is: ' + score);
+						 document.querySelector('.content').style.display = 'none'; // Hide game content
+					 } else {
+						 timerDisplay.textContent = timer;
+						 timer--;
+					 }
+				 }, 1000);
+			 }
+	
+			 // Event listeners for buttons
+			 document.querySelector('.refresh-word').addEventListener('click', fetchWord);
+			 document.querySelector('.check-word').addEventListener('click', () => {
+				 const userInput = document.querySelector('input').value.trim().toLowerCase();
+				 if (userInput === currentWord.toLowerCase()) { // Compare in lower case
+					 score++;
+					 document.querySelector('.score').textContent = score;
+					 showModal('Correct! Your score is: ' + score);
+					 fetchWord(); // Fetch a new word
+				 } else {
+					 showModal('Wrong! Try again.');
+				 }
+				 document.querySelector('input').value = ''; // Clear input
+			 });
+	
+			 // Modal handling                                                  
+			 function showModal(message) {
+				 document.getElementById('modalText').textContent = message;
+				 document.getElementById('myModal').style.display = 'block';
+			 }
+	
+			 document.querySelector('.close').onclick = function() {
+				 document.getElementById('myModal').style.display = 'none';
+			 };
+																																																																																																																																																																																																				 
+			 window.onclick = function(event) {
+				 if (event.target == document.getElementById('myModal')) {
+					 document.getElementById('myModal').style.display = 'none';
+				 }
+			 };
+	
+			 // Start the game on page load or when the user clicks a start button
+			 document.querySelector('.start-button').addEventListener('click', start);*/
+	</script>
+
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			// Fetch the tasks when the page loads
+			fetchTasks();
+
+			// Add event listener to handle task creation
+			/*  document.getElementById('addTaskForm').addEventListener('submit', function(e) {
+				  e.preventDefault();
+				  addTask();
+			  });*/
+
+
+			const saveButton = document.getElementById('saveTaskChanges');
+			console.log("Save button found:", saveButton); // Check if this logs the button element
+			if (saveButton) {
+				saveButton.addEventListener('click', function () {
+					console.log("Save changes button clicked");
+					const taskId = document.getElementById('editTaskId').value;
+					const newDescription = document.getElementById('editTaskDescription').value;
+					const newDeadlineDate = document.getElementById('editTaskDeadlineDate').value;
+					const newDeadlineTime = document.getElementById('editTaskDeadlineTime').value;
+					console.log(`Task ID: ${taskId}, New Description: ${newDescription}`);
+					updateTaskDescription(taskId, newDescription, newDeadlineDate, newDeadlineTime);
+					// Close the modal after saving
+					let modalElement = document.getElementById('editTaskModal');
+					let modal = bootstrap.Modal.getInstance(modalElement);
+					modal.hide();
+				});
+			} else {
+				console.error('Save button not found');
+			}
+
+
+
+		});
+
+
+
+		// Function to fetch the tasks using AJAX
+		function fetchTasks() {
+			fetch('/tasks', {
+				method: 'GET'
+			})
+				.then(response => response.json())
+				.then(tasks => {
+					updateTaskLists(tasks);
+				})
+				.catch(error => console.error('Error fetching tasks:', error));
+		}
+
+		// Function to update task lists for all tabs
+		function updateTaskLists(tasks) {
+			const taskListAll = document.getElementById('taskList');
+			const taskListActive = document.getElementById('taskListActive');
+			const taskListCompleted = document.getElementById('taskListCompleted');
+
+			// Clear the lists before appending new items
+			taskListAll.innerHTML = '';
+			taskListActive.innerHTML = '';
+			taskListCompleted.innerHTML = '';
+
+			tasks.forEach(task => {
+				const taskItem = createTaskItem(task);
+
+				// Append to the appropriate list based on completion status
+				taskListAll.innerHTML += taskItem;
+				if (task.completed) {
+					taskListCompleted.innerHTML += taskItem;
+				} else {
+					taskListActive.innerHTML += taskItem;
+				}
+			});
+
+			// Add event listeners to the checkboxes
+			document.querySelectorAll('.task-checkbox').forEach(checkbox => {
+				checkbox.addEventListener('change', function () {
+					const taskId = this.getAttribute('data-task-id');
+					const completed = this.checked;
+
+					// Send status update to the server
+					updateTaskStatus(taskId, completed);
+				});
+			});
+
+			// Add event listeners to edit buttons
+			document.querySelectorAll('.edit-task').forEach(editButton => {
+				editButton.addEventListener('click', function () {
+					const taskId = editButton.getAttribute('data-task-id');
+					openEditModal(taskId);
+				});
+			});
+
+			// Add event listeners to delete buttons
+			document.querySelectorAll('.delete-task').forEach(deleteButton => {
+				deleteButton.addEventListener('click', function () {
+					const taskId = deleteButton.getAttribute('data-task-id');
+					deleteTask(taskId);
+				});
+			});
+		}
+
+		function createTaskItem(task) {
+			return `
+		        <li class="list-group-item d-flex align-items-center justify-content-between border-0 mb-2 rounded" style="background-color: #f4f6f7;">
+		            <div class="d-flex align-items-center">
+		                <input class="form-check-input me-2 task-checkbox" type="checkbox" data-task-id="${task.id}" ${task.completed ? 'checked' : ''} />
+		                <span ${task.completed ? 'style="text-decoration: line-through;"' : ''}>${task.description}</span>
+		            </div>
+		            <div class="d-flex flex-row justify-content-end mb-1">
+		                <span class="text-muted ms-2">${task.deadlinedate} ${task.deadlinetime}</span> <!-- Display deadline -->
+		                <a href="#!" class="text-info edit-task" data-task-id="${task.id}" data-mdb-tooltip-init title="Edit todo">
+		                    <i class="fas fa-pencil-alt me-3"></i>
+		                </a>
+		                <a href="#!" class="text-danger delete-task" data-task-id="${task.id}" data-mdb-tooltip-init title="Delete todo">
+		                    <i class="fas fa-trash-alt"></i>
+		                </a>
+		            </div>
+		        </li>`;
+		}
+
+		// Function to show the deadline modal
+		function showDeadlineModal() {
+			// Show the modal using Bootstrap’s modal API
+			var myModal = new bootstrap.Modal(document.getElementById('deadlineModal'));
+			myModal.show();
+		}
+
+		// Function to open modal and populate it with task details
+		function openEditModal(taskId) {
+			fetch(`/getTask/${taskId}`, {
+				method: 'GET',
+			})
+				.then(response => response.json())
+				.then(task => {
+					// Populate modal with task details
+					document.getElementById('editTaskId').value = task.id;
+					document.getElementById('editTaskDescription').value = task.description;
+					document.getElementById('editTaskDeadlineDate').value = task.deadlinedate; // Populate deadline date
+					document.getElementById('editTaskDeadlineTime').value = task.deadlinetime; // Populate deadline time
+
+					// Show the modal
+					let editTaskModal = new bootstrap.Modal(document.getElementById('editTaskModal'));
+					editTaskModal.show();
+				})
+				.catch(error => console.error('Error fetching task details:', error));
+		}
+
+
+		// Function to update the task description on the server
+		function updateTaskDescription(taskId, newDescription, newDeadlineDate, newDeadlineTime) {
+			fetch('/updateTaskDescription', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					taskId: taskId,
+					description: newDescription,
+					deadlinedate: newDeadlineDate,
+					deadlinetime: newDeadlineTime
+				})
+			})
+				.then(response => response.text())
+				.then(result => {
+					console.log(result);
+					// Show success message
+					Swal.fire({
+						title: 'Saved!',
+						text: 'Your changes have been saved successfully.',
+						icon: 'success',
+						confirmButtonColor: '#3085d6'
+					}).then(() => {
+						// After showing success message, fetch updated tasks
+						fetchTasks();
+					});
+				})
+				.catch(error => console.error('Error updating task description:', error));
+		}
+
+		// Function to update the task status on the server
+		function updateTaskStatus(taskId, completed) {
+			fetch('/updateTaskStatus', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					taskId: taskId,
+					completed: completed
+				})
+			})
+				.then(response => response.text())
+				.then(result => {
+					console.log(result);
+					// After updating the task status, fetch the updated tasks
+					fetchTasks();
+				})
+				.catch(error => console.error('Error updating task status:', error));
+		}
+
+		// Function to delete a task with confirmation
+		function deleteTask(taskId) {
+			Swal.fire({
+				title: 'Are you sure?',
+				text: "You won't be able to revert this!",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Yes, delete it!',
+				cancelButtonText: 'Cancel'
+			}).then((result) => {
+				if (result.isConfirmed) {
+					fetch(`/deleteTask/${taskId}`, {
+						method: 'DELETE'
+					})
+						.then(response => response.text())
+						.then(result => {
+							console.log(result);
+							// After deleting the task, show success message and fetch the updated tasks
+							Swal.fire({
+								title: 'Deleted!',
+								text: 'Your task has been deleted successfully.',
+								icon: 'success',
+								confirmButtonColor: '#3085d6'
+							}).then(() => {
+								fetchTasks();
+							});
+						})
+						.catch(error => console.error('Error deleting task:', error));
+				}
+			});
+		}
+
+
+
+	</script>
+
+
+
+
+	<!-- ======= Footer ======= -->
+	<!-- ======= Footer ======= -->
+	<!--<footer id="footer" class="footer">
+			<div class="copyright">
+				Copyright &copy; <span id="currentYear"></span> <strong><span>Melange Systems Private
+						Limited</span></strong>. All Rights Reserved
+			</div>
+		</footer>-->
+
+	<script>
+		/*	var currentYear = new Date().getFullYear();
+			document.getElementById("currentYear").innerHTML = currentYear;*/
+	</script>
+
+	<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+			class="bi bi-arrow-up-short"></i></a>
+
+	<!-- Vendor JS Files -->
+	<script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+	<script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script src="assets/vendor/chart.js/chart.umd.js"></script>
+	<script src="assets/vendor/echarts/echarts.min.js"></script>
+	<script src="assets/vendor/quill/quill.js"></script>
+	<script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+	<script src="assets/vendor/tinymce/tinymce.min.js"></script>
+	<script src="assets/vendor/php-email-form/validate.js"></script>
+
+	<!-- Template Main JS File -->
+	<script src="assets/js/main.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+	<script>
+		function getLeavePendingCount() {
+			$.ajax({
+				type: 'GET',
+				url: '/getProjectNames',
+				success: function (projectNames) {
+					console.log('Project namesssss:', projectNames);
+
+					if (projectNames.length > 0) {
+						projectNames.forEach(function (projectName) {
+							console.log('Fetching notifications for project:', projectName); // Debug log
+							getNotificationCounts(projectName); // Pass projectName here
+						});
+					} else {
+
+						console.error('No project names found for the given user.');
+						$('#notification_list_message').text('No projects found for your email.');
+						$('#defaultBox').show();
+						getDefaultNotificationCounts();
+
+					}
+				},
+				error: function (xhr, status, error) {
+					console.error('Error fetching project names:', error);
+					$('#notification_list_message').text('Error fetching project names. Please try again later.');
+					$('#defaultBox').show();
+					getDefaultNotificationCounts();
+
+				}
+			});
+		}
+
+
+		function getNotificationCounts(projectName) {
+			console.log('Inside getNotificationCounts for project:', projectName);
+			$.ajax({
+				type: 'GET',
+				url: 'fetchNotificationCountForAllPages',
+				data: {projectName: projectName},
+				success: function (data) {
+					console.log("=======" + JSON.stringify(data));
+
+					var totalNotificationCount = data.total_notification;
+					var leavePendingCountValue = data.leave_pending_count;
+					var newProjectCountValue = data.newProjectCount;
+					var appraisalCountValue = data.appraisalCountValue;
+					var appraisalTwoDaysCountValue = data.appraisalTwoDaysCountValue;
+					var appraisalOneDayCountValue = data.appraisalOneDayCountValue;
+					var ToDoListNotification = data.toDoListNotification;
+					var eventsNotification = data.eventsNotification;
+					var featuresNotification = data.featuresNotification;
+
+					$('#notificationCount').text(totalNotificationCount);
+					updateNotificationDetailData(totalNotificationCount, leavePendingCountValue, newProjectCountValue, appraisalCountValue, appraisalTwoDaysCountValue, appraisalOneDayCountValue, ToDoListNotification, eventsNotification, featuresNotification);
+				},
+				error: function (xhr, status, error) {
+					console.error('Error fetching data:', error);
+					console.log('Error fetching data. Please try again.');
+				}
+			});
+		}
+
+		function getDefaultNotificationCounts() {
+			//console.log('Fetching general notification counts.');
+			$.ajax({
+				type: 'GET',
+				url: 'fetchNotificationCountForAllPagesWithoutProject',
+				success: function (data) {
+					console.log("General notification data:", JSON.stringify(data));
+
+					var totalNotificationCount = data.total_notification || 0;
+					var leavePendingCountValue = data.leave_pending_count || 0;
+					var newProjectCountValue = data.newProjectCount || 0;
+					var appraisalCountValue = data.appraisalCountValue || 0;
+					var appraisalTwoDaysCountValue = data.appraisalTwoDaysCountValue || 0;
+					var appraisalOneDayCountValue = data.appraisalOneDayCountValue || 0;
+					var toDoListNotification = data.toDoListNotification || 0;
+					var eventsNotification = data.eventsNotification || 0;
+					var featuresNotification = data.featuresNotification || 0;
+					$('#notificationCount').text(totalNotificationCount);
+					updateNotificationDetailData(totalNotificationCount, leavePendingCountValue, newProjectCountValue, appraisalCountValue, appraisalTwoDaysCountValue, appraisalOneDayCountValue, toDoListNotification, eventsNotification, featuresNotification);
+				},
+				error: function (xhr, status, error) {
+					//console.error('Error fetching general notifications:', error);
+					$('#notification_list_message').text('Error fetching notifications. Please try again later.');
+				}
+			});
+		}
+
+
+		$(document).ready(function () {
+			getLeavePendingCount();
+			setInterval(getLeavePendingCount, 1000);
+		});
+
+		function updateNotificationDetailData(totalNotificationCount, leavePendingCountValue, newprojectCountValue, appraisalCountValue, appraisalTwoDaysCountValue, appraisalOneDayCountValue, ToDoListNotification, eventsNotification, featuresNotification) {
+			var emptyNotifyDiv = $('#emptyNotifyDiv');
+			//var leaveRequestNotifyDiv = $('#leaveRequestNotifyDiv');
+
+			var leaveRequestNotifyDiv = $('#leaveRequestNotifyDiv');
+			var leaveRequestNotifyDivHorizontalRow = $('#leaveRequestNotifyDivHorizontalRow');
+
+			var moatNewCandidateNotifyDiv = $('#moatNewCandidateNotifyDiv');
+			var moatNewCandidateNotifyDivHorizontalRow = $('#moatNewCandidateNotifyDivHorizontalRow');
+
+			var appraisalNotifyDiv = $('#appraisalNotifyDiv');
+			var appraisalNotifyDivHorizontalRow = $('#appraisalNotifyDivHorizontalRow');
+
+			var appraisalTwoDaysNotifyDiv = $('#appraisalTwoDaysNotifyDiv');
+			var appraisalTwoDaysNotifyDivHorizontalRow = $('#appraisalTwoDaysNotifyDivHorizontalRow');
+
+			var appraisalOneDayNotifyDiv = $('#appraisalOneDayNotifyDiv');
+			var appraisalOneDayNotifyDivHorizontalRow = $('#appraisalOneDayNotifyDivHorizontalRow');
+
+			var ToDoListNotifyDiv = $('#ToDoListNotifyDiv');
+			var ToDoListNotifyDivHorizontalRow = $('#ToDoListNotifyDivHorizontalRow');
+
+			var EventNotifyDiv = $('#EventNotifyDiv');
+			var EventNotifyDivHorizontalRow = $('#EventNotifyDivHorizontalRow');
+
+			var FeaturesNotifyDiv = $('#FeaturesNotifyDiv');
+			var FeaturesNotifyDivHorizontalRow = $('#FeaturesNotifyDivHorizontalRow');
+
+
+			if (totalNotificationCount > 0) {
+				$("#bellIcon").show();
+				$("#emptyNotifyDiv").hide();
+				$('#emptyNotificationHeaderMessage').text("");
+
+				if (leavePendingCountValue > 0) {
+					leaveRequestNotifyDiv.show();
+					$('#leaveNotificationMessage').text("You have " + leavePendingCountValue + " new leave Notification");
+					$('#leaveNotificationNumberHeader').text("Leave Request!");
+				} else {
+					leaveRequestNotifyDiv.hide();
+				}
+				if (newprojectCountValue > 0) {
+					moatNewCandidateNotifyDiv.show();
+					moatNewCandidateNotifyDivHorizontalRow.show();
+					$('#moatNewCandidateNotificationMessage').text("There is " + newprojectCountValue + " New Project Task Assigned");
+					$('#moatNewCandidateNumberHeader').text("Project!");
+				} else {
+					moatNewCandidateNotifyDiv.hide();
+
+				} if (appraisalCountValue > 0) {
+					appraisalNotifyDiv.show();
+					appraisalNotifyDivHorizontalRow.show();
+					$('#appraisalNotificationMessage').text("There is " + appraisalCountValue + " Appraisal Form Assigned");
+					$('#appraisalNumberHeader').text("Appraisal!");
+				} else {
+					appraisalNotifyDiv.hide();
+				} if (appraisalTwoDaysCountValue > 0) {
+					appraisalTwoDaysNotifyDiv.show();
+					appraisalTwoDaysNotifyDivHorizontalRow.show();
+					$('#appraisalTwoDaysNotificationMessage').text("Reminder: Complete and submit your appraisal form at your earliest convenience.");
+					$('#appraisalTwoDaysNumberHeader').text("Appraisal!");
+				} else {
+					appraisalTwoDaysNotifyDiv.hide();
+				} if (appraisalOneDayCountValue > 0) {
+					appraisalOneDayNotifyDiv.show();
+					appraisalOneDayNotifyDivHorizontalRow.show();
+					$('#appraisalOneDayNotificationMessage').text("Reminder: Just one more day until the appraisal form submission deadline. Please take action!");
+					$('#appraisalOneDayNumberHeader').text("Appraisal!");
+				} else {
+					appraisalOneDayNotifyDiv.hide();
+				} if (ToDoListNotification > 0) {
+					ToDoListNotifyDiv.show();
+					ToDoListNotifyDivHorizontalRow.show();
+					$('#ToDoListNotificationMessage').text("Time is ticking! Don't forget to complete your task before the deadline.");
+					$('#ToDoListNumberHeader').text("TODO List!");
+				} else {
+					ToDoListNotifyDiv.hide();
+				} if (eventsNotification > 0) {
+					EventNotifyDiv.show();
+					EventNotifyDivHorizontalRow.show();
+					$('#EventNotificationMessage').text("There is  " + eventsNotification + " new event has been scheduled. Mark your calendars!");
+					$('#EventNumberHeader').text("Announcements!");
+				} else {
+					EventNotifyDiv.hide();
+				} if (featuresNotification > 0) {
+					FeaturesNotifyDiv.show();
+					FeaturesNotifyDivHorizontalRow.show();
+					$('#FeaturesNotificationMessage').text("There is  " + featuresNotification + " new feature update is now available! explore the latest enhancements.");
+					$('#FeaturesNumberHeader').text("Latest Update!");
+				} else {
+					FeaturesNotifyDiv.hide();
+				}
+			} else {
+				$("#bellIcon").hide();
+				$("#emptyNotifyDiv").show();
+				$('#emptyNotificationHeaderMessage').text("Currently there are no notifications");
+			}
+		}
+
+
+
+
+
+
+
+
+	</script>
+
+	<input type="hidden" th:value="${loggedInUserEmail}" id="loggedInMail">
+
+	<!--CHAT BOOT-->
+
+	<script>
+		/*    var stompClient = null;
+			var selectedEmployee = null;
+			var chatHistory = {}; // Object to store chat history for each employee
+			var employeeMap = {}; // To store the mapping of employee names to emails
+	
+			// Connect to the WebSocket server
+			function connect() {
+				var socket = new SockJS('/chat-websocket');
+				stompClient = Stomp.over(socket);
+	
+				// Get the logged-in user's email from the hidden input
+				var email = document.getElementById('loggedInMail').value;
+				console.log(`Connecting as: ${email}`);
+	
+				// Include email in the headers
+				stompClient.connect({ 'email': email }, function (frame) {
+					console.log('Connected: ' + frame);
+					stompClient.subscribe('/user/queue/messages', function (message) {
+						var msg = JSON.parse(message.body);
+						console.log(`Received message in subscription: ${JSON.stringify(msg)}`);
+						showMessage(msg.sender, msg.content);
+					});
+				});
+			}
+	
+			// Load employee names from the server
+			function loadEmployees() {
+				console.log("Loading employee names...");
+				fetch('/employees/names')
+					.then(response => response.json())
+					.then(data => {
+						var employeeList = document.getElementById('employeeNames');
+						employeeList.innerHTML = ''; // Clear the list before adding new items
+						data.forEach(function (employee) { // Assuming data is an array of {name: "...", email: "..."}
+							var li = document.createElement('li');
+							li.innerHTML = employee.name; // Display the name
+							employeeMap[employee.name] = employee.email; // Store the mapping
+							li.onclick = function () { 
+								console.log(`Selected employee: ${employee.name}`);
+								selectEmployee(employee.name); 
+							}; // Use name for selection
+							employeeList.appendChild(li);
+						});
+						console.log("Employee names loaded:", employeeMap);
+					})
+					.catch(error => console.error("Error loading employees:", error));
+			}
+	
+			// Load previous messages for the selected employee
+			function loadMessages() {
+				// Get the logged-in user's email
+				var email = document.getElementById('loggedInMail').value; 
+				console.log(`Loading messages for: ${email}`);
+	
+				fetch(`/messages?email=${encodeURIComponent(email)}`)
+					.then(response => response.json())
+					.then(data => {
+						console.log("Previous messages loaded:", data);
+						data.forEach(function (msg) {
+							showMessage(msg.senderEmail, msg.content); // Display messages using sender's email
+						});
+					})
+					.catch(error => console.error("Error loading messages:", error));
+			}
+	
+			// Select an employee to chat with
+			function selectEmployee(employeeName) {
+				selectedEmployee = employeeMap[employeeName]; // Get the email from the map
+				console.log(`Employee selected: ${selectedEmployee}`);
+	
+				// Highlight the selected employee
+				var employeeItems = document.querySelectorAll('#employeeNames li');
+				employeeItems.forEach(function (item) {
+					item.classList.remove('active');
+				});
+				var selectedItem = Array.from(employeeItems).find(item => item.innerHTML === employeeName);
+				if (selectedItem) {
+					selectedItem.classList.add('active');
+				}
+	
+				// Update chat header
+				document.querySelector('.chat-about h6').innerText = employeeName;
+	
+				// Load previous messages if they exist
+				loadChatHistory();
+			}
+	
+			// Send a message to the selected employee
+			function sendMessage() {
+				var messageContent = document.getElementById('message').value;
+				var loggedInEmail = document.getElementById('loggedInMail').value; // Get the logged-in user's email
+	
+				if (messageContent && stompClient && selectedEmployee) {
+					var chatMessage = {
+						content: messageContent,
+						recipientEmail: selectedEmployee, // Email of the recipient
+						senderEmail: loggedInEmail // Include the sender's email
+					};
+					console.log(`Sending message: "${messageContent}" to ${selectedEmployee}`); // Log message sending
+					console.log("Chat message object:", chatMessage); // Log the chat message object
+	
+					stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
+					showMessage("You", messageContent); // Show sent message in the chat window
+					storeMessage(selectedEmployee, "You", messageContent); // Store the sent message
+					document.getElementById('message').value = ''; // Clear the input field
+				} else {
+					alert("Please select an employee to send a message.");
+				}
+			}
+	
+			// Show a message in the chat window
+			// Show a message in the chat window
+			function showMessage(senderEmail, message) {
+				console.log(`Received message from ${senderEmail}: "${message}"`); // Log message received
+	
+				// Get the sender's full name using the employeeMap
+				const senderName = Object.keys(employeeMap).find(name => employeeMap[name] === senderEmail) || senderEmail;
+	
+				console.log("---"+senderName)
+				var chatWindow = document.getElementById('chat-window').querySelector('ul');
+				var li = document.createElement('li');
+				li.className = 'clearfix';
+				li.innerHTML = `<div class="message"><strong>${senderName}:</strong> ${message}</div>`;
+				chatWindow.appendChild(li);
+				chatWindow.scrollTop = chatWindow.scrollHeight; // Scroll to the bottom
+			}
+	
+	
+			// Store a message in the chat history
+			function storeMessage(employeeName, sender, message) {
+				if (!chatHistory[employeeName]) {
+					chatHistory[employeeName] = [];
+				}
+				chatHistory[employeeName].push({ sender: sender, content: message });
+			}
+	
+			// Load previous messages for the selected employee
+			function loadChatHistory() {
+				var chatWindow = document.getElementById('chat-window').querySelector('ul');
+				chatWindow.innerHTML = ''; // Clear the chat window
+	
+				if (chatHistory[selectedEmployee]) {
+					console.log(`Loading chat history for: ${selectedEmployee}`);
+					chatHistory[selectedEmployee].forEach(function (msg) {
+						showMessage(msg.sender, msg.content);
+					});
+				}
+			}
+	
+			// Connect to the WebSocket server and load employees when the page is loaded
+			window.onload = function () {
+				connect();
+				loadEmployees();
+				loadMessages();
+			};*/
+	</script>
+	<script>
+		var stompClient = null;
+		var selectedEmployee = null;
+		var chatHistory = {}; // Object to store chat history for each employee
+		var employeeMap = {}; // To store the mapping of employee names to emails
+		let employeePhotoMap = {};
+		let emailToNameMap = {}; // New map for email -> name lookup
+
+
+
+
+
+		function fetchEmployeePhotos() {
+			console.log("Fetching employee photos...");
+			fetch('/fetchEmployeeDetails')
+				.then(response => response.json())
+				.then(data => {
+					data.forEach(emp => {
+						// Map each employee's email to their photo path
+						employeePhotoMap[emp.email] = emp.profilePicPath || 'default-avatar.png';
+					});
+					console.log("Employee photos fetched:", employeePhotoMap);
+				})
+				.catch(error => console.error("Error fetching employee photos:", error));
+		}
+
+
+		// Connect to the WebSocket server
+		/*  function connect() {
+			  var socket = new SockJS('/chat-websocket');
+			  stompClient = Stomp.over(socket);
+  
+			  // Get the logged-in user's email from the hidden input
+			  var email = document.getElementById('loggedInMail').value;
+			  console.log(`Connecting as: ${email}`);
+  
+			  // Include email in the headers
+			  stompClient.connect({ 'email': email }, function (frame) {
+				  console.log('Connected: ' + frame);
+  
+				  // Subscribe to the user's message queue
+				  stompClient.subscribe('/user/queue/messages', function (message) {
+					  var msg = JSON.parse(message.body);
+					  console.log(`Received messagesdsd: ${JSON.stringify(msg)}`);
+  
+					  // Show the message only if it's for the selected employee
+					  if (selectedEmployee === msg.sender || selectedEmployee === msg.recipientEmail) {
+						 // showMessage(msg.sender, msg.content);
+						 // Ensure the message displays dynamically on the UI
+										 showMessage(
+						  	
+											 msg.id, // Message ID
+											 msg.senderEmail, // Sender's email
+											 msg.content, // Message content
+											 msg.recipientEmail, // Recipient's email
+											 msg.timestamp, // Message timestamp
+											 email // Logged-in user's email
+										 );
+					  }
+				  });
+			  });
+		  }*/
+
+		function connect() {
+			//alert("A");
+			var socket = new SockJS('/chat-websocket');
+			stompClient = Stomp.over(socket);
+
+			// Get the logged-in user's email from the hidden input
+			var email = document.getElementById('loggedInMail').value;
+			console.log(`Connecting as: ${email}`);
+
+			// Include email in the headers
+			stompClient.connect({'email': email}, function (frame) {
+				console.log('Connected: ' + frame);
+
+				// Subscribe to the user's message queue
+				stompClient.subscribe('/user/queue/messages', function (message) {
+					//	alert("B");
+					console.log('Raw WebSocket Message:', message);
+					var msg = JSON.parse(message.body);
+					console.log('Parsed Message:', msg);
+					console.log('Received messagddde:', msg);
+					console.log(`Received messaged: ${JSON.stringify(msg)}`);
+
+
+					// Show the message only if it's for the selected employee
+					if (selectedEmployee === msg.sender || selectedEmployee === msg.recipientEmail) {
+						// Show the message with the ID now returned from the backend
+						showMessage(
+							msg.id, // Message ID
+							msg.senderEmail, // Sender's email
+							msg.content, // Message content
+							msg.recipientEmail, // Recipient's email
+							msg.timestamp, // Message timestamp
+							email // Logged-in user's email
+						);
+					}
+
+					// Subscribe to receive notifications
+					stompClient.subscribe('/user/queue/notifications', function (notification) {
+						console.log('New Notification:', notification.body);
+						showToastNotification(notification.body);
+					});
+
+
+				});
+				// Fetch unread messages after connecting
+				fetchUnreadMessages();
+			});
+		}
+
+
+
+
+
+
+		// Load employee names from the server
+		/* function loadEmployees() {
+		 	
+			 console.log("Loading employee names...");
+			 fetch('/employees/names')
+				 .then(response => response.json())
+				 .then(data => {
+					 var employeeList = document.getElementById('employeeNames');
+					 employeeList.innerHTML = ''; // Clear the list before adding new items
+					 data.forEach(function (employee) { // Assuming data is an array of {name: "...", email: "..."}
+						 var li = document.createElement('li');
+						 li.innerHTML = employee.name; // Display the name
+						 employeeMap[employee.name] = employee.email; // Store the mapping
+						 li.onclick = function () { 
+							 console.log(`Selected employee: ${employee.name}`);
+							 selectEmployee(employee.name); 
+						 }; // Use name for selection
+						 employeeList.appendChild(li);
+					 });
+					 console.log("Employee names loaded:", employeeMap);
+				 })
+				 .catch(error => console.error("Error loading employees:", error));
+		 }*/
+
+		// Store reference to the search input and employee list
+		const searchInput = document.getElementById('searchInputModal');
+		const employeeList = document.getElementById('employeeNames');
+
+		// Add an event listener to handle input in the search bar
+		searchInput.addEventListener('input', filterEmployees);
+
+		function filterEmployees() {
+			const searchQuery = searchInput.value.toLowerCase().trim();  // Get search query and remove extra spaces
+			console.log("Search query:", searchQuery);
+
+			const employeeItems = employeeList.getElementsByTagName('li');
+			console.log("Employee list items:", employeeItems.length); // Log the number of items in the list
+
+			// Iterate over the list items and hide those that do not match the search query
+			Array.from(employeeItems).forEach(item => {
+				const employeeName = item.querySelector('span').textContent.toLowerCase();
+				console.log(`Checking if "${employeeName}" matches "${searchQuery}"`);
+
+				if (employeeName.includes(searchQuery)) {
+					item.classList.remove('not-visible');  // Show the item
+					item.classList.add('is-visible');      // Add visible class
+					console.log(`Showing: ${employeeName}`);
+				} else {
+					item.classList.remove('is-visible');  // Hide the item
+					item.classList.add('not-visible');    // Add hidden class
+					console.log(`Hiding: ${employeeName}`);
+				}
+
+				// Force reflow to apply changes correctly
+				item.offsetTop;  // Trigger reflow
+			});
+		}
+
+
+
+
+
+
+		// Load employee names and display them with photos
+		// Load employee names and display them with photos
+		/*	function loadEmployees() {
+				console.log("Loading employee names...");
+	
+				// Fetch employee names from the endpoint
+				fetch('/employees/names')
+					.then(response => {
+						console.log("Response received:", response);
+						if (!response.ok) {
+							throw new Error(`HTTP error! status: ${response.status}`);
+						}
+						return response.json();
+					})
+					.then(data => {
+						console.log("Employee data fetched:", data); // Log the raw data
+	
+						const employeeList = document.getElementById('employeeNames');
+						if (!employeeList) {
+							console.error("Element with ID 'employeeNames' not found.");
+							return;
+						}
+	
+						employeeList.innerHTML = ''; // Clear the list before adding new items
+	
+						// Iterate through employee data
+						data.forEach(employee => {
+							console.log("Processing employee:", employee);
+	
+							// Create a list item for each employee
+							const li = document.createElement('li');
+							li.classList.add('d-flex', 'align-items-center', 'employee-item');
+	
+							// Handle missing or empty profile photo paths
+							const profilePic = employeePhotoMap[employee.email] || '/static/default-profile.jpg';
+							console.log(`Profile picture for ${employee.name}: ${profilePic}`);
+	
+							li.innerHTML = `
+								<img src="${profilePic}" 
+									 alt="Employee Photo" 
+									 class="employee-photo mr-2" />
+								<span>${employee.name}</span>
+							`;
+	
+							// Map employee name to email
+							employeeMap[employee.name] = employee.email;
+							console.log("Mapped employee:", employee.name, "->", employee.email);
+							// Add new reverse mapping (email -> name)
+										  emailToNameMap[employee.email] = employee.name;
+							// Add click event to list item
+							li.onclick = () => {
+								console.log(`Selected employee: ${employee.name}`);
+								selectEmployee(employee.name);
+							};
+	
+							// Append the list item to the employee list
+							employeeList.appendChild(li);
+							
+						});
+	
+						console.log("Employee names loaded successfully. Employee map:", employeeMap);
+						
+					})
+					.catch(error => {
+						console.error("Error loading employees:", error);
+					});
+			}*/
+		// Filter employee list based on search input
+
+		function loadEmployees() {
+			console.log("Loading employee names...");
+
+			return fetch('/employees/names') // Return this promise
+				.then(response => {
+					console.log("Response received:", response);
+					if (!response.ok) {
+						throw new Error(`HTTP error! status: ${response.status}`);
+					}
+					return response.json();
+				})
+				.then(data => {
+					console.log("Employee data fetched:", data);
+
+					const employeeList = document.getElementById('employeeNames');
+					if (!employeeList) {
+						console.error("Element with ID 'employeeNames' not found.");
+						return;
+					}
+
+					employeeList.innerHTML = ''; // Clear the list before adding new items
+
+					// Iterate through employee data
+					data.forEach(employee => {
+						console.log("Processing employee:", employee);
+
+						// Handle missing or empty profile photo paths
+						const profilePic = employeePhotoMap[employee.email] || '/static/default-profile.jpg';
+						console.log(`Profile picture for ${employee.name}: ${profilePic}`);
+
+						const li = document.createElement('li');
+						li.classList.add('d-flex', 'align-items-center', 'employee-item');
+						li.innerHTML = `
+		                    <img src="${profilePic}" alt="Employee Photo" class="employee-photo mr-2" />
+		                    <span>${employee.name}</span>
+		                `;
+
+						// Map employee name to email
+						employeeMap[employee.name] = employee.email;
+						emailToNameMap[employee.email] = employee.name; // Reverse mapping
+						console.log("Mapped employee:", employee.name, "->", employee.email);
+
+						// Add click event to list item
+						li.onclick = () => {
+							console.log(`Selected employee: ${employee.name}`);
+							selectEmployee(employee.name);
+						};
+
+						employeeList.appendChild(li);
+					});
+
+					console.log("Employee names loaded successfully.");
+				})
+				.catch(error => {
+					console.error("Error loading employees:", error);
+				});
+		}
+
+
+		// Select an employee to chat with
+		/*  function selectEmployee(employeeName) {
+			  selectedEmployee = employeeMap[employeeName]; // Get the email from the map
+			  console.log(`Employee selected: ${selectedEmployee}`);
+  
+			  // Highlight the selected employee
+			  var employeeItems = document.querySelectorAll('#employeeNames li');
+			  employeeItems.forEach(function (item) {
+				  item.classList.remove('active');
+			  });
+			  var selectedItem = Array.from(employeeItems).find(item => item.innerHTML === employeeName);
+			  if (selectedItem) {
+				  selectedItem.classList.add('active');
+			  }
+  
+			  // Update chat header
+			  document.querySelector('.chat-about h6').innerText = employeeName;
+  
+			  // Load previous messages if they exist
+			  loadChatHistory();
+			  loadMessages();
+		  }*/
+
+		// Select an employee to chat with
+		function selectEmployee(employeeName) {
+			selectedEmployee = employeeMap[employeeName]; // Get the email from the map
+			console.log(`Employee selected: ${selectedEmployee}`);
+
+			// Highlight the selected employee
+			var employeeItems = document.querySelectorAll('#employeeNames li');
+			employeeItems.forEach(function (item) {
+				item.classList.remove('active');
+			});
+			var selectedItem = Array.from(employeeItems).find(item => item.innerHTML === employeeName);
+			if (selectedItem) {
+				selectedItem.classList.add('active');
+			}
+
+			// Update chat header with employee name and photo
+			document.querySelector('.chat-about h6').innerText = employeeName;
+			document.querySelector('#employeePhoto').src = employeePhotoMap[selectedEmployee] || 'default-profile.jpg';
+
+			// Hide the message icon and dots when an employee is selected
+			document.getElementById('message-icon-container').style.display = 'none';
+			// Hide the paragraph when an employee is selected
+			document.getElementById('logo-text').style.display = 'none';
+
+			// Load messages for the selected employee
+			loadMessages();
+		}
+
+		function initializeChat() {
+			// Update chat header and photo
+			document.querySelector('.chat-about h6').innerText = 'Select an Employee';
+			document.querySelector('#employeePhoto').src = 'default-avatar.png';
+
+			// Show the message icon (with dots) when no employee is selected
+			document.getElementById('message-icon-container').style.display = 'block';
+
+			// Show the paragraph with the logo text
+			document.getElementById('logo-text').style.display = 'block';
+		}
+
+
+		// Load previous messages for the selected employee
+		/*  function loadMessages() {
+			  // Get the logged-in user's email
+			  var email = document.getElementById('loggedInMail').value; 
+			  console.log(`Loading messages for: ${email}`);
+  
+			  fetch(`/messages?email=${encodeURIComponent(email)}`)
+				  .then(response => response.json())
+				  .then(data => {
+					  console.log("Previous messages loaded:", data);
+					  data.forEach(function (msg) {
+						  showMessage(msg.senderEmail, msg.content); // Display messages using sender's email
+					  });
+				  })
+				  .catch(error => console.error("Error loading messages:", error));
+		  }*/
+		function loadMessages() {
+			// alert("Loading messages...");
+			// Get the logged-in user's email and selected employee's email
+			var loggedInEmail = document.getElementById('loggedInMail').value;
+			var selectedEmployeeEmail = selectedEmployee; // Email is already stored in selectedEmployee
+
+			console.log(`Loading messages between: ${loggedInEmail} and ${selectedEmployeeEmail}`);
+
+			fetch(`/messages?loggedInEmail=${encodeURIComponent(loggedInEmail)}&selectedEmployeeEmail=${encodeURIComponent(selectedEmployeeEmail)}`)
+				.then(response => response.json())
+				.then(data => {
+					console.log("Chat messages loaded:", data);
+					// Clear the chat window before displaying messages
+					var chatWindow = document.getElementById('chat-window').querySelector('ul');
+					chatWindow.innerHTML = '';
+
+					// Display messages
+					data.forEach(function (msg) {
+						// showMessage(msg.senderEmail, msg.content, msg.recipientEmail, loggedInEmail);
+						showMessage(msg.id, msg.senderEmail, msg.content, msg.recipientEmail, msg.timestamp, loggedInEmail);
+					});
+				})
+				.catch(error => console.error("Error loading chat messages:", error));
+		}
+
+		/*imp	function showMessage(senderEmail, message, recipientEmail, loggedInEmail) {
+				// Log the email values to ensure they're correct
+				console.log(`LoggedInEmail: ${loggedInEmail}, SenderEmail: ${senderEmail}`);
+			    
+				// Determine the alignment of the message
+				const isSender = senderEmail === loggedInEmail;  // Check if sender is the logged-in user
+				const senderName = isSender ? "Me" : Object.keys(employeeMap).find(name => employeeMap[name] === senderEmail) || senderEmail;
+				const senderPhoto = employeePhotoMap[senderEmail] || 'default-avatar.png';  // Use default photo if not available
+			    
+				console.log(`Message from ${senderEmail} to ${recipientEmail}: "${message}"`);
+	
+				// Create the message element
+				var chatWindow = document.getElementById('chat-window').querySelector('ul');
+				var li = document.createElement('li');
+				li.className = isSender ? 'clearfix right' : 'clearfix left';  // Align the message based on sender
+	
+				li.innerHTML = `
+					<div class="message-container">
+						<img class="sender-photo" src="${senderPhoto}" alt="Sender Photo" />
+						<div class="message ${isSender ? 'my-message' : 'other-message'}">
+							<strong>${senderName}:</strong> ${message}
+						</div>
+					</div>`;
+	
+				// Append the message and scroll to the bottom
+				chatWindow.appendChild(li);
+				chatWindow.scrollTop = chatWindow.scrollHeight;
+			}*/
+		let activeDeleteDropdown = null;
+		function showMessage(id, senderEmail, message, recipientEmail, timestamp, loggedInEmail) {
+			console.log("Message ID:", id);
+			console.log(`LoggedInEmailrrr: ${loggedInEmail}, SenderEmail: ${senderEmail}`);
+
+			const isSender = senderEmail === loggedInEmail;
+			const senderName = isSender ? "Me" : Object.keys(employeeMap).find(name => employeeMap[name] === senderEmail) || senderEmail;
+			const senderPhoto = employeePhotoMap[senderEmail] || 'default-avatar.png';
+			const formattedTime = new Date(timestamp).toLocaleString(); // Format timestamp
+
+			console.log(`Message ID: ${id}, Time: ${formattedTime}, From: ${senderEmail}, To: ${recipientEmail}, Content: "${message}"`);
+
+			var chatWindow = document.getElementById('chat-window').querySelector('ul');
+			var li = document.createElement('li');
+			li.className = isSender ? 'clearfix right' : 'clearfix left';
+
+			li.innerHTML = `
+			    <div class="message-container" data-message-id="${id}" onclick="toggleDeleteOption(this)">
+			        <img class="sender-photo" src="${senderPhoto}" alt="Sender Photo" />
+			        <div class="message ${isSender ? 'my-message' : 'other-message'}">
+			            <strong>${senderName}:</strong> ${message}
+			        </div>
+			    </div>
+			    <div class="timestamp" style="text-align: ${isSender ? 'right' : 'left'};">
+			        ${formattedTime}
+			    </div>
+			    ${isSender ? `
+			        <div class="message-action-dropdown" >
+			            <a class="dropdown-item" href="#" onclick="deleteMessage(this, ${id})">Delete Message</a>
+			        </div>
+			    ` : ''}`;
+
+
+
+
+
+			chatWindow.appendChild(li);
+			chatWindow.scrollTop = chatWindow.scrollHeight;
+		}
+
+		function toggleDeleteOption(messageContainer) {
+			const dropdown = messageContainer.nextElementSibling.nextElementSibling; // Get the dropdown
+
+			// If the dropdown is currently active, hide it
+			if (activeDeleteDropdown && activeDeleteDropdown !== dropdown) {
+				activeDeleteDropdown.style.display = 'none'; // Hide the previous dropdown
+			}
+
+			// Toggle the current dropdown
+			if (dropdown) {
+				dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none'; // Toggle display
+				activeDeleteDropdown = dropdown.style.display === 'block' ? dropdown : null; // Update active dropdown
+			}
+		}
+
+
+		function deleteMessage(deleteButton, messageId) {
+			// Check if the message ID is valid
+			if (!messageId) {
+				console.error('Message ID is invalid or undefined.');
+				return;
+			}
+
+			// Show confirmation dialog before proceeding
+			Swal.fire({
+				title: 'Are you sure?',
+				text: "This action cannot be undone!",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#d33',
+				cancelButtonColor: '#3085d6',
+				confirmButtonText: 'Yes, delete it!',
+				customClass: {
+					popup: 'smaller-swal-popup', // Apply custom CSS class
+				},
+			}).then((result) => {
+				if (result.isConfirmed) {
+					// Proceed with deletion if confirmed
+					console.log(`Sending DELETE request for message ID: ${messageId}`);
+
+					// Find the parent `li` containing the message
+					const messageElement = deleteButton.closest('li');
+					console.log('Message container (li):', messageElement);
+
+					if (!messageElement) {
+						console.error('Could not find the message container (li).');
+						return;
+					}
+
+					// Send an AJAX request to delete the message from the backend
+					fetch(`/deleteMessage/${messageId}`, {
+						method: 'DELETE',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+					})
+						.then((response) => {
+							if (response.ok) {
+								// Remove the message from the chat window
+								messageElement.remove();
+								console.log(`Message ID ${messageId} deleted successfully`);
+
+								// Show smaller success message
+								Swal.fire({
+									title: 'Deleted!',
+									text: 'Your message has been deleted.',
+									icon: 'success',
+									customClass: {
+										popup: 'smaller-swal-success', // Apply custom CSS class for success message
+									},
+								});
+							} else {
+								console.error(
+									`Failed to delete the message with ID ${messageId}`
+								);
+							}
+						})
+						.catch((error) => {
+							console.error('Error deleting message:', error);
+						});
+				}
+			});
+		}
+
+
+
+
+
+
+		// Store a message in the chat history
+		function storeMessage(employeeName, sender, message) {
+			if (!chatHistory[employeeName]) {
+				chatHistory[employeeName] = [];
+			}
+			chatHistory[employeeName].push({sender: sender, content: message});
+		}
+
+		// Load previous messages for the selected employee
+		function loadChatHistory() {
+			var chatWindow = document.getElementById('chat-window').querySelector('ul');
+			chatWindow.innerHTML = ''; // Clear the chat window
+
+			if (chatHistory[selectedEmployee]) {
+				console.log(`Loading chat history for: ${selectedEmployee}`);
+				chatHistory[selectedEmployee].forEach(function (msg) {
+					showMessage(msg.sender, msg.content);
+				});
+			}
+		}
+
+		// Send a message to the selected employee
+		/*   function sendMessage() {
+			   var messageContent = document.getElementById('message').value;
+			   var loggedInEmail = document.getElementById('loggedInMail').value; // Get the logged-in user's email
+   
+			   if (messageContent && stompClient && selectedEmployee) {
+				   var chatMessage = {
+					   content: messageContent,
+					   recipientEmail: selectedEmployee, // Email of the recipient
+					   senderEmail: loggedInEmail // Include the sender's email
+				   };
+				   console.log(`Sending message: "${messageContent}" to ${selectedEmployee}`); // Log message sending
+				   console.log("Chat message object:", chatMessage); // Log the chat message object
+   
+				   stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
+				   const timestamp = new Date().toISOString(); // Get the current timestamp
+				   // Simulating the server response (this should come from the backend after the message is stored):
+				    
+			   //	showMessage(18, loggedInEmail, messageContent, selectedEmployee, timestamp, loggedInEmail); // Corrected showMessage call
+		   showMessage(null, loggedInEmail, messageContent, selectedEmployee, timestamp, loggedInEmail);
+   
+				   // Call the showMessage function with the server response
+		   	
+				  // storeMessage(selectedEmployee, "You", messageContent); // Store the sent message
+				   document.getElementById('message').value = ''; // Clear the input field
+			   } else {
+				   alert("Please select an employee to send a message.");
+			   }
+		   }*/
+
+
+		/*	function fetchUnreadMessages() {
+				console.log("Fetching unread messages...");
+				var loggedInEmail = document.getElementById('loggedInMail').value;
+	
+				fetch(`/unread?email=${loggedInEmail}`)
+					.then(response => response.json())
+					.then(messages => {
+						messages.forEach(message => {
+							showToastNotification(`New message from ${message.senderEmail}: ${message.content}`);
+						});
+					})
+					.catch(error => console.error("Error fetching unread messages:", error));
+			}*/
+
+		/*function fetchUnreadMessages() {
+				console.log("Fetching unread messages...");
+				var loggedInEmail = document.getElementById('loggedInMail').value;
+	
+				fetch(`/unread?email=${loggedInEmail}`)
+					.then(response => response.json())
+					.then(messages => {
+						messages.forEach(message => {
+							// Get sender's name from emailToNameMap, fallback to email if not found
+							let senderName = emailToNameMap[message.senderEmail] || message.senderEmail;
+	
+							// Show notification with sender's name
+							showToastNotification(`New message from ${senderName}: ${message.content}`);
+						});
+					})
+					.catch(error => console.error("Error fetching unread messages:", error));
+			}
+	
+			
+			
+			function showToastNotification(message) {
+				var toastContainer = document.createElement('div');
+				toastContainer.className = 'toast-notification';
+			    
+				// Add message and close button
+				toastContainer.innerHTML = `<p>${message}</p> <span class="toast-close">✖</span>`;
+	
+				document.body.appendChild(toastContainer);
+	
+				// Animate in
+				setTimeout(() => {
+					toastContainer.classList.add('show');
+				}, 100);
+	
+				// Auto-hide after 5 seconds
+				let autoHideTimeout = setTimeout(() => closeToast(toastContainer), 8000);
+	
+				// Close on click of ✖
+				toastContainer.querySelector('.toast-close').addEventListener('click', () => {
+					clearTimeout(autoHideTimeout); // Stop auto-hide
+					closeToast(toastContainer);
+				});
+				
+				
+			}
+	
+			// Function to handle toast closing
+			function closeToast(toast) {
+				toast.classList.remove('show');
+				setTimeout(() => toast.remove(), 300); // Faster fade-out
+			}*/
+
+		function fetchUnreadMessages() {
+			console.log("Fetching unread messages...");
+			var loggedInEmail = document.getElementById('loggedInMail').value;
+
+			fetch(`/unread?email=${loggedInEmail}`)
+				.then(response => response.json())
+				.then(messages => {
+					messages.forEach(message => {
+						let senderName = emailToNameMap[message.senderEmail] || message.senderEmail;
+						// Show notification with sender's email as a parameter
+						showToastNotification(`New message from ${senderName}: ${message.content}`, message.senderEmail);
+					});
+				})
+				.catch(error => console.error("Error fetching unread messages:", error));
+		}
+
+		function showToastNotification(message, senderEmail) {
+			var toastContainer = document.createElement('div');
+			toastContainer.className = 'toast-notification';
+
+			// Add message and close button
+			toastContainer.innerHTML = `<p>${message}</p> <span class="toast-close">✖</span>`;
+
+			document.body.appendChild(toastContainer);
+
+			// Animate in
+			setTimeout(() => {
+				toastContainer.classList.add('show');
+			}, 100);
+
+			// Auto-hide after 8 seconds
+			let autoHideTimeout = setTimeout(() => closeToast(toastContainer), 10000);
+
+			// Prevent opening chat when clicking the close button
+			toastContainer.querySelector('.toast-close').addEventListener('click', (event) => {
+				event.stopPropagation(); // Prevent click from bubbling to toastContainer
+				clearTimeout(autoHideTimeout);
+				closeToast(toastContainer);
+			});
+
+			// Open chat when clicking on the notification
+			toastContainer.addEventListener('click', () => {
+				openChatWithSender(senderEmail);
+				closeToast(toastContainer); // Remove notification when chat opens
+			});
+		}
+
+
+		function closeToast(toast) {
+			toast.classList.remove('show');
+			setTimeout(() => toast.remove(), 300); // Faster fade-out
+		}
+
+
+
+		function openChatWithSender(senderEmail) {
+			console.log("Opening chat with:", senderEmail);
+
+			// Find employee name from email
+			let employeeName = Object.keys(employeeMap).find(name => employeeMap[name] === senderEmail);
+
+			if (!employeeName) {
+				console.warn("Employee name not found for email:", senderEmail);
+				employeeName = senderEmail; // Fallback to email if name not found
+			}
+
+			// Update UI with selected employee
+			selectEmployee(employeeName);
+		}
+
+
+		function sendMessage() {
+			var messageContent = document.getElementById('message').value;
+			var loggedInEmail = document.getElementById('loggedInMail').value; // Get the logged-in user's email
+
+			if (messageContent && stompClient && selectedEmployee) {
+				var chatMessage = {
+					content: messageContent,
+					recipientEmail: selectedEmployee, // Email of the recipient
+					senderEmail: loggedInEmail // Include the sender's email
+				};
+				console.log(`Sending message: "${messageContent}" to ${selectedEmployee}`); // Log message sending
+				console.log("Chat message object:", chatMessage); // Log the chat message object
+
+				stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
+
+				// Simulating the server response (this should come from the backend after the message is stored):
+				// Assuming the backend sends a response message with an ID after saving
+				/*  const timestamp = new Date().toISOString(); // Get the current timestamp
+				  showMessage(
+					  null, // Placeholder for now, to be updated with the generated ID
+					  loggedInEmail,
+					  messageContent,
+					  selectedEmployee,
+					  timestamp,
+					  loggedInEmail
+				  );*/
+				// Listen for the response from the backend
+
+				document.getElementById('message').value = ''; // Clear the input field
+
+			} else {
+				alert("Please select an employee to send a message.");
+			}
+		}
+
+
+		// Connect to the WebSocket server and load employees when the page is loaded
+		document.addEventListener('DOMContentLoaded', function () {
+			//alert("second");
+			fetchEmployeePhotos();
+			connect();
+			loadEmployees();
+			loadMessages();
+			initializeChat();
+		});
+
+		document.addEventListener("DOMContentLoaded", function () {
+			//alert("1");
+			loadEmployees().then(() => {
+				//alert("12");
+				const senderEmail = sessionStorage.getItem("chatSenderEmail");
+				console.log("Opening chat with:", senderEmail);
+
+				if (senderEmail) {
+					// Direct lookup using emailToNameMap
+					const senderName = emailToNameMap[senderEmail];
+
+					if (senderName) {
+						console.log(`Found mapping: ${senderEmail} -> ${senderName}`);
+					} else {
+						console.warn(`No mapping found for email: ${senderEmail}. Using email as fallback.`);
+					}
+
+					// Use the senderName if found; otherwise, fallback to senderEmail
+					const displayName = senderName || senderEmail;
+					console.log("Employee selected:", displayName);
+
+					// Call the selectEmployee function with the retrieved name
+					selectEmployee(displayName);
+
+					// Remove the stored email to prevent repeated execution on refresh
+					sessionStorage.removeItem("chatSenderEmail");
+				}
+			}).catch(error => {
+				console.error("Error in loadEmployees:", error);
+			});
+		});
+
+
+
+
+
+	</script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+	<input type="hidden" id="emp_idSessionValue" th:value="${empId}" />
+
+	<script>
+		$.ajax({
+			type: "GET",
+			url: "fetchEmployeeDocumentDetailsOnlyByEmpId",
+			data: {
+				"emp_id": $('#emp_idSessionValue').val()
+			},
+			success: function (data) {
+				$('#dynamicProfilePic').attr('src', `${data.profilePicPath}`);
+			},
+			error: function (xhr, status, error) {
+				console.error("Error invoking data:", error);
+			}
+		});
+	</script>
+
+
+	<script>
+		window.onload = function () {
+			var apprisalLink = document.getElementById("apprisalLink");
+			if (apprisalLink) {
+				apprisalLink.classList.add('blinking');  // Add blinking class
+				apprisalLink.focus();  // Set focus after animation
+			}
+		};
+	</script>
+	<script>
+		let inactivityTimeout;
+		const timeoutDuration = 900000; // 15 minutes in milliseconds
+
+		// Reset the timeout when there is any user activity (e.g., mouse move, key press, etc.)
+		function resetInactivityTimer() {
+			clearTimeout(inactivityTimeout);
+			inactivityTimeout = setTimeout(() => {
+				window.location.href = '/'; // Redirect to the login page
+			}, timeoutDuration);
+		}
+
+		// Attach event listeners to reset the timer on user activity
+		window.onload = resetInactivityTimer;
+		document.onmousemove = resetInactivityTimer;
+		document.onkeypress = resetInactivityTimer;
+		document.ontouchstart = resetInactivityTimer;
+	</script>
+	<!-- Include Toastr JS -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+	
+	
+	
+	
+	
+	
+	<!-- script to notification -->
+<script>
+//Function to fetch flag value from the backend
+function fetchFlag() {
+    $.get("/flag", function(response) {
+    	console.log("admin");
+        var leaveRequestCountValue = response;
+        console.log(leaveRequestCountValue);
+       // If total notification count is greater than 0, show the bell icon
+        if (leaveRequestCountValue.totalNotificationCount > 0) {
+            $("#notificationBellIcon").show();  // Show bell icon
+        } else {
+            $("#notificationBellIcon").hide();  // Hide bell icon if no notifications
+        }
+
+        if (leaveRequestCountValue.leaveRequestFlagCount > 0) {
+            $("#notificationBellIcon").show();  // Show bell icon
+            $("#leaveRequestNotification").show();  // Show specific notification
+            
+            $("#leaveRequestMessage").text(leaveRequestCountValue.leaveRequestFlagCount + " leave request(s)");
+            $(".badge-number").text(leaveRequestCountValue.leaveRequestFlagCount);
+            $("#leaveRequestFlagCount").text(leaveRequestCountValue.leaveRequestFlagCount);
+        }
+        //display the asset notifu=ication based on asset count value
+        if(leaveRequestCountValue.asseteRequestFlagCount>0){
+        	 
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#assetRequestNotification").show();  // Show specific notification
+              
+             $("#assetRequestMessage").text(leaveRequestCountValue.asseteRequestFlagCount + " asset request(s)");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+             $("#asseteRequestFlagCount").text(leaveRequestCountValue.asseteRequestFlagCount);
+        	 	
+        }
+        
+        //display the new project notification based on asset count value
+        if(leaveRequestCountValue.newPrjectValueCount>0){
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#newProjectNotification").show();  // Show specific notification
+             
+             $("#newProjectMessage").text(leaveRequestCountValue.newPrjectValueCount + " project request(s)");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+             $("#newPrjectValueCount").text(leaveRequestCountValue.asseteRequestFlagCount);
+        }
+        //display the appraisal from HR notification ]
+        if(leaveRequestCountValue.appraisalCount>0){
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#hrAppraisal").show();  // Show specific notification
+             
+             $("#newProjectMessage").text(leaveRequestCountValue.appraisalCount + " Appraisal Form");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+             $("#newPrjectValueCount").text(leaveRequestCountValue.asseteRequestFlagCount);
+        }
+      //display the appraisal from employee notification 
+        if(leaveRequestCountValue.empAppraisalflag>0){
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#empAppraisal").show();  // Show specific notification
+             
+             $("#apprisalempNotification").text(leaveRequestCountValue.empAppraisalflag + " employees sent appraisal");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+             $("#newPrjectValueCount").text(leaveRequestCountValue.asseteRequestFlagCount);
+        }
+        
+        //display the appraisal Due date notification 
+        if(leaveRequestCountValue.adminAppraisalDuedate>0){
+        	 $("#dueAppraisal").show();  // Show bell icon
+             $("#empAppraisal").show();  // Show specific notification
+             
+             $("#apprisalDueNotification").text("Tomorrow is the due date for submit appraisal");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+             $("#newPrjectValueCount").text(leaveRequestCountValue.asseteRequestFlagCount);
+        }
+      //display the announcement notification based on asset count value
+        if(leaveRequestCountValue.announcementNotification>0){
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#newAnnouncementNotification").show();  // Show specific notification
+             
+             $("#newannouncement").text(leaveRequestCountValue.announcementNotification + " announcement(s)");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+        }
+        //display the leave request status change notification
+        if(leaveRequestCountValue.leaveRequestStatusChangeValue > 0){
+        	 
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#leaveRequestSatusChangeNotification").show();  // Show specific notification
+             
+             $("#leaveRequestSatusChangeMessage").text("Your leave request status has been");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);             
+        	 	
+        } 
+       
+    });
+}
+
+// Periodically fetch flag value every second (adjust as needed)
+setInterval(fetchFlag, 1000);
+
+//Function to fetch flag value from the backend
+function fetchsuperAdminFlag() {
+    $.get("/flag", function(response) {
+    	console.log("Super admin");
+        var requestCount = response;
+         
+        // If total notification count is greater than 0, show the bell icon and notifications
+        if (requestCount.totalNotificationCount > 0) {
+            $("#notificationBellIcon").show();  // Show bell icon
+            $("#leaveRequestNotification").show();  // Show specific notification
+            
+            $("#leaveRequestMessage").text(requestCount.leaveRequestFlagCount + " leave request(s)");
+            $(".badge-number").text(requestCount.totalNotificationCount);
+            $("#leaveRequestFlagCount").text(requestCount.leaveRequestFlagCount);
+        } else {
+            // If total notification count is 0, hide the bell icon and notification
+            $("#notificationBellIcon").hide();
+        }
+        //display the asset notifu=ication based on asset count value
+        if(requestCount.asseteRequestFlagCount>0){
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#assetRequestNotification").show();  // Show specific notification
+             
+             $("#assetRequestMessage").text(requestCount.asseteRequestFlagCount + " asset request(s)");
+             $(".badge-number").text(requestCount.totalNotificationCount);
+             $("#asseteRequestFlagCount").text(requestCount.asseteRequestFlagCount);
+        		
+        }
+        else {
+            // If total notification count is 0, hide the bell icon and notification
+            $("#assetRequestNotification").hide();
+        }
+        
+    });
+}
+
+// Periodically fetch flag value every second (adjust as needed)
+const employeeId = document.getElementById('employee-id').value; // This is a string
+console.log(employeeId);
+
+if(employeeId === "0") {
+	//alert("hii");
+	setInterval(fetchsuperAdminFlag, 1000);
+}
+else{
+	setInterval(fetchFlag, 1000);
+}
+
+
+</script>
+	
+</body>
+
+</html>

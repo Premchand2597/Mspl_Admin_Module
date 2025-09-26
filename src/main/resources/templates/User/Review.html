@@ -1,0 +1,2658 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Product List</title>
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"> -->
+  <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  
+  
+<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+    <script src="assets/js/jquery-3.6.4.min.js"></script>
+
+<!-- <script	src="https://cdn.jsdelivr.net/npm/datatables.net/js/jquery.dataTables.min.js"></script> -->
+	<script src="/assets/js/jquery.dataTables.min.js"></script>
+
+<!-- <script	src="https://cdn.jsdelivr.net/npm/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script> --> 
+    <script src="/assets/js/dataTables.bootstrap5.min.js"></script>
+    
+ <!-- <link rel="stylesheet"  href="https://cdn.jsdelivr.net/npm/datatables.net-bs5/css/dataTables.bootstrap5.min.css"> -->
+ <link rel="stylesheet" href="/assets/css/dataTables.bootstrap5.min.css">
+
+ <!-- Bootstrap 5 CDN -->
+ <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+ <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+ 
+ <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> -->
+ <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+ 
+ <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
+ <script src="assets/js/sweetalert2@11.js"></script>
+ 
+ <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script> -->
+ <script src="/assets/js/jspdf.umd.min.js"></script>
+ 
+</head>
+
+<style>
+/* Set table layout */
+table {
+	width: 100%;
+	min-width: 100%;
+	table-layout: auto;
+	white-space: nowrap;
+}
+
+th {
+	white-space: nowrap;
+	text-align: center;
+}
+
+/* Set specific width for each column */
+th:nth-child(1), td:nth-child(1) {
+	width: 100px;
+} /* Date */
+th:nth-child(2), td:nth-child(2) {
+	width: 150px;
+} /* Product ID */
+th:nth-child(3), td:nth-child(3) {
+	width: 200px;
+} /* Product Name */
+th:nth-child(4), td:nth-child(4) {
+	width: 200px;
+} /* HSN Code */
+th:nth-child(5), td:nth-child(5) {
+	width: 180px;
+} /* Part Number */
+th:nth-child(6), td:nth-child(6) {
+	width: 1000px;
+} /* Description */
+th:nth-child(7), td:nth-child(7) {
+	width: 200px;
+} /* Remarks */
+
+/* Style pagination */
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+	padding: 5px 10px;
+	margin: 2px;
+	border-radius: 5px;
+	border: 1px solid #007bff;
+	color: #007bff;
+	background: white;
+	transition: 0.3s;
+	cursor: default;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+	background: #007bff !important;
+	color: white !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+	background: #0056b3 !important;
+	color: white !important;
+	cursor: default;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+	color: #999 !important;
+	border-color: #ddd;
+}
+
+/* Custom ellipsis style */
+.paginate_button.ellipsis {
+	cursor: default;
+	border: none;
+	background: none;
+	color: #999;
+	padding: 5px 10px;
+}
+
+/* Ensure pagination stays at the bottom */
+.dataTables_wrapper .dataTables_info {
+	float: left;
+}
+
+.dataTables_wrapper .dataTables_paginate {
+	float: right;
+}
+
+   .sendEmailForCustomerOuterDiv{
+   	width: 100%;
+   	height: 100%;
+   	position: fixed;
+   	background: rgba(0,0,0,0.5);
+   	top: 0;
+   	left: 0;
+   	z-index: 100;
+   	display: none;
+   	pointer-events: auto;
+   }
+   
+   .viewQuotationOuterDiv{
+   	width: 100%;
+   	height: 100%;
+   	position: fixed;
+   	background: rgba(0,0,0,0.5);
+   	top: 0;
+   	left: 0;
+   	z-index: 99;
+   	display: none;
+   	pointer-events: auto;
+   }
+   
+   .revise_QuotationOuterDiv{
+   	width: 100%;
+   	height: 100%;
+   	position: fixed;
+   	background: rgba(0,0,0,0.5);
+   	top: 0;
+   	left: 0;
+   	z-index: 103;
+   	display: none;
+   	pointer-events: auto;
+   }
+   
+   .viewQuotationInnerBox{
+   	width: 98%;
+   	height: 96%;
+   	background: rgb(255,255,255);
+   	margin: 1% auto;
+   	border-radius: 5px;
+   	overflow: auto;
+   	pointer-events: auto;
+   }
+   
+   .revise_QuotationInnerBox{
+   	width: 98%;
+   	height: 96%;
+   	background: rgb(255,255,255);
+   	margin: 1% auto;
+   	border-radius: 5px;
+   	overflow: auto;
+   	pointer-events: auto;
+   }
+   
+   .emailPasswordOuterDiv{
+   	width: 100%;
+   	height: 100%;
+   	position: fixed;
+   	background: rgba(0,0,0,0.5);
+   	top: 0;
+   	left: 0;
+   	z-index: 101;
+   	display: none;
+   	pointer-events: auto;
+   }
+   
+   .sendEmailForCustomerInnerBox{
+	width: 60%;
+   	height: 96%;
+   	background: rgb(255,255,255);
+   	margin: 1% auto;
+   	border-radius: 5px;
+   	overflow: auto;
+   	pointer-events: auto;
+}
+
+.emailPasswordInnerBox{
+	width: 40%;
+   	height: auto;
+   	background: rgb(255,255,255);
+   	margin: 1% auto;
+   	border-radius: 5px;
+   	overflow: auto;
+   	pointer-events: auto;
+}
+
+.candidatePrfoilesHeading{
+	font-family: 'Montserrat'; 
+	font-size: 15px; 
+	font-weight: bold; 
+	text-transform: uppercase;
+}
+
+  .emailFormInnerBoxCloser{
+   	/* background: red; */
+   	padding-right: 10px;
+   	text-align: right;
+   }
+   
+   .emailFormInnerBoxCloser span{
+   	font-size: 25px;
+   	font-weight: bold;
+   	cursor: pointer;
+   }
+   
+   .sendEmailForCustomerBodyBox{
+   	width: 100%;
+   	height: 90%;
+   	background: #fff;
+   	overflow: auto;
+   }
+   
+   .modal-backdrop {
+    z-index: 1049 !important; /* Ensure Bootstrap's backdrop is below the custom modal */
+  }
+  
+  #loadingPopup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Dim background */
+    z-index: 9999;
+    font-family: Arial, sans-serif;
+    color: white; /* Text color for better contrast */
+    display: none;
+}
+
+#loadingPopup p {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+}
+
+.spinnerAndParaMerger{
+	display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* background: red; */
+    margin: 18% auto;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 6px solid rgba(255, 255, 255, 0.3); /* Semi-transparent border */
+    border-top-color: white; /* Bright top border */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+	.revise_suggestions {
+          position: absolute;
+          background: white;
+          border: 1px solid #ccc;
+          border-top: none;
+          max-height: 150px;
+          overflow-y: auto;
+          width: 22.5%;
+          z-index: 1000;
+          display: none;
+          font-size:14px;
+      }
+      .revise_suggestions div {
+          padding: 8px;
+          cursor: pointer;
+      }
+      .revise_suggestions div:hover {
+          background: #f1f1f1;
+      }
+</style>
+
+<body>
+
+<div id="loadingPopup">
+	<div class="spinnerAndParaMerger">
+	    <div class="spinner"></div>
+	    <p id="loadingPopupPara"></p>
+    </div>
+</div>
+
+<div class="sendEmailForCustomerOuterDiv" id="sendEmailForCustomerOuterDiv">
+	 <div class="sendEmailForCustomerInnerBox">
+			<div class="d-flex justify-content-between align-items-center m-0" style="position: sticky; top: 0; background: #fff;">
+				<p class="candidatePrfoilesHeading m-0" style="font-size: 14px; padding-left: 10px; font-weight: bold;">Send Mail</p>
+				<p class="emailFormInnerBoxCloser m-0"><span onclick="closeSendEmailForCustomerOuterDiv();">&times;</span></p>		               	  
+			</div>
+			<div class="card-body sendEmailForCustomerBodyBox mt-1">
+			
+				<div style="width: 96%; margin-left: auto; margin-right: auto;">
+					<input class="form-check-input border border-primary" type="checkbox" id="emailManuallySentCheckBox">
+					<label style="font-size: 14px;">Update status as email has been sent manually to the customer</label>
+				</div>
+			
+				<div class="table-responsive" style="width: 96%; margin-left: auto; margin-right: auto;">
+					<table style="width: 100%; font-size: 14px;">
+						<tr>
+							<th style="text-align: left; margin-bottom: 10px; margin-top: 10px;">From</th>
+							<td><input type="text" th:value="${session.email}" readonly style="font-size: 14px; margin-bottom: 10px; margin-top: 10px;" class="form-control" id="emailFromAddress"></td>
+						</tr>
+						<tr>
+							<th style="text-align: left; margin-bottom: 10px;">To</th>
+							<td><input type="text" style="font-size: 14px; margin-bottom: 10px;" class="form-control" id="emailToAddress"></td>
+						</tr>
+						<tr>
+							<th style="text-align: left; margin-bottom: 10px;">CC</th>
+							<td><input type="text" style="font-size: 14px; margin-bottom: 10px;" class="form-control" id="emailCCAddress"></td>
+						</tr>
+						<tr>
+							<th style="text-align: left; margin-bottom: 10px;">Subject</th>
+							<td><input type="text" style="font-size: 14px; margin-bottom: 20px;" class="form-control" id="emailSubject"></td>
+						</tr>
+						<tr>
+							<td style="padding-left: 3px; padding-right: 3px;" colspan="2">
+								<textarea class="form-control" placeholder="Body" style="font-size: 14px; margin-bottom: 10px;" id="emailBody" rows="4"></textarea>
+							</td>
+						</tr>
+					</table>
+				</div>
+				
+				<div style="width: 96%; margin-left: auto; margin-right: auto;">
+					<div class="col-sm-12 form-group mt-4">
+						<button type="button" id="email_send_button" class="btn btn-primary" onclick="openEmailPasswordOuterDiv()" style="font-size: 14px; float: right;">Send</button>
+					</div>
+				</div>
+			
+			</div>
+		</div>
+	</div>
+	
+	
+<div class="emailPasswordOuterDiv" id="emailPasswordOuterDiv">
+	 <div class="emailPasswordInnerBox">
+			<div class="d-flex justify-content-between align-items-center m-0" style="position: sticky; top: 0; background: #fff;">
+				<p class="candidatePrfoilesHeading m-0" style="font-size: 14px; padding-left: 10px; font-weight: bold;">Please Enter Email Password</p>
+				<p class="emailFormInnerBoxCloser m-0"><span onclick="closeEmailPasswordOuterDiv();">&times;</span></p>		               	  
+			</div>
+			<div class="card-body mt-1" style="padding-bottom: 10px;">
+			
+				<div class="table-responsive" style="width: 96%; margin-left: auto; margin-right: auto;">
+					<div class="col-sm-12 form-group mb-2" style="padding-left: 3px; padding-right: 3px;">
+						<input type="text" class="form-control mt-2" id="ionos_password">
+					</div>
+				</div>
+				
+				<div class="table-responsive" style="width: 96%; margin-left: auto; margin-right: auto;">
+					<div class="col-sm-12 form-group p-2">
+						<button type="button" class="btn btn-primary" id="emailSendBtn" onclick="sendDataToEmailToTheParticularCustomer();" style="font-size: 14px; float: right;">Submit</button>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	
+
+	<div class="container-fluid mt-2">
+		<h4 class="text-center mb-0">Review List</h4>
+
+		<table id="productTable"
+			class="table table-striped table-bordered text-center table-responsive">
+			<thead class="table-primary text-center table-responsive">
+				<tr>
+					<th class="text-center table-responsive">View</th>
+					<th class="text-center table-responsive">Quotation Sent(Customer)</th>
+			        <th class="text-center table-responsive">Date Time</th>
+			        <th class="text-center table-responsive">Quotation ID</th>
+			        <th class="text-center table-responsive" style="display: none;">Honorifics</th>
+			        <th class="text-center table-responsive">Customer Name</th>
+			        <th class="text-center table-responsive" style="display: none;">Honorifics</th>
+			        <th class="text-center table-responsive">Contact Person</th>
+			        <th class="text-center table-responsive">Designation</th>
+			        <th class="text-center table-responsive">Mobile Number</th>
+			        <th class="text-center table-responsive">Email Id</th>
+			        <th class="text-center table-responsive">Order Platform</th>
+			        <th class="text-center table-responsive">Delivery Address</th>
+			        <th class="text-center table-responsive">Billing Address</th>
+			        <!-- <th class="text-center table-responsive">Product Details</th> -->
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="quot : ${quotation}">
+			    	 <td><img src="/assets/img/eye_icons.png" alt="View" width="20" height="20" title="View" 
+									style="cursor: pointer;" onclick="openDetails(this)" data-id="QUOTATION_ID">
+								</td>
+					<!-- <td th:text="${quot.email_sent_status == '0' ? 'Pending' : 'Sent'}"></td> -->
+					<td th:text="${quot.email_sent_status == '0' ? 'Pending' :
+					              quot.email_sent_status == '1' ? 'Sent' :
+					              quot.email_sent_status == '2' ? 'Manually Sent' : 'Unknown'}">
+					</td>
+			        <td th:text="${quot.dateTime}"></td>
+			        <td th:text="${quot.qid}"></td>
+			        <td style="display: none;" th:text="${quot.honorifics1}"></td>
+			        <td th:text="${quot.honorifics1+' '+quot.customerName}"></td>
+			        <td style="display: none;" th:text="${quot.honorifics2}"></td>
+			        <td th:text="${quot.honorifics2+' '+quot.contactPersonName}"></td>
+			        <td th:text="${quot.designation}"></td>
+			        <td th:text="${quot.contactDetails}"></td>
+			        <td th:text="${quot.emailId}"></td>
+			        <td th:text="${quot.orderMethod}"></td>
+			        <td th:text="${quot.deliveryAddress}"></td>
+			        <td th:text="${quot.shipmentAddress}"></td>
+			        <!-- <td>
+			            <table class="table-bordered">
+			                <tbody>
+			                    <tr th:each="prod : ${quot.products}">
+			                        <td th:text="${prod.productName}"></td>
+			                        <td th:text="${prod.quantity}"></td>
+			                        <td th:text="${prod.price}"></td>
+			                        <td th:text="${prod.discount}"></td>
+			                        <td th:text="${prod.total}"></td>                        
+			                        <td th:text="${prod.cgst}"></td>
+			                        <td th:text="${prod.sgst}"></td>
+			                        <td th:text="${prod.igst}"></td>
+			                    </tr>
+			                </tbody>
+			            </table>
+			        </td> -->
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+<!-- Edit Product Modal -->
+<div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Product</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <form id="productForm">
+          <input type="hidden" id="editedRowIndex"> <!-- Stores row index for update -->
+
+       <div class="row mb-3 justify-content-between">
+						<div class="col-md-3">			
+							<input type="text" class="form-control" id="product_id" placeholder="Product ID" disabled autocomplete="off" />
+						</div>
+						<div class="col-md-4 text-end">			
+							<input type="text" class="form-control" id="pdateTime" autocomplete="off"/>
+						</div>
+					</div>
+					<div class="row mb-3">
+						<div class="col-md-4">
+							<label for="productName" class="form-label">Product Name</label>
+							<input type="text" class="form-control" id="product_name" placeholder="Enter Product Name" autocomplete="off"/>
+						</div>
+						<div class="col-md-4">
+							<label for="productName" class="form-label">HSN Code</label>
+							<input type="text" class="form-control" id="hsn_code" placeholder="Enter HSN Code" autocomplete="off"/>
+						</div>
+						<div class="col-md-4">
+							<label for="productName" class="form-label">Part Number</label>
+							<input type="text" class="form-control" id="part_number" placeholder="Enter Part Number" autocomplete="off"/>
+						</div>								
+					</div>		
+					
+					<div class="row mb-3">
+					<div class="col-md-6">
+							<label for="productDescription" class="form-label">Product Description</label>
+							<textarea type="text" class="form-control" id="product_description" autocomplete="off"
+								placeholder="Enter Product Description" ></textarea>
+						</div>	
+						
+							<div class="col-md-6">
+							<label for="remarks" class="form-label">Remarks</label>
+							<textarea type="text" class="form-control" id="remarks" autocomplete="off"
+								placeholder="Enter Remarks" ></textarea>
+						</div>	
+					</div>	
+        </form>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="saveProduct()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- <div class="modal fade" id="quotationModal" tabindex="-4" aria-labelledby="quotationModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-xl" style="max-width: 100vw;">
+		<div class="modal-content">
+          <div class="modal-header">
+                <h5 class="modal-title" id="quotationModalLabel">View Quotation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body"> -->
+            
+<div class="viewQuotationOuterDiv" id="viewQuotationOuterDiv">
+	 <div class="viewQuotationInnerBox">
+			<div class="d-flex justify-content-between align-items-center m-0" style="position: sticky; top: 0; background: #fff;">
+				<p class="candidatePrfoilesHeading m-0" style="font-size: 14px; padding-left: 10px; font-weight: bold;">View Quotation</p>
+				<p class="emailFormInnerBoxCloser m-0"><span onclick="closeViewQuotationOuterDiv();">&times;</span></p>		               	  
+			</div>
+            
+                <!-- Quotation Form -->
+                <form id="quotationForm" style="padding: 20px;">
+                  <input type="hidden" id="editRowIndex"> 
+                
+                <div class="row mb-3 justify-content-between">
+						<div class="col-md-3">
+							<input type="text" class="form-control" id="qid" placeholder="Quotation ID" disabled />
+						</div>
+						<div class="col-md-3">
+							<input type="datetime-local" class="form-control text-center" id="qdateTime" disabled />
+						</div>
+					</div>
+                
+                
+                    <div class="row">            
+                    	<div class="col-md-1">
+                            <label class="form-label">Honorifics</label>
+                            <input type="text" id="company_honorifics" class="form-control" readonly>
+                        </div>        
+                        <div class="col-md-3">
+                            <label class="form-label">Customer Name</label>
+                            <input type="text" id="vendorName" class="form-control"  list="customerList" autocomplete="off" required>
+                            <div id="suggestionsBox" class="suggestions"></div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Customer Legal Name</label>
+                            <input type="text" id="vendorlegalNamee" class="form-control" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">GST Number</label>
+                            <input type="text" id="gstnumberr" class="form-control" required>
+                        </div>
+                         <div class="col-md-2">
+                            <label class="form-label">Order Method</label>
+                             <input type="text" id="orderMethod" class="form-control" required>                           
+                        </div>
+                        <div class="col-md-1">
+                            <label class="form-label">Honorifics</label>
+                            <input type="text" id="contact_person_honorifics" class="form-control" readonly>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Contact Person Name</label>
+                             <input type="text" id="personName" class="form-control" required>  
+                        
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">Designation</label>
+                            <input type="text" id="designation" class="form-control" >
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Mobile Number</label>
+                            <input type="text" id="contactDetails" class="form-control">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Email ID</label>
+                            <input type="email" id="emailId" class="form-control">
+                        </div>
+                         <div class="col-md-6">
+                         
+                            <label class="form-label">Billing Address</label>
+                            <textarea id="shipmentAddress" class="form-control"></textarea>                     
+   						</div>
+                        <div class="col-md-6"> 
+                            <label class="form-label">Delivery Address</label>
+                            <textarea id="deliveryAddress" class="form-control"></textarea>
+                        </div>
+                   </div>    
+                   
+                   <hr>
+                    <!-- GST Selection -->
+                    <h5>Tax Type</h5>
+                    
+                     <hr>
+                    <div class="d-flex align-items-center mb-3">
+                        <input type="checkbox" id="interState" class="form-check-input me-1" onclick="toggleGST('interState')"> 
+                        <label class="form-check-label me-3">Interstate</label>
+
+                        <input type="checkbox" id="outerState" class="form-check-input me-1" onclick="toggleGST('outerState')"> 
+                        <label class="form-check-label me-3">Outerstate</label>
+
+                       <!--  <input type="number" id="gstPercentage" class="form-control ms-3" style="width: 100px;" placeholder="GST %" oninput="updateTableHeaders()">
+                   -->  
+                   </div>
+
+                   <!-- Product Table -->
+                    <hr>
+                                 
+   
+				   <div class="table-responsive">               
+					<table class="table table-bordered mt-3">
+					    <thead class="table bg-secondary">
+					        <tr>         
+					            <th>Product Name</th>
+					            <th>HSN Code</th>
+					            <th>Part Number</th>
+					            <th>Description</th>
+					            <th>Quantity</th>
+					            <th>Price</th>
+					            <th>Taxable Value</th>
+					            <th class="cgst-header d-none">CGST (9%)</th>
+					            <th class="sgst-header d-none">SGST (9%)</th>
+					            <th class="igst-header d-none">IGST (18%)</th>            
+					            <th>Total Value</th>
+					            
+					        </tr>
+					    </thead>
+					    <tbody id="productTableBody">
+					        <!-- Rows will be dynamically added here -->
+					    </tbody>
+					</table>
+				</div>
+
+
+		<table style="display: none;" class="table-bordered hiddenProductDetailsTableBoxData">
+		    <tbody id="hiddenProductTableBody">
+		        <!-- Rows will be dynamically added here -->
+		    </tbody>
+		</table>
+		
+			<div class="col-md-12 mt-2">
+				<label>Terms And Condition</label>
+				<textarea class="form-control" style="font-size: 14px;" readonly id="terms_and_condition" rows="3"></textarea>
+			</div>
+
+                </form>
+                <div class="modal-footer table-responsive p-2">
+	                <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
+	                <!-- <button type="button" class="btn btn-primary" id="quotationSubmitBtnForReview" onclick="forwardQuotationForReview($('#qid').val())">Submit</button> -->
+	                <button type="button" class="btn btn-primary" style="font-size: 14px;" id="reviseQuotationBtn" onclick="openReviseQuotationOuterDiv();">Revise</button>
+	                <button type="button" class="btn btn-success mx-1" style="font-size: 14px;" id="quotationReviewApproveBtn" onclick="updateQuotationStatusAfterReview($('#qid').val(), $('#emailId').val(), 2)">Approve</button>
+	                <!-- <button type="button" class="btn btn-danger" style="font-size: 14px; margin-left: 10px;" id="quotationReviewRejectBtn" onclick="updateQuotationStatusAfterReview($('#qid').val(), $('#emailId').val(), 3)">Reject</button> -->
+	                <button type="button" class="btn btn-primary" style="display: none;" id="quotationReviewSendMailBtn" onclick="forwardQuotationForReview($('#qid').val())">Send Mail</button>
+	                <!-- <button type="button" class="btn btn-danger" onclick="downloadPDF()"> <i class="fas fa-file-pdf"></i>Download PDF</button> -->
+	            </div>
+          </div>
+            <!-- <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="quotationSubmitBtnForReview" onclick="forwardQuotationForReview($('#qid').val())">Submit</button>
+                <button type="button" class="btn btn-success" id="quotationReviewApproveBtn" onclick="updateQuotationStatusAfterReview($('#qid').val(), $('#emailId').val(), 2)">Approve</button>
+                <button type="button" class="btn btn-danger" id="quotationReviewRejectBtn" onclick="updateQuotationStatusAfterReview($('#qid').val(), $('#emailId').val(), 3)">Reject</button>
+                <button type="button" class="btn btn-primary" style="display: none;" id="quotationReviewSendMailBtn" onclick="forwardQuotationForReview($('#qid').val())">Send Mail</button>
+                <button type="button" class="btn btn-danger" onclick="downloadPDF()"> <i class="fas fa-file-pdf"></i>Download PDF</button>
+            </div> -->
+       
+    </div>
+<!-- </div>
+</div> -->
+
+
+<div class="revise_QuotationOuterDiv" id="revise_QuotationOuterDiv">
+	 <div class="revise_QuotationInnerBox">
+			<div class="d-flex justify-content-between align-items-center m-0" style="position: sticky; top: 0; background: #fff;">
+				<p class="candidatePrfoilesHeading m-0" style="font-size: 14px; padding-left: 10px; font-weight: bold;">Revise Quotation</p>
+				<p class="emailFormInnerBoxCloser m-0"><span onclick="closeReviseQuotationOuterDiv();">&times;</span></p>		               	  
+			</div>
+            
+                <!-- Quotation Form -->
+                <form id="revise_quotationForm" style="padding: 20px;">
+                  <input type="hidden" id="revise_editRowIndex"> 
+                
+                <div class="row mb-3 justify-content-between">
+						<div class="col-md-3">
+							<input type="text" class="form-control" id="revise_qid" placeholder="Quotation ID" disabled />
+						</div>
+						<div class="col-md-3">
+							<input type="datetime-local" class="form-control text-center" id="revise_qdateTime" disabled />
+						</div>
+					</div>
+                
+                    <div class="row"> 
+                   		 <div class="col-md-1">
+                            <label class="form-label">Honorifics</label>
+                            <input type="text" id="revise_company_honorifics" class="form-control" readonly>
+                        </div>                   
+                        <div class="col-md-3">
+                            <label class="form-label">Customer Name</label>
+                            <input type="text" id="revise_vendorName" class="form-control"  list="customerList" autocomplete="off" required>
+                            <div id="revise_suggestionsBox" class="revise_suggestions"></div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Customer Legal Name</label>
+                            <input type="text" id="revise_vendorlegalNamee" class="form-control" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">GST Number</label>
+                            <input type="text" id="revise_gstnumberr" class="form-control" required>
+                        </div>
+                         <div class="col-md-2">
+                            <label class="form-label">Order Method</label>
+                             <!-- <input type="text" id="revise_orderMethod" class="form-control" required> --> 
+                             <select id="revise_orderMethod" class="form-select">
+                                <option value="Online">Online</option>
+                                <option value="Phone">Phone</option>
+                                <option value="In-Person">In-Person</option>
+                            </select>                          
+                        </div>
+                        <div class="col-md-1">
+                            <label class="form-label">Honorifics</label>
+                            <input type="text" id="revise_contact_person_honorifics" class="form-control" readonly>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Contact Person Name</label>
+                             <!-- <input type="text" id="revise_personName" class="form-control" required> -->  
+                        	<select id="revise_personName" class="form-control form-select" required>
+                        	 <option id="revise_personNameOptionForPopupFistTime"></option>
+       						 <!-- <option value="">Select Contact Person</option> -->
+    						</select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">Designation</label>
+                            <input type="text" id="revise_designation" class="form-control" >
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Mobile Number</label>
+                            <input type="text" id="revise_contactDetails" class="form-control">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Email ID</label>
+                            <input type="email" id="revise_emailId" class="form-control">
+                        </div>
+                         <div class="col-md-6">
+                            <label class="form-label">Billing Address</label>
+                            <!-- <input type="checkbox" id="revise_sameAddress" onchange="copyAddress()" style="margin-left:10px;"> Same as Billing Address -->
+                            <textarea id="revise_shipmentAddress" class="form-control"></textarea>                     
+   						</div>
+                        <!-- <div class="col-md-6"> 
+                            <label class="form-label">Delivery Address</label>
+                            <textarea id="revise_deliveryAddress" class="form-control"></textarea>
+                        </div> -->
+                        <div class="col-md-6 mt-2"> 
+                            <label class="form-label">Delivery Address</label>
+                            <!-- <textarea id="deliveryAddress" class="form-control"></textarea> -->
+                            <select id="revise_deliveryAddress" class="form-control form-select">
+       						 <option id="revise_deliveryAddressOptionForPopupFistTime"></option>
+    						</select>
+                        </div>
+                   </div>    
+                   
+                   <hr>
+                    <!-- GST Selection -->
+                    <h5>Tax Type</h5>
+                    
+                     <hr>
+                    <div class="d-flex align-items-center mb-3">
+                        <input type="checkbox" id="revise_interState" name="interState" class="form-check-input me-1 revisetaxTypeCheckBox" onchange="toggleGST('interState')"> 
+                        <label class="form-check-label me-3">Interstate</label>
+
+                        <input type="checkbox" id="revise_outerState" name="outerState" class="form-check-input me-1 revisetaxTypeCheckBox" onchange="toggleGST('outerState')"> 
+                        <label class="form-check-label me-3">Outerstate</label>
+
+                       <!--  <input type="number" id="gstPercentage" class="form-control ms-3" style="width: 100px;" placeholder="GST %" oninput="updateTableHeaders()">
+                   -->  
+                   </div>
+
+                   <!-- Product Table -->
+                    <hr>
+                    <h5>Product Details</h5>
+                     <hr>
+<div class="d-flex justify-content-between align-items-center">
+   
+     <div class="col-md-2">
+        <select class="form-control form-select" id="productName">
+        	<!-- <option id="revise_productNameOptionForPopupFistTime"></option> -->
+            <option value="">Select Product</option>
+          
+        </select>
+    </div>
+    <div class="col-md-2">
+        <input type="text"  class="form-control" id="hsnCode" readonly>
+            <!-- <option value="">Select HSN Code</option> -->
+          
+       
+    </div>
+    <div class="col-md-2">
+        <input type="text"  class="form-control" id="partNumber" readonly>
+          <!--   <option value="">Select Part Number</option> -->
+            
+      
+    </div>
+    <div class="col-md-3">
+        <input type="text"  class="form-control" id="productDescription" readonly>
+            <!-- <option value="">Select Description</option> -->
+          
+        
+    </div>
+      <div class="col-md-2">
+        <button type="button" class="btn btn-secondary w-100" onclick="addProduct()">Add Product</button>
+        </div>
+
+</div>
+
+	<div class="table-responsive">
+		<table class="table table-bordered mt-3" style="font-size: 12px;">
+		    <thead class="table bg-secondary">
+		        <tr>
+		            <th>Sl No</th>
+		            <th>Product Name</th>
+		            <th>HSN Code</th>
+		            <th>Part Number</th>
+		            <th>Description</th>
+		            <th>Quantity</th>
+		            <th>Price</th>
+		            <th>Taxable Value</th>
+		            <th class="revise_cgst-header d-none">CGST (9%)</th>
+		            <th class="revise_sgst-header d-none">SGST (9%)</th>
+		            <th class="revise_igst-header d-none">IGST (18%)</th>            
+		            <th>Total Value</th>
+		            <th>Actions</th>
+		        </tr>
+		    </thead>
+		    <tbody id="revise_productTableBody">
+		        <!-- Rows will be dynamically added here -->
+		    </tbody>
+		</table>
+	</div>
+                                 
+                  
+<!-- <table class="table table-bordered mt-3">
+    <thead class="table bg-secondary">
+        <tr>         
+            <th>Product Name</th>
+            <th>HSN Code</th>
+            <th>Part Number</th>
+            <th>Description</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Taxable Value</th>
+            <th class="revise_cgst-header">CGST (9%)</th>
+            <th class="revise_sgst-header">SGST (9%)</th>
+            <th class="revise_igst-header">IGST (18%)</th>            
+            <th>Total Value</th>
+            
+        </tr>
+    </thead>
+    <tbody id="revise_productTableBody">
+        Rows will be dynamically added here
+    </tbody>
+</table> -->
+
+
+			<div class="col-md-12 mt-2">
+				<label>Terms And Condition</label>
+				<textarea class="form-control" style="font-size: 14px;" id="revise_terms_and_condition" rows="3"></textarea>
+			</div>
+		
+                </form>
+                <div class="modal-footer table-responsive p-2">
+                <button type="button" class="btn btn-primary" style="font-size: 14px;" onclick="reviseQuotation();" id="reviseQuotationSubmitBtn">Submit</button>
+            </div>
+          </div>
+    </div>
+
+
+	<script>
+		$(document)
+				.ready(
+						function() {
+							var table = $('#productTable')
+									.DataTable(
+											{
+												"paging" : true,
+												"searching" : true,
+												"scrollX" : true, // Enable horizontal scrolling
+												"lengthMenu" : [ 8, 15, 25, 50,
+														75, 100, 200, 500, 800,
+														1000 ],
+														"ordering": true,
+														
+												"pageLength" : 8,
+												"pagingType" : "full_numbers",
+												// "info": true,
+												"dom" : '<"d-flex justify-content-between mb-2"l f>t<"d-flex justify-content-between mt-2"i p>',
+												
+												
+												
+												
+												
+												
+											});
+
+							// Ensure pagination stays at the bottom even when scrolling
+							//  $('.dataTables_paginate').parent().css('overflow', 'visible');
+						});
+		
+		window.onunload = function(){ window.scrollTo(0,0); }
+	</script>
+
+	
+	<script>
+function editProduct(button) {
+    // Get the row where the button was clicked
+    var row = button.closest('tr');
+    var rowIndex = row.rowIndex - 1; // Adjusting for header row
+
+    // Extract data from row cells
+    var datetime = row.cells[2].innerText;
+    var productID = row.cells[3].innerText;
+    var productName = row.cells[4].innerText;
+    var hsnCode = row.cells[5].innerText;
+    var partNumber = row.cells[6].innerText;
+    var description = row.cells[7].innerText;
+    var remarks = row.cells[8].innerText;
+    
+   // alert(productID);
+
+    // Populate modal fields
+    document.getElementById("editedRowIndex").value = rowIndex;
+    document.getElementById("pdateTime").value = datetime;
+    document.getElementById("product_id").value = productID;
+    document.getElementById("product_name").value = productName;
+    document.getElementById("hsn_code").value = hsnCode;
+    document.getElementById("part_number").value = partNumber;
+    document.getElementById("product_description").value = description;
+    document.getElementById("remarks").value = remarks;
+
+    // Show the modal
+    var productModal = new bootstrap.Modal(document.getElementById('productModal'));
+    productModal.show();
+}
+
+</script>
+
+<script>
+function openDetails(button) {
+	//alert(JSON.stringify(productData))
+	 var row = button.closest('tr');
+	    var rowIndex = row.rowIndex - 1; // Adjusting for header row
+	    //alert(rowIndex);
+	    var qId = row.cells[3]?.innerText;
+	    var dateTime = row.cells[2]?.innerText;
+	    document.getElementById("qid").value = qId;
+	    document.getElementById("qdateTime").value = dateTime;
+	   //alert(qId);
+	    
+	    fetch(`/getQuotationDetails?id=${qId}`) // API call to fetch data
+        .then(response => response.json())
+        .then(data => {
+        	console.log(JSON.stringify(data));
+            // Populate Modal Fields
+            document.getElementById("qid").value = data.qid;
+            document.getElementById("qdateTime").value = data.dateTime;
+            document.getElementById("vendorName").value = data.customerName;
+            document.getElementById("vendorlegalNamee").value = data.customerLegalName;
+            document.getElementById("gstnumberr").value = data.gstNumber;
+            document.getElementById("orderMethod").value = data.orderMethod;
+            document.getElementById("personName").value = data.contactPersonName; 
+            document.getElementById("designation").value = data.designation;
+            document.getElementById("contactDetails").value = data.contactDetails;
+            document.getElementById("emailId").value = data.emailId;
+            document.getElementById("shipmentAddress").value = data.shipmentAddress;
+            document.getElementById("deliveryAddress").value = data.deliveryAddress;
+            document.getElementById("company_honorifics").value = data.honorifics1;
+            document.getElementById("contact_person_honorifics").value = data.honorifics2;
+            
+            document.getElementById("revise_qid").value = data.qid;
+            //document.getElementById("revise_qdateTime").value = data.dateTime;
+            document.getElementById("revise_vendorName").value = data.customerName;
+            document.getElementById("revise_vendorlegalNamee").value = data.customerLegalName;
+            document.getElementById("revise_gstnumberr").value = data.gstNumber;
+            //document.getElementById("revise_orderMethod").value = data.orderMethod;
+            document.getElementById("revise_personNameOptionForPopupFistTime").value = data.contactPersonName; 
+            document.getElementById("revise_personNameOptionForPopupFistTime").innerHTML = data.contactPersonName;
+            document.getElementById("revise_designation").value = data.designation;
+            document.getElementById("revise_contactDetails").value = data.contactDetails;
+            document.getElementById("revise_emailId").value = data.emailId;
+            document.getElementById("revise_shipmentAddress").value = data.shipmentAddress;
+            document.getElementById("revise_company_honorifics").value = data.honorifics1;
+            document.getElementById("revise_contact_person_honorifics").value = data.honorifics2;
+            //document.getElementById("revise_deliveryAddress").value = data.deliveryAddress;
+            
+            document.getElementById("revise_deliveryAddressOptionForPopupFistTime").value = data.deliveryAddress; 
+            document.getElementById("revise_deliveryAddressOptionForPopupFistTime").innerHTML = data.deliveryAddress;
+            
+            let orderMethodDropDown = document.getElementById("revise_orderMethod");
+            let options = orderMethodDropDown.options;
+            
+            for (let i = 0; i < options.length; i++) {
+                if (options[i].value === data.orderMethod) {
+                    options[i].selected = true;  // Match found, set as selected
+                    break;
+                }
+            }
+            
+            //alert(data.orderMethod);
+            
+            /* if(data.review === 2){
+        		$('#quotationReviewRejectBtn').text("Reject");
+            	$('#quotationReviewRejectBtn').prop("disabled", false);
+        		$('#quotationReviewApproveBtn').text("Approved");
+            	$('#quotationReviewApproveBtn').prop("disabled", true);
+        	}else if(data.review === 3){
+        		$('#quotationReviewApproveBtn').text("Approve");
+            	$('#quotationReviewApproveBtn').prop("disabled", false);
+        		$('#quotationReviewRejectBtn').text("Rejected");
+            	$('#quotationReviewRejectBtn').prop("disabled", true);
+        	} */
+            
+           // alert(data.contactPersonName);
+           // Apply tax type logic
+        	applyTaxType(data.tax_type);
+            if(data.tax_type === "interstate"){
+            	 document.getElementById("interState").checked = true;
+            	 document.getElementById("outerState").checked = false;
+            }
+            else if(data.tax_type === "outerstate"){
+            	 document.getElementById("outerState").checked = true;
+            	 document.getElementById("interState").checked = false;
+            }
+            
+         	// Populate product details
+            let productTable = document.getElementById("productTableBody");
+            productTable.innerHTML = ""; // Clear old data
+            
+            let productDropdown = document.getElementById("productName");
+            
+            data.products.forEach((product, index) => {
+            	let options = productDropdown.options;
+                
+                for (let i = 0; i < options.length; i++) {
+                    if (options[i].value === product.productName) {
+                        options[i].selected = true;  // Match found, set as selected
+                        break;
+                    }
+                }
+                
+                populateProductDetailsDataBasedOnSelectedProductNameInRevise(product.productName);
+                addProduct();
+                
+                    /* let quantityFields = document.querySelectorAll(".quantity");
+                    let priceFields = document.querySelectorAll(".price");
+
+                    if (quantityFields[index]) {
+                        quantityFields[index].value = product.quantity;
+                    }
+
+                    if (priceFields[index]) {
+                        priceFields[index].value = product.price;
+                    } */
+                    
+                    
+                        let quantityFields = document.querySelectorAll("#revise_productTableBody .quantity");
+                        let priceFields = document.querySelectorAll("#revise_productTableBody .price");
+
+                        let lastIndex = quantityFields.length - 1; // Get last added row
+
+                        if (quantityFields[lastIndex]) {
+                            quantityFields[lastIndex].value = product.quantity;
+                            quantityFields[lastIndex].dispatchEvent(new Event('input')); // Trigger calculation
+                        }
+
+                        if (priceFields[lastIndex]) {
+                            priceFields[lastIndex].value = product.price;
+                            priceFields[lastIndex].dispatchEvent(new Event('input')); // Trigger calculation
+                        }
+
+	                    
+                    //calculateTotalPriceValueAndTaxCalculationForRevisedPopup(product.quantity, product.price);
+                    
+                let row = `<tr>                
+                    <td>${product.productName}</td>
+                    <td>${product.partNumber}</td>
+                    <td>${product.description}</td>
+                    <td>${product.hsnCode}</td>
+                    <td>${product.quantity}</td>
+                    <td>${product.price}</td>
+                    <td>${product.total}</td>
+                    <td class="cgst-header ${data.tax_type === 'interstate' ? '' : 'd-none'}">${product.cgst || "-"}</td>
+                    <td class="sgst-header ${data.tax_type === 'interstate' ? '' : 'd-none'}">${product.sgst || "-"}</td>
+                    <td class="igst-header ${data.tax_type === 'outerstate' ? '' : 'd-none'}">${product.igst || "-"}</td>
+                    <td>${product.total_value}</td>                   
+                </tr>`;
+                productTable.innerHTML += row;
+            });
+            
+         // Populate product details
+            let productHiddenTable = document.getElementById("hiddenProductTableBody");
+            productHiddenTable.innerHTML = ""; // Clear old data
+            
+            data.products.forEach((product, index) => {
+                let row = `<tr>     
+                	<td>${product.productName}</td>
+                    <td>${product.quantity}</td>
+                    <td>${product.price}</td>
+                    <td>${product.discount}</td>
+                    <td>${product.total}</td>                        
+                    <td>${product.cgst}</td>
+                    <td>${product.sgst}</td>
+                    <td>${product.igst}</td>
+                </tr>`;
+                productHiddenTable.innerHTML += row;
+            });
+
+            // Show modal
+            //document.getElementById("myModal").style.display = "block";
+        })
+        .catch(error => console.error("Error fetching quotation:", error));
+	    
+	    // Show the modal
+	    document.getElementById("editRowIndex").value = rowIndex;
+	    openViewQuotationOuterDiv();
+	    /* var quotationModal = new bootstrap.Modal(document.getElementById('quotationModal'));
+	    quotationModal.show(); */
+	};
+
+/* function toggleGST(selectedType) {
+    let isInterState = selectedType === "interState";
+
+    // Set checkbox values based on selection
+    document.getElementById("revise_interState").checked = isInterState;
+    document.getElementById("revise_interState").checked = !isInterState;
+
+    // Show/hide table headers based on tax type
+    document.querySelectorAll(".revise_cgst-header, .revise_sgst-header").forEach(header => {
+        header.classList.toggle("d-none", !isInterState);
+    });
+
+    document.querySelectorAll(".revise_igst-header").forEach(header => {
+        header.classList.toggle("d-none", isInterState);
+    });
+} */
+
+function toggleGST(type) {
+	//alert(type);
+    if (type === "interState") {
+        document.getElementById("revise_outerState").checked = false;
+    } else {
+        document.getElementById("revise_interState").checked = false;
+    }
+
+    applyGSTSelection();
+}
+
+// Function to apply settings when fetching data
+function applyTaxType(taxType) {
+    if (taxType === "interState") {
+        document.getElementById("revise_interState").checked = true;
+        document.getElementById("revise_outerState").checked = false;
+        toggleGST("interState");
+    } else if (taxType === "outerState") {
+        document.getElementById("revise_outerState").checked = true;
+        document.getElementById("revise_interState").checked = false;
+        toggleGST("outerState");
+    }
+}
+
+$.ajax({
+    url: '/returnRecentlyInsertedTermsAndConditionDetail',
+    type: 'GET',
+    contentType: 'application/json', // Specify content type
+    success: function(data) {
+    	$('#terms_and_condition').val(data.terms_and_condition_data);
+    	$('#revise_terms_and_condition').val(data.terms_and_condition_data);
+    },
+    error: function(xhr, status, error) {
+        console.error('Failed to get terms and condition details:', error);
+        console.error('Response text:', xhr.responseText);
+    }
+});
+
+function updateQuotationStatusAfterReview(quotationId, customerEmail, clickedStatusBtnValue){
+	//alert(quotationId+" "+clickedStatusBtnValue);
+	$.ajax({
+        type: 'POST',
+        url: '/updateReviewStatusForQuotationReview',
+        data: {
+            "reviewStatus": clickedStatusBtnValue,
+            "quotationId": quotationId
+        },
+        success: function (response) {
+            if (response === 'success') {
+            	if(clickedStatusBtnValue === 2){
+            		/* $('#quotationReviewRejectBtn').text("Reject");
+                	$('#quotationReviewRejectBtn').prop("disabled", false);
+            		$('#quotationReviewApproveBtn').text("Approved");
+                	$('#quotationReviewApproveBtn').prop("disabled", true); */
+                	//$('#quotationModal').modal('hide');
+                	openSendEmailForCustomerOuterDiv(quotationId, customerEmail);
+            	} else if(clickedStatusBtnValue === 3){
+            		/* $('#quotationReviewApproveBtn').text("Approve");
+                	$('#quotationReviewApproveBtn').prop("disabled", false);
+            		$('#quotationReviewRejectBtn').text("Rejected");
+                	$('#quotationReviewRejectBtn').prop("disabled", true); */
+            	}
+            }
+        },
+        error: function (xhr, status, error) {
+        	hideLoadingPopup();
+            console.error('Error updating quotation after review status record:');
+            console.log('XHR object:', xhr);
+            console.log('Status:', status);
+            console.log('Error:', error);
+        }
+    });   	
+}
+
+function closeSendEmailForCustomerOuterDiv(){
+	$('#sendEmailForCustomerOuterDiv').hide();
+}
+
+function closeEmailPasswordOuterDiv(){
+	$('#emailPasswordOuterDiv').hide();
+}
+
+function closeViewQuotationOuterDiv(){
+	$('#viewQuotationOuterDiv').hide();
+}
+
+function closeReviseQuotationOuterDiv(){
+	location.reload();
+	$('#revise_QuotationOuterDiv').hide();
+}
+
+function openReviseQuotationOuterDiv(){
+	$('#revise_QuotationOuterDiv').show();
+}
+
+function openViewQuotationOuterDiv(){
+	$('#viewQuotationOuterDiv').show();
+}
+
+function openEmailPasswordOuterDiv(){
+	$('#emailPasswordOuterDiv').show();
+}
+
+function openSendEmailForCustomerOuterDiv(quotationId, customerEmail){
+	
+	$('#emailToAddress').val(customerEmail);
+	$('#emailSubject').val("Melange sales proposal estimation: "+quotationId);
+	
+	$.ajax({
+        type: 'GET',
+        url: '/fetchReportingManagersEmailBasedOnEmpEmail',
+        data: {
+        	employee_email: $('#emailFromAddress').val()
+        	//employee_email: "sanjay.raj@melangesystems.com"
+        },
+        success: function (response) {
+        	let firstEmail = response.first_reporting_manager_email;
+            let secondEmail = response.second_reporting_manager_email;
+            let emailCCField = $('#emailCCAddress');
+
+            // Ensure both values are not null and compare them
+            if (firstEmail && secondEmail) {
+                if (firstEmail !== secondEmail) {
+                    emailCCField.val(firstEmail + ', ' + secondEmail);
+                } else {
+                    emailCCField.val(firstEmail); // If both are the same, add only once
+                }
+            } else if (firstEmail) {
+                emailCCField.val(firstEmail);
+            } else if (secondEmail) {
+                emailCCField.val(secondEmail);
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('Error fetching reporting managers email:');
+            console.log('XHR object:', xhr);
+            console.log('Status:', status);
+            console.log('Error:', error);
+        }
+    });
+	
+	$.ajax({
+        url: '/returnRecentlyInsertedEmailDraftMessageDetail',
+        type: 'GET',
+        contentType: 'application/json', // Specify content type
+        success: function(data) {
+        	$('#emailBody').val(data.email_draft);
+        },
+        error: function(xhr, status, error) {
+            console.error('Failed to get email draft details:', error);
+            console.error('Response text:', xhr.responseText);
+        }
+    });
+	
+	$.ajax({
+        url: '/retrieveEmailSentFlagStatusValue',
+        type: 'GET',
+        data: {
+        	quotationId: quotationId
+        },
+        contentType: 'application/json', // Specify content type
+        success: function(data) {
+        	if(data === "2"){
+        		$('#emailManuallySentCheckBox').prop("checked", true);
+        		$('#email_send_button').text("Sent");
+        		$('#email_send_button').prop("disabled", true);
+        	}else{
+        		$('#email_send_button').text("Send");
+        		$('#email_send_button').prop("disabled", false);
+        		$('#emailManuallySentCheckBox').prop("checked", false);
+        	}
+        },
+        error: function(xhr, status, error) {
+            console.error('Failed to get email sent status flag:', error);
+            console.error('Response text:', xhr.responseText);
+        }
+    });
+	
+	//document.getElementById('sendEmailForCustomerOuterDiv').style.display = "block";
+	$('#sendEmailForCustomerOuterDiv').show();
+}
+
+function sendDataToEmailToTheParticularCustomer(){
+	//let fromAddress = $('#emailFromAddress').val().trim();
+	let fromAddress = "premchand.s@melangesystems.com";
+	let toAddress = $('#emailToAddress').val().trim();
+	//let toAddress = "premsgowda25@gmail.com";
+	let ccAddress = $('#emailCCAddress').val().trim();
+	let subjectName = $('#emailSubject').val().trim();
+	let bodyContent = $('#emailBody').val().trim();
+	let enteredPaswword = $('#ionos_password').val().trim();
+	
+	const submitButton = document.getElementById('emailSendBtn');
+	
+	 if (!enteredPaswword) {
+         Swal.fire({ icon: 'warning', title: "Password is required" });
+         return;
+     }
+	
+	// Store original button text before changing it
+     const originalButtonText = submitButton.innerHTML;
+     
+     // Disable button and show loading state
+     submitButton.disabled = true;
+     submitButton.innerHTML = `Validating...`;
+	
+  	// Validate sender email & password
+     fetch('/api/validateSenderCredentials', {
+         method: 'POST',
+         headers: { 'Content-Type': 'application/json' },
+         body: JSON.stringify({ email: fromAddress, password: enteredPaswword })
+     })
+     .then(response => {
+         if (!response.ok) {
+             return response.text().then(text => { throw new Error(text); });
+         }
+         return response.text();
+     })
+     .then(() => {
+         // Close password popup
+         closeEmailPasswordOuterDiv();
+         
+         $.ajax({
+             url: '/returnRecentlyInsertedEmailDraftMessageDetail',
+             type: 'GET',
+             contentType: 'application/json', // Specify content type
+             success: function(data) {
+             	
+             	if(data.email_draft !== bodyContent){
+
+             		let emailDraftData = {
+             				email_draft: bodyContent
+             		    };
+             		
+             		$.ajax({
+             	        type: "POST",
+             	        url: "/insertEmailDraft",
+             	        contentType: "application/json",
+             	        data: JSON.stringify(emailDraftData),
+             	        success: function(response) {
+             	        	console.log(response);
+             	        },
+             	        error: function(xhr) {
+             	            alert("Error: " + xhr.responseText);
+             	        }
+             	    });
+             	}
+             	
+             },
+             error: function(xhr, status, error) {
+                 console.error('Failed to get email draft details:', error);
+                 console.error('Response text:', xhr.responseText);
+             }
+         });
+         
+      	  // Proceed with sending email sending...
+          sendEmailToTheCustomerAfterValidation(fromAddress, toAddress, ccAddress, subjectName, bodyContent, enteredPaswword);
+     })
+     .catch(error => {
+         Swal.fire({ icon: 'error', title: "Invalid Credentials", text: error.message });
+         //alert("Invalid Credentials");
+         submitButton.disabled = false;
+         submitButton.innerHTML = originalButtonText;
+     })
+     .finally(() => {
+     	// Re-enable button and restore original text
+         submitButton.disabled = false;
+         submitButton.innerHTML = originalButtonText;
+     });
+}
+
+function sendEmailToTheCustomerAfterValidation(fromAddress, toAddress, ccAddress, subjectName, bodyContent, enteredPaswword){
+	let quotationId = $('#qid').val();
+	
+	displayOnLoadingPopup();
+	
+	const { jsPDF } = window.jspdf || {}; // Ensure jsPDF is loaded
+    
+	if (!jsPDF) {
+        alert("jsPDF library not loaded. Please check the script inclusion.");
+        return;
+    }
+	
+    const doc = new jsPDF();
+ 	// Draw Page Border
+    var rawDateTime = document.getElementById("qdateTime").value;
+    
+    // Draw Page Border
+    doc.setDrawColor(0); // Black Border
+    //doc.rect(3, 3, 203.5, 330); // (x, y, width, height)
+    doc.rect(3, 3, 203.5, 291); // 297 - 6 for padding
+
+ 	// ✅ HEADER BAR
+   	doc.setDrawColor(0); // Black border
+    doc.rect(3, 3, 203.5, 25); // Header box
+
+    // ✅ Add Company Address (Left Side)
+    doc.setTextColor(0); // Black text
+    doc.setFontSize(12);
+    doc.text("Melange Systems Private Limited", 10, 10);
+    doc.setFontSize(10);
+    doc.text("4/1, 7th cross, Kumara Park West, Bangalore, Karnataka - 560020", 10, 15);
+    //doc.text("Bangalore, Karnataka - 560020", 10,18.5);
+    doc.text("Phone: +91 8023561023", 10, 19);
+    doc.setFont("helvetica", "bold");
+    doc.text("GSTIN: 29AACCM4737H1ZA", 10, 23, );
+    doc.text("Udyan Ref No: UDYAM-KR-03-0101576", 10, 27, );
+    doc.setFont("helvetica", "normal");
+    // ✅ Add Company Logo (Right Side)
+   	let logo = new Image();
+    logo.src = "/assets/img/logo.png";
+    
+    //logo.onload = function () {
+    doc.addImage(logo, "PNG", 150, 4, 50, 18); // (image, type, x, y, width, height)        
+
+    // Title
+    doc.setFontSize(16);
+    doc.text("Quotation Details", 105, 35, { align: "center" } );    
+    doc.setFont("helvetica", "normal");
+    doc.rect(3, 28, 203.5, 10); // Horizontal Line
+    
+    doc.setFontSize(12);
+    doc.rect(3, 38, 203.5, 10);
+    doc.text("Quotation Number: " + document.getElementById("qid").value, 10, 45);
+    if (rawDateTime) {
+        var date = new Date(rawDateTime);
+        var day = String(date.getDate()).padStart(2, '0');
+        var month = String(date.getMonth() + 1).padStart(2, '0'); // Month is 0-based
+        var year = date.getFullYear();
+        var formattedDate = `${day}-${month}-${year}`;
+
+        doc.text("Quotation Date: " + formattedDate, 128, 45);
+    }  
+    
+    doc.rect(3, 38, 203.5, 60); // Horizontal Line
+    doc.line(105, 48, 105, 98); 
+    
+    doc.setFont("helvetica", "bold");
+    doc.text("Billing Address", 10, 54  ); 
+    doc.text("Shipping Address", 129, 54  );  
+    doc.rect(3, 48, 102, 10);  // Left Header Box
+    doc.rect(105, 48, 101.5, 10); // Right Header Box
+  
+    doc.setFont("helvetica", "bold"); 
+    doc.setFontSize(10);
+
+    let billingAndShippengAddY = 65;
+    
+    // Billing Address Section
+    
+    // ✅ M/S (Bold) + Vendor Name (Normal) on the Same Line
+    let msLabel = "M/S ";
+    doc.setFont("helvetica", "bold");
+    doc.text(msLabel, 10, billingAndShippengAddY);
+    let msLabelWidth = doc.getTextWidth(msLabel);
+    doc.setFont("helvetica", "normal");
+    doc.text(document.getElementById("vendorlegalNamee").value, 10 + msLabelWidth + 16, billingAndShippengAddY); 
+
+    // ✅ Address (Bold) + Address Text (Normal, Wrapped Properly)
+    doc.setFont("helvetica", "bold");
+    let addressLabel = "Address ";
+    doc.text(addressLabel, 10, billingAndShippengAddY + 6);
+    let addressLabelWidth = doc.getTextWidth(addressLabel);
+    doc.setFont("helvetica", "normal");
+
+    let addressText = document.getElementById("shipmentAddress").value;
+    let maxWidth = 65;
+    let addressLines = doc.splitTextToSize(addressText, maxWidth);
+    let addressX = 10 + addressLabelWidth + 5;
+    let addressY = billingAndShippengAddY + 6;
+
+    // Print wrapped address lines
+    let lineHeight = 5; // Adjust if your font size changes
+    for (let i = 0; i < addressLines.length; i++) {
+        doc.text(addressLines[i], addressX, addressY + (i * lineHeight));
+    }
+
+    // ✅ Dynamically Position GSTIN After Address
+    let gstY = addressY + (addressLines.length * lineHeight) + 1; // Extra 5px padding after address
+    doc.setFont("helvetica", "bold"); 
+    let gstLabel = "GSTIN ";
+    doc.text(gstLabel, 10, gstY);
+    let gstLabelWidth = doc.getTextWidth(gstLabel);
+    doc.setFont("helvetica", "normal");
+    doc.text(document.getElementById("gstnumberr").value, 10 + gstLabelWidth + 11, gstY);
+    
+    //shipping address
+				        
+				        
+	// shipping address box position
+	const boxX = 105;
+	const boxY = 48;
+	const boxWidth = 101.5;
+	
+	// Font settings
+	doc.setFont("helvetica", "bold");
+	doc.setFontSize(10);
+	
+	// ------------------ Address ------------------
+	let addressLabell = "Address ";
+	doc.text(addressLabell, 110, 65);
+	let addressLabelWidthh = doc.getTextWidth(addressLabell);
+	doc.setFont("helvetica", "normal");
+	
+	let addressTextt = document.getElementById("deliveryAddress").value;
+	let maxWidthh = 60;
+	let addressLiness = doc.splitTextToSize(addressTextt, maxWidthh);
+	let addressXx = 110 + addressLabelWidthh + 17;
+	let addressYy = 65;
+	
+	let lineHeight1 = 5;
+	for (let i = 0; i < addressLiness.length; i++) {
+	    doc.text(addressLiness[i], addressXx, addressYy);
+	    addressYy += lineHeight1;
+	}
+	
+	// ------------------ Contact Person ------------------
+	let contactY = addressYy + 1;
+	let msLabell = "Contact Person ";
+	doc.setFont("helvetica", "bold");
+	doc.text(msLabell, 110, contactY);
+	let msLabelWidthh = doc.getTextWidth(msLabell);
+	doc.setFont("helvetica", "normal");
+	doc.text(document.getElementById("personName").value, 110 + msLabelWidthh + 5, contactY);
+	
+	// ------------------ Mobile Number ------------------
+	let mobileY = contactY + lineHeight1;
+	doc.setFont("helvetica", "bold");
+	let gstLabell = "Mobile Number ";
+	doc.text(gstLabell, 110, mobileY);
+	let gstLabelWidthh = doc.getTextWidth(gstLabell);
+	doc.setFont("helvetica", "normal");
+	doc.text(document.getElementById("contactDetails").value, 110 + gstLabelWidthh + 6, mobileY);
+	
+	// ------------------ Email ID ------------------
+	let emailY = mobileY + lineHeight1;
+	doc.setFont("helvetica", "bold");
+	let gstLabelll = "Email ID ";
+	doc.text(gstLabelll, 110, emailY);
+	let gstLabelWidthhh = doc.getTextWidth(gstLabelll);
+	doc.setFont("helvetica", "normal");
+	doc.text(document.getElementById("emailId").value, 110 + gstLabelWidthhh + 18, emailY);
+	
+	
+	
+	
+	
+	
+	// ------------------ Dynamically draw the box ------------------
+	// The height is from boxY to the final Y position used + padding
+	const dynamicBoxHeight = (emailY + lineHeight1) - boxY;
+	
+	
+	
+	// doc.rect(boxX, boxY, boxWidth, dynamicBoxHeight); // 🟦 dynamic height box
+		        
+    doc.setFontSize(14);
+    doc.rect(3, 100, 203.5, 10);        
+    doc.text("Product Details", 105, 106, { align: "center" }  );
+    
+    const headers = [
+        "S.No","Product Name", "HSN Code", "Part Number", "Description",
+        "Quantity", "Price", "Total"
+    ];
+
+    // Fetch table data
+    let tableData = [];
+    let rowIndex = 1;
+    document.querySelectorAll("#productTableBody tr").forEach(row => {
+        let cells = row.querySelectorAll("td");
+        tableData.push([
+        	 rowIndex.toString(), 
+            cells[0]?.textContent || "-",
+            cells[1]?.textContent || "-",
+            cells[2]?.textContent || "-",
+            cells[3]?.textContent || "-",
+            cells[4]?.textContent || "-",
+            cells[5]?.textContent || "-",
+            cells[6]?.textContent || "-"             
+           
+        ]);
+        rowIndex++;
+    });
+
+    // Define table starting position
+    let startX = 3, startY = 110;
+    let colWidths = [12, 30, 30, 30, 41.5, 20, 20, 20]; // Column widths
+    let rowHeight = 8; // Row height
+    doc.setFillColor(211, 211, 211); // Light grey background
+    doc.setFont("helvetica", "bold"); // Bold text
+    doc.setFontSize(11);
+
+    // Draw table headers
+    let currentX = startX;
+    headers.forEach((header, index) => {
+        doc.rect(currentX, startY, colWidths[index], rowHeight); // Draw cell border
+        doc.text(header, currentX + 2, startY + 5); // Add text inside cell
+        currentX += colWidths[index];
+    });
+    
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    
+    let { total, tax, finalAmount, aggregateCgst, aggregateSgst, aggregateIgst } = calculateTotalFromTable();
+    let amountInWords = numberToWords(finalAmount);
+    
+    // Draw table rows
+		let currentY = startY + rowHeight;
+		tableData.forEach(row => {
+		    currentX = startX;
+		    row.forEach((cell, index) => {
+		        doc.rect(currentX, currentY, colWidths[index], rowHeight); // Draw cell border
+		        doc.text(cell, currentX + 2, currentY + 5); // Add text inside cell
+		        currentX += colWidths[index];
+		    });
+		    currentY += rowHeight;
+		});
+		
+		
+		// Draw cells
+		let totalColSpan = colWidths.length - 1;
+		let totalLabelWidth = 0;
+		for (let i = 0; i < totalColSpan; i++) {
+		    totalLabelWidth += colWidths[i];
+		}
+		
+		// ✅ Add totals row
+		let totalRowY = currentY;
+		let totalLabel = "Taxable Amount:";
+		let totalValue = `${total}`;
+		
+		// Set Y position below the table
+        let leftY = currentY + 5; // Add padding after the table
+        let rightY = currentY; // Add padding after the table
+        let bankDetailsYval = leftY - 5; // this is to start amount in worlds after bank details rec ends,
+        doc.rect(3, leftY - 5, 102, 23);     
+     
+        let bankText = "Bank Details";
+        let bankX = 5;
+        let bankY = leftY;
+
+        doc.setFontSize(10);
+        doc.setFont("helvetica", "bold");
+        doc.text(bankText, bankX, bankY);
+        
+        // Underline by drawing a line under the text
+        let textWidth1 = doc.getTextWidth(bankText);
+        doc.setLineWidth(0.5); // optional: set thickness of underline
+        doc.line(bankX, bankY + 1, bankX + textWidth1, bankY + 1);
+        
+        leftY += 5
+        doc.setFont("helvetica", "normal");
+        doc.text("Bank Name: HDFC Bank", 5, leftY);
+        leftY += 5
+        doc.text("Bank Account Number: 03677630001106", 5, leftY);
+        leftY += 5
+        doc.text("Bank IFSC Code: HDFC0000367", 5, leftY);
+		
+		// Label cell (spans multiple columns)
+		//doc.rect(startX, totalRowY, totalLabelWidth, rowHeight);
+		doc.text(totalLabel, startX + totalLabelWidth - 2, totalRowY + 5, { align: 'right' });
+		
+		// Value cell
+		//doc.rect(startX + totalLabelWidth, totalRowY, colWidths[colWidths.length - 1], rowHeight);
+		doc.text(totalValue, startX + totalLabelWidth + 2, totalRowY + 5);
+		
+		doc.setLineWidth(0.2);
+		doc.rect(105, rightY, 101, 23);   
+		
+		
+		if(`${aggregateCgst}` > 0){		
+			// Move Y for next content
+			currentY += 5;
+			// Define labels and values for the new row
+			let aggregateCgsttLabel = "Added CGST:";
+			let aggregateCgsttValue = `${aggregateCgst}`;
+			
+			// Extra row - Label cell (merged columns)
+			doc.text(aggregateCgsttLabel, startX + totalLabelWidth - 2, currentY + 5, { align: 'right' });
+	  		
+			// Extra row - Value cell (last column)
+			// Adjust the X position accordingly
+			doc.text(aggregateCgsttValue, startX + totalLabelWidth + 2, currentY + 5);
+        }
+		if(`${aggregateSgst}` > 0){	
+			
+			// Move Y for next content
+			currentY += 5;
+			// Define labels and values for the new row
+			let aggregateSgsttLabel = "Added SGST:";
+			let aggregateSgsttValue = `${aggregateSgst}`;
+			
+			// Extra row - Label cell (merged columns)
+			doc.text(aggregateSgsttLabel, startX + totalLabelWidth - 2, currentY + 5, { align: 'right' });
+	  		
+			// Adjust the X position accordingly
+			doc.text(aggregateSgsttValue, startX + totalLabelWidth + 2, currentY + 5);
+			
+        }
+	
+		if(`${aggregateIgst}` > 0){
+			// Move Y for next content
+			currentY += 5;
+			// Define labels and values for the new row
+			let aggregateIgstLabel = "Added IGST:";
+			let aggregateIgstValue = `${aggregateIgst}`;
+			
+			// Extra row - Label cell (merged columns)
+			doc.text(aggregateIgstLabel, startX + totalLabelWidth - 2, currentY + 5, { align: 'right' });
+	  		
+			// Extra row - Value cell (last column)
+			// Adjust the X position accordingly
+			doc.text(aggregateIgstValue, startX + totalLabelWidth + 2, currentY + 5);
+			
+		}
+		
+		// Move Y for next content
+		currentY += 5;
+		// Define labels and values for the new row
+		let totalAmountAfterTaxtLabel = "Total Amount After Tax:";
+		let totalAmountAfterTaxValue = `${finalAmount}`;
+		
+		// Extra row - Label cell (merged columns)
+		doc.setFont("helvetica", "bold");
+		doc.text(totalAmountAfterTaxtLabel, startX + totalLabelWidth - 2, currentY + 5, { align: 'right' });
+		
+		// Adjust the X position accordingly
+		doc.text(totalAmountAfterTaxValue, startX + totalLabelWidth + 2, currentY + 5);
+		// Move Y for next content
+		currentY += 5;
+		// Move Y for next content
+		currentY += 5;
+		
+		
+		// Move Y for next content
+		currentY += 5;
+		// Track the Y position for the "Total in Words" section
+		//let totalInWordsYStart = currentY;  
+		doc.setFont("helvetica", "bold");
+		doc.setFontSize(12);
+		doc.setLineWidth(0.2); // Reset to default line thickness before drawing the final box
+		
+		// Draw the rectangle for total in words
+		const totalInWordsHeight = 10;
+		doc.rect(3, 23 + bankDetailsYval, 203.5, totalInWordsHeight); // rec start from banckdedetailsYstartFrom + height of the rect
+		
+		// Draw the text inside the box (vertically center text)
+		const textY = 23 + bankDetailsYval + totalInWordsHeight / 2 + 2; // +2 for visual alignment
+		doc.text(`Total in Words: ${amountInWords}`, 105, textY, { align: "center" });
+    
+    let termsAndConYAxis = 23 + bankDetailsYval + 20; // height of bank details rec + bankDetails rec Y axis start position + gap between ampunt in words and terms and condistions
+
+    //doc.setFont("helvetica", "bold");
+    //doc.setFontSize(10);
+    //doc.setMarginTop(20);
+    //doc.text(`Terms And Condition:`, 5, termsAndConYAxis);
+    
+    // Set bold font
+	doc.setFont("helvetica", "bold");
+	doc.setFontSize(10);
+	
+	// Text position
+	const x = 5;
+	const y = termsAndConYAxis + 5;
+	
+	// Draw the text
+	const text = "Terms And Condition:";
+	doc.text(text, x, y);
+	
+	// Underline manually
+	const textWidth = doc.getTextWidth(text);
+	doc.setLineWidth(0.3); // Optional: makes the underline a bit thicker
+	doc.line(x, y + 1, x + textWidth, y + 1); // underline just below the text
+    
+    termsAndConYAxis += 10;
+    let termsText = $('#terms_and_condition').val(); // Get value from the input/textarea
+    doc.setFont("helvetica", "normal");
+    doc.text(termsText, 5, termsAndConYAxis);
+    
+    
+    
+    doc.setFontSize(8);
+    doc.setTextColor(100); // Optional: subtle gray
+    doc.text("*This is a computer-generated quotation, no seal and signature required", 105, 292, { align: "center" });
+    //};
+
+    // Convert PDF to Blob
+    const pdfBlob = new Blob([doc.output("arraybuffer")], { type: "application/pdf" });
+
+    const formData = new FormData();
+    formData.append("from", fromAddress);
+    formData.append("to", toAddress);
+    formData.append("cc", ccAddress);
+    formData.append("subject", subjectName);
+    formData.append("message", bodyContent);
+    formData.append("password", enteredPaswword);
+    formData.append("file", pdfBlob, "Quotation.pdf"); // Append blob with filename
+    formData.append("quotationId", quotationId);
+
+    $.ajax({
+        type: "POST",
+        url: "/sendEmailToTheCustomerWithAttachment",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            //alert(response);
+            hideLoadingPopup();
+            closeSendEmailForCustomerOuterDiv();
+            Swal.fire({ icon: 'success', title: "Delivered", text: response });
+        },
+        error: function(xhr) {
+            alert("Error: " + xhr.responseText);
+            hideLoadingPopup();
+        }
+    });
+}
+
+
+// Function to calculate total and tax from table data
+function calculateTotalFromTable() {
+let totalSum = 0;
+let aggregateCgst = 0;
+let aggregateSgst = 0;
+let aggregateIgst = 0;
+let taxSum = 0;
+
+document.querySelectorAll(".hiddenProductDetailsTableBoxData tbody tr").forEach(row => {
+    let total = parseFloat(row.children[4].innerText) || 0;
+    let cgst = parseFloat(row.children[5].innerText) || 0;
+    let sgst = parseFloat(row.children[6].innerText) || 0;
+    let igst = parseFloat(row.children[7].innerText) || 0;
+
+    console.log("total == "+total);
+    console.log("cgst == "+cgst);
+    console.log("sgst == "+sgst);
+    console.log("igst == "+igst);
+    
+    totalSum += total;
+    
+    console.log("totalSum == "+totalSum);
+
+    if (cgst === 0 && sgst === 0) {
+    	aggregateIgst += igst;
+    	console.log("aggregateIgst == "+aggregateIgst);
+        taxSum += igst;
+        console.log("taxSum == "+taxSum);
+    } else if (igst === 0) {
+    	aggregateCgst += cgst
+     	aggregateSgst += sgst;
+    	console.log("aggregateCgst == "+aggregateCgst);
+    	console.log("aggregateSgst == "+aggregateSgst);
+    	taxSum += cgst + sgst;
+        console.log("taxSum == "+taxSum);
+    }
+});
+
+let finalAmount = Math.round(totalSum + taxSum);
+totalSum = Math.round(totalSum);
+taxSum = Math.round(taxSum);
+aggregateCgst = Math.round(aggregateCgst);
+aggregateSgst = Math.round(aggregateSgst);
+aggregateIgst = Math.round(aggregateIgst);
+
+console.log("finalAmount == "+finalAmount);
+return { total: totalSum, tax: taxSum, finalAmount: finalAmount, aggregateCgst: aggregateCgst, aggregateSgst: aggregateSgst, aggregateIgst: aggregateIgst };
+}
+
+function numberToWords(num) {
+const ones = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"];
+const teens = ["Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen",
+               "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
+const tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
+
+function twoDigits(n) {
+    if (n < 10) return ones[n];
+    if (n < 20) return teens[n - 10];
+    return tens[Math.floor(n / 10)] + (n % 10 ? " " + ones[n % 10] : "");
+}
+
+function threeDigits(n) {
+    if (n < 100) return twoDigits(n);
+    return ones[Math.floor(n / 100)] + " Hundred" + (n % 100 ? " " + twoDigits(n % 100) : "");
+}
+
+if (num === 0) return "Zero Only";
+
+let result = "";
+
+const crore = Math.floor(num / 10000000);
+num %= 10000000;
+if (crore) result += threeDigits(crore) + " Crore ";
+
+const lakh = Math.floor(num / 100000);
+num %= 100000;
+if (lakh) result += threeDigits(lakh) + " Lakh ";
+
+const thousand = Math.floor(num / 1000);
+num %= 1000;
+if (thousand) result += threeDigits(thousand) + " Thousand ";
+
+if (num > 0) result += (result !== "" ? "and " : "") + threeDigits(num);
+
+
+return result.trim() + " Only";
+}
+	
+document.getElementById("emailManuallySentCheckBox").addEventListener("change", function () {
+    let quotationId = $('#qid').val();
+    let isChecked = this.checked; // Store the checked state before the AJAX call
+
+    $.ajax({
+        url: '/retrieveEmailSentFlagStatusValue',
+        type: 'GET',
+        data: { quotationId: quotationId },
+        contentType: 'application/json', // Specify content type
+        success: function (data) {
+            if (data !== "1") {
+                let emailStatusFlag = isChecked ? "2" : "0"; // Determine flag based on checkbox state
+
+                $.ajax({
+                    type: "POST",
+                    url: "/updateEmailSentMailStatusForManuallySentByTheAdmin",
+                    data: {
+                        emailStatusFlag: emailStatusFlag,
+                        quotationId: quotationId
+                    },
+                    success: function (response) {
+                        console.log(response);
+                    },
+                    error: function (xhr) {
+                        alert("Error: " + xhr.responseText);
+                    }
+                });
+                
+                if(emailStatusFlag === "0"){
+                	$('#email_send_button').text("Send");
+                    $('#email_send_button').prop("disabled", false);
+                }else{
+                	$('#email_send_button').text("Sent");
+                    $('#email_send_button').prop("disabled", true);
+                }                	
+            } else {
+                $('#emailManuallySentCheckBox').prop("checked", false);
+                $('#email_send_button').text("Send");
+                $('#email_send_button').prop("disabled", false);
+                alert("The email has already been sent to the customer using the send button!");
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('Failed to get email sent status flag:', error);
+            console.error('Response text:', xhr.responseText);
+        }
+    });
+});
+</script>
+
+<script>
+function saveProduct() {
+    // Get the product ID (Primary Key)
+    var productID = document.getElementById("product_id").value;
+	var dateTime = document.getElementById("pdateTime").value;
+    // Get updated values from modal
+    var productName = document.getElementById("product_name").value;
+    var hsnCode = document.getElementById("hsn_code").value;
+    var partNumber = document.getElementById("part_number").value;
+    var description = document.getElementById("product_description").value;
+    var remarks = document.getElementById("remarks").value;
+
+    // Create an object to send to the server
+    var productData = {
+        pid: productID,
+        dateTime : dateTime,
+        pname: productName,
+        hsn_code: hsnCode,
+        part_number: partNumber,
+        pdescription: description,
+        remarks: remarks
+    };
+    
+   // alert(JSON.stringify(productData));
+
+    // Send AJAX request to update the product in the database
+    fetch("/updateProduct", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(productData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Find the row in the table and update it
+            var table = document.getElementById("productTable");
+            var rowIndex = document.getElementById("editedRowIndex").value;
+            var row = table.rows[rowIndex];
+
+            row.cells[2].innerText = productName;
+            row.cells[3].innerText = hsnCode;
+            row.cells[4].innerText = partNumber;
+            row.cells[5].innerText = description;
+            row.cells[6].innerText = remarks;
+
+            // Close the modal
+            var productModal = bootstrap.Modal.getInstance(document.getElementById('productModal'));
+            productModal.hide();
+            alert("Updated the product Successfully !");
+            location.reload();
+        } else {
+            alert("Failed to update product!");
+        }
+    })
+    .catch(error => console.error("Error:", error));
+}
+</script>
+
+	<script>
+	function deleteProduct(productId) {
+	    if (confirm("Are you sure you want to delete this product?")) {
+	        $.ajax({
+	            url: '/deleteProduct',  // Send request to `/deleteProduct`
+	            type: 'POST',           // Change method to POST
+	            data: { id: productId }, // Send `id` as form data
+	            success: function(response) {
+	                alert(response.message);  // Show success message
+	                location.reload();
+	            },
+	            error: function(xhr) {
+	                alert("Error: " + xhr.responseText);
+	            }
+	        });
+	    }
+	}
+	</script>
+	
+<script>
+function displayOnLoadingPopup(){
+	$('#loadingPopup').show();
+	$('#loadingPopupPara').text("Loading, please wait...");
+}
+
+function hideLoadingPopup(){
+	$('#loadingPopup').hide();
+}
+</script>
+
+<script>
+let customers = [];
+let selectedContacts = {}; // Stores contacts for each customer
+
+document.addEventListener("DOMContentLoaded", function() {
+    fetchCustomers();
+});
+
+function fetchCustomers() {
+    fetch('/customers')
+        .then(response => response.json())
+        .then(data => {
+            customers = data;
+        })
+        .catch(error => console.error('Error fetching customers:', error));
+}
+
+// Filter customer names based on input
+document.getElementById("revise_vendorName").addEventListener("input", function() {
+    const input = this.value.toLowerCase();
+    const suggestionsBox = document.getElementById("revise_suggestionsBox");
+
+    if (!input) {
+        suggestionsBox.style.display = "none";
+        return;
+    }
+
+    const filteredCustomers = customers.filter(customer => 
+        customer.name.toLowerCase().includes(input)
+    );
+
+    if (filteredCustomers.length === 0) {
+        suggestionsBox.style.display = "none";
+        return;
+    }
+
+    // Store contacts globally and show suggestions
+    suggestionsBox.innerHTML = filteredCustomers.map((customer, index) => {
+        selectedContacts[index] = [
+            { name: customer.c1, designation: customer.c11, mobile: customer.c111, email: customer.c1111, honorifics: customer.honorifics_1 },
+            { name: customer.c2, designation: customer.c22, mobile: customer.c222, email: customer.c2222, honorifics: customer.honorifics_2 },
+            { name: customer.c3, designation: customer.c33, mobile: customer.c333, email: customer.c3333, honorifics: customer.honorifics_3 }
+        ].filter(contact => contact.name); // Remove empty contacts
+
+        return `<div onclick="selectCustomer('${customer.name}', '${customer.legalName}', '${customer.gst}', '${customer.billing_address}', '${customer.delivery_address_1}', '${customer.delivery_address_2}', '${customer.delivery_address_3}', '${customer.honorifics_main}', '${index}')">${customer.name}</div>`;
+    }).join("");
+
+    suggestionsBox.style.display = "block";
+});
+
+// Select customer and populate fields
+function selectCustomer(name, legalName, gst, billingAddresss, deliveryAddress1, deliveryAddress2, deliveryAddress3, mainHonorifics, index) {
+    document.getElementById("revise_vendorName").value = name;
+    document.getElementById("revise_vendorlegalNamee").value = legalName;
+    document.getElementById("revise_gstnumberr").value = gst;
+    document.getElementById("revise_shipmentAddress").value = billingAddresss; // Populate billing address
+    document.getElementById("revise_company_honorifics").value = mainHonorifics;
+    
+ 	// Get the dropdown element
+    let deliverySelect = document.getElementById("revise_deliveryAddress");
+    
+    // Clear existing options
+    deliverySelect.innerHTML = "<option value=''>Select Delivery Address</option>";
+
+    // Array of delivery addresses
+    let deliveryAddresses = [deliveryAddress1, deliveryAddress2, deliveryAddress3];
+
+    // Add only non-null and non-empty addresses to the dropdown
+    deliveryAddresses.forEach(address => {
+        if (address && address.trim() !== "") {
+            let option = document.createElement("option");
+            option.value = address;
+            option.textContent = address;
+            deliverySelect.appendChild(option);
+        }
+    });
+
+    populateContactsDropdown(selectedContacts[index]);
+
+    document.getElementById("revise_suggestionsBox").style.display = "none";
+}
+
+// Populate contact dropdown dynamically
+function populateContactsDropdown(contacts) {
+    const contactDropdown = document.getElementById("revise_personName");
+    contactDropdown.innerHTML = `<option value="">Select Contact Person</option>` +
+        contacts.map(contact => `<option value="${contact.name}" data-designation="${contact.designation}" data-mobile="${contact.mobile}" data-email="${contact.email}" data-honorifics="${contact.honorifics}">${contact.name}</option>`).join("");
+}
+
+// Auto-fill details when selecting a contact person
+document.getElementById("revise_personName").addEventListener("change", function() {
+    const selectedOption = this.options[this.selectedIndex];
+    
+    document.getElementById("revise_deliveryAddress").value = "";
+
+    if (selectedOption.value) {
+    	document.getElementById("revise_contact_person_honorifics").value = selectedOption.dataset.honorifics;
+        document.getElementById("revise_designation").value = selectedOption.dataset.designation || "";
+        document.getElementById("revise_contactDetails").value = selectedOption.dataset.mobile || "";
+        document.getElementById("revise_emailId").value = selectedOption.dataset.email || "";
+    } else {
+        clearContactFields();
+    }
+});
+
+// Hide suggestions when clicking outside
+document.addEventListener("click", function(event) {
+    if (!event.target.closest("#revise_vendorName") && !event.target.closest("#revise_suggestionsBox")) {
+        document.getElementById("revise_suggestionsBox").style.display = "none";
+    }
+});
+
+// Select first suggestion on Enter
+document.getElementById("revise_vendorName").addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        const suggestionsBox = document.getElementById("revise_suggestionsBox");
+        if (suggestionsBox.style.display === "block") {
+            const firstSuggestion = suggestionsBox.querySelector("div");
+            if (firstSuggestion) {
+                firstSuggestion.click(); // Simulate a click on the first suggestion
+                event.preventDefault(); // Prevent form submission
+            }
+        }
+    }
+});
+
+// Clear all related fields on backspace when empty
+document.getElementById("revise_vendorName").addEventListener("keydown", function(event) {
+    if (event.key === "Backspace" && this.value === "") {
+        clearCustomerFields();
+    }
+});
+
+// Clear customer fields
+function clearCustomerFields() {
+    document.getElementById("revise_vendorlegalNamee").value = "";
+    document.getElementById("revise_gstnumberr").value = "";
+    document.getElementById("revise_shipmentAddress").value = "";
+    document.getElementById("revise_personName").innerHTML = `<option value="">Select Contact Person</option>`;
+    clearContactFields();
+}
+
+// Clear contact person fields
+function clearContactFields() {
+    document.getElementById("revise_designation").value = "";
+    document.getElementById("revise_contactDetails").value = "";
+    document.getElementById("revise_emailId").value = "";
+    document.getElementById("revise_contact_person_honorifics").value = "";
+}
+
+function copyAddress() {
+    const shipmentAddress = document.getElementById("revise_shipmentAddress").value;
+    const deliveryAddress = document.getElementById("revise_deliveryAddress");
+    const sameAddress = document.getElementById("revise_sameAddress");
+
+    if (sameAddress.checked) {
+        deliveryAddress.value = shipmentAddress;
+        deliveryAddress.setAttribute("readonly", true);
+    } else {
+        deliveryAddress.value = "";
+        deliveryAddress.removeAttribute("readonly");
+    }
+}
+
+let productCount = 0;
+const GST_PERCENTAGE = 18; // Fixed 18% GST
+
+function addProduct() {
+    productCount++;
+    const tableBody = document.getElementById("revise_productTableBody");
+    //tableBody.innerHTML = ""; // Clear old data
+    
+    // Get selected values from dropdowns
+    /* const productName = document.getElementById("productName").value;
+    const hsnCode = document.getElementById("hsnCode").value;
+    const partNumber = document.getElementById("partNumber").value;
+    const productDescription = document.getElementById("productDescription").value; */
+    
+    const productName = document.getElementById("productName").value;
+    const hsnCode = document.getElementById("partNumber").value;
+    const partNumber = document.getElementById("productDescription").value;
+    const productDescription = document.getElementById("hsnCode").value;
+    
+    // Get checkbox elements correctly
+    const interState = document.getElementById("revise_interState");
+    const outerState = document.getElementById("revise_outerState");
+
+    // Ensure values are selected before adding
+    if (!productName || !hsnCode || !partNumber || !productDescription) {
+        alert("Please select all product details before adding.");
+        return;
+    }
+    
+    if (!(interState.checked) && !(outerState.checked)) {
+        alert("Please select Tax Type Before Adding Products.");
+        return;
+    }
+
+    // Create a new row
+    const row = document.createElement("tr");
+    row.innerHTML = `
+        <td>${productCount}</td>
+        <td>${productName}</td>
+        <td>${hsnCode}</td>
+        <td>${partNumber}</td>
+        <td>${productDescription}</td>
+        <td><input type="number" style="width: 70px" class="form-control quantity" oninput="calculateTotal(this)"></td>
+        <td><input type="number" style="width: 70px" class="form-control price" oninput="calculateTotal(this)"></td>
+        <td class="total-without-gst">0.00</td>
+        <td class="cgst-value">0.00</td>
+        <td class="sgst-value">0.00</td>
+        <td class="igst-value">0.00</td>
+        <td class="total-with-gst">0.00</td>
+        <td><button class="btn btn-outline-danger btn-sm" onclick="removeProduct(this)">Remove</button></td>
+    `;
+
+    tableBody.appendChild(row);
+    
+    // Apply tax selection logic
+    applyGSTSelection();
+
+    // Hide IGST column immediately after adding if Interstate is selected
+    const igstCell = row.querySelector(".igst-value");
+    if (interState.checked) {
+        igstCell.style.display = "none"; // Hide IGST
+        igstCell.innerText = ""; // Remove text
+    }
+
+    // Reset dropdown selections
+    document.getElementById("productName").selectedIndex = 0;
+    document.getElementById("hsnCode").selectedIndex = 0;
+    document.getElementById("partNumber").selectedIndex = 0;
+    document.getElementById("productDescription").selectedIndex = 0;
+}
+
+
+function removeProduct(button) {
+    button.closest("tr").remove();
+    productCount--;
+    updateSlNumbers();
+}
+
+function updateSlNumbers() {
+    document.querySelectorAll("#revise_productTableBody tr").forEach((row, index) => {
+        row.cells[0].innerText = index + 1;
+    });
+}
+
+function calculateTotal(input) {
+    const row = input.closest("tr");
+    const quantity = parseFloat(row.querySelector(".quantity").value) || 0;
+    const price = parseFloat(row.querySelector(".price").value) || 0;
+    
+    //alert(quantity+" "+price);
+    
+    let totalWithoutGST = quantity * price;
+    let cgst = 0, sgst = 0, igst = 0, totalWithGST = totalWithoutGST;
+
+    if (document.getElementById("revise_interState").checked) {
+        cgst = (totalWithoutGST * GST_PERCENTAGE) / 200;
+        sgst = (totalWithoutGST * GST_PERCENTAGE) / 200;
+        totalWithGST += cgst + sgst;
+        row.querySelector(".cgst-value").innerText = cgst.toFixed(2);
+        row.querySelector(".sgst-value").innerText = sgst.toFixed(2);
+        row.querySelector(".igst-value").innerText = "—";
+    } else if (document.getElementById("revise_outerState").checked) {
+        igst = (totalWithoutGST * GST_PERCENTAGE) / 100;
+        totalWithGST += igst;
+        row.querySelector(".cgst-value").innerText = "—";
+        row.querySelector(".sgst-value").innerText = "—";
+        row.querySelector(".igst-value").innerText = igst.toFixed(2);
+    }
+
+    row.querySelector(".total-without-gst").innerText = totalWithoutGST.toFixed(2);
+    row.querySelector(".total-with-gst").innerText = totalWithGST.toFixed(2);
+}
+
+function calculateTotalPriceValueAndTaxCalculationForRevisedPopup(quantityData, priceData){
+	//alert(quantity+" "+price);
+    const quantity = parseFloat(quantityData) || 0;
+    const price = parseFloat(priceData) || 0;
+    
+    let totalWithoutGST = quantity * price;
+    let cgst = 0, sgst = 0, igst = 0, totalWithGST = totalWithoutGST;
+
+    if (document.getElementById("revise_interState").checked) {
+        cgst = (totalWithoutGST * GST_PERCENTAGE) / 200;
+        sgst = (totalWithoutGST * GST_PERCENTAGE) / 200;
+        totalWithGST += cgst + sgst;
+        document.querySelector(".cgst-value").innerText = cgst.toFixed(2);
+        document.querySelector(".sgst-value").innerText = sgst.toFixed(2);
+        document.querySelector(".igst-value").innerText = "—";
+    } else if (document.getElementById("revise_outerState").checked) {
+        igst = (totalWithoutGST * GST_PERCENTAGE) / 100;
+        totalWithGST += igst;
+        document.querySelector(".cgst-value").innerText = "—";
+        document.querySelector(".sgst-value").innerText = "—";
+        document.querySelector(".igst-value").innerText = igst.toFixed(2);
+    }
+
+    document.querySelector(".total-without-gst").innerText = totalWithoutGST.toFixed(2);
+    document.querySelector(".total-with-gst").innerText = totalWithGST.toFixed(2);
+}
+
+/* function toggleGST(type) {
+    if (type === "interState") {
+        document.getElementById("outerState").checked = false;
+    } else {
+        document.getElementById("interState").checked = false;
+    }
+
+    applyGSTSelection();
+} */
+
+function applyGSTSelection() {
+
+    const isInterState = document.getElementById("revise_interState").checked;
+    const isOuterState = document.getElementById("revise_outerState").checked;
+
+    // Toggle visibility of header columns
+    document.querySelector(".revise_cgst-header").classList.toggle("d-none", !isInterState);
+    document.querySelector(".revise_sgst-header").classList.toggle("d-none", !isInterState);
+    document.querySelector(".revise_igst-header").classList.toggle("d-none", !isOuterState);
+
+    // Apply correct values and visibility to each row
+    document.querySelectorAll("#revise_productTableBody tr").forEach(row => {
+        const cgstCell = row.querySelector(".cgst-value");
+        const sgstCell = row.querySelector(".sgst-value");
+        const igstCell = row.querySelector(".igst-value");
+
+        if (isInterState) {
+            cgstCell.style.display = "";
+            sgstCell.style.display = "";
+            igstCell.style.display = "none"; // Hide IGST
+            igstCell.innerText = ""; // Remove text
+        } else if (isOuterState) {
+            cgstCell.style.display = "none"; // Hide CGST
+            sgstCell.style.display = "none"; // Hide SGST
+            igstCell.style.display = "";
+        } else {
+            // If neither is selected, hide all tax columns
+            cgstCell.style.display = "none";
+            sgstCell.style.display = "none";
+            igstCell.style.display = "none";
+        }
+
+        // Ensure tax values are recalculated
+        calculateTotal(row.querySelector(".quantity"));
+    });
+}
+
+let productData = []; // Store fetched data globally
+
+document.addEventListener("DOMContentLoaded", function () {
+    fetch("/product_list")
+        .then(response => response.json())
+        .then(data => {
+            console.log("Fetched Data:", data); // Debugging
+            productData = data; // Store the fetched data globally
+
+            if (data.length > 0) {
+                const productSelect = document.getElementById("productName");
+                const hsnCodeSelect = document.getElementById("hsnCode");
+                const partNumberSelect = document.getElementById("partNumber");
+                const productDescriptionSelect = document.getElementById("productDescription");
+
+                // Clear previous options
+                productSelect.innerHTML = `<option value="">Select a Product</option>`;
+                hsnCodeSelect.innerHTML = `<option value="">Select HSN Code</option>`;
+                partNumberSelect.innerHTML = `<option value="">Select Part Number</option>`;
+                productDescriptionSelect.innerHTML = `<option value="">Select Description</option>`;
+
+                // Loop through data and add options for Product Name
+                data.forEach(product => {
+                    productSelect.innerHTML += `<option value="${product.pname}">${product.pname}</option>`;
+                });
+
+                // Add event listener to detect product selection change
+              /*   productSelect.addEventListener("change", function () {
+                    const selectedProduct = this.value;
+                    const selectedData = productData.find(p => p.pname === selectedProduct);
+
+                    if (selectedData) {
+                        hsnCodeSelect.innerHTML = `<option value="${selectedData.hsn_code}">${selectedData.hsn_code}</option>`;
+                        partNumberSelect.innerHTML = `<option value="${selectedData.part_number}">${selectedData.part_number}</option>`;
+                        productDescriptionSelect.innerHTML = `<option value="${selectedData.pdescription}">${selectedData.pdescription}</option>`;
+                    } else {
+                        // Reset other dropdowns if no product is selected
+                        hsnCodeSelect.innerHTML = `<option value="">Select HSN Code</option>`;
+                        partNumberSelect.innerHTML = `<option value="">Select Part Number</option>`;
+                        productDescriptionSelect.innerHTML = `<option value="">Select Description</option>`;
+                    }
+                }); */
+                
+             // Add event listener to detect product selection change
+                productSelect.addEventListener("change", function () {
+                    const selectedProduct = this.value;
+                    const selectedData = productData.find(p => p.pname === selectedProduct);
+
+                    if (selectedData) {
+                        hsnCodeSelect.value = selectedData.hsn_code;
+                        partNumberSelect.value = selectedData.part_number;
+                        productDescriptionSelect.value = selectedData.pdescription;
+                    } else {
+                        // Reset input fields if no product is selected
+                        hsnCodeSelect.value = "";
+                        partNumberSelect.value = "";
+                        productDescriptionSelect.value = "";
+                    }
+                });
+
+            } else {
+                console.log("No products found.");
+            }
+        })
+        .catch(error => console.error("Error fetching products:", error));
+});
+
+function populateProductDetailsDataBasedOnSelectedProductNameInRevise(productName){
+	const selectedProduct = productName;
+    const selectedData = productData.find(p => p.pname === selectedProduct);
+    
+    const hsnCodeSelect = document.getElementById("hsnCode");
+    const partNumberSelect = document.getElementById("partNumber");
+    const productDescriptionSelect = document.getElementById("productDescription");
+
+    if (selectedData) {
+        hsnCodeSelect.value = selectedData.hsn_code;
+        partNumberSelect.value = selectedData.part_number;
+        productDescriptionSelect.value = selectedData.pdescription;
+    } else {
+        // Reset input fields if no product is selected
+        hsnCodeSelect.value = "";
+        partNumberSelect.value = "";
+        productDescriptionSelect.value = "";
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    
+    // Function to format date-time in dd/mm/yyyy hh:mm:ss
+    function formatDisplayDateTime(date) {
+        let dd = String(date.getDate()).padStart(2, '0');
+        let mm = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+        let yyyy = date.getFullYear();
+        let hh = String(date.getHours()).padStart(2, '0');
+        let min = String(date.getMinutes()).padStart(2, '0');
+        let ss = String(date.getSeconds()).padStart(2, '0');
+
+        return `${dd}/${mm}/${yyyy} ${hh}:${min}:${ss}`;
+    }
+
+    // Function to format date-time for input type datetime-local
+    function formatISODateTime(date) {
+        let yyyy = date.getFullYear();
+        let mm = String(date.getMonth() + 1).padStart(2, '0');
+        let dd = String(date.getDate()).padStart(2, '0');
+        let hh = String(date.getHours()).padStart(2, '0');
+        let min = String(date.getMinutes()).padStart(2, '0');
+        let ss = String(date.getSeconds()).padStart(2, '0');
+
+        return `${yyyy}-${mm}-${dd} ${hh}:${min}:${ss}`;
+    }
+
+    const dateTimeInput = document.getElementById("revise_qdateTime");
+
+    function updateDateTime() {
+        let now = new Date();
+        if (dateTimeInput) {
+            dateTimeInput.value = formatISODateTime(now); // Update datetime-local input
+            dateTimeInput.setAttribute("data-display", formatDisplayDateTime(now)); // Store formatted value
+        } else {
+            console.error("Date-Time input field not found");
+        }
+    }
+
+    updateDateTime(); // Set initial value
+    setInterval(updateDateTime, 1000); // Update every second
+});
+
+function reviseQuotation() {
+    let products = [];
+    $("#revise_productTableBody tr").each(function() {
+        let row = $(this);
+        let product = {
+            productName: row.find("td:eq(1)").text().trim(),
+            hsnCode: row.find("td:eq(2)").text().trim(),
+            partNumber: row.find("td:eq(3)").text().trim(),
+            description: row.find("td:eq(4)").text().trim(),
+            quantity: parseFloat(row.find(".quantity").val()) || 0,
+            price: parseFloat(row.find(".price").val()) || 0,
+            taxableValue: parseFloat(row.find(".total-without-gst").text().trim()) || 0,
+            cgst: parseFloat(row.find(".cgst-value").text().trim()) || 0,
+            sgst: parseFloat(row.find(".sgst-value").text().trim()) || 0,
+            igst: parseFloat(row.find(".igst-value").text().trim()) || 0,
+            total: parseFloat(row.find(".total-with-gst").text().trim()) || 0,
+            qid: $("#revise_qid").val().trim(),
+        };
+
+        // Ensure no invalid values (remove "—" which is causing backend errors)
+        product.cgst = isNaN(product.cgst) ? 0 : product.cgst;
+        product.sgst = isNaN(product.sgst) ? 0 : product.sgst;
+        product.igst = isNaN(product.igst) ? 0 : product.igst;
+
+       // console.log("Row Data:", product);
+        products.push(product);
+        
+    });
+    
+    var taxTypeValue;
+    
+    let checkboxes = document.querySelectorAll('.revisetaxTypeCheckBox');
+    checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+        	taxTypeValue = checkbox.name; // Logs the ID of the checked checkbox
+        }
+    });
+    
+    let quotationData = {
+        qid: $("#revise_qid").val().trim(),
+        qdateTime: $("#revise_qdateTime").val(),
+        vendorName: $("#revise_vendorName").val(),
+        vendorlegalName: $("#revise_vendorlegalNamee").val(),
+        gstnumber: $("#revise_gstnumberr").val(),
+        orderMethod: $("#revise_orderMethod").val(),
+        personName: $("#revise_personName").val(),
+        designation: $("#revise_designation").val(),
+        contactDetails: $("#revise_contactDetails").val(),
+        emailId: $("#revise_emailId").val(),
+        shipmentAddress: $("#revise_shipmentAddress").val(),
+        deliveryAddress: $("#revise_deliveryAddress").val(),
+        taxType: taxTypeValue,
+        products: products
+    };
+
+    //alert("Sending Data:", JSON.stringify(quotationData));
+    console.log("Sending Data: ", quotationData); // Debugging Output
+    //alert($('#terms_and_condition').val());
+    
+    let termsAndConditionValue = $('#revise_terms_and_condition').val() || "";  // Ensure it is not null
+
+    $.ajax({
+        type: "POST",
+        url: "/reviseQuotation/save?termsAndConditionValue=" + encodeURIComponent(termsAndConditionValue),
+        contentType: "application/json",
+        data: JSON.stringify(quotationData),
+        success: function(response) {
+            alert(response);
+        },
+        error: function(xhr) {
+            alert("Error: " + xhr.responseText);
+        }
+    });
+}
+</script>
+
+</body>
+</html>

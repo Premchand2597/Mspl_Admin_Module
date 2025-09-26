@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Vendors List</title>
+   
+<!--   <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+   -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+  
+  <link rel="stylesheet" href="/assets/font/fonts.css"> 
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+  
+  <!--   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+  <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> -->
+  <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+<!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> -->
+  <script src="assets/js/jquery-3.6.4.min.js"></script> 
+</head>
+
+<style>
+
+        /* Style for pagination buttons */
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            padding: 5px 10px;
+            margin: 2px;
+            border-radius: 5px;
+            border: 1px solid #007bff;
+            color: #007bff;
+            background: white;
+            transition: 0.3s;
+             cursor:default;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+            background: #007bff !important;
+            color: white !important;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+            background: #0056b3 !important;
+            color: white !important;
+             cursor:default;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+            color: #999 !important;
+            border-color: #ddd;
+        }
+
+        /* Custom ellipsis style */
+        .paginate_button.ellipsis {
+            cursor:default;
+            border: none;
+            background: none;
+            color: #999;
+            padding: 5px 10px;
+        }
+    </style>
+<body>
+
+<div class="container-fluid mt-1">
+    <!-- Table -->
+    <table id="vendorTable" class="table text-center table-hover table-responsive" style="font-size:12px;">
+        <thead class="table-primary text-center" style="position:sticky;top:0;z-index:2;">
+            <tr>             
+            	<th class="text-center table-responsive">SL No</th>
+                <th class="text-center table-responsive">Edit</th>
+				<th class="text-center table-responsive">Delete</th>
+                <th class="text-center table-responsive">Date Time</th>
+                <th class="text-center table-responsive">Customer ID</th>
+                <th class="text-center table-responsive">Honorifics</th>
+                <th class="text-center table-responsive">Customer Name</th>
+                <th class="text-center table-responsive">Customer Legal Name</th>
+                <th class="text-center table-responsive">GST Number</th>
+                <th class="text-center table-responsive">Honorifics</th>
+                <th class="text-center table-responsive">Contact Person 1</th>
+                <th class="text-center table-responsive">Designation</th>
+                <th class="text-center table-responsive">Mobile Number</th>
+                <th class="text-center table-responsive">Email Id</th>
+                <th class="text-center table-responsive">Honorifics</th>
+                <th class="text-center table-responsive">Contact Person 2</th>
+                <th class="text-center table-responsive">Designation</th>
+                <th class="text-center table-responsive">Mobile Number</th>
+                <th class="text-center table-responsive">Email Id</th>
+                <th class="text-center table-responsive">Honorifics</th>
+                <th class="text-center table-responsive">Contact Person 3</th>
+                <th class="text-center table-responsive">Designation</th>
+                <th class="text-center table-responsive">Mobile Number</th>
+                <th class="text-center table-responsive">Email Id</th>
+                <th class="text-center table-responsive">Delivery Address 1</th>
+                <th class="text-center table-responsive">Delivery Address 2</th>
+                <th class="text-center table-responsive">Delivery Address 3</th>
+                <th class="text-center table-responsive">Billing Address</th>
+                
+                  
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="vend, serialNo : ${vendor}">              
+                <td th:text="${serialNo.count}"></td>
+                <td>
+                	<img src="/assets/img/edit.png" alt="Update" width="15" height="15" title="Update" 
+						style="cursor: pointer;" onclick="editVendor(this)">
+					</td>
+					<td>
+						<img src="assets/img/delete.png" alt="Delete" width="15" height="15" title="Delete"
+						style="cursor: pointer;"
+						th:attr="onclick='deleteVendor(\'' + ${vend.vid} + '\')'">
+					</td>
+					 
+					<td style="min-width: 120px;" class="dateTimeCell" th:text="${vend.dateTime}"></td>
+					
+					<td style="min-width: 180px;" th:text="${vend.vid}"></td>
+					<td style="min-width: 80px;" th:text="${vend.honorifics_main}"></td>
+					<td th:text="${vend.vname}"></td>
+					<td th:text="${vend.vlname}"></td>
+					<td th:text="${vend.gstnumber}"></td>
+					<td th:text="${vend.honorifics_1}"></td>
+					<td th:text="${vend.contact_p1_name}"></td>
+					<td th:text="${vend.contact_p1_designation}"></td>
+					<td th:text="${vend.contact_p1_mobile}"></td>
+					<td th:text="${vend.contact_p1_email}"></td>
+					<td th:text="${vend.honorifics_2}"></td>
+					<td th:text="${vend.contact_p2_name}"></td>
+					<td th:text="${vend.contact_p2_designation}"></td>
+					<td th:text="${vend.contact_p2_mobile}"></td>
+					<td th:text="${vend.contact_p2_email}"></td>
+					<td th:text="${vend.honorifics_3}"></td>
+					<td th:text="${vend.contact_p3_name}"></td>
+					<td th:text="${vend.contact_p3_designation}"></td>
+					<td th:text="${vend.contact_p3_mobile}"></td>
+					<td th:text="${vend.contact_p3_email}"></td>
+					<td style="min-width: 240px;" th:text="${vend.delivery_address_1}"></td>
+					<td style="min-width: 240px;" th:text="${vend.delivery_address_2}"></td>
+					<td style="min-width: 240px;" th:text="${vend.delivery_address_3}"></td>
+					<td style="min-width: 240px;" th:text="${vend.billing_address}"></td>
+				</tr>
+        </tbody>
+    </table>
+
+</div>
+
+
+<div class="modal fade" id="customerModal" tabindex="-1" aria-labelledby="customerModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-xl">
+		<div class="modal-content">
+			<!-- Header -->
+			<div class="modal-header">
+				<h5 class="modal-title" id="quotationModalLabel">Edit Customers</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+
+			<!-- Body -->
+			<div class="modal-body">
+				  <input type="hidden" id="editRowIndex"> 
+					
+					<div class="row mb-3 justify-content-between">
+						<div class="col-md-4">
+							<input type="text" class="form-control" id="vendorRegId" placeholder="Customer ID" disabled />
+						</div>
+						<div class="col-md-4 text-end">
+
+							<input type="text" class="form-control" id="cdateTime" />
+						</div>
+					</div>
+
+					<!-- Vendor and Person Details -->
+					<div class="row mb-3">
+						<div class="col-md-2">
+							<label for="main_honorifics" class="form-label">Honorifics</label>
+							<select id="main_honorifics" class="form-select">
+								<option value="" selected disabled="disabled"></option>
+								<option value="M/S.">M/s.</option>
+                                <option value="Mr.">Mr.</option>
+                                <option value="Ms.">Ms.</option>
+                            </select>
+						</div>
+						<div class="col-md-4">
+							<label for="vendorName" class="form-label">Customer Name</label>
+							<input type="text" class="form-control" id="vendorRegName"
+								placeholder="Enter Customer Name" />
+						</div>
+						<div class="col-md-4">
+							<label for="personName" class="form-label">Customer Legal Name</label>
+							<input type="text" class="form-control" id="vendorLegalName"
+								placeholder="Enter Customer Legal Name" />
+						</div>
+						<div class="col-md-2">
+							<label for="designation" class="form-label">GST Number</label>
+							<input type="text" class="form-control" id="vendorGstNumber" placeholder="Enter GST Number" />
+						</div>
+					</div>
+					
+				<nav class="navbar navbar-light bg-light mb-3 border border-right-0 border-left-0">
+				    <div class="container-fluid ">
+				        <span class="navbar-brand mb-0 h4">Contact Details</span>
+				    </div>
+				</nav>
+
+				<div class="container mb-3">
+				    <div id="contactContainer" class="row g-3">
+				        <!-- Default Contact Person 1 -->
+				        <div class="col-md-4 contact-group" id="contact_1">
+				            <label>Contact Person 1</label>
+				            <select class="form-select" id="honorifics1">
+								<option value="" selected disabled="disabled">Select Honorifics</option>
+								<!-- <option value="M/S.">M/S.</option> -->
+                                <option value="Mr.">Mr.</option>
+                                <option value="Ms.">Ms.</option>
+                            </select>
+				            <input type="text" class="form-control mt-2" placeholder="Contact Person 1 Name" id="c1">
+				            <input type="text" class="form-control mt-2" placeholder="Designation" id="c11">
+				            <input type="email" class="form-control mt-2" placeholder="Mobile Number" id="c111">
+				            <input type="text" class="form-control mt-2" placeholder="Email ID" id="c1111">
+				        </div>
+				        
+				         <div class="col-md-4 contact-group" id="contact_2">
+				            <label>Contact Person 2</label>
+				            <select class="form-select" id="honorifics2">
+								<option value="" selected disabled="disabled">Select Honorifics</option>
+								<!-- <option value="M/S.">M/S.</option> -->
+                                <option value="Mr.">Mr.</option>
+                                <option value="Ms.">Ms.</option>
+                            </select>
+				            <input type="text" class="form-control mt-2" placeholder="Contact Person 2 Name" id="c2">
+				            <input type="text" class="form-control mt-2" placeholder="Designation" id="c22">
+				            <input type="email" class="form-control mt-2" placeholder="Mobile Number" id="c222">
+				            <input type="text" class="form-control mt-2" placeholder="Email ID" id="c2222">
+				        </div>
+				        
+				         <div class="col-md-4 contact-group" id="contact_3">
+				            <label>Contact Person 3</label>
+				            <select class="form-select" id="honorifics3">
+								<option value="" selected disabled="disabled">Select Honorifics</option>
+								<!-- <option value="M/S.">M/S.</option> -->
+                                <option value="Mr.">Mr.</option>
+                                <option value="Ms.">Ms.</option>
+                            </select>
+				            <input type="text" class="form-control mt-2" placeholder="Contact Person 3 Name" id="c3">
+				            <input type="text" class="form-control mt-2" placeholder="Designation" id="c33">
+				            <input type="email" class="form-control mt-2" placeholder="Mobile Number" id="c333">
+				            <input type="text" class="form-control mt-2" placeholder="Email ID" id="c3333">
+				        </div>
+				    </div>
+				</div>
+				
+				<nav class="navbar navbar-light bg-light mb-3 border border-right-0 border-left-0">
+					    <div class="container-fluid ">
+					        <span class="navbar-brand mb-0 h4">Billing Address Details</span>
+					    </div>
+					</nav>
+
+
+					<!-- Vendor and Shipment Address -->
+					<div class="row mb-12 mb-3">
+						<!-- <div class="col-md-6">
+							<label for="delivaryAddresss" class="form-label">Delivery Address</label>
+							<textarea class="form-control" id="deliveryAddresss" placeholder="Enter Delivery Address"></textarea>
+						</div> -->
+						<div class="col-md-12">
+							<label for="billingAddresss" class="form-label">Billing Address</label>
+							<textarea class="form-control" id="billingAddresss" placeholder="Enter Billing Address"></textarea>
+						</div>
+					</div>
+
+				<nav class="navbar navbar-light bg-light mb-3 border border-right-0 border-left-0">
+				    <div class="container-fluid ">
+				        <span class="navbar-brand mb-0 h4">Delivery Address Details</span>
+				    </div>
+				</nav>
+				
+				<!-- Vendor and Shipment Address -->
+					<div class="row mb-3 mt-2">
+						<!-- <div class="col-md-6">
+                            <label for="vendorAddress" class="form-label">Vendor Address</label>
+                            <textarea
+                                class="form-control"
+                                id="vendorAddress"
+                                rows="2"
+                                placeholder="Enter Vendor Address"
+                            ></textarea>
+                        </div>-->
+                        
+                        <div class="col-md-4 mt-2">
+							<label for="delivery_Address1" class="form-label">Delivery Address 1</label>
+							<textarea class="form-control" id="delivery_Address1" placeholder="Enter Delivery Address 1"></textarea>
+						</div>
+						
+						<div class="col-md-4 mt-2">
+							<label for="delivery_Address2" class="form-label">Delivery Address 2</label>
+							<textarea class="form-control" id="delivery_Address2" placeholder="Enter Delivery Address 2"></textarea>
+						</div>
+						
+						<div class="col-md-4 mt-2">
+							<label for="delivery_Address3" class="form-label">Delivery Address 3</label>
+							<textarea class="form-control" id="delivery_Address3" placeholder="Enter Delivery Address 3"></textarea>
+						</div>
+
+						<!-- <div class="col-md-12 mt-2">
+							<label for="billingAddress" class="form-label">Billing Address</label>
+							<textarea class="form-control" id="billingAddress" placeholder="Enter Billing Address"></textarea>
+						</div> -->
+						<!-- <div class="col-md-6">
+							<label for="shipmentAddresss" class="form-label">Shipment Address</label>
+							<textarea class="form-control" id="shipmentAddresss" placeholder="Enter Shipment Address"></textarea>
+						</div> -->
+					</div>
+					
+			</div>
+
+			<!-- Footer -->
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+					Close
+				</button>
+				<button type="button" class="btn btn-primary" onclick="saveVendors()">
+					Save
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+<script>
+    $(document).ready(function() {
+        var table = $('#vendorTable').DataTable({
+            "paging": true, 
+            "searching": true,
+            "scrollX" : true,
+             "lengthMenu": [8, 15, 25, 50, 75, 100, 200, 500, 800, 1000],
+             "pageLength": 8,
+             "pagingType": "full_numbers",
+            "info": true,
+            "dom": '<"d-flex justify-content-between mb-2"l f>t<"d-flex justify-content-between mt-2"i p>',
+            
+        });
+    });    
+</script>
+
+
+
+
+
+<script>
+function editVendor(button) {
+    // Get the row where the button was clicked
+    var row = button.closest('tr');
+    var rowIndex = row.rowIndex - 1; // Adjusting for header row
+
+    // Extract data from row cells
+    var datetime = row.cells[3]?.innerText;
+    var vendorId = row.cells[4]?.innerText;
+    
+    var honorificsMain = row.cells[5]?.innerText;
+    var vendorName = row.cells[6]?.innerText;
+    var vendorLegalName = row.cells[7]?.innerText;
+    var gstNumber = row.cells[8]?.innerText;
+    
+    var honorifics1 = row.cells[9]?.innerText;
+    var c1 = row.cells[10]?.innerText;
+    var c11 = row.cells[11]?.innerText;
+    var c111 = row.cells[12]?.innerText;
+    var c1111 = row.cells[13]?.innerText;
+    
+    var honorifics2 = row.cells[14]?.innerText;
+    var c2 = row.cells[15]?.innerText;
+    var c22 = row.cells[16]?.innerText;
+    var c222 = row.cells[17]?.innerText;
+    var c2222 = row.cells[18]?.innerText;
+    
+    var honorifics3 = row.cells[19]?.innerText;
+    var c3 = row.cells[20]?.innerText;
+    var c33 = row.cells[21]?.innerText;
+    var c333 = row.cells[22]?.innerText;
+    var c3333 = row.cells[23]?.innerText;
+    
+    var delivaryAddress1 = row.cells[24]?.innerText;
+    var delivaryAddress2 = row.cells[25]?.innerText;
+    var delivaryAddress3 = row.cells[26]?.innerText;
+    var billingAddress = row.cells[27]?.innerText;
+    
+    // Populate modal fields
+    document.getElementById("editRowIndex").value = rowIndex;
+    document.getElementById("cdateTime").value = datetime;
+    document.getElementById("vendorRegId").value = vendorId;
+    document.getElementById("vendorRegName").value = vendorName;
+    document.getElementById("vendorLegalName").value = vendorLegalName;
+    document.getElementById("vendorGstNumber").value = gstNumber;
+    
+    let mainHonorificsDropDown = document.getElementById("main_honorifics");
+    let options = mainHonorificsDropDown.options;
+    
+    for (let i = 0; i < options.length; i++) {
+        if (options[i].value === honorificsMain) {
+            options[i].selected = true;  // Match found, set as selected
+            break;
+        }
+    }
+    
+    let honorifics1DropDown = document.getElementById("honorifics1");
+    let options1 = honorifics1DropDown.options;
+    
+    for (let i = 0; i < options1.length; i++) {
+        if (options1[i].value === honorifics1) {
+            options1[i].selected = true;  // Match found, set as selected
+            break;
+        }
+    }
+    
+    let honorifics2DropDown = document.getElementById("honorifics2");
+    let options2 = honorifics2DropDown.options;
+    
+    for (let i = 0; i < options2.length; i++) {
+        if (options2[i].value === honorifics2) {
+            options2[i].selected = true;  // Match found, set as selected
+            break;
+        }
+    }
+    
+    let honorifics3DropDown = document.getElementById("honorifics3");
+    let options3 = honorifics3DropDown.options;
+    
+    for (let i = 0; i < options3.length; i++) {
+        if (options3[i].value === honorifics3) {
+            options3[i].selected = true;  // Match found, set as selected
+            break;
+        }
+    }
+    
+    document.getElementById("c1").value = c1;
+    document.getElementById("c11").value = c11;
+    document.getElementById("c111").value = c111;
+    document.getElementById("c1111").value = c1111;
+    
+    document.getElementById("c2").value = c2;
+    document.getElementById("c22").value = c22;
+    document.getElementById("c222").value = c222;
+    document.getElementById("c2222").value = c2222;
+    
+    document.getElementById("c3").value = c3;
+    document.getElementById("c33").value = c33;
+    document.getElementById("c333").value = c333;
+    document.getElementById("c3333").value = c3333;
+    
+    document.getElementById("delivery_Address1").value = delivaryAddress1;
+    document.getElementById("delivery_Address2").value = delivaryAddress2;
+    document.getElementById("delivery_Address3").value = delivaryAddress3;
+    
+    document.getElementById("billingAddresss").value = billingAddress;
+
+    // Show the modal
+    var customerModal = new bootstrap.Modal(document.getElementById('customerModal'));
+    customerModal.show();
+}
+
+</script>
+
+<script>
+function saveVendors() {
+	var vid = document.getElementById("vendorRegId").value.trim() || null;	
+	var dateTime = document.getElementById("cdateTime")?.value?.trim() || null;	
+	var vname =  document.getElementById("vendorRegName").value.trim() || null;
+	var vlname = document.getElementById("vendorLegalName").value.trim() || null;
+	var gstnumber = document.getElementById("vendorGstNumber").value.trim() || null;
+	var contact_p1_name = document.getElementById("c1").value.trim() || null;
+	var contact_p1_designation = document.getElementById("c11").value.trim() || null;
+	var contact_p1_mobile = document.getElementById("c111").value.trim() || null;
+	var contact_p1_email = document.getElementById("c1111").value.trim() || null;
+	var contact_p2_name = document.getElementById("c2").value.trim() || null;
+	var contact_p2_designation = document.getElementById("c22").value.trim() || null;                
+	var contact_p2_mobile = document.getElementById("c222").value.trim() || null;
+	var contact_p2_email = document.getElementById("c2222").value.trim() || null;
+	var contact_p3_name = document.getElementById("c3").value.trim() || null;
+	var contact_p3_designation = document.getElementById("c33").value.trim() || null;                
+	var contact_p3_mobile = document.getElementById("c333").value.trim() || null;
+	var contact_p3_email = document.getElementById("c3333").value.trim() || null;
+	var delivery_address_1 = document.getElementById("delivery_Address1").value.trim() || null;
+	var delivery_address_2 = document.getElementById("delivery_Address2").value.trim() || null;
+	var delivery_address_3 = document.getElementById("delivery_Address3").value.trim() || null;
+	var billing_address = document.getElementById("billingAddresss").value.trim() || null;
+	var honorificsMain = document.getElementById("main_honorifics").value.trim() || null;
+	var honorifics1 = document.getElementById("honorifics1").value.trim() || null;
+	var honorifics2 = document.getElementById("honorifics2").value.trim() || null;
+	var honorifics3 = document.getElementById("honorifics3").value.trim() || null;
+	
+	
+    const vendorData = {
+        vid: vid,
+        dateTime: dateTime,
+        vname: vname,
+        vlname: vlname,
+        gstnumber: gstnumber,
+        contact_p1_name: contact_p1_name,
+        contact_p1_designation: contact_p1_designation,
+        contact_p1_mobile: contact_p1_mobile,
+        contact_p1_email: contact_p1_email,
+        contact_p2_name: contact_p2_name,
+        contact_p2_designation: contact_p2_designation,                
+        contact_p2_mobile: contact_p2_mobile,
+        contact_p2_email: contact_p2_email,
+        contact_p3_name: contact_p3_name,
+        contact_p3_designation: contact_p3_designation,                
+        contact_p3_mobile: contact_p3_mobile,
+        contact_p3_email: contact_p3_email,
+        delivery_address_1: delivery_address_1,
+        delivery_address_2: delivery_address_2,
+        delivery_address_3: delivery_address_3,
+        billing_address: billing_address,
+        honorifics_main: honorificsMain,
+        honorifics_1: honorifics1,
+        honorifics_2: honorifics2,
+        honorifics_3: honorifics3
+    };
+
+    //alert(JSON.stringify(vendorData));
+
+    fetch("/updateVendor", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(vendorData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert("Successfully updated!");
+            closeModal();  // Close the modal
+            clearFields(); // Clear input fields
+        } else if (data.error) {
+            alert("Error: " + data.error);
+        }
+    })
+    .catch(error => alert("Request failed: " + error));
+}
+
+// Function to close the modal popup
+function closeModal() {
+    const modal = document.getElementById("vendorModal"); // Change to your modal ID
+    if (modal) {
+        modal.style.display = "none"; // Hide the modal
+    }
+}
+
+// Function to clear all input fields
+function clearFields() {
+    document.querySelectorAll("input").forEach(input => input.value = "");
+    document.querySelectorAll("textarea").forEach(input => input.value = "");
+    document.querySelectorAll("select").forEach(input => input.value = "");
+}
+
+</script>
+
+<script>
+function deleteVendor(vendorId) {
+    if (confirm("Are you sure you want to delete this vendor?")) {
+        $.ajax({
+            url: '/deleteVendor',  // Send request to `/deleteProduct`
+            type: 'POST',           // Change method to POST
+            data: { id: vendorId }, // Send `id` as form data
+            success: function(response) {
+                alert(response.message);  // Show success message
+                location.reload();
+            },
+            error: function(xhr) {
+                alert("Error: " + xhr.responseText);
+            }
+        });
+    }
+}
+
+	</script>
+
+<!-- script to convert dateformate -->
+<script>
+  document.querySelectorAll('.dateTimeCell').forEach(function(cell) {
+    const rawDate = cell.innerText;
+    if (rawDate) {
+      const dateObj = new Date(rawDate);
+      if (!isNaN(dateObj)) {
+        const day = String(dateObj.getDate()).padStart(2, '0');
+        const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+        const year = dateObj.getFullYear();
+
+        const hours = String(dateObj.getHours()).padStart(2, '0');
+        const minutes = String(dateObj.getMinutes()).padStart(2, '0');
+        const seconds = String(dateObj.getSeconds()).padStart(2, '0');
+
+        const formattedDateTime = `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+        cell.innerText = formattedDateTime;
+      }
+    }
+  });
+</script>
+
+
+</body>
+</html>

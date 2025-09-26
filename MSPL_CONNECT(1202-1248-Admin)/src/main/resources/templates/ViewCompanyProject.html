@@ -1,0 +1,2047 @@
+<!DOCTYPE html>
+<html lang="en"> 
+<head>
+    <title>AMS</title>
+    
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta name="description" content="Portal - Bootstrap 5 Admin Dashboard Template For Developers">
+    <meta name="author" content="Xiaoying Riley at 3rd Wave Media">    
+    <link rel="shortcut icon" href="favicon.ico"> 
+    
+    <!-- FontAwesome JS-->
+    <script defer src="assets/plugins/fontawesome/js/all.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <!-- App CSS -->  
+    <link id="theme-style" rel="stylesheet" href="assets/css/portal.css">
+	<link id="theme-style" rel="stylesheet" href="assets/css/style.css">
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
+	<script src="https://code.highcharts.com/highcharts.js"></script>
+    
+	<style>
+    .highlight {
+        background-color: yellow;
+        font-weight: bold;
+    }
+</style>
+</head> 
+
+<body class="app">   	
+    <!-- <header th:replace="~{basics/nav::navBar1}"></header> -->
+<header class="app-header fixed-top" th:fragment="navBar1">
+		<div class="app-header-inner">
+			<div class="container-fluid py-2">
+				<div class="app-header-content">
+					<div class="row justify-content-between align-items-center">
+
+						<div class="col-auto">
+							<a id="sidepanel-toggler"
+								class="sidepanel-toggler d-inline-block d-xl-none" href="#">
+								<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"
+									viewBox="0 0 30 30" role="img">
+									<title>Menu</title><path stroke="currentColor"
+										stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"
+										d="M4 7h22M4 15h22M4 23h22"></path></svg>
+							</a>
+						</div>
+						<!--//col-->
+						<div class="search-mobile-trigger d-sm-none col">
+							<i
+								class="search-mobile-trigger-icon fa-solid fa-magnifying-glass"></i>
+						</div>
+						<!--//col-->
+						<div class="app-search-box col" style="display: flex; justify-content: space-between;">
+							
+							<p class="app-page-title" style="padding: 0; margin: 0; font-size: 20px;">Company Projects</p>
+							
+							<a href="#" class="addUsers_btn" id="addNewProject_btn" onclick="editPopUp();">Assign New Project</a>
+							
+							<!--<form class="app-search-form">
+								<input type="text" placeholder="Search..." name="search"
+									class="form-control search-input">
+								<button type="submit" class="btn search-btn btn-primary"
+									value="Search">
+									<i class="fa-solid fa-magnifying-glass"></i>
+								</button>
+							</form>-->
+							
+						</div>
+						<!--//app-search-box-->
+
+						<div class="app-utilities col-auto">
+							<div class="app-utility-item app-notifications-dropdown dropdown">
+								<a class="dropdown-toggle no-toggle-arrow"
+									id="notifications-dropdown-toggle" data-bs-toggle="dropdown"
+									href="#" role="button" aria-expanded="false"
+									title="Notifications">
+									<svg width="1em" height="1em" viewBox="0 0 16 16"
+										class="bi bi-bell icon" fill="currentColor"
+										xmlns="http://www.w3.org/2000/svg">
+								  <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2z" />
+								  <path fill-rule="evenodd"
+											d="M8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z" />
+								</svg> <span class="icon-badge" id="icon_badge"></span>
+								</a>
+								<!--//dropdown-toggle-->
+
+								<div class="dropdown-menu p-0" id="notification_list_box"
+									aria-labelledby="notifications-dropdown-toggle">
+									<div class="dropdown-menu-header p-3">
+										<h5 class="dropdown-menu-title mb-0">Notifications</h5>
+									</div>
+									<!--//dropdown-menu-title-->
+									
+									<div class="dropdown-menu-content" id="leaveRequestFromUserBox" style="display: none;">
+										<div class="item p-3">
+											<div
+												class="row gx-2 justify-content-between align-items-center">
+												<div class="col-auto">
+													<div class="app-icon-holder">
+														<svg width="1em" height="1em" viewBox="0 0 16 16"
+															class="bi bi-receipt" fill="currentColor"
+															xmlns="http://www.w3.org/2000/svg">
+	  <path fill-rule="evenodd"
+																d="M1.92.506a.5.5 0 0 1 .434.14L3 1.293l.646-.647a.5.5 0 0 1 .708 0L5 1.293l.646-.647a.5.5 0 0 1 .708 0L7 1.293l.646-.647a.5.5 0 0 1 .708 0L9 1.293l.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .801.13l.5 1A.5.5 0 0 1 15 2v12a.5.5 0 0 1-.053.224l-.5 1a.5.5 0 0 1-.8.13L13 14.707l-.646.647a.5.5 0 0 1-.708 0L11 14.707l-.646.647a.5.5 0 0 1-.708 0L9 14.707l-.646.647a.5.5 0 0 1-.708 0L7 14.707l-.646.647a.5.5 0 0 1-.708 0L5 14.707l-.646.647a.5.5 0 0 1-.708 0L3 14.707l-.646.647a.5.5 0 0 1-.801-.13l-.5-1A.5.5 0 0 1 1 14V2a.5.5 0 0 1 .053-.224l.5-1a.5.5 0 0 1 .367-.27zm.217 1.338L2 2.118v11.764l.137.274.51-.51a.5.5 0 0 1 .707 0l.646.647.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.509.509.137-.274V2.118l-.137-.274-.51.51a.5.5 0 0 1-.707 0L12 1.707l-.646.647a.5.5 0 0 1-.708 0L10 1.707l-.646.647a.5.5 0 0 1-.708 0L8 1.707l-.646.647a.5.5 0 0 1-.708 0L6 1.707l-.646.647a.5.5 0 0 1-.708 0L4 1.707l-.646.647a.5.5 0 0 1-.708 0l-.509-.51z" />
+	  <path fill-rule="evenodd"
+																d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm8-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5z" />
+	</svg>
+													</div>
+												</div>
+												<!--//col-->
+												<div class="col">
+													<div class="info">
+														<div class="desc" id="notification_list_message1"></div>
+														<!--<div class="meta">1 day ago</div>-->
+													</div>
+												</div>
+												<!--//col-->
+											</div>
+											<!--//row-->
+											<a class="link-mask" href="leaveRequests"></a>
+										</div>
+									</div>
+									
+									<div class="dropdown-menu-content" id="leaveRequestApproveOrRejectedBox" style="display: none;">
+										<div class="item p-3">
+											<div
+												class="row gx-2 justify-content-between align-items-center">
+												<div class="col-auto">
+													<div class="app-icon-holder">
+														<svg width="1em" height="1em" viewBox="0 0 16 16"
+															class="bi bi-receipt" fill="currentColor"
+															xmlns="http://www.w3.org/2000/svg">
+	  <path fill-rule="evenodd"
+																d="M1.92.506a.5.5 0 0 1 .434.14L3 1.293l.646-.647a.5.5 0 0 1 .708 0L5 1.293l.646-.647a.5.5 0 0 1 .708 0L7 1.293l.646-.647a.5.5 0 0 1 .708 0L9 1.293l.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .801.13l.5 1A.5.5 0 0 1 15 2v12a.5.5 0 0 1-.053.224l-.5 1a.5.5 0 0 1-.8.13L13 14.707l-.646.647a.5.5 0 0 1-.708 0L11 14.707l-.646.647a.5.5 0 0 1-.708 0L9 14.707l-.646.647a.5.5 0 0 1-.708 0L7 14.707l-.646.647a.5.5 0 0 1-.708 0L5 14.707l-.646.647a.5.5 0 0 1-.708 0L3 14.707l-.646.647a.5.5 0 0 1-.801-.13l-.5-1A.5.5 0 0 1 1 14V2a.5.5 0 0 1 .053-.224l.5-1a.5.5 0 0 1 .367-.27zm.217 1.338L2 2.118v11.764l.137.274.51-.51a.5.5 0 0 1 .707 0l.646.647.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.509.509.137-.274V2.118l-.137-.274-.51.51a.5.5 0 0 1-.707 0L12 1.707l-.646.647a.5.5 0 0 1-.708 0L10 1.707l-.646.647a.5.5 0 0 1-.708 0L8 1.707l-.646.647a.5.5 0 0 1-.708 0L6 1.707l-.646.647a.5.5 0 0 1-.708 0L4 1.707l-.646.647a.5.5 0 0 1-.708 0l-.509-.51z" />
+	  <path fill-rule="evenodd"
+																d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm8-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5z" />
+	</svg>
+													</div>
+												</div>
+												<!--//col-->
+												<div class="col">
+													<div class="info">
+														<div class="desc" id="notification_list_message2"></div>
+														<!--<div class="meta">1 day ago</div>-->
+													</div>
+												</div>
+												<!--//col-->
+											</div>
+											<!--//row-->
+											<a class="link-mask" href="leaves"></a>
+										</div>
+									</div>
+									
+									
+									<div class="dropdown-menu-content" id="companyProjectDetailBox" style="display: none;">
+										<div class="item p-3">
+											<div
+												class="row gx-2 justify-content-between align-items-center">
+												<div class="col-auto">
+													<div class="app-icon-holder">
+														<svg width="1em" height="1em" viewBox="0 0 16 16"
+															class="bi bi-receipt" fill="currentColor"
+															xmlns="http://www.w3.org/2000/svg">
+	  <path fill-rule="evenodd"
+																d="M1.92.506a.5.5 0 0 1 .434.14L3 1.293l.646-.647a.5.5 0 0 1 .708 0L5 1.293l.646-.647a.5.5 0 0 1 .708 0L7 1.293l.646-.647a.5.5 0 0 1 .708 0L9 1.293l.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .801.13l.5 1A.5.5 0 0 1 15 2v12a.5.5 0 0 1-.053.224l-.5 1a.5.5 0 0 1-.8.13L13 14.707l-.646.647a.5.5 0 0 1-.708 0L11 14.707l-.646.647a.5.5 0 0 1-.708 0L9 14.707l-.646.647a.5.5 0 0 1-.708 0L7 14.707l-.646.647a.5.5 0 0 1-.708 0L5 14.707l-.646.647a.5.5 0 0 1-.708 0L3 14.707l-.646.647a.5.5 0 0 1-.801-.13l-.5-1A.5.5 0 0 1 1 14V2a.5.5 0 0 1 .053-.224l.5-1a.5.5 0 0 1 .367-.27zm.217 1.338L2 2.118v11.764l.137.274.51-.51a.5.5 0 0 1 .707 0l.646.647.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.509.509.137-.274V2.118l-.137-.274-.51.51a.5.5 0 0 1-.707 0L12 1.707l-.646.647a.5.5 0 0 1-.708 0L10 1.707l-.646.647a.5.5 0 0 1-.708 0L8 1.707l-.646.647a.5.5 0 0 1-.708 0L6 1.707l-.646.647a.5.5 0 0 1-.708 0L4 1.707l-.646.647a.5.5 0 0 1-.708 0l-.509-.51z" />
+	  <path fill-rule="evenodd"
+																d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm8-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5z" />
+	</svg>
+													</div>
+												</div>
+												<!--//col-->
+												<div class="col">
+													<div class="info">
+														<div class="desc" id="notification_list_message3"></div>
+														<!--<div class="meta">1 day ago</div>-->
+													</div>
+												</div>
+												<!--//col-->
+											</div>
+											<!--//row-->
+											<a class="link-mask" href="viewCompProject"></a>
+										</div>
+									</div>
+									
+									
+									<div class="dropdown-menu-content" id="defaultNotificationBox" style="display: none;">
+										<div class="item p-3">
+											<div
+												class="row gx-2 justify-content-between align-items-center">
+												<div class="col-auto">
+													<div class="app-icon-holder">
+														<svg width="1em" height="1em" viewBox="0 0 16 16"
+															class="bi bi-receipt" fill="currentColor"
+															xmlns="http://www.w3.org/2000/svg">
+	  <path fill-rule="evenodd"
+																d="M1.92.506a.5.5 0 0 1 .434.14L3 1.293l.646-.647a.5.5 0 0 1 .708 0L5 1.293l.646-.647a.5.5 0 0 1 .708 0L7 1.293l.646-.647a.5.5 0 0 1 .708 0L9 1.293l.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .801.13l.5 1A.5.5 0 0 1 15 2v12a.5.5 0 0 1-.053.224l-.5 1a.5.5 0 0 1-.8.13L13 14.707l-.646.647a.5.5 0 0 1-.708 0L11 14.707l-.646.647a.5.5 0 0 1-.708 0L9 14.707l-.646.647a.5.5 0 0 1-.708 0L7 14.707l-.646.647a.5.5 0 0 1-.708 0L5 14.707l-.646.647a.5.5 0 0 1-.708 0L3 14.707l-.646.647a.5.5 0 0 1-.801-.13l-.5-1A.5.5 0 0 1 1 14V2a.5.5 0 0 1 .053-.224l.5-1a.5.5 0 0 1 .367-.27zm.217 1.338L2 2.118v11.764l.137.274.51-.51a.5.5 0 0 1 .707 0l.646.647.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.509.509.137-.274V2.118l-.137-.274-.51.51a.5.5 0 0 1-.707 0L12 1.707l-.646.647a.5.5 0 0 1-.708 0L10 1.707l-.646.647a.5.5 0 0 1-.708 0L8 1.707l-.646.647a.5.5 0 0 1-.708 0L6 1.707l-.646.647a.5.5 0 0 1-.708 0L4 1.707l-.646.647a.5.5 0 0 1-.708 0l-.509-.51z" />
+	  <path fill-rule="evenodd"
+																d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm8-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5z" />
+	</svg>
+													</div>
+												</div>
+												<!--//col-->
+												<div class="col">
+													<div class="info">
+														<div class="desc">Currently, there is no any notifications</div>
+														<!--<div class="meta">1 day ago</div>-->
+													</div>
+												</div>
+												<!--//col-->
+											</div>
+										</div>
+									</div>
+									
+								</div>
+								<!--//dropdown-menu-->
+							</div>
+							<!--//app-utility-item-->
+							
+							<!--//app-utility-item-->
+
+							<div class="app-utility-item app-user-dropdown dropdown">
+								<a class="dropdown-toggle" id="user-dropdown-toggle"
+									data-bs-toggle="dropdown" href="#" role="button"
+									aria-expanded="false"></a>
+								<ul class="dropdown-menu" aria-labelledby="user-dropdown-toggle">
+									<li><p class="dropdown-item" href="#">
+										<span th:text="${session.loggedInName}"></span>
+        								<span th:text="'(' + ${session.roleData} + ')'"></span>
+									</p></li>
+									<!--<li><a class="dropdown-item" href="account.html">Account</a></li>
+									<li><a class="dropdown-item" href="settings.html">Settings</a></li>-->
+									<li><hr class="dropdown-divider"></li>
+									<li><a class="dropdown-item" th:href=@{/}>Log Out</a></li>
+								</ul>
+							</div>
+							<!--//app-user-dropdown-->
+						</div>
+						<!--//app-utilities-->
+					</div>
+					<!--//row-->
+				</div>
+				<!--//app-header-content-->
+			</div>
+			<!--//container-fluid-->
+		</div>
+		<!--//app-header-inner-->
+		<div id="app-sidepanel" class="app-sidepanel">
+			<div id="sidepanel-drop" class="sidepanel-drop"></div>
+			<div class="sidepanel-inner d-flex flex-column">
+				<a href="#" id="sidepanel-close" class="sidepanel-close d-xl-none">&times;</a>
+				<div class="app-branding" style="width:100%; margin:0 0 0 10px;padding:5px;" >
+					<a class="app-logo" href="dashboard"  ><img class="logo-icon"
+						src="assets/images/melangeNewUpdatedLogo.png" alt="logo" style="width:80%; height: 90%; padding:0 2px 0 2px; margin:0;"></a>
+				</div>
+				<!--//app-branding-->
+
+				<nav id="app-nav-main" class="app-nav app-nav-main flex-grow-1">
+					<ul class="app-menu list-unstyled accordion" id="menu-accordion">
+						<li class="nav-item">
+							<!--//Bootstrap Icons: https://icons.getbootstrap.com/ --> <a
+							class="nav-link" th:href=@{/dashboard}> <span
+								class="nav-icon"> <svg width="1em" height="1em"
+										viewBox="0 0 16 16" class="bi bi-house-door"
+										fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+		  <path fill-rule="evenodd"
+											d="M7.646 1.146a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 .146.354v7a.5.5 0 0 1-.5.5H9.5a.5.5 0 0 1-.5-.5v-4H7v4a.5.5 0 0 1-.5.5H2a.5.5 0 0 1-.5-.5v-7a.5.5 0 0 1 .146-.354l6-6zM2.5 7.707V14H6v-4a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v4h3.5V7.707L8 2.207l-5.5 5.5z" />
+		  <path fill-rule="evenodd"
+											d="M13 2.5V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z" />
+		</svg>
+							</span> <span class="nav-link-text">Dashboard</span>
+						</a>
+						<!--//nav-link-->
+						</li>
+						
+						
+						<li class="nav-item has-submenu">
+							<!--//Bootstrap Icons: https://icons.getbootstrap.com/ --> <a
+							class="nav-link submenu-toggle" href="#"
+							data-bs-toggle="collapse" data-bs-target="#submenu-1"
+							aria-expanded="false" aria-controls="submenu-1"> <span
+								class="nav-icon"> <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
+									<svg width="1em" height="1em" viewBox="0 0 16 16"
+										class="bi bi-files" fill="currentColor"
+										xmlns="http://www.w3.org/2000/svg">
+	  									<path fill-rule="evenodd"
+											d="M4 2h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H4z" />
+	  										<path
+											d="M6 0h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2v-1a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H6a1 1 0 0 0-1 1H4a2 2 0 0 1 2-2z" />
+									</svg>
+							</span> <span class="nav-link-text">Daily Activities</span> <span
+								class="submenu-arrow"> <svg width="1em" height="1em"
+										viewBox="0 0 16 16" class="bi bi-chevron-down"
+										fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+							  <path fill-rule="evenodd"	d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
+							</svg>
+							</span>
+							<!--//submenu-arrow-->
+						</a>
+						<!--//nav-link-->
+							<div id="submenu-1" class="collapse submenu submenu-1" data-bs-parent="#menu-accordion">
+								<ul class="submenu-list list-unstyled">
+									<li class="submenu-item"><a class="submenu-link" th:href=@{/adminAttendanceCalendar}>Mark Attendence</a></li>
+									<li class="submenu-item"><a class="submenu-link" th:href=@{/adminDailyActivityReport}>Activity Report</a></li>
+									<li class="submenu-item"><a class="submenu-link" th:href=@{leaves}>Apply Leave</a></li>
+								</ul>
+							</div>
+						</li>
+						
+						
+						<!--<li class="nav-item">
+							//Bootstrap Icons: https://icons.getbootstrap.com/  <a
+							class="nav-link" th:href=@{/addHoliday}> <span
+								class="nav-icon"> <svg width="1em" height="1em" viewBox="0 0 16 16"
+												class="bi bi-card-list" fill="currentColor"
+												xmlns="http://www.w3.org/2000/svg">
+		  									<path fill-rule="evenodd"
+													d="M14.5 3h-13a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z" />
+		  									<path fill-rule="evenodd"
+													d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5z" />
+								  <circle cx="3.5" cy="5.5" r=".5" />
+								  <circle cx="3.5" cy="8" r=".5" />
+								  <circle cx="3.5" cy="10.5" r=".5" />
+								</svg>
+							</span> <span class="nav-link-text">Add Holidays</span>
+						</a>
+						//nav-link
+						</li>-->
+						
+						<li class="nav-item has-submenu">
+							<!--//Bootstrap Icons: https://icons.getbootstrap.com/ --> <a
+							class="nav-link submenu-toggle" href="#"
+							data-bs-toggle="collapse" data-bs-target="#submenu-25"
+							aria-expanded="false" aria-controls="submenu-1"> <span
+                class="nav-icon"> <svg width="1em" height="1em"
+                    viewBox="0 0 16 16" class="bi bi-house-door"
+                    fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M1 3.857C1 3.384 1.448 3 2 3h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H2c-.552 0-1-.384-1-.857z"/>
+  				<path d="M12 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-5 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m2-3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-5 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
+                </svg>
+              </span> <span class="nav-link-text">Holidays</span> <span
+								class="submenu-arrow"> <svg width="1em" height="1em"
+										viewBox="0 0 16 16" class="bi bi-chevron-down"
+										fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+							  <path fill-rule="evenodd"	d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
+							</svg>
+							</span>
+							<!--//submenu-arrow-->
+						</a>
+						<!--//nav-link-->
+							<div id="submenu-25" class="collapse submenu submenu-25" data-bs-parent="#menu-accordion">
+								<ul class="submenu-list list-unstyled">
+									
+									<li class="submenu-item" id="addHolidayLink"><a class="submenu-link" th:href=@{/addHoliday}>Add Holidays</a></li>
+									
+									<li class="submenu-item"><a class="submenu-link" th:href=@{viewHoliday}>View Holidays</a></li>
+									
+								</ul>
+							</div>
+						</li>
+						
+						
+						<!-- <li class="nav-item has-submenu" id="accountsLink">
+							//Bootstrap Icons: https://icons.getbootstrap.com/ <a
+							class="nav-link submenu-toggle" href="#"
+							data-bs-toggle="collapse" data-bs-target="#submenu-2"
+							aria-expanded="false" aria-controls="submenu-1"> <span
+                class="nav-icon"> <svg width="1em" height="1em"
+                    viewBox="0 0 16 16" class="bi bi-house-door"
+                    fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" d="M2 2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zM1 4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1zm7.5.5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0zM2 5.5a.5.5 0 0 1 .5-.5H6a.5.5 0 0 1 0 1H2.5a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5H6a.5.5 0 0 1 0 1H2.5a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5H6a.5.5 0 0 1 0 1H2.5a.5.5 0 0 1-.5-.5M10.5 5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zM13 8h-2V6h2z"/>
+                  <path fill-rule="evenodd"
+                      d="M13 2.5V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z" />
+                </svg>
+              </span> <span class="nav-link-text">Accounts</span> <span
+								class="submenu-arrow"> <svg width="1em" height="1em"
+										viewBox="0 0 16 16" class="bi bi-chevron-down"
+										fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+							  <path fill-rule="evenodd"	d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
+							</svg>
+							</span>
+							//submenu-arrow
+						</a>
+						//nav-link
+							<div id="submenu-2" class="collapse submenu submenu-2" data-bs-parent="#menu-accordion">
+								<ul class="submenu-list list-unstyled">
+									
+									<li class="submenu-item"><a class="submenu-link" th:href=@{/paySlip}>Add Payslip</a></li>
+									
+									<li class="submenu-item has-submenu"><a
+											class="submenu-link submenu-toggle" href="#"
+											data-bs-toggle="collapse" data-bs-target="#submenu-11"
+											aria-expanded="false" aria-controls="submenu-1"> <span
+												class="nav-icon">
+											</span> <span class="nav-link-text">View Payslip</span> <span
+												class="submenu-arrow"> <svg width="1em" height="1em"
+														viewBox="0 0 16 16" class="bi bi-chevron-down"
+														fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+											  <path fill-rule="evenodd"	d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
+											</svg>
+											</span>
+										</a>
+										
+										<div id="submenu-11" class="collapse submenu submenu-11">
+											<ul class="submenu-list list-unstyled">
+												
+												<li class="submenu-item" style="margin-left: 15px;"><a class="submenu-link" th:href=@{paySlipSoftware}>IT</a></li>
+												<li class="submenu-item" style="margin-left: 15px;"><a class="submenu-link" th:href=@{paySlipHardware}>Hardware</a></li>
+												<li class="submenu-item" style="margin-left: 15px;"><a class="submenu-link" th:href=@{paySlipTesting}>Testing</a></li>
+												<li class="submenu-item" style="margin-left: 15px;"><a class="submenu-link" th:href=@{#}>IOT</a></li>
+												<li class="submenu-item" style="margin-left: 15px;"><a class="submenu-link" th:href=@{#}>Production</a></li>
+
+											</ul>
+										</div>
+									</li>
+								</ul>
+							</div>
+						</li> -->
+						
+						
+						<li class="nav-item" id="compProjectLink">
+							<!--//Bootstrap Icons: https://icons.getbootstrap.com/ --> <a
+							class="nav-link active" th:href=@{/viewCompProject}> <span
+                class="nav-icon"> <svg width="1em" height="1em"
+                    viewBox="0 0 16 16" class="bi bi-house-door"
+                    fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                   <path d="M4 2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zM4 5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zM7.5 5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zM4.5 8a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z"/>
+  <path d="M2 1a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1zm11 0H3v14h3v-2.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5V15h3z"/>
+                </svg>
+              </span> <span class="nav-link-text">Company Projects</span>
+						</a>
+						<!--//nav-link-->
+						</li>
+						
+						
+					<li class="nav-item has-submenu">
+							<!--//Bootstrap Icons: https://icons.getbootstrap.com/ --> <a
+							class="nav-link submenu-toggle" href="#"
+							data-bs-toggle="collapse" data-bs-target="#submenu-3"
+							aria-expanded="false" aria-controls="submenu-1"> <span
+                class="nav-icon"> <svg width="1em" height="1em"
+                    viewBox="0 0 16 16" class="bi bi-house-door"
+                    fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3 2.5A1.5 1.5 0 0 1 4.5 1h1A1.5 1.5 0 0 1 7 2.5V5h2V2.5A1.5 1.5 0 0 1 10.5 1h1A1.5 1.5 0 0 1 13 2.5v2.382a.5.5 0 0 0 .276.447l.895.447A1.5 1.5 0 0 1 15 7.118V14.5a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 14.5v-3a.5.5 0 0 1 .146-.354l.854-.853V9.5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v.793l.854.853A.5.5 0 0 1 7 11.5v3A1.5 1.5 0 0 1 5.5 16h-3A1.5 1.5 0 0 1 1 14.5V7.118a1.5 1.5 0 0 1 .83-1.342l.894-.447A.5.5 0 0 0 3 4.882zM4.5 2a.5.5 0 0 0-.5.5V3h2v-.5a.5.5 0 0 0-.5-.5zM6 4H4v.882a1.5 1.5 0 0 1-.83 1.342l-.894.447A.5.5 0 0 0 2 7.118V13h4v-1.293l-.854-.853A.5.5 0 0 1 5 10.5v-1A1.5 1.5 0 0 1 6.5 8h3A1.5 1.5 0 0 1 11 9.5v1a.5.5 0 0 1-.146.354l-.854.853V13h4V7.118a.5.5 0 0 0-.276-.447l-.895-.447A1.5 1.5 0 0 1 12 4.882V4h-2v1.5a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5zm4-1h2v-.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5zm4 11h-4v.5a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5zm-8 0H2v.5a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5z"/>
+                </svg>
+              </span> <span class="nav-link-text">Manage Teams</span> <span
+								class="submenu-arrow"> <svg width="1em" height="1em"
+										viewBox="0 0 16 16" class="bi bi-chevron-down"
+										fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+							  <path fill-rule="evenodd"	d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
+							</svg>
+							</span>
+							<!--//submenu-arrow-->
+						</a>
+						<!--//nav-link-->
+							<div id="submenu-3" class="collapse submenu submenu-3" data-bs-parent="#menu-accordion">
+								<ul class="submenu-list list-unstyled">
+									<li class="submenu-item"><a class="submenu-link" onclick="showLoadingModal2();" th:href=@{/teamDash}>Team Dashboard</a></li>
+									<li class="submenu-item" id="addEmployeeLink"><a class="submenu-link" th:href=@{/addEmp}>Add Employees</a></li>
+									
+									<li class="submenu-item has-submenu"><a
+											class="submenu-link submenu-toggle" href="#"
+											data-bs-toggle="collapse" data-bs-target="#submenu-4"
+											aria-expanded="false" aria-controls="submenu-1"> <span
+												class="nav-icon">
+											</span> <span class="nav-link-text">View Employees</span> <span
+												class="submenu-arrow"> <svg width="1em" height="1em"
+														viewBox="0 0 16 16" class="bi bi-chevron-down"
+														fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+											  <path fill-rule="evenodd"	d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
+											</svg>
+											</span>
+										</a>
+										
+										<div id="submenu-4" class="collapse submenu submenu-4">
+											<ul class="submenu-list list-unstyled">
+												
+												<li class="submenu-item" style="margin-left: 15px;"><a class="submenu-link" onclick="showLoadingModal2();" th:href=@{viewSoftware}>IT</a></li>
+												<li class="submenu-item" style="margin-left: 15px;"><a class="submenu-link" onclick="showLoadingModal2();" th:href=@{viewHardware}>Hardware</a></li>
+												<li class="submenu-item" style="margin-left: 15px;"><a class="submenu-link" onclick="showLoadingModal2();" th:href=@{viewMarketing}>Marketing</a></li>
+												<li class="submenu-item" style="margin-left: 15px;"><a class="submenu-link" onclick="showLoadingModal2();" th:href=@{viewTesting}>Testing</a></li>
+												<li class="submenu-item" style="margin-left: 15px;"><a class="submenu-link" th:href=@{#}>IOT</a></li>
+												<li class="submenu-item" style="margin-left: 15px;"><a class="submenu-link" th:href=@{#}>Production</a></li>
+
+											</ul>
+										</div>
+									</li>
+									
+									<li class="submenu-item has-submenu"><a
+											class="submenu-link submenu-toggle" href="#"
+											data-bs-toggle="collapse" data-bs-target="#submenu-6"
+											aria-expanded="false" aria-controls="submenu-1"> <span
+												class="nav-icon">
+											</span> <span class="nav-link-text">Attendance</span> <span
+												class="submenu-arrow"> <svg width="1em" height="1em"
+														viewBox="0 0 16 16" class="bi bi-chevron-down"
+														fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+											  <path fill-rule="evenodd"	d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
+											</svg>
+											</span>
+										</a>
+										
+										<div id="submenu-6" class="collapse submenu submenu-6">
+											<ul class="submenu-list list-unstyled">
+												
+												<li class="submenu-item" style="margin-left: 15px;"><a class="submenu-link" th:href=@{attendanceSoftware}>IT</a></li>
+												<li class="submenu-item" style="margin-left: 15px;"><a class="submenu-link" th:href=@{attendanceHardware}>Hardware</a></li>
+												<li class="submenu-item" style="margin-left: 15px;"><a class="submenu-link" th:href=@{attendanceMarketing}>Marketing</a></li>
+												<li class="submenu-item" style="margin-left: 15px;"><a class="submenu-link" th:href=@{attendanceTesting}>Testing</a></li>
+												<li class="submenu-item" style="margin-left: 15px;"><a class="submenu-link" th:href=@{#}>IOT</a></li>
+												<li class="submenu-item" style="margin-left: 15px;"><a class="submenu-link" th:href=@{#}>Production</a></li>
+																								
+											</ul>
+										</div>
+									</li>
+									
+									<li class="submenu-item"><a class="submenu-link" th:href=@{leaveRequests}>Leaves</a></li>
+									
+									<li class="submenu-item"><a class="submenu-link" th:href=@{viewEvents}>Events</a></li>
+									
+									<li class="submenu-item"><a class="submenu-link" th:href=@{addInterComm}>Inter Comm Maintenance</a></li>
+									
+									<li class="submenu-item"><a class="submenu-link" th:href=@{groupMailId}>Group Mail Id</a></li>
+									
+								</ul>
+							</div>
+						</li>
+						
+					</ul>
+				</nav>
+				<!--//app-nav-->
+				<div class="app-sidepanel-footer">
+					<nav class="app-nav app-nav-footer">
+						<ul class="app-menu footer-menu list-unstyled">
+							<li class="nav-item">
+								<!--//Bootstrap Icons: https://icons.getbootstrap.com/ --> <!-- footer for nav bar  -->
+							</li>
+							<!--//nav-item-->
+							<li class="nav-item">
+								<!--//Bootstrap Icons: https://icons.getbootstrap.com/ --> <!-- footer for nav bar  -->
+							</li>
+							<!--//nav-item-->
+							<li class="nav-item">
+								<!-- footer for nav bar  -->
+							</li>
+							<!--//nav-item-->
+						</ul>
+						<!--//footer-menu-->
+					</nav>
+				</div>
+				<!--//app-sidepanel-footer-->
+
+			</div>
+			<!--//sidepanel-inner-->
+		</div>
+		<!--//app-sidepanel-->
+	</header>
+    <div class="app-wrapper">
+		
+<!-- PreLoader for AJAX -->
+<div id="loadingModal">
+  <div id="loadingModalContent">
+  	<div class="loading-spinner"></div>
+  </div>
+</div>
+
+
+<!--<div class="smallModal">
+  <div class="smallModal-content">
+    <p class="smallModal-contentClosePara">
+		<span class="smallModal-content_Heading">Choose The Action</span>
+		<span class="smallModal-content_closeIcon" onclick="closeEditPopup1();">&times;</span>
+	</p>
+	
+	<div class="smallModal-content_actionsDiv">
+		<div class="smallModal-content_viewDiv" title="view"><img src="assets/images/AMS_view_icon_1.png" alt="view_icon" class="smallModal-content_Icon"></div>
+		<div class="smallModal-content_editDiv" title="edit"><img src="assets/images/ams_edit_icon5.png" alt="edit_icon" class="smallModal-content_Icon"></div>
+		<div class="smallModal-content_deleteDiv" title="delete"><img src="assets/images/ams_delete_icon6.png" alt="delete_icon" class="smallModal-content_Icon"></div>
+	</div>
+	
+  </div>
+</div>-->
+
+
+<div class="compProjectEditPopupOuterBox2" id="compProjectEditPopupOuterBox2">
+	<div class="projectDetail_modal">
+		<input type="hidden" id="idToTrack"><input type="hidden" id="prjNameToTrack"><input type="hidden" id="projectIdToTrack"><input type="hidden" id="teamStartedDateToTrack"><input type="hidden" id="teamExpectedDateToTrack">
+		<div class="editPopupClosePara10">
+			<div>
+				<p class="editPopupClosePara10_Heading">Project Name : <span id="compProjectHeadingNameInPopup"></span>
+				</p>
+				<p class="editPopupClosePara10_Heading">Status : <span id="currentStatusPopup"></span></p>
+			</div>
+
+			<div>
+				<a href="#" class="trackProject_btn" id="trackProject_btn" onclick="viewTrackProject(document.getElementById('prjNameToTrack').value,document.getElementById('idToTrack').value,document.getElementById('projectIdToTrack').value,document.getElementById('teamStartedDateToTrack').value,document.getElementById('teamExpectedDateToTrack').value);">Track
+					Project</a>
+				<span class="editPopupClosePara10_closeIcon" onclick="closeCompProjectEditPopup1();">&times;</span>
+			</div>
+		</div>
+
+		<div class="projectDetailsViewBody">
+			<div class="cooTableAndTeamLeadTableMerger">
+				<div class="cooTableDiv">
+					<p class="viewProjectSub_Heading">COO Updates</p>
+					<div class="cooTableInnerDiv">
+						<table class="table table-hover">
+							<tr>
+								<th>Project ID</th>
+								<td id="projIDPopup"></td>
+							</tr>
+							<tr>
+								<th>Project Name</th>
+								<td id="projNamePopup"></td>
+							</tr>
+							<tr>
+								<th>Department</th>
+								<td id="departmentPopup"></td>
+							</tr>
+							<tr>
+								<th>Assigned Date</th>
+								<td class='dateFormatter' id="assignedDatePopup"></td>
+							</tr>
+							<tr>
+								<th>Platform</th>
+								<td id="platformToWorkPopup"></td>
+							</tr>
+							<tr>
+								<th>Project Description</th>
+								<td id="descriptionPopup"></td>
+							</tr>
+							<tr>
+								<th>Client Name</th>
+								<td id="clientnamePopup"></td>
+							</tr>
+							<tr>
+								<th>Project Manager</th>
+								<td id="projManagerPopup"></td>
+							</tr>
+							<tr>
+								<th>Delivery Date</th>
+								<td class='dateFormatter' id="deliveryDatePopup"></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div class="teamLeadTableDiv">
+					<p class="viewProjectSub_Heading">Team Lead Updates</p>
+					<div class="teamLeadTableInnerDiv">
+						<table class="table table-hover">
+							<tr>
+								<th>Team Started Date to Work</th>
+								<td id="teamStartedDatePopup"></td>
+							</tr>
+							<tr>
+								<th>Expected Date to Complete</th>
+								<td id="teamExpectedDateToCompletePopup"></td>
+							</tr>
+							<tr id="hiddenDelayReasonRow" style="display: none;">
+								<th>Reason for Delay</th>
+								<td id="delayReasonPopup"></td>
+							</tr>
+							<tr>
+								<th>Actual Completion Date</th>
+								<td id="completedDatePopup"></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+			<div class="trackProject_box" id="trackProject_box" tabindex="1">
+				<div class="trackProject_InnerBox">
+					<div class="projectChart" id="projectChart"></div>
+					<div class="barGraphChartBox" id="barGraphChartBox"></div>
+				</div>
+				<div class="trackProjectTableDiv">
+					<table class="table table-hover mb-0 text-center">
+						<thead class="fixTHead">
+							<tr>
+								<!--<th class="cell border">ID</th>-->
+								<th class="cell border">SL No</th>
+								<th class="cell border">Date</th>
+								<th class="cell border">Employee Id</th>
+								<th class="cell border">Employee Name</th>
+								<th class="cell border">Email</th>
+								<th class="cell border">Working On</th>
+								<th class="cell border">Work(%)</th>
+								<th class="cell border">Status</th>
+							</tr>
+						</thead>
+						<tbody id="trackProjectDetailsTBody"></tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+		
+		<input type="hidden" id="sessionLoggedInEmail"  th:value="${session.email_id}"/>
+		<input type="hidden" id="roleValue"  th:value="${session.roleData}"/> 
+		
+		<div class="compProjectEditPopupOuterBox" id="compProjectEditPopupOuterBox">
+			<div class="editPopupInnerBox">
+				<p class="editPopupClosePara">
+					<span>Assign New Project</span>
+					<span onclick="closeEditPopup1();">&times;</span>
+				</p>
+				<div class="addCompProjectFormOuterBox">
+					<div class="container mt-3">
+					  <form class="addCompProjectForm addEmployeeFormWithValidation" th:action="@{/saveNewCompProjectList}" method="post" th:object="${newCompProj_Entity}" onsubmit="return validateForm();">
+						 <input type="date" style="display: none;" id="assignedSubmitDate" th:field="*{assigned_date}">
+						 <div class="row jumbotron box8">
+								  <table class="compProject_table table">
+									  <tr>
+										  <td colspan="2">
+											  <label>Select Department:</label>
+											  <select style="padding: 0 10px;" th:field="*{department}" onchange="selectDepartment(document.getElementById('department').value)" class="form-control custom-select browser-default paySlip_departmentTextField" id="department" required>
+												  <option value="" selected>Select Department</option>
+												  <option value="IT">IT</option>
+										          <option value="Hardware">Hardware</option>
+										          <option value="Marketing">Marketing</option>
+										          <option value="Testing">Testing</option>
+										          <option value="IOT">IOT</option>
+										          <option value="Production">Production</option>
+												</select>
+												<span id="dept_error"></span>
+											</td>
+									  </tr>
+									  <tr>
+										    <td><label>Select Platform to Work:</label>
+										  	 <div class="compProjectSelectAndAddBtnDiv">
+												<select class="form-control paySlipCustom_textfield" name="platform_to_work" th:field="*{platform_to_work}" id="platform_to_work" required>
+												  <option value="" selected>Select Platform to work</option>
+												  <option id="subSoftwareOption" value="Software">Software</option>
+												  <option id="subEmbeddedOption" value="Embedded">Embedded</option>
+										          <option id="subHardwareOption" value="Hardware">Hardware</option>
+										          <option id="subMarketingOption" value="Marketing">Marketing</option>
+										          <option id="subTestingOption" value="Testing">Testing</option>
+										          <option id="subIOTOption" value="IOT">IOT</option>
+										          <option id="subProductionOption" value="Production">Production</option>
+												</select>
+											  </div>
+												<span id="platformToWork_error"></span>
+											</td>
+											<td><label>Project Id:</label><input type="text" th:field="*{projectId}" class="form-control paySlipCustom_textfield" id="project_ID" placeholder="Project ID" required><span id="projectID_error"></span></td>
+
+									  	</tr>
+									  <tr>
+										  <td><label>Project Name:</label><input type="text" th:field="*{project_name}" class="form-control paySlipCustom_textfield" id="project_name" placeholder="Project name" required><span id="projectName_error"></span></td>
+										  <td><label>Select Project Manager:</label>
+										  	 <div class="compProjectSelectAndAddBtnDiv">
+												<select class="form-control paySlipCustom_textfield" th:field="*{project_manager}" name="projectManager_name" id="projectManager_name"></select>
+												<!--<button type="button" onclick="addProjectManagerName()" class="compProject_AddBtn btn btn-primary">Add</button>-->
+											  </div>
+											  <!--<input type="text" th:field="*{project_manager}" class="compProjectHiddenSelectedNames" id="projectManagerSelectedNames" required>-->
+												<span id="projectManager_error"></span>
+											</td>
+									  	</tr>
+									  <tr>
+										  	<td colspan="2"><label>Project Description:</label>
+										  	<textarea class="form-control compProjectCustom_textArea2" th:field="*{description}" placeholder="Description" id="projDescription" required></textarea><span id="description_error"></span></td>
+									  </tr>
+									  <tr>
+										  <td><label>Client Name:</label><input type="text" th:field="*{client_name}" class="form-control paySlipCustom_textfield" id="client_name" placeholder="Client name" required><span id="clientName_error"></span></td>
+									  	  <td><label>Delivered Date:</label><input type="date" th:field="*{completion_date}" class="form-control paySlipCustom_textfield" id="delivery_date" required><span id="deliveryDate_error"></span></td>
+									  </tr>
+								  </table>
+								  
+								  <div class="form-group mb-0 customize_btn_div">
+									<button type="reset" class="btn customize_btn clear_btn">Clear</button>
+							        <button type="submit" class="btn customize_btn submit_btn">Assign</button>
+							      </div>
+								  
+							  </div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			
+	    <div class="app-content pt-3" style="margin-bottom: 10vh;">
+		    <div class="container-xl">
+				
+				<input type="hidden" th:value="${emailString}" id="hrEmailValue">
+				<input type="hidden" th:value="${hrName}" id="hrNameValue">
+			    
+				<div class="compProjectCardsBody" id="compProjectCardsBody">
+					<div class="compProjectCardsRow" id="compProjectCardsRow"></div>
+				</div>
+				
+			    
+		    </div><!--//container-fluid-->
+	    </div><!--//app-content-->
+	    
+	    <footer class="footer fixed-bottom bg-white" style="padding: 10px; z-index: 1;">
+			<div class="container text-center">
+				<small class="copyright" id="currentYear"></small>
+		        <script>
+		            var currentYear = new Date().getFullYear();
+		            document.getElementById("currentYear").innerHTML = currentYear;
+		        </script>
+		        <span>&copy; Melange Systems Private Limited. ALL Rights Reserved. Sitemap |
+		            <a class="app-link" href="#" target="_blank">Privacy Policy</a> | <a class="app-link" href="#" target="_blank">Terms of Service</a>
+		        </span>
+			</div>
+		</footer><!--//app-footer-->
+	    
+    </div><!--//app-wrapper-->    					
+
+ 
+    <!-- Javascript -->          
+    <script src="assets/plugins/popper.min.js"></script>
+    <script src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>  
+    
+    
+    <script src="assets/js/app.js"></script>
+    
+    
+    <script>
+    
+	var nameTxtPattern = /^[^0-9 =/|{},.<>""'':;\\!@#$?%^&*]+[ a-zA-Z]*$/;
+	
+	function validateForm() {
+		var department = document.getElementById('department').value;
+		var platform_to_work = document.getElementById('platform_to_work').value;
+		var projectManager_name = document.getElementById('projectManager_name').value;
+		var project_ID = document.getElementById('project_ID').value;
+		var project_name = document.getElementById('project_name').value;
+		var projDescription = document.getElementById('projDescription').value;
+		var client_name = document.getElementById('client_name').value;
+		var delivery_date = document.getElementById('delivery_date').value;
+		
+		if (department.trim().length === 0) {
+			document.getElementById("dept_error").innerHTML = "Please select department";
+			document.getElementById("dept_error").style.fontSize = "14px";
+			document.getElementById("department").focus();
+			return false;
+		} else {
+			document.getElementById("dept_error").innerHTML = "";
+		}
+
+		//-------------------------------------------------------------------------------------------
+		
+		if (platform_to_work.trim().length === 0) {
+			document.getElementById("platformToWork_error").innerHTML = "Please select platform";
+			document.getElementById("platformToWork_error").style.fontSize = "14px";
+			document.getElementById("platform_to_work").focus();
+			return false;
+		} else {
+			document.getElementById("platformToWork_error").innerHTML = "";
+		}
+		
+		//-------------------------------------------------------------------------------------------
+		
+		if (project_ID.trim().length === 0) {
+			document.getElementById("projectID_error").innerHTML = "Please fill project id";
+			document.getElementById("projectID_error").style.fontSize = "14px";
+			document.getElementById("project_ID").focus();
+			return false;
+		} else {
+			document.getElementById("projectID_error").innerHTML = "";
+		}
+
+		//-------------------------------------------------------------------------------------------
+
+		if (project_name.trim().length === 0) {
+			document.getElementById("projectName_error").innerHTML = "Please fill project name";
+			document.getElementById("projectName_error").style.fontSize = "14px";
+			document.getElementById("project_name").focus();
+			return false;
+		} else if (!nameTxtPattern.test(project_name)) {
+			document.getElementById("projectName_error").innerHTML = "Project name should not contain Numbers or any Special Characters";
+			document.getElementById("projectName_error").style.fontSize = "14px";
+			document.getElementById("project_name").focus();
+			return false;
+		} else {
+			document.getElementById("projectName_error").innerHTML = "";
+		}
+
+		//-------------------------------------------------------------------------------------------
+		
+		/* if (projectManager_name.trim().length === 0) {
+			document.getElementById("projectManager_error").innerHTML = "Please select project manager";
+			document.getElementById("projectManager_error").style.fontSize = "14px";
+			document.getElementById("projectManager_name").focus();
+			return false;
+		} else {
+			document.getElementById("projectManager_error").innerHTML = "";
+		} */
+
+		//-------------------------------------------------------------------------------------------
+		
+		if (projDescription.trim().length === 0) {
+			document.getElementById("description_error").innerHTML = "Please fill project description";
+			document.getElementById("description_error").style.fontSize = "14px";
+			document.getElementById("projDescription").focus();
+			return false;
+		} else {
+			document.getElementById("description_error").innerHTML = "";
+		}
+
+		//-------------------------------------------------------------------------------------------
+
+		if (client_name.trim().length === 0) {
+			document.getElementById("clientName_error").innerHTML = "Please fill client name";
+			document.getElementById("clientName_error").style.fontSize = "14px";
+			document.getElementById("client_name").focus();
+			return false;
+		} else if (!nameTxtPattern.test(client_name)) {
+			document.getElementById("clientName_error").innerHTML = "Client name should not contain Numbers or any Special Characters";
+			document.getElementById("clientName_error").style.fontSize = "14px";
+			document.getElementById("client_name").focus();
+			return false;
+		} else {
+			document.getElementById("clientName_error").innerHTML = "";
+		}
+
+		//-------------------------------------------------------------------------------------------
+
+		if (delivery_date.trim().length === 0) {
+			document.getElementById("deliveryDate_error").innerHTML = "Please fill delivery date";
+			document.getElementById("deliveryDate_error").style.fontSize = "14px";
+			document.getElementById("delivery_date").focus();
+			return false;
+		} else {
+			document.getElementById("deliveryDate_error").innerHTML = "";
+		}
+		
+	}
+	
+</script>
+    
+<script>
+	
+	    $.ajax({
+	        type: 'GET', 
+	        url: 'getCardDetailsForCompProject', 
+	        success: function(data) {
+				//alert(JSON.stringify(data));
+				updateCompanyProjectsDetailsUsingCardsData(data);
+				},
+	        error: function(xhr, status, error) {
+	            console.error('Error fetching data:', error);
+	            console.log('Error fetching data. Please try again.');
+	        }
+	    });
+	    
+	    
+	    function updateCompanyProjectsDetailsUsingCardsData(data){
+		    var cardContainer = document.getElementById("compProjectCardsRow");
+		    cardContainer.innerHTML = ''; 
+		
+		    for (var i = 0; i < data.length; i++) {
+				
+				var dynamicCardColor1, dynamicCardColor2;
+				
+				if(data[i].project_status === "Assigned Project"){
+					dynamicCardColor1 = 'color: #5DADE2';
+					dynamicCardColor2 = 'color: #85C1E9';
+				}else if(data[i].project_status === "Ongoing Project"){
+					dynamicCardColor1 = 'color: #F5B041';
+					dynamicCardColor2 = 'color: #F8C471';
+				}else if(data[i].project_status === "Delayed Project"){
+					dynamicCardColor1 = 'color: #EC7063';
+					dynamicCardColor2 = 'color: #F1948A';
+				}else if(data[i].project_status === "Completed Project"){
+					dynamicCardColor1 = 'color: #52BE80';
+					dynamicCardColor2 = 'color: #7DCEA0';
+				}
+				
+		        var cardDiv = document.createElement("div");
+		        cardDiv.className = "compProjectHiddenCards";
+		        cardDiv.innerHTML = '<div class="compProjectInnerHiddenCards" onclick="getProjectDetailInPopup(' + data[i].id + ', \'' + data[i].project_status + '\');">' +
+		                                '<div class="compProjectCard_content">' +
+		                                    '<p class="compProject_card_data_heading_para">' + data[i].project_id + '</p>' +
+		                                    '<p style="'+ dynamicCardColor1 + '" class="card_data_counts_para">' + data[i].project_name + '</p>' +
+		                                    '<p style="'+ dynamicCardColor2 + '" class="card_data_heading_para">(' + data[i].project_status + ')</p>' +
+		                                '</div>'+
+		                            '</div>';
+		
+		        cardContainer.appendChild(cardDiv);
+		    }
+		}
+		
+		
+	    function getProjectDetailInPopup(id, status){
+			
+				showCompProjectEditPopup();
+			
+			    $('#trackProject_box').hide();
+			
+				$.ajax({
+		        type: 'GET', 
+		        url: 'getCompProjectDetailsById', 
+		        data:{"id":id},
+		        success: function(data) {
+					//alert(JSON.stringify(data));
+					
+		            let assignedDate = data.assigned_date ?  new Date(data.assigned_date) : "-";
+            		let teamStartedDate = data.start_date ? new Date(data.start_date) : "-";
+            		let deliveryDate = data.completion_date ? new Date(data.completion_date) : "-";
+            		let clientName = data.client_name ? data.client_name : "-";
+            		let currentStatus = status ? status : "-";
+            		let projManager = data.project_manager ? data.project_manager : "-";
+            		let description = data.description ? data.description : "-";
+            		let platformToWork = data.platform_to_work ? data.platform_to_work : "-";
+            		let delayReason = data.delay_reason ? data.delay_reason : "-";
+            		let actualCompletedDate = data.completed_date === "Pending" ? "-" : new Date(data.completed_date);
+            		let teamCompletionDate = data.admin_completion_date ? new Date(data.admin_completion_date) : "-";
+            		
+            		
+            		if (assignedDate !== "-") {
+            		    // Extract day, month, and year
+            		    let day = String(assignedDate.getDate()).padStart(2, '0');
+            		    let month = String(assignedDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+            		    let year = assignedDate.getFullYear();
+
+            		    // Format the date as dd-MM-yyyy
+            		    assignedDate = `${day}-${month}-${year}`;
+            		}
+            		
+            		if (deliveryDate !== "-") {
+            		    // Extract day, month, and year
+            		    let day = String(deliveryDate.getDate()).padStart(2, '0');
+            		    let month = String(deliveryDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+            		    let year = deliveryDate.getFullYear();
+
+            		    // Format the date as dd-MM-yyyy
+            		    deliveryDate = `${day}-${month}-${year}`;
+            		}
+            		
+            		if (teamStartedDate !== "-") {
+            		    // Extract day, month, and year
+            		    let day = String(teamStartedDate.getDate()).padStart(2, '0');
+            		    let month = String(teamStartedDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+            		    let year = teamStartedDate.getFullYear();
+
+            		    // Format the date as dd-MM-yyyy
+            		    teamStartedDate = `${day}-${month}-${year}`;
+            		}
+            		
+            		if (actualCompletedDate !== "-") {
+            		    // Extract day, month, and year
+            		    let day = String(actualCompletedDate.getDate()).padStart(2, '0');
+            		    let month = String(actualCompletedDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+            		    let year = actualCompletedDate.getFullYear();
+
+            		    // Format the date as dd-MM-yyyy
+            		    actualCompletedDate = `${day}-${month}-${year}`;
+            		}
+            		
+            		if (teamCompletionDate !== "-") {
+            		    // Extract day, month, and year
+            		    let day = String(teamCompletionDate.getDate()).padStart(2, '0');
+            		    let month = String(teamCompletionDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+            		    let year = teamCompletionDate.getFullYear();
+
+            		    // Format the date as dd-MM-yyyy
+            		    teamCompletionDate = `${day}-${month}-${year}`;
+            		}
+            		
+            		$('#projectIdToTrack').val(data.projectId);
+            		$('#teamStartedDateToTrack').val(data.start_date);
+            		$('#teamExpectedDateToTrack').val(data.admin_completion_date);
+            		$('#idToTrack').val(id);
+            		$('#prjNameToTrack').val(data.project_name);
+            		
+            		if(data.start_date && data.admin_completion_date){
+						$('#trackProject_btn').show();
+					}else{
+						$('#trackProject_btn').hide();
+					}
+            		
+            		if (status === "Delayed Project") {
+		                document.getElementById('hiddenDelayReasonRow').style.display = 'table-row';
+		            } else {
+		                document.getElementById('hiddenDelayReasonRow').style.display = 'none';
+		            }
+					
+					$('#compProjectHeadingNameInPopup').text(data.project_name);
+					$('#departmentPopup').text(data.department);
+					$('#projIDPopup').text(data.projectId);
+					$('#projNamePopup').text(data.project_name);
+					$('#assignedDatePopup').text(assignedDate);
+					$('#platformToWorkPopup').text(platformToWork);
+					$('#clientnamePopup').text(clientName);
+					$('#projManagerPopup').text(projManager);
+					$('#currentStatusPopup').text(currentStatus);
+					$('#teamStartedDatePopup').text(teamStartedDate);
+					$('#descriptionPopup').text(description);
+					$('#delayReasonPopup').text(delayReason);
+					$('#deliveryDatePopup').text(deliveryDate);
+					$('#completedDatePopup').text(actualCompletedDate);
+					$('#teamExpectedDateToCompletePopup').text(teamCompletionDate);
+					
+					// Apply color dynamically based on status
+		            let dynamicCardColor;
+		            switch(status) {
+		                case "Assigned Project":
+		                    dynamicCardColor = '#5DADE2';
+		                    break;
+		                case "Ongoing Project":
+		                    dynamicCardColor = '#F5B041';
+		                    break;
+		                case "Delayed Project":
+		                    dynamicCardColor = '#EC7063';
+		                    break;
+		                case "Completed Project":
+		                    dynamicCardColor = '#52BE80';
+		                    break;
+		                default:
+		                    dynamicCardColor = '#808B96';
+		                    break;
+		            }
+		
+		            $('#currentStatusPopup').css('color', dynamicCardColor);
+		            
+		            var prjId = data.projectId;
+		            var prjName = data.project_name;
+		            
+		            // Store the assignedDate and expectedDate for use in the trackProject_box
+		            $('#trackProject_box').data('assignedDate', assignedDate);
+		            $('#trackProject_box').data('expectedDate', expectedDate);
+		            $('#trackProject_box').data('projectId', prjId);
+		            $('#trackProject_box').data('projectName', prjName);
+					
+					},
+		        error: function(xhr, status, error) {
+		            console.error('Error fetching data:', error);
+		            console.log('Error fetching data. Please try again.');
+		        }
+		    });
+		}
+	    
+	    
+	    function viewTrackProject(prjName, id, prjId, teamStartedDate, teamExpectedDate) {
+	    	
+	    		var project_name = prjName.toLowerCase();
+	    		
+	    		//alert(project_name);
+
+				$('#trackProject_box').show();
+				$('#trackProject_box').focus();
+				
+				$.ajax({
+			        type: 'GET', 
+			        url: 'getProjectDetailsToTrack', 
+			        data:{
+						"project_id":prjId,
+						"team_start_date":teamStartedDate,
+						"team_expected_date":teamExpectedDate
+			        },
+			        success: function(data) {
+						//console.log(JSON.stringify(data));
+						updateProjectInfoTrackerData(data);
+						createProjectChart(id, prjId);
+						createProjectBarChart(prjId, project_name);
+						},
+			        error: function(xhr, status, error) {
+			            console.log('Error fetching data:', JSON.stringify(error));
+			            console.log('Error fetching data. Please try again.');
+			        }
+			    });
+			    
+		}
+				
+				
+			function updateProjectInfoTrackerData(data) {
+					var trackProjectDetailsTBody = document.getElementById('trackProjectDetailsTBody');
+
+					trackProjectDetailsTBody.innerHTML = '';
+
+					if (data && data.length > 0) {
+
+						var groupedData = {};
+
+						data.forEach(function (item) {
+							var key = item.team_worked_date;
+							//alert(key);
+							if (!groupedData[key]) {
+								groupedData[key] = [];
+							}
+							groupedData[key].push(item);
+						});
+
+
+						var rowIndex = 1;
+						for (var key in groupedData) {
+							if (groupedData.hasOwnProperty(key)) {
+								var group = groupedData[key];
+								var rowspan = group.length;
+								
+								// Create concatenated strings for usernames and cell numbers with line breaks
+								var empId = group.map(item => "<p>" + (item.empid ? item.empid : '-') + "</p>").join('');
+								var empName = group.map(item => "<p>" + (item.emp_name ? item.emp_name : '-') + "</p>").join('');
+								var email = group.map(item => "<p>" + (item.email ? item.email : '-') + "</p>").join('');
+								var workingProgress = group.map(item => "<p>" + (item.working_progress ? item.working_progress : '-') + "</p>").join('');
+								var percentage = group.map(item => "<p>" + (item.percent ? item.percent : '-') + "</p>").join('');
+								var suggestionData = group.map(item => "<p onclick='openSuggestionBox(\"" + item.empid + "\", \"" + item.email + "\", \"" + group[0].team_worked_date + "\")'>" + 'Any?' + "</p>").join('');
+								
+								 var taskStatus = group.map(item => {
+							            var colorStyle = '';
+							            var taskStatus = '';
+
+							            if (item.task_status === "completed" || item.task_status === "Completed") {
+							                colorStyle = 'color: green';
+							                taskStatus = 'Completed';
+							            } else {
+							                colorStyle = 'color: #E74C3C';
+							                taskStatus = 'Pending';
+							            }
+							            return "<p style='" + colorStyle + "'>" + (item.task_status ? item.task_status : '-') + "</p>";
+							        }).join('');
+
+								
+								// Create the first row for this group
+								var row = "<tr class='custom_tr'>" +
+									"<td class='cell border' rowspan='" + rowspan + "'>" + rowIndex + "</td>" +
+									"<td class='cell border' rowspan='" + rowspan + "'>" + (group[0].team_worked_date ? group[0].team_worked_date : '-') + "</td>" +
+									"<td class='cell border'>" + empId + "</td>" +
+									"<td class='cell border'>" + empName + "</td>" +
+									"<td class='cell border'>" + email + "</td>" +
+									"<td class='cell border companyProjectWorkingProgressData'>" + workingProgress + "</td>" +
+									"<td class='cell border'>" + percentage + "</td>" +
+									"<td class='cell border'>" + taskStatus + "</td>" +
+									//"<td class='cell border'>" + suggestionData + "</td>" +
+									"</tr>";
+
+								trackProjectDetailsTBody.innerHTML += row;
+
+								// If there are additional rows, we just add empty rows to fill the space for the rowspan
+								for (var i = 1; i < group.length; i++) {
+									var additionalRow = "<tr class='custom_tr'>" +
+										"<td style='display: none;'>" + rowIndex + "</td>" +
+										"</tr>";
+
+									trackProjectDetailsTBody.innerHTML += additionalRow;
+								}
+
+								rowIndex++;
+							}
+						}
+					} else {
+						var noDataRow = "<tr><td colspan='9'>No data available</td></tr>";
+						trackProjectDetailsTBody.innerHTML = noDataRow;
+					}
+				}
+				
+				
+				function openSuggestionBox(empId, email, date){
+					alert(empId+" "+email+" "+date);
+				}
+				
+				function createProjectChart(id, projectIDValue) {
+				    $.ajax({
+				        type: 'GET',
+				        url: 'completedProjectPercent', // Adjust this URL based on your backend endpoint
+				        data: {
+				            projectId: projectIDValue
+				        },
+				        success: function(response) {
+				            // Initialize the arrays for chart data
+				            let completedData = [];
+				            let totalCompletedWork = 0;
+				            let totalAssignedCount = 0;
+
+				            // Define custom colors for each segment
+				            const colors = ['#1d8348', '#239b56', '#28b463', '#2ecc71', '#58d68d', '#82e0aa', '#abebc6', '#d5f5e3', '#eafaf1'];
+
+				            // Process the response to extract data
+				            response.forEach((item, index) => {
+				                completedData.push({
+				                    name: item.empName, // Use employee name as the label
+				                    y: item.totalCompletedWork, // Completed work percentage
+				                    color: colors[index % colors.length] // Assign color from the custom colors array
+				                });
+				                totalCompletedWork += item.totalCompletedWork;
+				                totalAssignedCount = item.overall_assigned_task
+				            });
+
+				            // Calculate pending percentage
+				           //const totalProjectPercent = 100; //Assuming the total project percentage is 100%
+				            const pendingProjectPercent = totalAssignedCount - totalCompletedWork;
+
+				            // Create the Highcharts chart
+				            Highcharts.chart('projectChart', {
+				                chart: {
+				                    type: 'pie',
+				                    animation: { 
+				                        duration: 1000, // Animation duration in milliseconds
+				                        easing: 'easeOutBounce' // Animation easing
+				                    }
+				                },
+				                title: {
+				                    text: 'Project Status',
+				                    style: {
+				                        fontSize: '15px' // Change the font size here
+				                    }
+				                },
+				                plotOptions: {
+				                    pie: {
+				                        innerSize: '0%',
+				                        size: '72%',
+				                        dataLabels: {
+				                            formatter: function() {
+				                                // Format the data labels conditionally
+				                                if (this.point.name === 'Total Completed Work') {
+				                                    return this.point.name + ': ' + Math.round(this.y);
+				                                } else {
+				                                    return this.point.name + ': ' + Highcharts.numberFormat(this.y, 1);
+				                                }
+				                            }
+				                        },
+				                        animation: {
+				                            duration: 500, // Animation duration for pie segments
+				                            easing: 'easeInOutQuart' // Animation easing for pie segments
+				                        }
+				                    }
+				                },
+				                series: [{
+				                    name: 'Task weight',
+				                    colorByPoint: true,
+				                    data: [
+				                        ...completedData, // Include individual completed work data
+				                        { name: 'Pending', y: pendingProjectPercent, color: '#EF3340' } // Custom color for the pending segment
+				                    ],
+				                    animation: {
+				                        duration: 2000, // Animation duration for series
+				                        easing: 'easeOutElastic' // Animation easing for series
+				                    }
+				                }],
+				                credits: {
+				                    enabled: false // Disable the credits (watermark)
+				                }
+				            });
+				        },
+				        error: function(xhr, status, error) {
+				            alert('Error fetching project details. Please try again.');
+				        }
+				    });
+				}
+
+
+				function createProjectBarChart(projectIDValue) {
+				    $.ajax({
+				        type: 'GET',
+				        url: 'getDataForBarChart', // Adjust this URL based on your backend endpoint
+				        data: {
+				            projectId: projectIDValue
+				        },
+				        success: function(response) {
+				            // Assuming response is an array of objects
+				            const empNames = [];
+				            const totalTasks = [];
+				            const completedTasks = [];
+				            const pendingTasks = [];
+				            const totalOverdueDate = [];
+
+				            response.forEach(function(item) {
+				                empNames.push(item.empname);
+				                totalTasks.push(item.total_task);
+				                completedTasks.push(item.completed_task);
+				                pendingTasks.push(item.pending_task);
+				                totalOverdueDate.push(item.total_overdue_date);
+				            });
+
+				            // Update the Highcharts chart with the fetched data
+				            Highcharts.chart('barGraphChartBox', {
+				                chart: {
+				                    type: 'column'
+				                },
+				                title: {
+				                    text: 'Project Task Distribution',
+				                    style: {
+				                        fontSize: '15px' // Change the font size here
+				                    }
+				                },
+				                xAxis: {
+				                    categories: empNames,
+				                    title: {
+				                        text: 'Employees',
+				                        style: {
+					                        fontSize: '15px', // Change the font size here
+					                        fontFamily: 'Times new roman'
+					                    }
+				                    }
+				                },
+				                yAxis: {
+				                    min: 0,
+				                    title: {
+				                        text: 'Tasks Weight',
+				                        style: {
+					                        fontSize: '15px', // Change the font size here
+					                        fontFamily: 'Times new roman'
+					                    }
+				                    }
+				                },
+				                tooltip: {
+			                           formatter: function() {
+			                               if (this.series.name === 'Overdue') {
+			                                   return '<b>' + this.x + '</b><br/>' +
+			                                          this.series.name + ': ' + this.y + ' days';
+			                               } else {
+			                                   return '<b>' + this.x + '</b><br/>' +
+			                                          this.series.name + ': ' + this.y;
+			                               }
+			                           }
+			                       },
+			                  series: [{
+				                    name: 'Assigned Tasks',
+				                    data: totalTasks,
+				                    color: '#3498db'
+				                }, {
+				                    name: 'Completed Tasks',
+				                    data: completedTasks,
+				                    color: '#2ecc71'
+				                }, {
+				                    name: 'Pending Tasks',
+				                    data: pendingTasks,
+				                    color: '#e74c3c'
+				                }, {
+				                    name: 'Overdue',
+				                    data: totalOverdueDate,
+				                    color: '#808b96'
+				                }],
+				                credits: {
+				                    enabled: false // Disable the credits (watermark)
+				                }
+				            });
+				        },
+				        error: function(xhr, status, error) {
+				            alert('Error fetching project details. Please try again.');
+				        }
+				    });
+				}
+				
+				
+				function selectDepartment(departmentName) {
+					 
+					 if(departmentName == "IT"){
+						 $('#subSoftwareOption').show();
+						 $('#subEmbeddedOption').show();
+						 $('#subHardwareOption').hide();
+						 $('#subMarketingOption').hide();
+						 $('#subTestingOption').hide();
+						 $('#subIOTOption').hide();
+						 $('#subProductionOption').hide();
+					 }else if(departmentName == "Hardware"){
+						 $('#subSoftwareOption').hide();
+						 $('#subEmbeddedOption').hide();
+						 $('#subHardwareOption').show();
+						 $('#subMarketingOption').hide();
+						 $('#subTestingOption').hide();
+						 $('#subIOTOption').hide();
+						 $('#subProductionOption').hide();
+					 }else if(departmentName == "Marketing"){
+						 $('#subSoftwareOption').hide();
+						 $('#subEmbeddedOption').hide();
+						 $('#subHardwareOption').hide();
+						 $('#subMarketingOption').show();
+						 $('#subTestingOption').hide();
+						 $('#subIOTOption').hide();
+						 $('#subProductionOption').hide();
+					 }else if(departmentName == "Testing"){
+						 $('#subSoftwareOption').hide();
+						 $('#subEmbeddedOption').hide();
+						 $('#subHardwareOption').hide();
+						 $('#subMarketingOption').hide();
+						 $('#subTestingOption').show();
+						 $('#subIOTOption').hide();
+						 $('#subProductionOption').hide();
+					 }else if(departmentName == "IOT"){
+						 $('#subSoftwareOption').hide();
+						 $('#subEmbeddedOption').hide();
+						 $('#subHardwareOption').hide();
+						 $('#subMarketingOption').hide();
+						 $('#subTestingOption').hide();
+						 $('#subIOTOption').show();
+						 $('#subProductionOption').hide();
+					 }else if(departmentName == "Production"){
+						 $('#subSoftwareOption').hide();
+						 $('#subEmbeddedOption').hide();
+						 $('#subHardwareOption').hide();
+						 $('#subMarketingOption').hide();
+						 $('#subTestingOption').hide();
+						 $('#subIOTOption').hide();
+						 $('#subProductionOption').show();
+					 }else{
+						 $('#subSoftwareOption').show();
+						 $('#subEmbeddedOption').show();
+						 $('#subHardwareOption').show();
+						 $('#subMarketingOption').show();
+						 $('#subTestingOption').show();
+						 $('#subIOTOption').show();
+						 $('#subProductionOption').show();
+					 }
+			    }
+				
+				
+				
+				
+				
+				
+				
+
+
+				
+
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	
+function updateCompanyProjectsDetailsData(data) {
+    var viewEmpDetailsTBody = document.getElementById('viewEmpDetailsTBody');
+    
+    viewEmpDetailsTBody.innerHTML = ''; // Clear existing content
+    
+    if (data && data.length > 0) {
+        for (var i = 0; i < data.length; i++) {
+				
+				var row = "<tr class='custom_tr'>" +
+				"<td style='display: none;'>" + data[i].id + "</td>" +
+				"<td><div class='edittt_div' onclick='editPopUp(\"" + data[i].id + "\")'><img alt='view_icon' src='assets/images/ams_edit_icon5.png' class='view_icon'></div></td>" +
+                "<td><div class='delete_div' onclick='deleteById(" + data[i].id + ")'><img alt='edit_icon' src='assets/images/ams_delete_icon6.png' class='edit_icon'></div></td>" +
+                "<td>" + (i+1) + "</td>" +
+                "<td>" + data[i].department + "</td>" +
+                "<td>" + data[i].project_name + "</td>" +
+                "<td>" + data[i].project_manager + "</td>" +
+                "<td>" + data[i].team_members + "</td>" +
+                "<td>" + data[i].description + "</td>" +
+                "<td>" + data[i].client + "</td>" +
+                "<td>" + data[i].completed_date + "</td>" +
+                "</tr>";
+
+            	viewEmpDetailsTBody.innerHTML += row; 
+        }
+    } else {
+        var noDataRow = "<tr><td colspan='12'>No data available</td></tr>";
+        viewEmpDetailsTBody.innerHTML = noDataRow;
+    }
+}
+
+
+function closeEditPopup1(){
+	$('#compProjectEditPopupOuterBox').hide();
+}
+
+function showEditPopup(){
+	$('#compProjectEditPopupOuterBox').show();
+}
+
+
+function closeCompProjectEditPopup1(){
+	$('#compProjectEditPopupOuterBox2').hide();
+}
+
+function showCompProjectEditPopup(){
+	$('#compProjectEditPopupOuterBox2').show();
+}
+
+function editPopUp(){
+		
+	showEditPopup();
+	/* document.getElementById('auto_id').value = id;
+		
+	$.ajax({
+	        type: 'GET', 
+	        url: 'fetchCompDataToEdit', 
+	        data: {
+			        "auto_id": id
+	    		},
+	        success: function(data) {
+				//alert(JSON.stringify(data));
+				$('#department').val(data.department);
+				$('#projectManagerSelectedNames').val(data.project_manager);
+				$('#teamMemberSelectedNames').val(data.team_members);
+				$('#project_name').val(data.project_name);
+				$('#projDescription').val(data.description);
+				$('#client_name').val(data.client);
+				$('#delivered_date').val(data.completed_date);
+				selectDepartment(data.department);
+				},
+	        error: function(xhr, status, error) {
+	            console.error('Error fetching data:', error);
+	            alert('Error fetching data. Please try again.');
+	        }
+	    }); */
+	}
+	
+	
+	function updateCompanyProjectDetails() {
+
+			if (validateUpdateForm()) {
+				var auto_id = document.getElementById('auto_id').value;
+
+				$.ajax({
+					type: "POST",
+					url: "updateCompProjectData",
+					data: {
+						"id": auto_id,
+						"project_name": document.getElementById("project_name").value,
+						"description": document.getElementById("projDescription").value,
+						"completed_date": document.getElementById("delivered_date").value,
+						"project_manager": document.getElementById("projectManagerSelectedNames").value,
+						"team_members": document.getElementById("teamMemberSelectedNames").value,
+						"department": document.getElementById("department").value,
+						"client": document.getElementById("client_name").value
+					},
+					success: function (response) {
+
+						closeEditPopup1();
+
+						$.ajax({
+							type: 'GET',
+							url: 'viewCompanyProj',
+							success: function (data) {
+								updateCompanyProjectsDetailsData(data);
+
+								Swal.fire({
+									title: "Updated!",
+									text: "Data has been updated.",
+									icon: "success",
+									confirmButtonColor: '#007bff',
+									confirmButtonText: 'OK'
+								});
+							},
+							error: function (xhr, status, error) {
+								console.error('Error fetching data:', error);
+								console.log('Error fetching data. Please try again.');
+							}
+						});
+
+					},
+					error: function (xhr, status, error) {
+						console.log('XHR object:', xhr);
+						console.log('Status:', status);
+						console.log('Error:', error);
+						alert('Error updating software');
+					}
+				});
+			}
+
+		}
+	
+	
+	
+	function deleteById(id) {
+	
+		Swal.fire({
+				title: "Are you sure?",
+				text: "You want to delete this data!",
+				icon: "warning",
+				showCancelButton: true,
+				confirmButtonColor: "#007bff",
+				cancelButtonColor: "#EC7063",
+				confirmButtonText: "Yes, delete it!"
+			}).then((result) => {
+				if (result.isConfirmed) {
+
+					$.ajax({
+						type: 'POST',
+						url: 'deleteCompProjectById',
+						data: {
+							"id": id,
+						},
+						success: function (response) {
+							$.ajax({
+						        type: 'GET', 
+						        url: 'viewCompanyProj', 
+						        success: function(data) {
+									updateCompanyProjectsDetailsData(data);
+				                    
+				                    Swal.fire({
+										title: "Deleted!",
+										text: "Data has been deleted.",
+										icon: "success",
+										confirmButtonColor: '#007bff',
+										confirmButtonText: 'OK'
+									});
+				
+				                },
+				                error: function(xhr, status, error) {
+				                    console.error('Error fetching updated data:', error);
+				                    alert('Error deleting data. Please try again.');
+				                }
+				            });
+						},
+						error: function (xhr, status, error) {
+							console.error('Error updating record:');
+							console.log('XHR object:', xhr);
+							console.log('Status:', status);
+							console.log('Error:', error);
+							alert('Error deleting record. Please try again.');
+						}
+					});
+				}
+			});
+		}
+
+</script>
+
+
+<!--<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const searchInput = document.querySelector('.search-input');
+    const tableBody = document.getElementById('viewEmpDetailsTBody');
+
+    searchInput.addEventListener('input', function () {
+        const searchTerm = this.value.trim().toLowerCase(); // Convert search term to lowercase for case-insensitive search
+
+        Array.from(tableBody.children).forEach(row => {
+            const cells = row.querySelectorAll('td');
+            let found = false; // Flag to track if the search term is found in any cell of the row
+
+            cells.forEach(cell => {
+                const cellText = cell.textContent.trim().toLowerCase(); // Convert cell text to lowercase for case-insensitive search
+                if (cellText.includes(searchTerm)) {
+                    found = true;
+                }
+            });
+
+            if (found) {
+                row.style.display = ''; // Show the row if search term is found in any cell
+            } else {
+                row.style.display = 'none'; // Hide the row if search term is not found in any cell
+            }
+        });
+    });
+});
+</script>-->
+
+<script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const today = new Date();
+            const formattedDate = today.toISOString().split('T')[0];
+            document.getElementById('assignedSubmitDate').value = formattedDate;
+            document.getElementById('delivery_date').setAttribute('min', formattedDate);
+        });
+    </script>
+
+<script>
+		function addProjectManagerName() {
+			var dropdown = document.getElementById("projectManager_name");
+			var selectedName = dropdown.options[dropdown.selectedIndex].value;
+			var selectedNamesField = document.getElementById("projectManagerSelectedNames");
+			
+			if (selectedName !== "") {
+				
+				selectedNamesField.style.display="block";
+				
+				if (selectedNamesField.value === "") {
+					selectedNamesField.value = selectedName;
+				} else {
+					selectedNamesField.value += ", " + selectedName;
+				}
+			}
+		}
+
+		function addTeamMemberName() {
+			var dropdown = document.getElementById("teamMember_name");
+			var selectedName = dropdown.options[dropdown.selectedIndex].value;
+			var selectedNamesField = document.getElementById("teamMemberSelectedNames");
+			
+			if (selectedName !== "") {
+				
+				selectedNamesField.style.display="block";
+				
+				if (selectedNamesField.value === "") {
+					selectedNamesField.value = selectedName;
+				} else {
+					selectedNamesField.value += ", " + selectedName;
+				}
+			}
+		}
+	</script>
+	
+	
+	<script>
+	
+    	function updateTeamCoNames(employeeNames) {
+		    var selectElement = document.getElementById('projectManager_name');
+		    selectElement.innerHTML = ''; // Clear existing options
+		    
+		    // Add 'Select employee name' option
+		    var defaultOption = document.createElement('option');
+		    defaultOption.text = 'Select Project Manager';
+		    defaultOption.value = "";
+		    defaultOption.selected = true;
+		    defaultOption.disabled = true;
+		    selectElement.appendChild(defaultOption);
+		    
+		    // Add options for each employee name
+		    employeeNames.forEach(function(employee) {
+		        var option = document.createElement('option');
+		        option.text = employee.emp_full_name;
+		        selectElement.appendChild(option);
+		    });
+		}
+		
+		function updateTeamLeadAndUserNames(employeeNames) {
+		    var selectElement = document.getElementById('teamMember_name');
+		    selectElement.innerHTML = ''; // Clear existing options
+		    
+		    // Add 'Select employee name' option
+		    var defaultOption = document.createElement('option');
+		    defaultOption.text = 'Select Team Members';
+		    defaultOption.value = "";
+		    defaultOption.selected = true;
+		    defaultOption.disabled = true;
+		    selectElement.appendChild(defaultOption);
+		    
+		    // Add options for each employee name
+		    employeeNames.forEach(function(employee) {
+		        var option = document.createElement('option');
+		        option.text = employee.emp_full_name;
+		        selectElement.appendChild(option);
+		    });
+		}
+
+</script>
+
+
+<script>
+	function getLeavePendingCount() {
+			$.ajax({
+				type: 'GET',
+				url: 'fetchNotificationCountForAllPages',
+				data:{
+					"email": document.getElementById('sessionLoggedInEmail').value,
+					"loggedInRole": document.getElementById('roleValue').value
+						},
+				success: function (data) {
+					//alert(JSON.stringify(data));
+					 var leavePendingCountValue = data.leave_pending_count;
+			         var approveOrRejectedCountValue = data.leave_approve_or_reject_count_from_superior;
+			         var finalNotificationCount = data.id;
+			         
+			         var acceptedProjectCountValue = data.status_count1;
+			         var delayedProjectCountValue = data.status_count2;
+			         var completedProjectCountValue = data.status_count3;
+			         
+			         var acceptedProjectHeading = data.status_name1;
+			         var delayedProjectHeading = data.status_name2;
+			         var completedProjectHeading = data.status_name3;
+					
+					$('#icon_badge').text(finalNotificationCount);
+					
+					updateNotificationDetailData(finalNotificationCount,leavePendingCountValue,approveOrRejectedCountValue,
+					acceptedProjectCountValue,delayedProjectCountValue,completedProjectCountValue,acceptedProjectHeading,
+					delayedProjectHeading,completedProjectHeading);
+				},
+				error: function (xhr, status, error) {
+					console.error('Error fetching data:', error);
+					console.log('Error fetching data. Please try again.');
+				}
+			});
+		}
+		
+		$(document).ready(function() {
+		  getLeavePendingCount(); 
+		  setInterval(getLeavePendingCount, 1000); 
+		});
+		
+		
+		function updateNotificationDetailData(finalNotificationCount, leavePendingCountValue, approveOrRejectedCountValue, 
+		acceptedProjectCountValue, delayedProjectCountValue, completedProjectCountValue, acceptedProjectHeading, delayedProjectHeading, 
+		completedProjectHeading) {
+			var messageDiv1 = $('#notification_list_message1');
+			var messageDiv2 = $('#notification_list_message2');
+			var messageDiv3 = $('#notification_list_message3');
+			
+			
+				if (finalNotificationCount > 0) {
+					
+					$("#defaultNotificationBox").hide();
+					
+					if (leavePendingCountValue > 0) {
+						$("#leaveRequestFromUserBox").show();
+						messageDiv1.text('You have got ' + leavePendingCountValue + ' new leave request');
+					} else {
+						$("#leaveRequestFromUserBox").hide();
+					}
+	
+					if (approveOrRejectedCountValue > 0) {
+						$('#leaveRequestApproveOrRejectedBox').show();
+						messageDiv2.text('Check the recent update on your applied leave request');
+					} else {
+						$('#leaveRequestApproveOrRejectedBox').hide();
+					}
+					
+					if (acceptedProjectCountValue > 0 || delayedProjectCountValue > 0 || completedProjectCountValue > 0) {
+						
+						if(acceptedProjectCountValue > 0){
+							var acceptedProjectStatement = acceptedProjectCountValue+' '+acceptedProjectHeading+',';
+						}else{
+							var acceptedProjectStatement = '';
+						}
+						
+						if(delayedProjectCountValue > 0){
+							var delayedProjectStatement = delayedProjectCountValue+' '+delayedProjectHeading+',';
+						}else{
+							var delayedProjectStatement = '';
+						}
+						
+						if(completedProjectCountValue > 0){
+							var completedProjectStatement = completedProjectCountValue+' '+completedProjectHeading+',';
+						}else{
+							var completedProjectStatement = '';
+						}
+						
+						messageDiv3.text('Recently there is '+acceptedProjectStatement+' '+delayedProjectStatement+' '+completedProjectStatement+' from the admin click here');
+						
+						$('#companyProjectDetailBox').show();
+						
+					} else {
+						$('#companyProjectDetailBox').hide();
+					}
+				}else{
+					$("#defaultNotificationBox").show();
+				}
+			}
+		
+</script>
+
+
+<script>
+	
+	$.ajax({
+	        type: 'GET', 
+	        url: 'fetchProfilePicForLogin', 
+	        data: {
+			        "email": document.getElementById('sessionLoggedInEmail').value
+	    		},
+	        success: function(data) {
+				//alert(JSON.stringify(data));
+				addPanDocImageToViewBox(data);
+				},
+	        error: function(xhr, status, error) {
+	            console.error('Error fetching data:', error);
+	            console.log('Error fetching data. Please try again.');
+	        }
+	    });
+	    
+function addPanDocImageToViewBox(data) {
+	
+	console.log(data); // Log the data to verify
+	
+	var docImage_div = document.getElementById('user-dropdown-toggle');
+    docImage_div.innerHTML = ''; 
+    
+        let photoImg = data.photo;
+
+            if (photoImg) {
+                var photoImage = document.createElement('img');
+                photoImage.src = 'data:image/png;base64,'+photoImg;
+                photoImage.alt = 'user profile';
+                photoImage.className = 'emp_photo_img_for_LoggedIn';
+                docImage_div.appendChild(photoImage); // Append panImage to docImage_div
+            }
+		}
+</script>
+
+<!-- This script is used to display loading modal popup -->
+ <script>
+ 
+      window.onload = function() {
+          closeLoadingModal2();
+      };  
+      
+    function showLoadingModal2() {
+	    const modal = document.getElementById('loadingModal');
+	    modal.style.display = 'block';
+	}
+	
+	function closeLoadingModal2() {
+	    const modal = document.getElementById('loadingModal');
+	    modal.style.display = 'none';
+	}      
+ </script>
+ 
+ <script>
+	var loggedInRole = document.getElementById('roleValue').value;
+	
+	if(loggedInRole === "HR"){
+		document.getElementById('addHolidayLink').style.display="block";
+		//document.getElementById('accountsLink').style.display="block";
+		document.getElementById('compProjectLink').style.display="none";
+		document.getElementById('addEmployeeLink').style.display="block";
+	}else if(loggedInRole === "COO"){
+		document.getElementById('addHolidayLink').style.display="none";
+		//document.getElementById('accountsLink').style.display="none";
+		document.getElementById('compProjectLink').style.display="block";
+		document.getElementById('addEmployeeLink').style.display="none";
+	}else{
+		document.getElementById('addHolidayLink').style.display="none";
+		//document.getElementById('accountsLink').style.display="none";
+		document.getElementById('compProjectLink').style.display="none";
+		document.getElementById('addEmployeeLink').style.display="none";
+	}
+</script>
+
+
+<!-- JavaScript code for displaying SweetAlert -->
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    // Check if the alert message exists in the model
+    var errorMessage = /*[[${error}]]*/ null;
+    if(errorMessage) {
+        // Display SweetAlert with error message
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: errorMessage
+        }).then((result) => {
+            // Check if the "OK" button is clicked
+            if (result.isConfirmed) {
+                // Redirect to another endpoint
+                location.href = 'viewCompProject';
+            }
+        });
+    }
+    /*]]>*/
+</script>
+
+</body>
+</html> 
+

@@ -1,0 +1,3543 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Interview</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+  <!-- Template Main JS File -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<script src="https://code.highcharts.com/modules/heatmap.js"></script>
+<script src="https://code.highcharts.com/highcharts-3d.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+
+  <!-- =======================================================
+  * Template Name: NiceAdmin
+  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+  * Updated: Apr 20 2024 with Bootstrap v5.3.3
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+
+<style>
+	.btn-highlight-success {
+    background-color: #229954;
+    color: white;
+}
+
+.btn-highlight-danger {
+    background-color: #FF2511;
+    color: white;
+}
+
+.marksBtn{
+	border-radius: 5px;
+	font-size: 14px;
+	margin: 5px 5px 10px 5px;
+	font-weight: bold;
+}
+
+.f2fFormInnerBox,.hrFormInnerBox{
+	width: 40%;
+   	height: 280px;
+   	background: rgb(255,255,255);
+   	margin: 8% auto;
+   	border-radius: 10px;
+   	padding: 15px 5px;
+   	overflow: auto;
+}
+.moat_navbar{
+	  font-size: 14px;
+	  background: #fff;
+	  padding: 15px;
+	  position: sticky;
+	  top: 64px;
+	  width: 100%;
+	  margin-left: auto;
+	  margin-right: auto;
+	  box-shadow: 0 0 10px #0005;
+	  gap: 0.7rem;
+	  backdrop-filter: blur(10px);
+	  background-color: #fff2;
+	  display: flex;
+}
+
+.moattt_anchor {
+    position: relative;
+    display: inline-block;
+    padding: 5px 10px;
+    color: inherit;
+    text-decoration: none;
+    text-shadow: 0 0 5px rgba(#000, 0.8);
+    letter-spacing: 1px;
+    border-right: 1px solid #d5d8dc;
+  }
+
+.moattt_anchor.active{
+	font-weight: bold;
+	color: #4154f1;
+}
+
+.moat_parentDropDown{
+	position: relative;
+    display: inline-block;
+}
+
+.moat_subDropDown {
+    display: none;
+    position: absolute;
+    background-color: #f6f9ff;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+  .progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0.08rem;
+    background-image: linear-gradient(to right, #8ad4ff, #fa7196);
+    border-radius: 0.1rem;
+    animation: progressMove linear both;
+    animation-timeline: scroll(block root);
+  }
+
+.moat_iframe{
+	width: 100%;
+	height: 100vh;
+}
+
+/* Fullscreen overlay with dim background */
+#loadingPopup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Dim background */
+    z-index: 9999;
+    font-family: Arial, sans-serif;
+    color: white; /* Text color for better contrast */
+    display: none;
+}
+
+.spinnerAndParaMerger{
+	display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* background: red; */
+    margin: 18% auto;
+}
+
+/* Spinner animation */
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 6px solid rgba(255, 255, 255, 0.3); /* Semi-transparent border */
+    border-top-color: white; /* Bright top border */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Loading text */
+#loadingPopup p {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+}
+
+/* Spinner keyframe animation */
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.moatBody_content_div{
+	width: 100%;
+	height: 100%;
+}
+
+.add_questions_form_outer_div{
+	width: 98%;
+	height: auto;
+	padding: 10px;
+	box-shadow: 0 0 10px #0005;
+    backdrop-filter: blur(10px);
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 14px;
+}
+
+.add_questions_form_div{
+	width: 100%;
+	height: 100%;
+}
+
+.question_heading{
+	width: 100%;
+	padding: 5px 10px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 10px;
+}
+
+.question_p{
+	color: #566573;
+	font-size: 14px;
+	font-weight: bold;
+	margin-top: 10px;
+}
+
+.addQuestions_language_select{
+	border: none;
+	outline: none;
+	background-color: transparent;
+	border-bottom: 1px solid #566573;
+	color: #566573;
+	font-weight: bold;
+}
+
+.questionType_radio_box{
+	width: auto;
+}
+
+.questionTypeLabel{
+	color: #566573;
+	font-weight: bold;
+}
+
+.question_text_area_box,.correct_answer_box2{
+	width: 100%;
+	height: auto;
+}
+
+.question_text_area{
+	width: 100%;
+	height: 100%;
+	font-size: 14px;
+}
+
+.options_p,.correct_answer_p{
+	color: #566573;
+	padding: 5px 10px;
+	font-weight: bold;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.options_box{
+	width: 100%;
+	height: auto;
+	display: flex;
+	justify-content: space-evenly;
+	gap: 5px;
+}
+
+.question_text_field{
+	padding-left: 5px;
+	font-size: 14px;
+}
+
+.answer_text_area2{
+	width: 100%;
+	font-size: 14px;
+}
+
+.btn_outer_div{
+	width: 100%;
+	height: auto;
+	padding: 5px 10px;
+	margin-top: 2%;
+}
+
+.btn_div{
+	display: flex;
+	width: 100%;
+	height: auto;
+	justify-content: flex-start;
+	gap: 10px;
+}
+
+.questions_table_div{
+	width: 98%;
+	height: 90vh;
+	overflow: auto;
+	box-shadow: 0 0 10px #0005;
+    backdrop-filter: blur(10px);
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 14px;
+}
+
+.cards_container{
+	width: 98%;
+	margin-bottom: 8px;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 5px 10px;
+	display: flex;
+	justify-content: space-between;
+	box-shadow: 0 0 10px #0005;
+    backdrop-filter: blur(10px);
+}
+
+.card1{
+	width: 24%;
+	/*background-color: green;*/
+	display: flex;
+	padding: 5px;
+	border-right: 2px solid #ECF0F1;
+}
+
+.card4{
+	width: 24%;
+	/*background-color: green;*/
+	display: flex;
+	padding: 5px;
+}
+
+.card_numbers{
+	/*background-color: yellow;*/
+	width: auto;
+	height: 100%;
+}
+
+.card_numbers p{
+	font-size: 30px;
+	font-weight: bold;
+	color: #4154f1;
+}
+
+.card_text{
+	/*background-color: red;*/
+	width: auto;
+	height: 100%;
+}
+
+.p2{
+	margin-top: 5px;
+	/*background-color: orange;*/
+	padding-left: 10px;
+	color: #566573;
+	font-size: 15px;
+	font-weight: bold;
+}
+
+.p3{
+	margin-top: -15px;
+	/*background-color: darkgreen;*/
+	padding-left: 10px;
+	color: #AEB6BF;
+	font-size: 14px;
+}
+
+.student_table_outer_div{
+	width: 98%;
+	height: 100%;
+	box-shadow: 0 0 10px #0005;
+	backdrop-filter: blur(10px);
+	margin-left: auto;
+	margin-right: auto;
+	background: transparent !important;
+}
+
+.student_table_div{
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+}
+
+.student_table_div .table,.student_table_url_archive_div .table{
+	width: 100%;
+	font-size: 14px;
+}
+
+.student_table_div .table thead th,.student_table_url_archive_div .table thead th{
+	padding: 12px;
+	font-size: 14px;
+	background: transparent !important;
+	color: #566573;
+}
+
+.emailFormOuterDiv{
+   	width: 100%;
+   	height: 100%;
+   	position: fixed;
+   	background: rgba(0,0,0,0.5);
+   	top: 0;
+   	left: 0;
+   	z-index: 200;
+   	display: none;
+   }
+
+.emailFormInnerBoxCloser{
+   	/* background: red; */
+   	padding-right: 10px;
+   	text-align: right;
+   }
+   
+   .emailFormInnerBoxCloser span{
+   	font-size: 25px;
+   	font-weight: bold;
+   	cursor: pointer;
+   }
+
+.emailFormBox{
+   	/* background: red; */
+   	width: 98%;
+   	margin-right: auto;
+   	margin-left: auto;
+   }
+
+.ctcFormOuterDiv{
+   	width: 100%;
+   	height: 100%;
+   	position: fixed;
+   	background: rgba(0,0,0,0.5);
+   	top: 0;
+   	left: 0;
+   	z-index: 200;
+   	display: none;
+   }
+   
+.ctcFormInnerBox{
+	width: 60%;
+   	height: 400px;
+   	background: rgb(255,255,255);
+   	margin: 3% auto;
+   	border-radius: 10px;
+   	padding: 15px 5px;
+   	overflow: auto;
+}
+
+  .ctcFormInnerBoxCloser{
+   	/* background: red; */
+   	padding-right: 10px;
+   	text-align: right;
+   	margin: 0;
+   }
+   
+   .ctcFormInnerBoxCloser span{
+   	font-size: 25px;
+   	font-weight: bold;
+   	cursor: pointer;
+   }
+
+.hiddenCtcFeedbackFromCandidate{
+   	display: none;
+   }
+
+.docUploadFormOuterDiv{
+   	width: 100%;
+   	height: 100%;
+   	position: fixed;
+   	background: rgba(0,0,0,0.5);
+   	top: 0;
+   	left: 0;
+   	z-index: 200;
+   	display: none;
+   }
+
+.docUploadFormInnerBox{
+	width: 30%;
+   	height: auto;
+   	background: rgb(255,255,255);
+   	margin: 3% auto;
+   	border-radius: 10px;
+   	padding: 15px 5px;
+   	overflow: auto;
+}
+
+.docUploadBox{
+	width: 32%;
+	height: 10px;
+	margin: 40px auto 5px auto;
+	/* background: red; */
+}
+
+.docUploadViewFormOuterDiv{
+   	width: 100%;
+   	height: 100%;
+   	position: fixed;
+   	background: rgba(0,0,0,0.5);
+   	top: 0;
+   	left: 0;
+   	z-index: 200;
+   	display: none;
+   }
+   
+   .docUploadViewFormInnerBox{
+	width: 70%;
+   	height: 440px;
+   	background: rgb(255,255,255);
+   	margin: 2% auto;
+   	border-radius: 10px;
+   	padding: 5px;
+   	overflow-y: auto;
+   	overflow-x: hidden;
+}
+
+.candidateCompleteViewFormOuterDiv{
+   	width: 100%;
+   	height: 100%;
+   	position: fixed;
+   	background: rgba(0,0,0,0.5);
+   	top: 0;
+   	left: 0;
+   	z-index: 200;
+   	display: none;
+   }
+
+.candidateCompleteViewFormInnerBox{
+	width: 86%;
+   	height: 96%;
+   	background: rgb(255,255,255);
+   	margin: 1% auto;
+   	border-radius: 5px;
+   	overflow: auto;
+}
+
+.candidateProfileHeadingAndAddEmpIconMerger{
+	 /* background: red; */
+	 display: flex;
+	 justify-content: space-between;
+	 align-items: center;
+}
+
+.candidateProfileHeadingAndAddEmpIconMerger span{
+	background: #eaeded;
+	padding: 2px 8px;
+	border-radius: 10px;
+	box-shadow: 0 0 4px #0005;
+}
+
+.candidateProfileHeadingAndAddEmpIconMerger span i{
+	font-size: 22px;
+	font-weight: bold;
+	color: #4154f1;
+}
+
+.candidateProfileHeadingAndAddEmpIconMerger span i:hover{
+	color: #52be80;
+}
+
+.student_result_box{
+	width: 98%;
+	height: 200px;
+	padding: 5px;
+	overflow: auto;
+	box-shadow: 0 0 10px #0005;
+    backdrop-filter: blur(10px);
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 14px;
+}
+
+.student_result_box_heading{
+	color: #566573;
+	padding: 5px 10px;
+	font-weight: bold;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	position: sticky;
+	top: 0;
+	left: 0;
+}
+
+.student_result_sheet_heading{
+	color: #566573;
+	padding: 5px 10px;
+	font-weight: bold;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.student_result_box_table thead th,.student_result_box_table tbody td{
+	padding: 10px;
+	font-size: 14px;
+	background: transparent !important;
+	color: #566573;
+}
+
+.candidate_resultSheet_box{
+	width: 98%;
+	height: auto;
+	box-shadow: 0 0 10px #0005;
+    backdrop-filter: blur(10px);
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 14px;
+	margin-top: 15px;
+	padding: 5px 10px;
+	display: none;
+}
+
+.questions_filter_box{
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.marksDetails_outerBox{
+	width: 50%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.5);
+	z-index: 5;
+	position: fixed;
+	top: 0;
+    right: 0; /* Initially positioned outside the screen */
+    transform: translateX(100%); /* Initial position outside the viewport */
+    transition: transform 0.8s ease;
+}
+
+.marksDetails_outerBox.active {
+    transform: translateX(0); /* When the modal is active, it slides to the right edge of the screen */
+}
+
+.marksDetails_outerBox_closeBox{
+	/* background-color: red; */
+	margin-top: 2vh;
+	margin-bottom: 3px;
+}
+
+.close_marksDetails_outerBox_span{
+	font-size: 20px;
+	color: #fff;
+	margin-left: 10px;
+	cursor: pointer;
+}
+
+.marksDetails_outerBox{
+	width: 50%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.5);
+	z-index: 5;
+	position: fixed;
+	top: 0;
+    right: 0; /* Initially positioned outside the screen */
+    transform: translateX(100%); /* Initial position outside the viewport */
+    transition: transform 0.8s ease;
+}
+
+.marksDetails_outerBox.active {
+    transform: translateX(0); /* When the modal is active, it slides to the right edge of the screen */
+}
+
+.marksDetails_outerBox_closeBox{
+	/* background-color: red; */
+	margin-top: 2vh;
+	margin-bottom: 3px;
+}
+
+.close_marksDetails_outerBox_span{
+	font-size: 20px;
+	color: #fff;
+	margin-left: 10px;
+	cursor: pointer;
+}
+
+.markDetails_table_and_chartBox{
+	width: 86%;
+	height: 82vh;
+	/* background-color: green; */
+	margin: 1px auto; 
+	padding: 4px;
+	overflow: auto;
+}
+
+.markDetails_tableBox{
+	width: 100%;
+	height: 46vh;
+	background-color: #fff;
+	padding: 8px;
+	margin-bottom: 5px;
+	overflow: auto;
+}
+
+.markDetails_table{
+	width: 100%;
+	height: 100%;
+}
+
+.markDetails_grapghBox{
+	width: 100%;
+	height: auto;
+	background-color: #fff;
+	padding: 5px;
+	margin-bottom: 5px;
+}
+
+.student_marksDetail_table{
+	width: 100%;
+	height: 100%;
+	font-size: 14px;
+	padding: 5px;
+	color: #566573;
+}
+
+.marksDetail_table_heading{
+	text-align: center;	
+	font-size: 15px;
+	font-weight: bold;
+	padding: 5px;
+	color: #566573;
+}
+
+.updateQuestionPopupOuterDiv{
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.2);
+	z-index: 9999;
+	position: fixed;
+	top: 0;
+	display: none;
+	overflow: auto;
+}
+
+.update_questions_form_outer_div{
+	width: 90%;
+	height: auto;
+	padding: 10px;
+	background-color: #f6f9ff;
+	margin: 2% auto;
+	border-radius: 10px;
+}
+
+.update_questions_form_div{
+	width: 100%;
+	height: 100%;
+}
+
+.UpdateQuestionPopupCloseBtnDiv{
+	margin-top: -20px;
+}
+
+.UpdateQuestionPopupCloseBtnDiv span{
+	font-size: 25px;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.update_questions_form_outer_div{
+	width: 90%;
+	height: auto;
+	padding: 10px;
+	background-color: #f6f9ff;
+	margin: 2% auto;
+	border-radius: 10px;
+}
+
+.update_questions_form_div{
+	width: 100%;
+	height: 100%;
+}
+
+.questions_table_div{
+	width: 98%;
+	height: 90vh;
+	overflow: auto;
+	box-shadow: 0 0 10px #0005;
+    backdrop-filter: blur(10px);
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 14px;
+}
+.customTable2{
+	width: 100%;
+	font-size: 14px;
+}
+
+.customTable2 thead{
+	position: sticky;
+	top: 0;
+	background-color: #f6f9ff;
+}
+
+.customTable2 thead th{
+	padding: 10px;
+	font-size: 14px;
+	background: transparent !important;
+	color: #566573;
+}
+
+.customTable2 tbody td{
+	font-size: 14px;
+}
+
+.viewQuestions_language_select{
+	border: none;
+	outline: none;
+	background-color: transparent;
+	border-bottom: 1px solid #566573;
+	color: #566573;
+	font-weight: bold;
+}
+
+.questions{
+	color: #EC7063 !important;
+}
+
+.answers{
+	color: #229954 !important;
+}
+
+.moatResultView_icon{
+	cursor: pointer;
+}
+
+.student_table_url_archive_div{
+	width: 98%;
+	height: 82vh;
+	box-shadow: 0 0 10px #0005;
+	backdrop-filter: blur(10px);
+	margin-left: auto;
+	margin-right: auto;
+	background: transparent !important;
+	overflow: auto;
+}
+
+.emailSentLoadingDiv{
+   	width: 100%;
+   	height: 100%;
+   	position: fixed;
+   	background: rgba(0,0,0,0.5);
+   	top: 0;
+   	left: 0;
+   	z-index: 200;
+   	display: none;
+   }
+   
+   .emailFormInnerBox{
+   	width: 40%;
+   	height: auto;
+   	background: rgb(255,255,255);
+   	margin: 10% auto;
+   	border-radius: 10px;
+   	padding: 15px 5px;
+   }
+
+.emailSentLoadingInnerBox{
+   	width: 40%;
+   	height: auto;
+   	background: rgb(255,255,255);
+   	margin: 10% auto;
+   	border-radius: 10px;
+   	padding: 15px 5px;
+   }
+   
+   .emailFormInnerBoxCloser{
+   	/* background: red; */
+   	padding-right: 10px;
+   	text-align: right;
+   }
+   
+   .emailFormInnerBoxCloser span{
+   	font-size: 25px;
+   	font-weight: bold;
+   	cursor: pointer;
+   }
+   
+   .emailFormBox{
+   	/* background: red; */
+   	width: 98%;
+   	margin-right: auto;
+   	margin-left: auto;
+   }
+
+.linkGenerateFormBox{
+   	width: 35%;
+    height: auto;
+    padding: 10px;
+    margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 10px;
+    box-shadow: 0 0 10px #0005;
+    backdrop-filter: blur(10px);
+   }
+
+.customTable{
+    	width: 100%;
+    	height: 100%;
+    	font-size: 14px;
+   }
+        
+     .customTable td{
+     	padding-bottom: 15px;
+     	padding: 10px;
+     	text-align: left !important;
+     	font-size: 14px;
+     }
+
+#emailList{
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+}
+
+.test_link_generator_btn {
+  color: #4154f1;
+  border: 1px solid #4154f1;
+  font-size: 14px;
+}
+
+.test_link_generator_btn:focus,
+.test_link_generator_btn:hover 
+{
+  color: #fff;
+  background-color: #4154f1;
+}
+
+.generatedLink {
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+.student_result_box_heading{
+	color: #566573;
+	padding: 5px 10px;
+	font-weight: bold;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	position: sticky;
+	top: 0;
+	left: 0;
+}
+
+.moatActionHiddenDiv{
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-content: center;
+	align-items: center;
+}
+.moatActionHiddenOuterDiv{
+	width: 120px;
+	height: auto;
+	background: transparent;
+	padding: 5px;
+	margin-top: 8px;
+	display: none;
+}
+</style>
+
+<body style="overflow-x: hidden;">
+
+<div id="loadingPopup">
+	<div class="spinnerAndParaMerger">
+	    <div class="spinner"></div>
+	    <p id="loadingPopupPara"></p>
+    </div>
+</div>
+
+<div class="emailFormOuterDiv" id="emailFormOuterDiv1">
+	<div class="f2fFormInnerBox">
+		<p class="emailFormInnerBoxCloser"><span onclick="closeEmailFormOuterDiv1();">&times;</span></p>
+		<p style="font-size: 14px; padding-left: 20px; font-weight: bold;">F2F Round</p>
+			<div class="row emailFormBox mb-2">
+				<div class="col-sm-6">
+					<input type="number" class="form-control" id="f2f_total_marks" style="font-size: 14px;" placeholder="Total marks">
+				</div>
+				<div class="col-sm-6">
+					<input type="number" class="form-control" id="f2f_assigned_marks" style="font-size: 14px;" placeholder="Assigned marks">
+				</div>
+			</div>
+			<div class="row emailFormBox mb-2">
+				<div class="col-sm-12">
+					<textarea class='form-control' id="f2f_remarks" placeholder="Remarks" rows='2' style='font-size: 14px'></textarea>
+				</div>
+			</div>
+			<div class="row emailFormBox">
+				<div class="col-sm-12">
+					<button type="button" id="updateF2FMarksBtn" class="btn btn-primary" style="font-size: 14px;" onclick="updateF2fMarks();">Submit</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+<div class="emailFormOuterDiv" id="emailFormOuterDiv2">
+	<div class="hrFormInnerBox">
+		<p class="emailFormInnerBoxCloser"><span onclick="closeEmailFormOuterDiv2();">&times;</span></p>
+		<p style="font-size: 14px; padding-left: 20px; font-weight: bold;">HR Round</p>
+			<div class="row emailFormBox mb-2">
+				<div class="col-sm-6">
+					<input type="number" class="form-control" id="hr_total_marks" style="font-size: 14px;" placeholder="Total marks">
+				</div>
+				<div class="col-sm-6">
+					<input type="number" class="form-control" id="hr_assigned_marks" style="font-size: 14px;" placeholder="Assigned marks">
+				</div>
+			</div>
+			<div class="row emailFormBox mb-2">
+				<div class="col-sm-12">
+					<textarea class='form-control' id="hr_remarks" placeholder="Remarks" rows='2' style='font-size: 14px'></textarea>
+				</div>
+			</div>
+			<div class="row emailFormBox">
+				<div class="col-sm-12">
+					<button type="button" id="updateHrMarksBtn" class="btn btn-primary" style="font-size: 14px;" onclick="updateHRMarks();">Submit</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+	<div class="ctcFormOuterDiv" id="ctcFormOuterDiv">
+		<div class="ctcFormInnerBox">
+		    <p class="ctcFormInnerBoxCloser">
+		        <span onclick="closeCtcFormOuterDiv();">&times;</span>
+		    </p>
+		    <p style="font-size: 14px; margin-top: -20px; padding-left: 20px; font-weight: bold; text-decoration: underline;">CTC OFFER</p>
+		
+		    <div class="row emailFormBox mb-4 mt-4">
+		        <div class="col-sm-12 d-flex">
+		            <label style="font-size: 14px; padding-left: 20px; font-weight: bold;">Candidate Expected CTC:</label>
+		            <p id="expectedCtcValueOfCandidateInCtcOffer" style="font-size: 14px; padding-left: 20px; margin: 0;"></p>
+		        </div>
+		    </div>
+		
+		    <!-- First CTC Offer -->
+		    <div class="row emailFormBox mb-3 border" id="firstCtcDiv" style="font-size: 14px; padding: 10px; border-radius: 10px;">
+		        <div class="col-sm-6 mb-2">
+		            <input type="number" class="form-control" id="first_ctc_offer" style="font-size: 14px;" placeholder="First CTC Offer (LPA)">
+		        </div>
+		        <div class="col-sm-6 mb-2">
+		            <button class="btn btn-primary" type="button" id="submitFirstCtc" onclick="submitCtcOffer(1);" style="font-size: 14px;">Submit</button>
+		        </div>
+		        
+		        <div class="hiddenCtcFeedbackFromCandidate mt-2" id="hiddenFirstCtcFeedbackFromCandidate">
+			        <div class="row">
+						<div class="col-sm-5">
+							<label style="font-size: 14px; font-weight: bold;">Candidate Action Status:</label>
+							<p id="candidateFirstCtcResponse"></p>
+						</div>
+						<div class="col-sm-7">
+							<label style="font-size: 14px; font-weight: bold;">Candidate Action Remarks:</label>
+							<p id="candidateFirstCtcRemark"></p>
+						</div>
+					</div>
+				</div>
+		    </div>
+		
+		    <!-- Second CTC Offer (Initially Hidden) -->
+		    <div class="row emailFormBox mb-3 border" id="secondCtcDiv" style="display: none; font-size: 14px; padding: 10px; border-radius: 10px;">
+		        <div class="col-sm-6 mb-2">
+		            <input type="number" class="form-control" id="second_ctc_offer" style="font-size: 14px;" placeholder="Second CTC Offer (LPA)">
+		        </div>
+		        <div class="col-sm-6 mb-2">
+		            <button class="btn btn-primary" type="button" id="submitSecondCtc" onclick="submitCtcOffer(2);" style="font-size: 14px;">Submit</button>
+		        </div>
+		        
+		        <div class="hiddenCtcFeedbackFromCandidate mt-2" id="hiddenSecondCtcFeedbackFromCandidate">
+			        <div class="row">
+						<div class="col-sm-5">
+							<label style="font-size: 14px; font-weight: bold;">Candidate Action Status:</label>
+							<p id="candidateSecondCtcResponse"></p>
+						</div>
+						<div class="col-sm-7">
+							<label style="font-size: 14px; font-weight: bold;">Candidate Action Remarks:</label>
+							<p id="candidateSecondCtcRemark"></p>
+						</div>
+					</div>
+				</div>
+		    </div>
+		
+		    <!-- Third CTC Offer (Initially Hidden) -->
+		    <div class="row emailFormBox mb-3 border" id="thirdCtcDiv" style="display: none; font-size: 14px; padding: 10px; border-radius: 10px;">
+		        <div class="col-sm-6 mb-2">
+		            <input type="number" class="form-control" id="third_ctc_offer" style="font-size: 14px;" placeholder="Third CTC Offer (LPA)">
+		        </div>
+		        <div class="col-sm-6 mb-2">
+		            <button class="btn btn-primary" type="button" id="submitThirdCtc" onclick="submitCtcOffer(3);" style="font-size: 14px;">Submit</button>
+		        </div>
+		        
+		        <div class="hiddenCtcFeedbackFromCandidate mt-2" id="hiddenThirdCtcFeedbackFromCandidate">
+			        <div class="row">
+						<div class="col-sm-5">
+							<label style="font-size: 14px; font-weight: bold;">Candidate Action Status:</label>
+							<p id="candidateThirdCtcResponse"></p>
+						</div>
+						<div class="col-sm-7">
+							<label style="font-size: 14px; font-weight: bold;">Candidate Action Remarks:</label>
+							<p id="candidateThirdCtcRemark"></p>
+						</div>
+					</div>
+				</div>
+		    </div>
+		</div>
+	</div>
+	
+	
+<div class="docUploadFormOuterDiv" id="docUploadFormOuterDiv">
+	 <div class="docUploadFormInnerBox">
+		<p class="emailFormInnerBoxCloser"><span onclick="closeDocUploadFormOuterDiv();">&times;</span></p>
+		<p style="font-size: 14px; padding-left: 20px; font-weight: bold;">Document Upload (Enable/Disable)</p>
+			<div class='form-check form-switch docUploadBox'>
+	         	<input title='Doc upload enable' class='form-check-input docUploadEnableBtn' type='checkbox' id="docUploadEnableBtn">
+	         	<label class="form-check-label" style="font-size: 14px; font-weight: bold;"></label>
+	       	</div>
+		</div>
+	</div>
+	
+	
+<div class="docUploadViewFormOuterDiv" id="docUploadViewFormOuterDiv">
+	 <div class="docUploadViewFormInnerBox">
+		 <p class="emailFormInnerBoxCloser"><span onclick="closeDocUploadViewFormOuterDiv();">&times;</span></p>
+			<p style="font-size: 14px; padding-left: 20px; font-weight: bold; font-family: 'Montserrat';">View Documents</p>
+				<div class="row jumbotron box8 mb-5 customDocDiv" style="padding: 5px 25px;">
+					<div class="col-sm-6 form-group photo_div profilePicDiv" style="display: none; height: 300px;">
+				        <p style="margin-bottom: 0; font-family: 'Montserrat'; font-size: 14px;">Profile Pic</p>
+				        <img id="profile_pic_path" width="100%" height="100%" src="" alt="Profile Picture" />
+				    </div>
+				    <div class="col-sm-6 form-group photo_div aadharPicDiv" style="display: none; height: 300px;">
+				        <p style="margin-bottom: 0; font-family: 'Montserrat'; font-size: 14px;">Aadhar Pic</p>
+				        <iframe id="aadhar_pic_path" width="100%" height="100%"></iframe>
+				        <!-- <img id="aadhar_pic_path" width="90%" height="80%" src="" alt="Aadhar Picture" /> -->
+				    </div>
+				</div>
+				
+				<div class="row jumbotron box8 mb-5 customDocDiv" style="padding: 5px 25px;">
+					<div class="col-sm-6 form-group photo_div panPicDiv" style="display: none; height: 300px;">
+				        <p style="margin-bottom: 0; font-family: 'Montserrat'; font-size: 14px;">Pan Pic</p>
+				        <img id="pan_pic_path" width="100%" height="100%" src="" alt="Pan Picture" />
+				    </div>
+				    <div class="col-sm-6 form-group photo_div tenthPicDiv" style="display: none; height: 300px;">
+				        <p style="margin-bottom: 0; font-family: 'Montserrat'; font-size: 14px;">Tenth Pic</p>
+				        <iframe id="tenth_pic_path" width="100%" height="100%"></iframe>
+				        <!-- <img id="tenth_pic_path" width="90%" height="80%" src="" alt="Tenth Picture" /> -->
+				    </div>
+				</div>
+				
+				<div class="row jumbotron box8 mb-5 customDocDiv" style="padding: 5px 25px;">
+					<div class="col-sm-6 form-group photo_div pucPicDiv" style="display: none; height: 300px;">
+				        <p style="margin-bottom: 0; font-family: 'Montserrat'; font-size: 14px;">PUC Pic</p>
+				        <iframe id="puc_pic_path" width="100%" height="100%"></iframe>
+				        <!-- <img id="puc_pic_path" width="90%" height="80%" src="" alt="PUC Picture" /> -->
+				    </div>
+				    <div class="col-sm-6 form-group photo_div degreePicDiv" style="display: none; height: 300px;">
+				        <p style="margin-bottom: 0; font-family: 'Montserrat'; font-size: 14px;">UG Pic</p>
+				        <iframe id="degree_pic_path" width="100%" height="100%"></iframe>
+				        <!-- <img id="degree_pic_path" width="90%" height="80%" src="" alt="Degree Picture" /> -->
+				    </div>
+				</div>
+				
+				<div class="row jumbotron box8 mb-5 customDocDiv" style="padding: 5px 25px;">
+					<div class="col-sm-6 form-group photo_div pgPicDiv" style="display: none; height: 300px;">
+				        <p style="margin-bottom: 0; font-family: 'Montserrat'; font-size: 14px;">PG Pic</p>
+				        <iframe id="pg_pic_path" width="100%" height="100%"></iframe>
+				        <!-- <img id="puc_pic_path" width="90%" height="80%" src="" alt="PUC Picture" /> -->
+				    </div>
+				    <div class="col-sm-6 form-group photo_div expLetterPicDiv" style="display: none; height: 300px;">
+				        <p style="margin-bottom: 0; font-family: 'Montserrat'; font-size: 14px;">Experience Latter</p>
+				        <iframe id="exp_letter_pic_path" width="100%" height="100%"></iframe>
+				        <!-- <img id="degree_pic_path" width="90%" height="80%" src="" alt="Degree Picture" /> -->
+				    </div>
+				</div>
+				
+				<div class="row jumbotron box8 mb-5 customDocDiv" style="padding: 5px 25px;">
+					<div class="col-sm-6 form-group photo_div payslipPicDiv" style="display: none; height: 300px;">
+				        <p style="margin-bottom: 0; font-family: 'Montserrat'; font-size: 14px;">Payslip Pic</p>
+				        <iframe id="payslip_pic_path" width="100%" height="100%"></iframe>
+				        <!-- <img id="puc_pic_path" width="90%" height="80%" src="" alt="PUC Picture" /> -->
+				    </div>
+				</div>
+				
+				<p class="text-danger text-center noDocAvailablePara" style="font-size: 15px; font-weight: bold; font-family: 'Montserrat';
+		width: 80%; margin: 50px auto; padding: 5px; background: #f5b7b1; border-radius: 5px; display: none;">No Documents Uploaded by the Candidate</p>
+				
+			</div>
+		</div>	
+		
+		
+		
+		
+	<div class="candidateCompleteViewFormOuterDiv" id="candidateCompleteViewFormOuterDiv">
+	 <div class="candidateCompleteViewFormInnerBox">
+			<div class="d-flex justify-content-between align-items-center shadow" style="position: sticky; top: 0; background: #fff;">
+				<p class="candidatePrfoilesHeading" style="font-size: 14px; padding-left: 10px; font-weight: bold;">Candidate Profile</p>
+				<p class="emailFormInnerBoxCloser"><span onclick="closeModalOfCompleteCandidateData();">&times;</span></p>		               	  
+			</div>
+			<div class="card-body" id="candidateProfile"></div>
+		</div>
+	</div>
+	
+	
+	<input type="hidden" th:value="${session.student_id}" id="candidateIdSessionValue">
+	<input type="hidden" id="candidateTestTypeStatusValue">
+
+  <main id="moatMain" class="moatMain">
+  
+			<section class="section dashboard">
+				<div class="col-lg-12">
+					<div class="row">
+						<div class="moatBody_content_div">
+							
+							<p style="display: none;">Student ID: <span id="student_id" th:text="${session.student_id}"></span></p>
+								<span style="position: fixed; top: 5px; z-index: 50; padding: 10px;">
+									<i style="font-size: 36px; color: #0d6efd; cursor: pointer;" onclick="location.href='moatDashboard?tab=interview'" class="bi bi-arrow-left-circle-fill"></i>
+								</span>
+								<div class="student_result_box">
+									<p class="student_result_box_heading text-center">Candidate Detail</p>
+									<table class="student_result_box_table table table-hover text-center">
+										<thead class="student_result_box_table_thead">
+											<tr>
+												<th>Candidate ID</th>
+												<th>Candidate Name</th>
+												<th>Registered Date</th>
+												<th>F2F Round</th>
+												<th>HR Round</th>
+												<th>Marks Details</th>
+												<th colspan="3">Actions</th>
+												<th>Uploaded Documents</th>
+												<th>Test Type</th>
+												<!-- <th>Gender</th>
+												<th>Email</th>
+												<th>Mobile Number</th> -->
+												<th>Test Attended Languages</th>
+												<!-- <th>Candidate Type</th>
+												<th>Expected CTC(LPA)</th>
+												<th>Joining Time</th> -->
+												<th>Candidate Status</th>
+												<th>Reason</th>
+											</tr>
+										</thead>
+										<tbody id="tbody"></tbody>
+									</table>
+								</div>
+								
+								<div class="candidate_resultSheet_box" id="candidate_resultSheet_box">
+									<p class="student_result_sheet_heading text-center">Result Sheet</p>
+									<div id="questions_filter_box" class="questions_filter_box"></div>
+									<div class="student_result_sheet_question_box" id="student_result_sheet_question_box"> </div>
+								</div>
+								
+								<div class="marksDetails_outerBox" id="marksDetails_outerBox">
+									<div class="marksDetails_outerBox_closeBox">
+										<span class="close_marksDetails_outerBox_span" onclick="closemarksDetails_outerBox();">&times;</span>
+									</div>
+									
+									<div class="markDetails_table_and_chartBox">
+										<div class="markDetails_tableBox" id="markDetails_tableBox">
+											<div class="markDetails_table" id="markDetails_table"></div>
+										</div>
+										
+										<div class="markDetails_grapghBox">
+											<div id="pieChartContainer"></div>
+										</div>
+									</div>
+								</div>
+							
+						</div>
+					</div>
+				</div>
+			</section>
+
+	</main><!-- End #main -->
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/chart.js/chart.umd.js"></script>
+  <script src="assets/vendor/echarts/echarts.min.js"></script>
+  <script src="assets/vendor/quill/quill.js"></script>
+  <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+  <script src="assets/vendor/tinymce/tinymce.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+
+
+<!-- Template Main JS File -->
+<script src="assets/js/main.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+
+<!-- script for spinner -->
+<script>
+function displayOnLoadingPopup(){
+	$('#loadingPopup').show();
+	$('#loadingPopupPara').text("Loading, please wait...");
+}
+
+function displayAppraisalEmailSendingLoadingPopup(){
+	$('#loadingPopup').show();
+	$('#loadingPopupPara').text("Please hold on, the appraisal reminder emails are currently being sent...");
+}
+
+function hideLoadingPopup(){
+	$('#loadingPopup').hide();
+}
+
+window.onload = function() {
+	hideLoadingPopup();
+};
+</script>
+
+<script>
+var student_id = document.getElementById('student_id').textContent;
+
+displayOnLoadingPopup();
+$.ajax({
+    type: 'GET', 
+    url: 'fetchStudentResultWithTestTypeStatusById', 
+    data: {
+			"student_id" : student_id
+		},
+    success: function(data){
+		//console.log(JSON.stringify(data));
+		$('#candidateTestTypeStatusValue').val(data.test_type);
+		
+		updateF2FMarksPopup(data);
+		updateHRMarksPopup(data);
+		
+        var candidateTestTypeStatus = $('#candidateTestTypeStatusValue').val();
+        
+        switch(candidateTestTypeStatus){
+            case "skip_all":
+	            	$.ajax({
+	    		        type: 'GET', 
+	    		        url: 'fetchStudentResultWithTestTypeStatusById', 
+	    		        data: {
+	    						"student_id" : student_id
+	    					},
+	    		        success: function(data){
+	    					//alert(JSON.stringify(data));
+	    					updateCandidateDetailForSkipAllTest(data);
+	    					hideLoadingPopup();
+	    				},
+	    		        error: function(xhr, status, error) {
+	    		            console.error('Error updating record:');
+	    		            console.log('XHR object:', xhr);
+	    		            console.log('Status:', status);
+	    		            console.log('Error:', error);
+	    		            alert('Error Fetching candidate result. Please try again.');
+	    		            hideLoadingPopup();
+	    		        }
+	    		    });
+	            	
+	            	$('#candidate_resultSheet_box').hide();
+                break;
+                
+            case "dont_skip":
+	            	$.ajax({
+	        	        type: 'GET', 
+	        	        url: 'fetchStudentResultById', 
+	        	        data: {
+	        					"student_id" : student_id
+	        				},
+	        	        success: function(data){
+	        				//console.log(JSON.stringify(data));
+	        				updateCandidateDetail(data);
+	        				updateResultSheet(data);
+	        				hideLoadingPopup();
+	        			},
+	        	        error: function(xhr, status, error) {
+	        	            console.error('Error updating record:');
+	        	            console.log('XHR object:', xhr);
+	        	            console.log('Status:', status);
+	        	            console.log('Error:', error);
+	        	            alert('Error Fetching candidate result. Please try again.');
+	        	            hideLoadingPopup();
+	        	        }
+	        	    });
+	        	    
+	        	    $('#candidate_resultSheet_box').show();
+                break;
+                
+                case "skip_first_round":
+	            	$.ajax({
+	        	        type: 'GET', 
+	        	        url: 'fetchStudentResultById', 
+	        	        data: {
+	        					"student_id" : student_id
+	        				},
+	        	        success: function(data){
+	        				//console.log(JSON.stringify(data));
+	        				updateCandidateDetail(data);
+	        				updateResultSheet(data);
+	        				hideLoadingPopup();
+	        			},
+	        	        error: function(xhr, status, error) {
+	        	            console.error('Error updating record:');
+	        	            console.log('XHR object:', xhr);
+	        	            console.log('Status:', status);
+	        	            console.log('Error:', error);
+	        	            alert('Error Fetching candidate result. Please try again.');
+	        	            hideLoadingPopup();
+	        	        }
+	        	    });
+	        	    
+	        	    $('#candidate_resultSheet_box').show();
+                break;
+                
+            default:
+            	alert("Not satisfied any conditions");
+                break;
+        }
+		
+	},
+    error: function(xhr, status, error) {
+        console.error('Error updating record:');
+        console.log('XHR object:', xhr);
+        console.log('Status:', status);
+        console.log('Error:', error);
+        alert('Error Fetching candidate result. Please try again.');
+    }
+});
+
+
+function updateF2FMarksPopup(data){
+	if(data.f2f_total_marks && data.f2f_assigned_marks && data.f2f_remarks){
+		$('#f2f_total_marks').val(data.f2f_total_marks);
+		$('#f2f_assigned_marks').val(data.f2f_assigned_marks);
+		$('#f2f_remarks').val(data.f2f_remarks);
+		$('#updateF2FMarksBtn').prop('disabled', true);
+	}else{
+		$('#f2f_total_marks').val("");
+		$('#f2f_assigned_marks').val("");
+		$('#f2f_remarks').val("");
+		$('#updateF2FMarksBtn').prop('disabled', false);
+	}
+}
+
+function updateHRMarksPopup(data){
+	if(data.hr_total_marks && data.hr_assigned_marks && data.hr_remarks){
+		$('#hr_total_marks').val(data.hr_total_marks);
+		$('#hr_assigned_marks').val(data.hr_assigned_marks);
+		$('#hr_remarks').val(data.hr_remarks);
+		$('#updateHrMarksBtn').prop('disabled', true);
+	}else{
+		$('#hr_total_marks').val("");
+		$('#hr_assigned_marks').val("");
+		$('#hr_remarks').val("");
+		$('#updateHrMarksBtn').prop('disabled', false);
+	}
+}
+
+
+$.ajax({
+    type: 'GET', 
+    url: 'fetchStudentMarksById', 
+    data: {
+			"student_id" : student_id
+		},
+        success: function(data){
+		    
+		    updateMarksDetailsTable(data);
+		    updateDoughnutChart(data);
+		},
+    error: function(xhr, status, error) {
+        console.error('Error updating record:');
+        console.log('XHR object:', xhr);
+        console.log('Status:', status);
+        console.log('Error:', error);
+        alert('Error Fetching candidate Marks. Please try again.');
+    }
+});
+
+	
+	function updateCandidateDetailForSkipAllTest(data){
+		//console.log(JSON.stringify(data));
+	 	var tbody = $('#tbody');
+	    tbody.empty();
+	    
+	    var candidateTestTypeStatus = $('#candidateTestTypeStatusValue').val(), candidateTestTypeStatusValue;
+	    
+	    if(candidateTestTypeStatus === "skip_all"){
+	    	candidateTestTypeStatusValue = "Skipped All the Rounds";
+	    }else if(candidateTestTypeStatus === "dont_skip"){
+	    	candidateTestTypeStatusValue = "Attended All the Rounds";
+	    }else if(candidateTestTypeStatus === "skip_first_round"){
+	    	candidateTestTypeStatusValue = "Skip the First Round";
+	    }
+	            
+	    	var candidate_name = (data.first_name+" "+data.last_name).toUpperCase();
+	            
+	            var borderStyle = '';
+	            switch (data.action) {
+	                case 'approv':
+	                    borderStyle = 'background-color: #dff2e7';
+	                    break;
+	                case 'reject':
+	                    borderStyle = 'background-color: #f5e3e1';
+	                    break;
+	                case 'onhold':
+	                    borderStyle = 'background-color: #f7f3ed';
+	                    break;
+	                default:
+	                    borderStyle = 'background-color: transparent';
+	            }
+	            
+	            $('#expectedCtcValueOfCandidateInCtcOffer').text(data.candidate_expected_salary_in_lpa+" LPA");
+	            
+	            var actionStatusValue, actionReasonValue = data.candidate_action_reason;
+	            
+	            if(data.action === "approv"){
+	            	actionStatusValue = "Approved";
+	            }else if(data.action === "reject"){
+	            	actionStatusValue = "Rejected";
+	            }else if(data.action === "onhold"){
+	            	actionStatusValue = "On-Hold";
+	            }else{
+	            	actionStatusValue = "-";
+	            }
+	            
+	            actionReasonValue = (actionReasonValue !== null && actionReasonValue !== "" && actionReasonValue !== "null") ? actionReasonValue : "-";
+
+	            var row = "<tr class='td_tr' style='"+ borderStyle + ";'>" +
+	                "<td style='min-width: 120px;'><button class='btn btn-primary' title='View complete profile' style='padding: 2px 10px; background: #0d6efd; color: #fff;' onclick='openModalToViewCompleteCandidateData();'>" + data.id + "</button></td>" +
+	                "<td style='min-width: 150px;'>" + candidate_name + "</td>" +
+	                "<td class='dateFormatter' style='min-width: 150px;'>" + data.inserted_at + "</td>" +
+	                "<td style='min-width: 120px; font-size: 14px; color: #4154f1;'>" + "<div class='view_icon_div2 text-center' onclick='openF2FAssignBox();'><i class='bi bi-pencil-fill moatResultView_icon'></i></div>" + "</td>" +
+	                "<td style='min-width: 120px; font-size: 14px; color: #4154f1;'>" + "<div class='view_icon_div2 text-center' onclick='openHRAssignBox();'><i class='bi bi-pencil-fill moatResultView_icon'></i></div>" + "</td>" +
+	                "<td style='min-width: 120px; font-size: 14px; color: #4154f1;'>" + "<div class='view_icon_div2 text-center' onclick='openMarkDetailsBox();'><i class='bi bi-eye-fill moatResultView_icon'></i></div>" + "</td>" +
+	                "<td style='min-width: 60px; font-size: 15px; color: #4154f1;'>" + "<div class='text-center' onclick=\"displayActionIcons(this);\"><i title='Candidate action status' class='bi bi-gear-fill moatResultView_icon'></i></div>" + 
+						"<div class='moatActionHiddenOuterDiv' id='moatActionHiddenOuterDiv'>" +		 				
+							 "<div class='moatActionHiddenDiv'>" +
+			 					"<div style='font-size: 20px; color: #52be80;' title='Approve' class='approve_icon_div text-center' onclick=\"changeApproveStatus('approv', '" + data.id + "', '" + $('#candidateTestTypeStatusValue').val() + "');\"><i class='bi bi-person-check-fill moatResultView_icon'></i></div>" +
+			 					"<div style='font-size: 20px; color: #ec7063;' title='Reject' class='reject_icon_div text-center' onclick=\"changeApproveStatus('reject', '" + data.id + "', '" + $('#candidateTestTypeStatusValue').val() + "');\"><i class='bi bi-person-x-fill moatResultView_icon'></i></div>" +
+			 					"<div class='moatOnHoldIconDiv text-center' title='On-Hold' onclick=\"changeApproveStatus('onhold', '" + data.id + "', '" + $('#candidateTestTypeStatusValue').val() + "');\"><i style='font-size: 20px; color: #d68910;' class='bi bi-person-fill'></i> <i style='font-size: 10px; color: #d68910;' class='bi bi-pause-circle-fill'></i></div>" +
+			 				"</div>" +
+			 			"</div>" +
+			 		"</td>" +
+	                "<td style='min-width: 60px; font-size: 15px; color: #4154f1;'>" + "<div class='view_icon_div2 text-center'><i title='CTC Offering' onclick='openCtcFormOuterDiv();' class='bi bi-wallet-fill moatResultView_icon'></i></div>" + "</td>" +
+	                "<td style='min-width: 60px; font-size: 17px; color: #4154f1;'>" + "<div class='view_icon_div2 text-center'><i title='Doc upload' onclick='openDocUploadFormOuterDiv();' class='bi bi-cloud-arrow-up-fill moatResultView_icon'></i></div>" + "</td>" +
+			 		"<td style='min-width: 180px; font-size: 14px; color: #4154f1;'>" + "<div class='view_icon_div2 text-center' onclick='openDocUploadViewFormOuterDiv();'><i class='bi bi-eye-fill moatResultView_icon'></i></div>" + "</td>" +
+	                "<td style='min-width: 150px;'>" + candidateTestTypeStatusValue + "</td>" +
+	                /* "<td style='min-width: 120px;'>" + data.gender + "</td>" +
+	                "<td style='min-width: 120px;'>" + data.email + "</td>" +
+	                "<td style='min-width: 150px;'>" + data.mobile_number + "</td>" + */
+	                "<td style='min-width: 200px;'>" + "-" + "</td>" +
+	                /* "<td style='min-width: 150px;'>" + data.experience + "</td>" +
+	                "<td style='min-width: 180px;'>" + data.candidate_expected_salary_in_lpa + "</td>" +
+	                "<td style='min-width: 150px;'>" + data.candidate_join_time + " days</td>" + */
+	                "<td style='min-width: 150px;'>" + actionStatusValue + "</td>" +
+			 		"<td style='min-width: 180px;'>" + actionReasonValue + "</td>" +
+	 				"</tr>";
+
+	            tbody.append(row);
+	            
+	            formatDates();
+			}
+	
+	function formatDates() {
+	    var dateElements = document.querySelectorAll('.dateFormatter');
+	    dateElements.forEach(function(dateElement) {
+	        var dateTimeStr = dateElement.innerText; // Get the date and time string
+	        var dateTimeParts = dateTimeStr.split(' '); // Split the string into date and time parts
+	        
+	        if (dateTimeParts.length === 2) {
+	            var dateStr = dateTimeParts[0]; // Extract the date part (yyyy-mm-dd)
+	            var timeStr = dateTimeParts[1]; // Extract the time part (hh:mm:ss)
+	            var dateParts = dateStr.split('-'); // Split the date string into yyyy, mm, dd
+	            
+	            // Format the date as dd-mm-yyyy
+	            if (dateParts.length === 3) {
+	                var formattedDate = dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0];
+	                // Update the text of the date element, keeping the time part
+	                dateElement.innerText = formattedDate + ' ' + timeStr;
+	            }
+	        }
+	    });
+	}
+	
+    
+    function updateMarksDetailsTable(data){
+		var markDetails_tableBox = $('#markDetails_table');
+		markDetails_tableBox.empty();
+		
+		if(data.length > 0){
+			var table = $('<table class="student_marksDetail_table table table-hover">')
+				
+				for (var i = 0; i < data.length; i++) {
+					    var newRow = $(
+					        '<tr>' +
+					        '<th class="marksDetail_table_heading" colspan="2">' + (data[i].subject_name ? data[i].subject_name.toUpperCase() : '-') + '</th>' +
+					        '</tr>' +
+					        '<tr>' +
+					        '<th>' + 'Total no of questions' + '</th>' +
+					        '<td>' + (data[i].total_questions_count !== null && data[i].total_questions_count !== "" && data[i].total_questions_count !== "null" ? data[i].total_questions_count : '-') + '</td>' +
+					        '</tr>' +
+					        '<tr>' +
+					        '<th>' + 'Total questions attended' + '</th>' +
+					        '<td>' + (data[i].questions_attended !== null && data[i].questions_attended !== "" && data[i].questions_attended !== "null" ? data[i].questions_attended : '-') + '</td>' +
+					        '</tr>' +
+					        '<tr>' +
+					        '<th>' + 'Total questions not attended' + '</th>' +
+					        '<td>' + (data[i].questions_not_attended !== null && data[i].questions_not_attended !== "" && data[i].questions_not_attended !== "null" ? data[i].questions_not_attended : '-') + '</td>' +
+					        '</tr>' +
+					        '<tr>' +
+					        '<th>' + 'Total correct answers' + '</th>' +
+					        '<td>' + (data[i].total_correct_answer !== null && data[i].total_correct_answer !== "" && data[i].total_correct_answer !== "null" ? data[i].total_correct_answer : '-') + '</td>' +
+					        '</tr>' +
+					        '<tr>' +
+					        '<th>' + 'Total wrong answers' + '</th>' +
+					        '<td>' + (data[i].total_wrong_answer !== null && data[i].total_wrong_answer !== "" && data[i].total_wrong_answer !== "null" ? data[i].total_wrong_answer : '-') + '</td>' +
+					        '</tr>' +
+					        '<tr>' +
+					        '<th class="percentage">' + 'Percentage' + '</th>' +
+					        '<td class="percentage">' + (data[i].total_percentage !== null && data[i].total_percentage !== "" && data[i].total_percentage !== "null" ? parseFloat(data[i].total_percentage).toFixed(2) + "%" : '-') + '</td>' +
+					        '</tr>'
+					    );
+					    
+					    table.append(newRow);
+					}
+
+					markDetails_tableBox.append(table);
+		}
+	}
+	
+	
+    function updateDoughnutChart(data) {
+        if (data.length > 0) {
+            var chartData = [];
+            var totalPercentageSum = 0;
+
+            // Calculate total percentage sum
+            data.forEach(function(item) {
+                totalPercentageSum += parseFloat(item.total_percentage);
+            });
+
+            // Iterate over each subject data
+            data.forEach(function(item) {
+            	var subjectName = item.subject_name ? item.subject_name.toUpperCase() : '-';
+           	    var totalQuestionsCount = item.total_questions_count ? parseInt(item.total_questions_count) : '-';
+           	    var questionsAttended = item.questions_attended ? parseInt(item.questions_attended) : '-';
+           	    var questionsNotAttended = item.questions_not_attended ? parseInt(item.questions_not_attended) : '-';
+           	    var totalCorrectAnswer = item.total_correct_answer ? parseInt(item.total_correct_answer) : '-';
+           	    var totalWrongAnswer = item.total_wrong_answer ? parseInt(item.total_wrong_answer) : '-';
+           	    var rawPercentage = item.total_percentage ? parseFloat(item.total_percentage) : 0; // Default to 0 if percentage is null
+
+                // Normalize the percentage to make the total equal 100%
+                var normalizedPercentage = (rawPercentage / totalPercentageSum) * 100;
+
+                // Push data for each subject
+                chartData.push({
+                    name: subjectName,
+                    y: normalizedPercentage, // Normalized percentage
+                    details: {
+                        'Total question(s)': totalQuestionsCount,
+                        'Attended question(s)': questionsAttended,
+                        'Not attended question(s)': questionsNotAttended,
+                        'Correct answer(s)': totalCorrectAnswer,
+                        'Wrong answer(s)': totalWrongAnswer,
+                        'Percentage': normalizedPercentage.toFixed(2) + '%'
+                    }
+                });
+            });
+
+            // Highcharts configuration
+            Highcharts.setOptions({
+                credits: {
+                    enabled: false
+                }
+            });
+
+            Highcharts.chart('pieChartContainer', {
+                chart: { type: 'pie' },
+                title: { text: 'Marks Details Chart', align: 'left' },
+                tooltip: {
+                    formatter: function() {
+                        var details = this.point.details;
+                        var tooltip = '<b>' + this.point.name + '</b><br>';
+                        Object.keys(details).forEach(function(key) {
+                            tooltip += key + ': ' + details[key] + '<br>';
+                        });
+                        return tooltip;
+                    }
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        borderWidth: 2,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b><br>{point.y:.2f}%', // Display percentage with 2 decimals
+                            distance: 20
+                        }
+                    }
+                },
+                exporting: {
+                    buttons: {
+                        contextButton: {
+                            menuItems: [
+                                'downloadPNG',
+                                'downloadJPEG',
+                                'downloadPDF',
+                                'downloadSVG',
+                                'downloadXLS',
+                                'printChart',
+                                {
+                                    text: 'View in Full Screen',
+                                    onclick: function () {
+                                        this.fullscreen.toggle();
+                                    }
+                                }
+                            ],
+                            symbol: 'menu',
+                            symbolStroke: '#666',
+                            symbolSize: 14
+                        }
+                    }
+                },
+                series: [{
+                    name: 'Display',
+                    enableMouseTracking: true,
+                    animation: { duration: 2000 },
+                    colorByPoint: true,
+                    data: chartData
+                }]
+            });
+        }
+    }
+    
+    
+function updateCandidateDetail(data) {
+    var tbody = $('#tbody');
+    var student_result_sheet_heading1 = $('#student_result_sheet_heading1');
+    var student_result_sheet_heading2 = $('#student_result_sheet_heading2');
+    tbody.empty();
+    student_result_sheet_heading1.empty();
+    student_result_sheet_heading2.empty();
+
+    if (data && data.length > 0) {
+        var subjectNamesSet = new Set();
+
+        for (var j = 0; j < data.length; j++) {
+            subjectNamesSet.add(data[j].subject_name);
+        }
+
+        var subjectNamesStr = Array.from(subjectNamesSet)
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize first letter
+        .join(', ');
+        // alert('Subject Names: ' + subjectNamesStr);
+        
+		var candidateTestTypeStatus = $('#candidateTestTypeStatusValue').val(), candidateTestTypeStatusValue;
+	    
+		if(candidateTestTypeStatus === "skip_all"){
+	    	candidateTestTypeStatusValue = "Skipped All the Rounds";
+	    }else if(candidateTestTypeStatus === "dont_skip"){
+	    	candidateTestTypeStatusValue = "Attended All the Rounds";
+	    }else if(candidateTestTypeStatus === "skip_first_round"){
+	    	candidateTestTypeStatusValue = "Skip the First Round";
+	    }
+
+        for (var i = 0; i < 1; i++) {
+            var candidate_name = data[i].student_full_name.toUpperCase();
+
+            // Determine border color based on action
+            var borderStyle = '';
+            switch (data[i].action) {
+                case 'approv':
+                    borderStyle = 'background-color: #dff2e7';
+                    break;
+                case 'reject':
+                    borderStyle = 'background-color: #f5e3e1';
+                    break;
+                case 'onhold':
+                    borderStyle = 'background-color: #f7f3ed';
+                    break;
+                default:
+                    borderStyle = 'background-color: transparent';
+            }
+            
+            $('#expectedCtcValueOfCandidateInCtcOffer').text(data[i].candidate_expected_salary_in_lpa+" LPA");
+            
+            var actionStatusValue, actionReasonValue = data[i].candidate_action_reason ;
+            
+            if(data[i].action === "approv"){
+            	actionStatusValue = "Approved";
+            }else if(data[i].action === "reject"){
+            	actionStatusValue = "Rejected";
+            }else if(data[i].action === "onhold"){
+            	actionStatusValue = "On-Hold";
+            }else{
+            	actionStatusValue = "-";
+            }
+            
+         	// Correct null/empty/"null" handling
+            actionReasonValue = (actionReasonValue && actionReasonValue !== "null") ? actionReasonValue : "-";
+
+            // Construct row with border color
+            var row = "<tr class='td_tr' style='"+ borderStyle + ";'>" +
+                "<td style='min-width: 120px;'><button class='btn btn-primary' style='padding: 2px 10px; background: #0d6efd; color: #fff;' title='View complete profile' onclick='openModalToViewCompleteCandidateData();'>" + data[i].student_id + "</button></td>" +
+                "<td style='min-width: 150px;'>" + candidate_name + "</td>" +
+                "<td class='dateFormatter' style='min-width: 150px;'>" + data[i].registered_at + "</td>" +
+                "<td style='min-width: 120px; font-size: 14px; color: #4154f1;'>" + "<div class='view_icon_div2 text-center' onclick='openF2FAssignBox();'><i class='bi bi-pencil-fill moatResultView_icon'></i></div>" + "</td>" +
+                "<td style='min-width: 120px; font-size: 14px; color: #4154f1;'>" + "<div class='view_icon_div2 text-center' onclick='openHRAssignBox();'><i class='bi bi-pencil-fill moatResultView_icon'></i></div>" + "</td>" +
+                "<td style='min-width: 120px; font-size: 14px; color: #4154f1;'>" + "<div class='view_icon_div2 text-center' onclick='openMarkDetailsBox();'><i class='bi bi-eye-fill moatResultView_icon'></i></div>" + "</td>" +
+                "<td style='min-width: 60px; font-size: 15px; color: #4154f1;'>" + "<div class='text-center' onclick=\"displayActionIcons(this);\"><i title='Candidate action status' class='bi bi-gear-fill moatResultView_icon'></i></div>" + 
+					"<div class='moatActionHiddenOuterDiv' id='moatActionHiddenOuterDiv'>" +		 				
+						 "<div class='moatActionHiddenDiv'>" +
+		 					"<div style='font-size: 20px; color: #52be80;' title='Approve' class='approve_icon_div text-center' onclick=\"changeApproveStatus('approv', '" + data[i].student_id + "', '" + $('#candidateTestTypeStatusValue').val() + "');\"><i class='bi bi-person-check-fill moatResultView_icon'></i></div>" +
+		 					"<div style='font-size: 20px; color: #ec7063;' title='Reject' class='reject_icon_div text-center' onclick=\"changeApproveStatus('reject', '" + data[i].student_id + "', '" + $('#candidateTestTypeStatusValue').val() + "');\"><i class='bi bi-person-x-fill moatResultView_icon'></i></div>" +
+		 					"<div class='moatOnHoldIconDiv text-center' title='On-Hold' onclick=\"changeApproveStatus('onhold', '" + data[i].student_id + "', '" + $('#candidateTestTypeStatusValue').val() + "');\"><i style='font-size: 20px; color: #d68910;' class='bi bi-person-fill'></i> <i style='font-size: 10px; color: #d68910;' class='bi bi-pause-circle-fill'></i></div>" +
+		 				"</div>" +
+		 			"</div>" +
+		 		"</td>" +
+                "<td style='min-width: 60px; font-size: 15px; color: #4154f1;'>" + "<div class='view_icon_div2 text-center'><i title='CTC Offering' onclick='openCtcFormOuterDiv();' class='bi bi-wallet-fill moatResultView_icon'></i></div>" + "</td>" +
+                "<td style='min-width: 60px; font-size: 17px; color: #4154f1;'>" + "<div class='view_icon_div2 text-center'><i title='Doc upload' onclick='openDocUploadFormOuterDiv();' class='bi bi-cloud-arrow-up-fill moatResultView_icon'></i></div>" + "</td>" +
+                "<td style='min-width: 180px; font-size: 14px; color: #4154f1;'>" + "<div class='view_icon_div2 text-center' onclick='openDocUploadViewFormOuterDiv();'><i class='bi bi-eye-fill moatResultView_icon'></i></div>" + "</td>" +
+                "<td style='min-width: 150px;'>" + candidateTestTypeStatusValue + "</td>" +
+                /* "<td style='min-width: 120px;'>" + data[i].gender + "</td>" +
+                "<td style='min-width: 120px;'>" + data[i].email + "</td>" +
+                "<td style='min-width: 150px;'>" + data[i].mobile_number + "</td>" + */
+                "<td style='min-width: 200px;'>" + subjectNamesStr + "</td>" +
+                /* "<td style='min-width: 150px;'>" + data[i].experience + "</td>" +
+                "<td style='min-width: 180px;'>" + data[i].candidate_expected_salary_in_lpa + "</td>" +
+                "<td style='min-width: 150px;'>" + data[i].candidate_join_time + " days</td>" + */
+                "<td style='min-width: 150px;'>" + actionStatusValue + "</td>" +
+		 		"<td style='min-width: 180px;'>" + actionReasonValue + "</td>" +
+ 				"</tr>";
+
+            tbody.append(row);
+            
+            student_result_sheet_heading1.text("Candidate Name: " + candidate_name);
+            student_result_sheet_heading2.text("Candidate ID: " + data[i].student_id);
+        }
+        formatDates();
+    } else {
+        var noDataRow = "<tr><td class='error_msg' colspan='20'>No data available</td></tr>";
+        tbody.append(noDataRow);
+    }
+}
+
+function formatDates() {
+    var dateElements = document.querySelectorAll('.dateFormatter');
+    dateElements.forEach(function(dateElement) {
+        var dateTimeStr = dateElement.innerText; // Get the date and time string
+        var dateTimeParts = dateTimeStr.split(' '); // Split the string into date and time parts
+        
+        if (dateTimeParts.length === 2) {
+            var dateStr = dateTimeParts[0]; // Extract the date part (yyyy-mm-dd)
+            var timeStr = dateTimeParts[1]; // Extract the time part (hh:mm:ss)
+            var dateParts = dateStr.split('-'); // Split the date string into yyyy, mm, dd
+            
+            // Format the date as dd-mm-yyyy
+            if (dateParts.length === 3) {
+                var formattedDate = dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0];
+                // Update the text of the date element, keeping the time part
+                dateElement.innerText = formattedDate + ' ' + timeStr;
+            }
+        }
+    });
+}
+
+function displayActionIcons(element) {
+    var moatActionHiddenOuterDiv = $(element).next('.moatActionHiddenOuterDiv');
+
+    moatActionHiddenOuterDiv.toggle();  // Toggle visibility
+
+    if (moatActionHiddenOuterDiv.is(':visible')) {
+        moatActionHiddenOuterDiv.focus();  // Focus on the div
+
+        // Scroll the parent container to ensure the full div is visible
+        moatActionHiddenOuterDiv[0].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+        // Optionally, ensure the full content is horizontally visible
+        var scrollParent = moatActionHiddenOuterDiv.closest('div').get(0);
+        scrollParent.scrollLeft = 0;  // Adjust this if you need a specific horizontal position
+    }
+}
+    
+    
+function updateResultSheet(data) {
+    if (data && data.length > 0) {
+        var questionCounter = 1; 
+        
+       // console.log("&&***&*& = "+JSON.stringify(data));
+        
+        // Create a dropdown list dynamically
+        var dropdown = document.createElement('select');
+        dropdown.classList.add('subject-dropdown');
+        dropdown.classList.add('form-select');
+        
+        var defaultOption = document.createElement('option');
+		defaultOption.textContent = 'Filter questions';
+		defaultOption.disabled = true;
+		defaultOption.selected = true; // Set the default option as selected
+		dropdown.appendChild(defaultOption);
+        
+        // Populate the dropdown with unique subject names
+        var subjects = [];
+        
+        for (var i = 0; i < data.length; i++) {
+            if (!subjects.includes(data[i].subject_name.toUpperCase())) {
+                subjects.push(data[i].subject_name.toUpperCase());
+                var option = document.createElement('option');
+                option.value = data[i].subject_name.toUpperCase();
+                option.textContent = data[i].subject_name.toUpperCase();
+                dropdown.appendChild(option);
+            }
+        }
+
+       // Add event listener to the dropdown
+        dropdown.addEventListener('change', function() {
+            var selectedSubject = this.value;
+            var questionBoxes = document.querySelectorAll('.student_result_sheet_question_box');
+            questionBoxes.forEach(function(questionBox) {
+                if (questionBox.dataset.subject === selectedSubject || selectedSubject === 'All') {
+                    questionBox.style.display = 'block';
+                } else {
+                    questionBox.style.display = 'none';
+                }
+            });
+        });
+        
+         // Append dropdown to the result sheet container
+        document.getElementById('questions_filter_box').appendChild(dropdown);
+        
+
+        for (var i = 0; i < data.length; i++) {
+        	(function(i) { // IIFE to capture the current value of 'i'
+            var questions = data[i].question_name.replace(/&new_line;/g, "<br>")
+			                                       .replace(/&lt;/g, "&lt;")
+                                                   .replace(/&gt;/g, "&gt;")
+			                                       .replace(/&quot;/g, "\"")
+			                                       .replace(/&apos;/g, "'")
+			                                       .replace(/&slash;/g, "/");
+
+            var questionContainer = document.createElement('div');
+            questionContainer.classList.add('student_result_sheet_question_box');
+            questionContainer.dataset.subject = data[i].subject_name.toUpperCase(); // Store subject name as dataset attribute
+            
+       /*     var questionCategoryName = document.createElement('p');
+            questionCategoryName.classList.add('student_result_sheet_SubjectCategory_p');
+            if(data[i].q_id <= 999){
+				questionCategoryName.innerHTML = "Apptitude Section";
+			}else if(data[i].q_id > 999 && data[i].q_id <= 1999){
+				questionCategoryName.innerHTML = "Java Section";
+			}else if(data[i].q_id > 1999 && data[i].q_id <= 2999){
+				questionCategoryName.innerHTML = "Python Section";
+			}else if(data[i].q_id > 2999 && data[i].q_id <= 3999){
+				questionCategoryName.innerHTML = "SQL Section";
+			}else if(data[i].q_id > 3999 && data[i].q_id <= 4999){
+				questionCategoryName.innerHTML = "C Section";
+			}else{
+				questionCategoryName.innerHTML = "Unknown Section";
+			}
+            questionContainer.appendChild(questionCategoryName); */
+
+            var questionParagraph = document.createElement('p');
+            questionParagraph.classList.add('student_result_sheet_question_p');
+            questionParagraph.innerHTML = + (questionCounter++) + ") " +questions;
+            questionContainer.appendChild(questionParagraph);
+            
+            if(data[i].logic){
+				var logicParagraph = document.createElement('p');
+	            logicParagraph.classList.add('student_result_sheet_logic_p');
+	            logicParagraph.innerHTML = "<p style='font-weight: bold;'>Entered Logic :</p><p style='background: #DCDCDC; padding: 6px; border-radius: 4px; box-shadow: 0 0 4px #DCDCDC;'>"+data[i].logic.replace(/&new_line;/g, "<br>")
+																														                	.replace(/&lt;/g, "&lt;")
+																														    			    .replace(/&gt;/g, "&gt;")
+																															                .replace(/&quot;/g, "\"")
+																															                .replace(/&apos;/g, "'")
+																															                .replace(/&slash;/g, "/")+"</p>";
+	            questionContainer.appendChild(logicParagraph);
+			}
+            
+            
+            // Check if options are provided
+            if (data[i].op1 || data[i].op2 || data[i].op3 || data[i].op4) {
+            	
+            	// Preprocess the selected option and original answer with replacements
+                var sanitizedSelectedOption = (data[i].selected_option || "").replace(/&new_line;/g, "<br>")
+                                                                            .replace(/&lt;/g, "&lt;")
+                                                                            .replace(/&gt;/g, "&gt;")
+                                                                            .replace(/&quot;/g, "\"")
+                                                                            .replace(/&apos;/g, "'")
+                                                                            .replace(/&slash;/g, "/");
+
+                var sanitizedOriginalAnswer = (data[i].original_answer || "").replace(/&new_line;/g, "<br>")
+                                                                            .replace(/&lt;/g, "&lt;")
+                                                                            .replace(/&gt;/g, "&gt;")
+                                                                            .replace(/&quot;/g, "\"")
+                                                                            .replace(/&apos;/g, "'")
+                                                                            .replace(/&slash;/g, "/");
+            	
+                var optionsList = document.createElement('ol');
+                optionsList.setAttribute('type', 'a');
+                optionsList.classList.add('options');
+
+                // Loop through each option and create a list item for it
+                for (var j = 1; j <= 4; j++) {
+                    var optionItem = document.createElement('li');
+                    //optionItem.textContent = data[i]['op' + j];
+                    
+                    var sanitizedOptionText = (data[i]['op' + j] || "").replace(/&new_line;/g, "<br>")
+                                                      .replace(/&lt;/g, "&lt;")
+                                                      .replace(/&gt;/g, "&gt;")
+                                                      .replace(/&quot;/g, "\"")
+                                                      .replace(/&apos;/g, "'")
+                                                      .replace(/&slash;/g, "/");
+                    
+    				optionItem.textContent = sanitizedOptionText;
+
+                    // Compare selected option with the answer and handle color based on conditions
+                    /*if (data[i].selected_option === data[i].original_answer && data[i].original_answer && data[i].selected_option === optionItem.textContent) {
+                        optionItem.style.color = '#229954'; // Selected option matches answer and answer is not empty
+                    	optionItem.style.fontWeight = 'bold';
+                    } else if (data[i].selected_option !== data[i].original_answer && data[i].original_answer && data[i].selected_option === optionItem.textContent) {
+                        optionItem.style.color = '#EC7063'; // Selected option does not match answer and answer is not empty
+                    	optionItem.style.fontWeight = 'bold';
+                    } else if (data[i].selected_option && !data[i].original_answer) {
+                        optionItem.style.color = '#566573'; // Selected option exists but answer is empty
+                    }*/
+                    
+                    
+                 // Compare sanitized selected option with sanitized answer and handle color based on conditions
+                    if (sanitizedSelectedOption === sanitizedOriginalAnswer && sanitizedOriginalAnswer && sanitizedSelectedOption === sanitizedOptionText) {
+                        optionItem.style.color = '#229954'; // Selected option matches answer and answer is not empty
+                        optionItem.style.fontWeight = 'bold';
+                    } else if (sanitizedSelectedOption !== sanitizedOriginalAnswer && sanitizedOriginalAnswer && sanitizedSelectedOption === sanitizedOptionText) {
+                        optionItem.style.color = '#EC7063'; // Selected option does not match answer and answer is not empty
+                        optionItem.style.fontWeight = 'bold';
+                    } else if (sanitizedSelectedOption && !sanitizedOriginalAnswer) {
+                        optionItem.style.color = '#566573'; // Selected option exists but answer is empty
+                    }
+                    
+
+                    optionsList.appendChild(optionItem);
+                }
+
+                questionContainer.appendChild(optionsList);
+            } else {
+				    // Options not provided
+				    var selectedOptionParagraph2 = document.createElement('p');
+				    selectedOptionParagraph2.classList.add('student_result_sheet_selectedOption_p2');
+				    
+				    if(data[i].selected_option === null){
+						selectedOptionParagraph2.innerHTML = "Entered answer: <span class='logicOutput'>" + '' + "</span>";
+					}else{
+						selectedOptionParagraph2.innerHTML = "Entered answer: <span class='logicOutput'>" + data[i].selected_option.replace(/&new_line;/g, "<br>")
+																							                                       .replace(/&lt;/g, "&lt;")
+                                                               																	   .replace(/&gt;/g, "&gt;")
+																							                                       .replace(/&quot;/g, "\"")
+																							                                       .replace(/&apos;/g, "'")
+																							                                       .replace(/&slash;/g, "/") + "</span>";
+					}
+				
+				    // Select the span element within selectedOptionParagraph2
+				    var span = selectedOptionParagraph2.querySelector('.logicOutput');
+				
+				    // Apply color based on conditions
+				    if (data[i].selected_option === data[i].original_answer && data[i].original_answer) {
+				        span.style.color = '#229954'; // Apply green color if selected option matches answer and answer is not empty
+				    } else if (data[i].selected_option !== data[i].original_answer && data[i].original_answer) {
+				        span.style.color = '#EC7063'; // Apply red color if selected option does not match answer and answer is not empty
+				    } else if (data[i].selected_option && !data[i].original_answer) {
+				        span.style.color = '#566573'; // Apply another color if selected option exists but answer is empty
+				    }
+				
+				    questionContainer.appendChild(selectedOptionParagraph2);
+				}
+
+            var selectedOptionParagraph = document.createElement('p');
+            selectedOptionParagraph.classList.add('student_result_sheet_selectedOption_p');
+            selectedOptionParagraph.innerHTML = 'Selected option: ' + data[i].selected_option.replace(/&new_line;/g, "<br>")
+														                                       .replace(/&lt;/g, "&lt;")
+                                                               								   .replace(/&gt;/g, "&gt;")
+														                                       .replace(/&quot;/g, "\"")
+														                                       .replace(/&apos;/g, "'")
+														                                       .replace(/&slash;/g, "/");
+            questionContainer.appendChild(selectedOptionParagraph);
+
+            var answerParagraph = document.createElement('p');
+            answerParagraph.classList.add('student_result_sheet_answer_p');
+            answerParagraph.innerHTML = 'Correct Answer :- <span class="answer-text resultSheetAnswerTextSpan">' + data[i].original_answer.replace(/&new_line;/g, "<br>")
+																									                                       .replace(/&lt;/g, "&lt;")
+                                                               																			   .replace(/&gt;/g, "&gt;")
+																									                                       .replace(/&quot;/g, "\"")
+																									                                       .replace(/&apos;/g, "'")
+																									                                       .replace(/&slash;/g, "/");
+ + '</span>';
+            
+ 			questionContainer.appendChild(answerParagraph);
+
+           /* var toggleButton = answerParagraph.querySelector('.toggle-button');
+            toggleButton.onclick = function() {
+                var answerText = this.nextElementSibling;
+                if (answerText.style.display === 'none') {
+                    answerText.style.display = 'inline'; // Show the answer text
+                    this.textContent = '-'; // Change button text to "-"
+                } else {
+                    answerText.style.display = 'none'; // Hide the answer text
+                    this.textContent = '+'; // Change button text to "+"
+                }
+            }; */
+            
+            
+         	// If selected_option and logic are not empty, add manual mark buttons
+            var markButtonsContainer = document.createElement('div');
+         	
+            if (data[i].subject_name.toLowerCase() !== 'aptitude' && (data[i].selected_option || data[i].logic)) {
+                markButtonsContainer.classList.add('mark-buttons');
+
+                // Use let to capture the current values of data[i].q_id and data[i].student_id
+                let q_id = data[i].q_id;
+                let student_id = data[i].student_id;
+                
+             	// Initial state based on database response
+                let initialMarkValue = fetchInitialMarks(student_id, q_id);
+
+                var oneMarkButton = document.createElement('button');
+                oneMarkButton.classList.add('btn', 'btn-outline-success', 'btn-mark', 'marksBtn');
+                //oneMarkButton.textContent = '1';
+                
+                // Clear any existing text content or child elements
+				oneMarkButton.textContent = '';
+                
+				// Create an icon element
+				let icon = document.createElement('i');
+				icon.classList.add('bi', 'bi-check-lg'); // Add the Bootstrap icon classes
+
+				// Append the icon to the button
+				oneMarkButton.appendChild(icon);
+                
+             	// Set initial background color based on DB response
+                if (initialMarkValue === "1") {
+                    oneMarkButton.classList.add('btn-highlight-success');
+                } else if (initialMarkValue === "null" || initialMarkValue === "" || initialMarkValue === "0") {
+                    oneMarkButton.classList.add('btn-outline-success');
+                }
+                
+                oneMarkButton.onclick = function() {
+                    // Now you can access q_id and student_id correctly
+                    console.log("1 mark awarded for question: " + q_id + "(question_id) for " + student_id + "(Student id)");
+                    handleButtonClick("1", q_id, student_id, oneMarkButton, zeroMarkButton);
+                };
+                markButtonsContainer.appendChild(oneMarkButton);
+
+               
+                
+                var zeroMarkButton = document.createElement('button');
+                zeroMarkButton.classList.add('btn', 'btn-outline-danger', 'btn-mark', 'marksBtn');
+                //zeroMarkButton.textContent = '0';
+                
+                // Clear any existing text content or child elements
+				zeroMarkButton.textContent = '';
+                
+				// Create an icon element
+				let icon2 = document.createElement('i');
+				icon2.classList.add('bi', 'bi-x-lg'); // Add the Bootstrap icon classes
+
+				// Append the icon to the button
+				zeroMarkButton.appendChild(icon2);
+                
+             	// Set initial background color based on DB response
+                if (initialMarkValue === "0") {
+                    zeroMarkButton.classList.add('btn-highlight-danger');
+                } else if (initialMarkValue === "null" || initialMarkValue === "" || initialMarkValue === "1") {
+                    zeroMarkButton.classList.add('btn-outline-danger');
+                }
+                
+                zeroMarkButton.onclick = function() {
+                    // Now you can access q_id and student_id correctly
+                    console.log("0 mark awarded for question: " + q_id + "(question_id) for " + student_id + "(Student id)");
+                    handleButtonClick("0", q_id, student_id, zeroMarkButton, oneMarkButton);
+                };
+                markButtonsContainer.appendChild(zeroMarkButton);
+            }
+
+            
+            questionContainer.appendChild(markButtonsContainer);
+            
+
+            document.getElementById('candidate_resultSheet_box').appendChild(questionContainer);
+        	})(i); //IIFE passes the current value of 'i' into the function
+        }
+    }else{
+		document.getElementById('candidate_resultSheet_box').style.display='none';
+	}
+}
+
+function fetchInitialMarks(student_id, question_id) {
+    let markValue = null;
+    $.ajax({
+        type: 'GET',
+        url: 'fetchAssignedTechnicalMarksValue', 
+        data: {
+            "student_id": student_id,
+            "question_id": question_id
+        },
+        async: false, // Make the request synchronous
+        success: function(data) {
+            markValue = data.result; // Expecting "1" or "0" from the server
+        },
+        error: function(xhr, status, error) {
+            console.error('Error fetching initial marks:');
+            console.log('XHR object:', xhr);
+            console.log('Status:', status);
+            console.log('Error:', error);
+        }
+    });
+    return markValue;
+}
+
+
+function handleButtonClick(technicalMarkValue, question_id, student_id, clickedButton, otherButton) {
+    // Remove highlighting from the other button
+    otherButton.classList.remove('btn-highlight-success', 'btn-highlight-danger');
+
+    updateTechnicalManuallyAwardedMarks(technicalMarkValue, question_id, student_id, clickedButton);
+}
+
+
+function updateTechnicalManuallyAwardedMarks(technicalMarkValue, question_id, student_id, button){
+	/* alert(technicalMarkValue);
+	alert(question_id);
+	alert(student_id); */
+	
+	 $.ajax({
+        type: 'POST', 
+        url: 'updateTechnicalMark', 
+        data: {
+				"student_id" : student_id,
+				"question_id" : question_id,
+				"technicalMarkValue" : technicalMarkValue
+			},
+        success: function(data){
+			
+        	$.ajax({
+                type: 'GET', 
+                url: 'fetchAssignedTechnicalMarksValue', 
+                data: {
+        				"student_id" : student_id,
+        				"question_id" : question_id
+        			},
+        			success: function(data) {
+        				
+        				$.ajax({
+        			        type: 'GET', 
+        			        url: 'fetchStudentMarksById', 
+        			        data: {
+        							"student_id" : student_id
+        						},
+        				        success: function(data){
+        							
+        						    updateMarksDetailsTable(data);
+        						    updateDoughnutChart(data);
+        						},
+        			        error: function(xhr, status, error) {
+        			            console.error('Error updating record:');
+        			            console.log('XHR object:', xhr);
+        			            console.log('Status:', status);
+        			            console.log('Error:', error);
+        			            alert('Error Fetching candidate Marks. Please try again.');
+        			        }
+        			    });
+        				
+                        if (data.result === "1") {
+                            button.classList.add('btn-highlight-success');
+                        } else {
+                            button.classList.add('btn-highlight-danger');
+                        }
+                    },
+                error: function(xhr, status, error) {
+                    console.error('Error updating record:');
+                    console.log('XHR object:', xhr);
+                    console.log('Status:', status);
+                    console.log('Error:', error);
+                    alert('Error Fetching candidate result. Please try again.');
+                }
+            });
+			
+			
+		},
+        error: function(xhr, status, error) {
+            console.error('Error updating record:');
+            console.log('XHR object:', xhr);
+            console.log('Status:', status);
+            console.log('Error:', error);
+            alert('Error Fetching candidate result. Please try again.');
+        }
+    }); 
+}
+
+
+
+function openResultSheetBox(){
+	$('#candidate_resultSheet_box').show();
+}
+
+function openMarkDetailsBox(){
+	// Hide the scroll bar on the body
+    document.body.style.overflow = 'hidden';
+	$('#marksDetails_outerBox').show();
+	marksDetails_outerBox.classList.add("active");
+}
+
+function closemarksDetails_outerBox(){
+	// Hide the scroll bar on the body
+    document.body.style.overflow = 'auto';
+	$('#marksDetails_outerBox').hide();
+	marksDetails_outerBox.classList.remove("active");
+}
+
+
+function changeApproveStatus(action, id, testType) {
+		//alert(action+" "+id+" "+testType);
+		Swal.fire({
+			title: "Are you sure?",
+			text: "You want to "+action+" this candidate?",
+			icon: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#007bff",
+			cancelButtonColor: "#EC7063",
+			confirmButtonText: "Yes, "+action+" it!",
+			customClass: {
+                popup: 'custom-swal-font'
+            },
+		}).then((result) => {
+			if (result.isConfirmed) {
+				if (action === "reject") {
+	                Swal.fire({
+	                    title: 'Reason for rejection',
+	                    input: 'textarea',
+	                    inputPlaceholder: 'Enter reason for rejection',
+	                    showCancelButton: true,
+	                    confirmButtonText: 'Submit',
+	                    customClass: {
+	                        popup: 'custom-swal-font'
+	                    },
+	                    preConfirm: (reason) => {
+	                        if (!reason) {
+	                            Swal.showValidationMessage('Reason is required');
+	                        }
+	                        return reason;
+	                    }
+	                }).then((reasonResult) => {
+	                    if (reasonResult.isConfirmed) {
+	                        updateCandidateApproveStatus(id, action, reasonResult.value, testType);
+	                    }
+	                });
+	            } else if (action === "onhold") {
+	                Swal.fire({
+	                    title: 'Reason for on-hold',
+	                    input: 'textarea',
+	                    inputPlaceholder: 'Enter reason for onhold',
+	                    showCancelButton: true,
+	                    confirmButtonText: 'Submit',
+	                    customClass: {
+	                        popup: 'custom-swal-font'
+	                    },
+	                    preConfirm: (reason) => {
+	                        if (!reason) {
+	                            Swal.showValidationMessage('Reason is required');
+	                        }
+	                        return reason;
+	                    }
+	                }).then((reasonResult) => {
+	                    if (reasonResult.isConfirmed) {
+	                    	updateCandidateApproveStatus(id, action, reasonResult.value, testType);
+	                    }
+	                });
+	            } else {
+	            	updateCandidateApproveStatus(id, action, null, testType);
+	            }
+			}
+		});
+	}
+	
+	
+	function updateCandidateApproveStatus(id, action, reason, testType){
+		
+		var formatedActionValue;
+		
+		if(action === "reject"){
+			formatedActionValue = "Candidate has been rejected";
+		}else if(action === "approv"){
+			formatedActionValue = "Candidate has been approved";
+		}else if(action === "onhold"){
+			formatedActionValue = "Candidate is in on-hold status";
+		}
+		
+		$.ajax({
+			type: 'POST',
+			url: 'changeApproveStatus',
+			data: {
+				"action_satus": action,
+				"id": id,
+				"candidate_action_reason": reason
+			},
+			success: function (response) {
+				if(response === 'success'){
+					
+					if(testType !== "skip_all"){
+						$.ajax({
+					        type: 'GET', 
+					        url: 'fetchStudentResultById', 
+					        data: {
+									"student_id" : student_id
+								},
+					        success: function(data){
+								//alert(JSON.stringify(data));
+								updateCandidateDetail(data);
+								Swal.fire({
+								  title: formatedActionValue,
+								  icon: 'success',
+								  confirmButtonColor: '#007bff', 
+								  confirmButtonText: 'OK',
+								  customClass: {
+				                        popup: 'custom-swal-font'
+				                    },
+								});
+							},
+					        error: function(xhr, status, error) {
+					            console.error('Error updating record:');
+					            console.log('XHR object:', xhr);
+					            console.log('Status:', status);
+					            console.log('Error:', error);
+					            alert('Error Fetching candidate result. Please try again.');
+					        }
+					    });
+					}else{
+						$.ajax({
+		    		        type: 'GET', 
+		    		        url: 'fetchStudentResultWithTestTypeStatusById', 
+		    		        data: {
+		    						"student_id" : student_id
+		    					},
+		    		        success: function(data){
+		    					//alert(JSON.stringify(data));
+		    					updateCandidateDetailForSkipAllTest(data);
+		    					Swal.fire({
+									  title: formatedActionValue,
+									  icon: 'success',
+									  confirmButtonColor: '#007bff', 
+									  confirmButtonText: 'OK',
+									  customClass: {
+					                        popup: 'custom-swal-font'
+					                    },
+									});
+		    				},
+		    		        error: function(xhr, status, error) {
+		    		            console.error('Error updating record:');
+		    		            console.log('XHR object:', xhr);
+		    		            console.log('Status:', status);
+		    		            console.log('Error:', error);
+		    		            alert('Error Fetching candidate result. Please try again.');
+		    		        }
+		    		    });
+					}
+				}
+			},
+			error: function (xhr, status, error) {
+				console.error('Error updating record:');
+				console.log('XHR object:', xhr);
+				console.log('Status:', status);
+				console.log('Error:', error);
+				alert('Error updating record. Please try again.');
+			}
+		});
+	}
+
+</script>
+
+
+<script>
+	function closeEmailFormOuterDiv1(){
+		// Hide the scroll bar on the body
+	    document.body.style.overflow = 'auto';
+		$('#emailFormOuterDiv1').hide();
+		/* $('#f2f_total_marks').val("");
+	    $('#f2f_assigned_marks').val("");
+	    $('#f2f_remarks').val(""); */
+	}
+	
+	function openF2FAssignBox(){
+		// Hide the scroll bar on the body
+	    document.body.style.overflow = 'hidden';
+		$('#emailFormOuterDiv1').show();
+	}
+	
+	function closeEmailFormOuterDiv2(){
+		// Hide the scroll bar on the body
+	    document.body.style.overflow = 'auto';
+		$('#emailFormOuterDiv2').hide();
+		/* $('#hr_total_marks').val("");
+	    $('#hr_assigned_marks').val("");
+	    $('#hr_remarks').val(""); */
+	}
+	
+	function openHRAssignBox(){
+		// Hide the scroll bar on the body
+	    document.body.style.overflow = 'hidden';
+		$('#emailFormOuterDiv2').show();
+	}
+	
+	function updateF2fMarks(){
+		
+		// Get the input values and convert them to numbers
+	    const totalMarks = Number($('#f2f_total_marks').val());
+	    const assignedMarks = Number($('#f2f_assigned_marks').val());
+		
+		if($('#f2f_total_marks').val() === ""){
+			alert("Please fill total marks");
+			return;
+		}
+		
+		if($('#f2f_assigned_marks').val() === ""){
+			alert("Please fill assigned marks");
+			return;
+		}
+		
+		if($('#f2f_remarks').val() === ""){
+			alert("Please fill remarks");
+			return;
+		}
+		
+		// Compare numeric values
+	    if (totalMarks < assignedMarks) {
+	        alert("Please enter valid data! Assigned marks should not be greater than Total marks");
+	        return;
+	    }
+		
+		Swal.fire({
+	        title: 'Are you sure?',
+	        text: "You want to submit this marks! Once submitted you can't able to edit again",
+	        icon: 'warning',
+	        showCancelButton: true,
+	        confirmButtonColor: '#3085d6',
+	        cancelButtonColor: '#d33',
+	        confirmButtonText: 'Yes, submit it!',
+	        customClass: {
+                popup: 'custom-swal-font'
+            },
+	    }).then((result) => {
+	        if (result.isConfirmed) {
+
+	        	$.ajax({
+	    			type: 'POST',
+	    			url: 'updateF2FMark',
+	    			data: {
+	    				"student_id": $('#candidateIdSessionValue').val(),
+	    				"f2f_total_marks": $('#f2f_total_marks').val(),
+	    				"f2f_assigned_marks": $('#f2f_assigned_marks').val(),
+	    				"f2f_remarks": $('#f2f_remarks').val()
+	    			},
+	    			success: function (response) {
+	    				if(response === 'success'){
+	    					$.ajax({
+	        			        type: 'GET', 
+	        			        url: 'fetchStudentMarksById', 
+	        			        data: {
+	        							"student_id" : $('#candidateIdSessionValue').val()
+	        						},
+	        				        success: function(data){
+	        							
+	        						    updateMarksDetailsTable(data);
+	        						    updateDoughnutChart(data);
+	        						    closeEmailFormOuterDiv1();
+	        						    
+	        						    Swal.fire({
+	        	                            title: 'Marks assigned successfully! Thank you',
+	        	                            icon: 'success',
+	        	                            confirmButtonColor: '#007bff',
+	        	                            confirmButtonText: 'OK',
+	        	                            customClass: {
+	        	                                popup: 'custom-swal-font'
+	        	                            },
+	        	                        });
+	        						    
+	        						    $.ajax({
+	        						        type: 'GET', 
+	        						        url: 'fetchStudentResultWithTestTypeStatusById', 
+	        						        data: {
+	        						    			"student_id" : student_id
+	        						    		},
+	        						        success: function(data){
+	        						        	updateF2FMarksPopup(data);
+	        						        },
+	        						        error: function(xhr, status, error) {
+	        						            console.error('Error updating record:');
+	        						            console.log('XHR object:', xhr);
+	        						            console.log('Status:', status);
+	        						            console.log('Error:', error);
+	        						            alert('Error Fetching candidate result. Please try again.');
+	        						        }
+	        						    });
+	        						    
+	        						},
+	        			        error: function(xhr, status, error) {
+	        			            console.error('Error updating record:');
+	        			            console.log('XHR object:', xhr);
+	        			            console.log('Status:', status);
+	        			            console.log('Error:', error);
+	        			            alert('Error Fetching candidate Marks. Please try again.');
+	        			        }
+	        			    });
+	    				}
+	    			},
+	    			error: function (xhr, status, error) {
+	    				console.error('Error updating record:');
+	    				console.log('XHR object:', xhr);
+	    				console.log('Status:', status);
+	    				console.log('Error:', error);
+	    				alert('Error updating record. Please try again.');
+	    			}
+	    		});
+	        	
+	        }
+	    });
+		
+	}
+	
+	
+	function updateHRMarks(){
+		
+		// Get the input values and convert them to numbers
+	    const totalMarks = Number($('#hr_total_marks').val());
+	    const assignedMarks = Number($('#hr_assigned_marks').val());
+		
+		if($('#hr_total_marks').val() === ""){
+			alert("Please fill total marks");
+			return;
+		}
+		
+		if($('#hr_assigned_marks').val() === ""){
+			alert("Please fill assigned marks");
+			return;
+		}
+		
+		if($('#hr_remarks').val() === ""){
+			alert("Please fill remarks");
+			return;
+		}
+		
+		// Compare numeric values
+	    if (totalMarks < assignedMarks) {
+	        alert("Please enter valid data! Assigned marks should not be greater than Total marks");
+	        return;
+	    }
+		
+		Swal.fire({
+	        title: 'Are you sure?',
+	        text: "You want to submit this marks! Once submitted you can't able to edit again",
+	        icon: 'warning',
+	        showCancelButton: true,
+	        confirmButtonColor: '#3085d6',
+	        cancelButtonColor: '#d33',
+	        confirmButtonText: 'Yes, submit it!',
+	        customClass: {
+                popup: 'custom-swal-font'
+            },
+	    }).then((result) => {
+	        if (result.isConfirmed) {
+	        	
+	        	$.ajax({
+	    			type: 'POST',
+	    			url: 'updateHRMark',
+	    			data: {
+	    				"student_id": $('#candidateIdSessionValue').val(),
+	    				"hr_total_marks": $('#hr_total_marks').val(),
+	    				"hr_assigned_marks": $('#hr_assigned_marks').val(),
+	    				"hr_remarks": $('#hr_remarks').val()
+	    			},
+	    			success: function (response) {
+	    				if(response === 'success'){
+	    					$.ajax({
+	        			        type: 'GET', 
+	        			        url: 'fetchStudentMarksById', 
+	        			        data: {
+	        							"student_id" : $('#candidateIdSessionValue').val()
+	        						},
+	        				        success: function(data){
+	        							
+	        						    updateMarksDetailsTable(data);
+	        						    updateDoughnutChart(data);
+	        						    closeEmailFormOuterDiv2();
+	        						    
+	        						    Swal.fire({
+	        	                            title: 'Marks assigned successfully! Thank you',
+	        	                            icon: 'success',
+	        	                            confirmButtonColor: '#007bff',
+	        	                            confirmButtonText: 'OK',
+	        	                            customClass: {
+	        	                                popup: 'custom-swal-font'
+	        	                            },
+	        	                        });
+	        						    
+	        						    $.ajax({
+	        						        type: 'GET', 
+	        						        url: 'fetchStudentResultWithTestTypeStatusById', 
+	        						        data: {
+	        						    			"student_id" : student_id
+	        						    		},
+	        						        success: function(data){
+	        						        	updateHRMarksPopup(data);
+	        						        },
+	        						        error: function(xhr, status, error) {
+	        						            console.error('Error updating record:');
+	        						            console.log('XHR object:', xhr);
+	        						            console.log('Status:', status);
+	        						            console.log('Error:', error);
+	        						            alert('Error Fetching candidate result. Please try again.');
+	        						        }
+	        						    });
+	        						    
+	        						},
+	        			        error: function(xhr, status, error) {
+	        			            console.error('Error updating record:');
+	        			            console.log('XHR object:', xhr);
+	        			            console.log('Status:', status);
+	        			            console.log('Error:', error);
+	        			            alert('Error Fetching candidate Marks. Please try again.');
+	        			        }
+	        			    });
+	    				}
+	    			},
+	    			error: function (xhr, status, error) {
+	    				console.error('Error updating record:');
+	    				console.log('XHR object:', xhr);
+	    				console.log('Status:', status);
+	    				console.log('Error:', error);
+	    				alert('Error updating record. Please try again.');
+	    			}
+	    		});
+	        	
+	        }
+	    });
+		
+	}
+	
+</script>
+
+<script>
+
+	var student_id = document.getElementById('student_id').textContent;
+
+	function closeCtcFormOuterDiv(){
+		// Hide the scroll bar on the body
+	    document.body.style.overflow = 'auto';
+		$('#ctcFormOuterDiv').hide();
+	}
+	
+	function openCtcFormOuterDiv(){
+		// Hide the scroll bar on the body
+	    document.body.style.overflow = 'hidden';
+		$('#ctcFormOuterDiv').show();
+	}
+	
+	function submitCtcOffer(step) {
+        let ctcValue;
+        let ctcField;
+        let ctcButton;
+
+        if (step === 1) {
+            ctcValue = document.getElementById('first_ctc_offer').value;
+            ctcField = document.getElementById('first_ctc_offer');
+            ctcButton = document.getElementById('submitFirstCtc');
+        } else if (step === 2) {
+            ctcValue = document.getElementById('second_ctc_offer').value;
+            ctcField = document.getElementById('second_ctc_offer');
+            ctcButton = document.getElementById('submitSecondCtc');
+        } else if (step === 3) {
+            ctcValue = document.getElementById('third_ctc_offer').value;
+            ctcField = document.getElementById('third_ctc_offer');
+            ctcButton = document.getElementById('submitThirdCtc');
+        }
+
+        // Ensure value is entered
+        if (!ctcValue) {
+            alert("Please enter the CTC value.");
+            return;
+        }
+
+        // AJAX call to insert the CTC offer into the database and fetch the value to display it
+        $.ajax({
+            url: '/updateCtcOfferValue', // Your backend URL for saving the CTC offer
+            type: 'POST',
+            data: {
+            	ctcValueOffer: ctcValue,
+            	student_id: student_id,
+                flag: step
+            },
+            success: function (response) {
+                // Fetch and display the inserted value in the text field
+                fetchAndDisplayCtc();
+            },
+            error: function (xhr, status, error) {
+                alert('Failed to submit the CTC offer: ' + error);
+            }
+        });
+    }
+	
+	$(document).ready(function () {
+        fetchAndDisplayCtc();
+    });
+
+    function fetchAndDisplayCtc() {
+        // AJAX call to fetch the inserted CTC offer from the database
+    	 $.ajax({
+             url: '/fetchCtcRemarksAndResponseAfterInsertion', // Backend URL for fetching all CTC offers
+             type: 'GET',
+             data: { student_id: student_id }, // Pass the student_id
+             success: function (response) {
+                 // Check and display each CTC offer value
+                 if (response.firstCtcOffer) {
+                     $('#first_ctc_offer').val(response.firstCtcOffer);
+                     $('#first_ctc_offer').prop('disabled', true); // Disable field
+                     $('#submitFirstCtc').prop('disabled', true); // Disable button
+                     if(response.firstCtcResponse === "Rejected"){
+                    	 $('#secondCtcDiv').show(); // Show second CTC div
+                     }else{
+                    	 $('#secondCtcDiv').hide();
+                     }
+                     
+                     if(response.firstCtcResponse){
+                    	 $('#hiddenFirstCtcFeedbackFromCandidate').show();
+                    	 $('#candidateFirstCtcResponse').text(response.firstCtcResponse ? response.firstCtcResponse : "-");
+                    	 $('#candidateFirstCtcRemark').text(response.firstCtcRemark ? response.firstCtcRemark : "-");
+                     }else{
+                    	 $('#hiddenFirstCtcFeedbackFromCandidate').hide();
+                    	 $('#candidateFirstCtcResponse').text("");
+                    	 $('#candidateFirstCtcRemark').text("");
+                     }
+                 }
+
+                 if (response.secondCtcOffer) {
+                     $('#second_ctc_offer').val(response.secondCtcOffer);
+                     $('#second_ctc_offer').prop('disabled', true); // Disable field
+                     $('#submitSecondCtc').prop('disabled', true); // Disable button
+                     if(response.secondCtcResponse === "Rejected"){
+                    	 $('#thirdCtcDiv').show(); // Show second CTC div
+                     }else{
+                    	 $('#thirdCtcDiv').hide();
+                     }
+                     if(response.secondCtcResponse){
+                    	 $('#hiddenSecondCtcFeedbackFromCandidate').show();
+                    	 $('#candidateSecondCtcResponse').text(response.secondCtcResponse ? response.secondCtcResponse : "-");
+                    	 $('#candidateSecondCtcRemark').text(response.secondCtcRemark ? response.secondCtcRemark : "-");
+                     }else{
+                    	 $('#hiddenSecondCtcFeedbackFromCandidate').hide();
+                    	 $('#candidateSecondCtcResponse').text("");
+                    	 $('#candidateSecondCtcRemark').text("");
+                     }
+                 }
+
+                 if (response.thirdCtcOffer) {
+                     $('#third_ctc_offer').val(response.thirdCtcOffer);
+                     $('#third_ctc_offer').prop('disabled', true); // Disable field
+                     $('#submitThirdCtc').prop('disabled', true); // Disable button
+                     if(response.thirdCtcResponse){
+                    	 $('#hiddenThirdCtcFeedbackFromCandidate').show();
+                    	 $('#candidateThirdCtcResponse').text(response.thirdCtcResponse ? response.thirdCtcResponse : "-");
+                    	 $('#candidateThirdCtcRemark').text(response.thirdCtcRemark ? response.thirdCtcRemark : "-");
+                     }else{
+                    	 $('#hiddenThirdCtcFeedbackFromCandidate').hide();
+                    	 $('#candidateThirdCtcResponse').text("");
+                    	 $('#candidateThirdCtcRemark').text("");
+                     }
+                 }
+             },
+             error: function (xhr, status, error) {
+                 console.error('Failed to fetch CTC values on load: ' + error);
+             }
+         });
+     }
+</script>
+
+<script>
+    var student_id = document.getElementById('student_id').textContent;
+
+    function closeDocUploadFormOuterDiv(){
+    	// Hide the scroll bar on the body
+        document.body.style.overflow = 'auto';
+        $('#docUploadFormOuterDiv').hide();
+    }
+
+    function openDocUploadFormOuterDiv(){
+    	// Hide the scroll bar on the body
+        document.body.style.overflow = 'hidden';
+        $('#docUploadFormOuterDiv').show();
+    }
+
+    document.getElementById('docUploadEnableBtn').addEventListener('change', function () {
+        const doc_upload_flag = this.checked ? 1 : 0; // 1 if checked, 0 if unchecked
+
+        // Update the label based on the checkbox state
+        const label = this.nextElementSibling;
+        label.textContent = doc_upload_flag ? 'Enabled' : 'Disabled';
+
+        // Send AJAX request to save the status in the database
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', `/updateDocUploadStatus/${doc_upload_flag}/${student_id}`, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    console.log('Document upload status updated successfully');
+                } else {
+                    console.log('Failed to update document upload status');
+                }
+            }
+        };
+
+        // Send the request
+        xhr.send();
+    });
+    
+    $(document).ready(function () {
+    	fetchDocUploadFlagValueInitially();
+    });
+    
+function fetchDocUploadFlagValueInitially(){
+	$.ajax({
+        type: 'GET', 
+        url: 'fetchDocUploadFlagValue', 
+        data: {
+				"student_id" : student_id
+			},
+        success: function(data){
+        	// Assuming data is either "1" or "0"
+            var checkbox = $('#docUploadEnableBtn');
+            var label = checkbox.next('label');
+
+            if(data === "1"){
+                checkbox.prop('checked', true); // Check the checkbox
+                label.text('Enabled'); // Change the label to "Enabled"
+            } else {
+                checkbox.prop('checked', false); // Uncheck the checkbox
+                label.text('Disabled'); // Change the label to "Disabled"
+            }
+		},
+        error: function(xhr, status, error) {
+            console.error('Error updating record:');
+            console.log('XHR object:', xhr);
+            console.log('Status:', status);
+            console.log('Error:', error);
+            alert('Error Fetching upload document flag value. Please try again.');
+        }
+    });
+}
+    
+</script>
+
+
+<script>
+
+var student_id = document.getElementById('student_id').textContent;
+
+	function closeDocUploadViewFormOuterDiv(){
+		// Hide the scroll bar on the body
+	    document.body.style.overflow = 'auto';
+		$('#docUploadViewFormOuterDiv').hide();
+	}
+	
+	function openDocUploadViewFormOuterDiv(){
+		// Hide the scroll bar on the body
+	    document.body.style.overflow = 'hidden';
+		$('#docUploadViewFormOuterDiv').show();
+		
+		$.ajax({
+	        type: 'GET', 
+	        url: 'fetchStudentDataFromMoatById', 
+	        data: {
+					"student_id" : student_id
+				},
+	        success: function(data){
+	        	
+	        	console.log(JSON.stringify(data));
+	        	
+	        	 if(!data.profile_pic_path && !data.pan_pic_path && !data.aadhar_pic && !data.tenth_pic && !data.puc_pic && !data.degree_pic){
+	        		$('.noDocAvailablePara').show();
+	        		$('.customDocDiv').hide();
+	        	}else{
+	        		if(data.profile_pic_path){
+	                	$('#profile_pic_path').attr('src', `${data.profile_pic_path}`);
+	                    $('.profilePicDiv').show();
+	                }
+		        	
+		        	if(data.pan_pic_path){
+	                	$('#pan_pic_path').attr('src', `${data.pan_pic_path}`);
+	                    $('.panPicDiv').show();
+	                }
+		        	
+		        	if(data.aadhar_pic){
+	                	$('#aadhar_pic_path').attr('src', `${data.aadhar_pic}`);
+	                    $('.aadharPicDiv').show();
+	                }
+		        	
+		        	if(data.tenth_pic){
+	                	$('#tenth_pic_path').attr('src', `${data.tenth_pic}`);
+	                    $('.tenthPicDiv').show();
+	                }
+		        	
+		        	if(data.puc_pic){
+	                	$('#puc_pic_path').attr('src', `${data.puc_pic}`);
+	                    $('.pucPicDiv').show();
+	                }
+		        	
+		        	if(data.degree_pic){
+	                	$('#degree_pic_path').attr('src', `${data.degree_pic}`);
+	                    $('.degreePicDiv').show();
+	                }
+		        	
+		        	if(data.pg_pic){
+	                	$('#pg_pic_path').attr('src', `${data.pg_pic}`);
+	                    $('.pgPicDiv').show();
+	                }
+		        	
+		        	if(data.exp_letter_pic){
+	                	$('#exp_letter_pic_path').attr('src', `${data.exp_letter_pic}`);
+	                    $('.expLetterPicDiv').show();
+	                }
+		        	
+		        	if(data.payslip_pic){
+	                	$('#payslip_pic_path').attr('src', `${data.payslip_pic}`);
+	                    $('.payslipPicDiv').show();
+	                }
+		        	
+		        	$('.noDocAvailablePara').hide();
+	        	} 
+			},
+	        error: function(xhr, status, error) {
+	            console.error('Error updating record:');
+	            console.log('XHR object:', xhr);
+	            console.log('Status:', status);
+	            console.log('Error:', error);
+	            alert('Error Fetching upload document flag value. Please try again.');
+	        }
+	    });
+	}
+	
+</script>
+
+
+
+<script>
+
+
+function openModalToViewCompleteCandidateData(){
+	// Hide the scroll bar on the body
+    document.body.style.overflow = 'hidden';
+	$('#candidateCompleteViewFormOuterDiv').show();
+}
+
+function closeModalOfCompleteCandidateData(){
+	// Hide the scroll bar on the body
+    document.body.style.overflow = 'auto';
+	$('#candidateCompleteViewFormOuterDiv').hide();
+}
+
+
+var student_id = document.getElementById('student_id').textContent;
+
+//Fetch student data via AJAX
+$.ajax({
+    type: "GET",
+    url: "fetchCandidatesDataUsingId",
+    data: {
+    	"candidate_id": student_id
+    },
+    success: function(data) {
+    	//alert(JSON.stringify(data));
+        updateCandidatePersonalAndAcademicDetail(data);
+        updateAcademicGapAndCandidateTypeAndLanguagesDetail(data);
+        updateExternalCorsesAndRefferedByAndPersonalAndLegalDisclousureDetail(data);
+        /* updateCandidatesDocumentImages(data); */
+    },
+    error: function(xhr, status, error) {
+        console.error("Error invoking data:", error);
+    }
+});
+
+function updateCandidatePersonalAndAcademicDetail(data) {
+    var mainPersonalDiv = document.createElement('div');
+    mainPersonalDiv.className = "row mb-4 candidateProfileDividerBox";
+    
+    // Personal Details
+    mainPersonalDiv.innerHTML = ` 
+    <div class="col-sm-7 border candidatePrfoilesBox">
+        <p class="candidatePrfoilesHeading" style="font-size: 14px;">Personal Details</p>
+        <table class="table table-hover" style="font-size: 14px;">
+        	<tr><th colspan="2" class="text-center" style="color: #4154f1;">${data.first_name + " " + data.last_name || '-'}</th></tr>
+            <tr><th>Candidate Id</th><td>${data.id}</td></tr>
+            <tr><th>DOB</th><td>${data.dob}</td></tr>
+            <tr><th>Gender</th><td>${data.gender}</td></tr>
+            <tr><th>Email</th><td>${data.email}</td></tr>
+            <tr><th>Mobile Number</th><td>${data.mobile_number}</td></tr>
+            <tr><th>Aadhaar Number</th><td>${data.aadhar_number}</td></tr>
+            <tr><th>Marital Status</th><td>${data.marital_status_value}</td></tr>
+            <tr><th>Father Name</th><td>${data.father_name}</td></tr>
+            <tr><th>Father Designation</th><td>${data.father_designation}</td></tr>
+            <tr><th>Mother Name</th><td>${data.mother_name}</td></tr>
+            <tr><th>Mother Designation</th><td>${data.mother_designation}</td></tr>
+            <tr><th>Corresponding Address</th><td class="text_wrap">${data.corresponding_address}</td></tr>
+            <tr><th>Permanent Address</th><td class="text_wrap">${data.permanent_address}</td></tr>
+        </table>
+    </div>`;
+
+    // Academic Details
+    var academicDiv = document.createElement('div');
+    academicDiv.className = "col-sm-4 border candidatePrfoilesBox";
+    academicDiv.innerHTML = `<p class="candidatePrfoilesHeading" style="font-size: 14px;">Academic Details</p><table style="font-size: 14px;" class="table table-hover"></table>`;
+
+    var table = academicDiv.querySelector('table');
+    
+    // Loop through qualifications (up to 5)
+    for (let i = 1; i <= 5; i++) {
+        if (data[`qualification${i}`] && data[`college_name${i}`] && data[`university_name${i}`] && 
+        		data[`education_completed_type${i}`] && data[`year_select${i}`] && data[`percentage${i}`]) {
+            let qualification = `
+                <tr><th colspan="2" class="text-center" style="color: #4154f1;">${data[`qualification${i}`]}</th></tr>
+                <tr><th>College/School Name</th><td>${data[`college_name${i}`]}</td></tr>
+                <tr><th>Degree Name</th><td>${data[`degree_name${i}`] || '-'}</td></tr>
+                <tr><th>University/Board Name</th><td>${data[`university_name${i}`]}</td></tr>
+                <tr><th>Type</th><td>${data[`education_completed_type${i}`]}</td></tr>
+                <tr><th>Completed Date</th><td>${data[`year_select${i}`]}</td></tr>
+                <tr><th>Percentage / CGPA</th><td>${data[`percentage${i}`]}</td></tr>
+                <br>`;
+            table.innerHTML += qualification;
+        }
+    }
+
+    // Append academic details
+    mainPersonalDiv.appendChild(academicDiv);
+
+    // Insert the created content inside the 'candidateProfile' div
+    document.getElementById('candidateProfile').appendChild(mainPersonalDiv);
+}
+
+
+function updateAcademicGapAndCandidateTypeAndLanguagesDetail(data) {
+
+    var secondRowDiv = document.createElement('div');
+    secondRowDiv.className = "row mb-4 candidateProfileDividerBox";
+
+    var candidateType = document.createElement('div');
+    candidateType.innerHTML = `<p class="candidatePrfoilesHeading" style="font-size: 14px;">Candidate Type</p><table style="font-size: 14px;" class="table table-hover"></table>`;
+    var table1 = candidateType.querySelector('table');
+
+    var knownLanguages = document.createElement('div');
+    knownLanguages.className = "col-sm-4 border candidatePrfoilesBox";
+    knownLanguages.innerHTML = `<p class="candidatePrfoilesHeading" style="font-size: 14px;">Languages</p><table style="font-size: 14px;" class="table table-hover"></table>`;
+    var table2 = knownLanguages.querySelector('table');
+
+    var academicGap = document.createElement('div');
+    academicGap.innerHTML = `<p class="candidatePrfoilesHeading" style="font-size: 14px;">Academic Gap</p><table style="font-size: 14px;" class="table table-hover"></table>`;
+    var table3 = academicGap.querySelector('table');
+    
+    var offeredCtc;
+    
+ // Determine offered CTC
+    if (data.candidate_response_for_first_ctc_offer === "Accepted" && data.first_ctc_offer) {
+        offeredCtc = data.first_ctc_offer;
+    } else if (data.candidate_response_for_second_ctc_offer === "Accepted" && data.second_ctc_offer) {
+        offeredCtc = data.second_ctc_offer;
+    } else if (data.candidate_response_for_third_ctc_offer === "Accepted" && data.third_ctc_offer) {
+        offeredCtc = data.third_ctc_offer;
+    } else {
+        offeredCtc = "-";
+    }
+
+    if (data.academic_gap === "No") {
+
+        if (data.experience === "Fresher") {
+            
+        	candidateType.className = "col-sm-7 border candidatePrfoilesBox";
+            let candidateTypeTable = `
+                <tr><th colspan="2" class="text-center" style="color: #4154f1;">${data.experience || '-'}</th></tr>
+                <tr><th>Expected Salary (LPA)</th><td>${data.candidate_expected_salary_in_lpa || '-'}</td></tr>
+                <tr><th>Accepted Salary (LPA)</th><td>${offeredCtc || '-'}</td></tr>
+                <tr><th>Interviewed By Us in Last 6 Months?</th><td>${data.interviewed_by_us || '-'}</td></tr>
+                <tr><th>Why Should we Hire You?</th><td>${data.why_should_hire_you_reason || '-'}</td></tr>
+                <tr><th>Joining Time</th><td>${data.candidate_join_time+" days" || '-'}</td></tr>`;
+            
+                table1.innerHTML += candidateTypeTable;
+            	secondRowDiv.appendChild(candidateType);
+
+            
+            for (let i = 1; i <= 3; i++) {
+                if (data[`language${i}`] && data[`language_proficiency${i}`]) {
+                    let languageProficiencyTable = `
+                        <tr><th style="color: #4154f1;">${data[`language${i}`]}</th><td>${data[`language_proficiency${i}`] || '-'}</td></tr>`;
+                    table2.innerHTML += languageProficiencyTable;
+                }
+            }
+
+            secondRowDiv.appendChild(knownLanguages);
+
+        } else {
+           
+        	candidateType.className = "col-sm-7 border candidatePrfoilesBox";
+            let candidateTypeTable = `
+                <tr><th colspan="2" class="text-center" style="color: #4154f1;">${data.experience || '-'}</th></tr>
+                <tr><th>Expected Salary (LPA)</th><td>${data.candidate_expected_salary_in_lpa || '-'}</td></tr>
+                <tr><th>Accepted Salary (LPA)</th><td>${offeredCtc || '-'}</td></tr>
+                <tr><th>Current Salary (LPA)</th><td>${data.exp_current_salary_in_lpa || '-'}</td></tr>
+                <tr><th>Interviewed By Us in Last 6 Months?</th><td>${data.interviewed_by_us || '-'}</td></tr>
+                <tr><th>Why Should we Hire You?</th><td>${data.why_should_hire_you_reason || '-'}</td></tr>
+                <tr><th>Joining Time</th><td>${data.candidate_join_time+" days" || '-'}</td></tr>
+                <tr><th>Total Years of Experience</th><td>${data.year_of_exp1 || '-'}</td></tr>
+                <tr><th>Notice Period</th><td>${data.exp_notice_period_type1 || '-'}</td></tr>
+                <tr><th>Reason to Leave Recent Employment</th><td>${data.exp_company_left_reason || '-'}</td></tr>`;
+            
+            for (let i = 1; i <= 5; i++) {
+                if (data[`previous_comp_name${i}`] && data[`exp_from_date${i}`] && data[`exp_to_date${i}`] && data[`exp_notice_period_type${i}`]) {
+                    candidateTypeTable += `
+                        <tr><th colspan="2" class="text-center" style="color: #4154f1;">${data[`previous_comp_name${i}`]}</th></tr>
+                        <tr><th>From</th><td class="monthAndYearFormatter">${data[`exp_from_date${i}`] || '-'}</td></tr>
+                        <tr><th>To</th><td class="monthAndYearFormatter">${data[`exp_to_date${i}`] || '-'}</td></tr>
+                        <tr><th>Designation Name</th><td>${data[`exp_designation_name${i}`] || '-'}</td></tr>
+                        <tr><th>In-hand Salary</th><td>${data[`exp_inhand_salary${i}`] || '-'}</td></tr>`;
+                }
+            }
+            
+            table1.innerHTML += candidateTypeTable;
+            secondRowDiv.appendChild(candidateType);
+
+            
+            for (let i = 1; i <= 3; i++) {
+                if (data[`language${i}`] && data[`language_proficiency${i}`]) {
+                    let languageProficiencyTable = `
+                    	<tr><th style="color: #4154f1;">${data[`language${i}`]}</th><td>${data[`language_proficiency${i}`] || '-'}</td></tr>`;
+                    table2.innerHTML += languageProficiencyTable;
+                }
+            }
+
+            secondRowDiv.appendChild(knownLanguages);
+        }
+    } else {
+    	
+    	if (data.experience === "Fresher") {
+    		
+    		academicGap.className = "col-sm-3 border candidatePrfoilesBox";
+            let academicGapTable = `
+                <tr><th colspan="2" class="text-center" style="color: #4154f1;">${data.academic_gap_qualification_name || '-'}</th></tr>
+                <tr><th>Gap In</th><td>${data.academic_gap_type || '-'}</td></tr>
+                <tr><th>Gap Duration</th><td>${data.academic_gap_number || '-'}</td></tr>
+                <tr><th>Academic Gap Reason</th><td>${data.academic_gap_reason || '-'}</td></tr>`;
+            
+                table3.innerHTML += academicGapTable;
+            	secondRowDiv.appendChild(academicGap);
+    		
+    		
+            candidateType.className = "col-sm-4 border candidatePrfoilesBox";
+            let candidateTypeTable = `
+                <tr><th colspan="2" class="text-center" style="color: #4154f1;">${data.experience || '-'}</th></tr>
+                <tr><th>Expected Salary (LPA)</th><td>${data.candidate_expected_salary_in_lpa || '-'}</td></tr>
+                <tr><th>Accepted Salary (LPA)</th><td>${offeredCtc || '-'}</td></tr>
+                <tr><th>Interviewed By Us in Last 6 Months?</th><td>${data.interviewed_by_us || '-'}</td></tr>
+                <tr><th>Why Should we Hire You?</th><td>${data.why_should_hire_you_reason || '-'}</td></tr>
+                <tr><th>Joining Time</th><td>${data.candidate_join_time+" days" || '-'}</td></tr>`;
+            
+                table1.innerHTML += candidateTypeTable;
+            	secondRowDiv.appendChild(candidateType);
+
+            
+            for (let i = 1; i <= 3; i++) {
+                if (data[`language${i}`] && data[`language_proficiency${i}`]) {
+                    let languageProficiencyTable = `
+                    	<tr><th style="color: #4154f1;">${data[`language${i}`]}</th><td>${data[`language_proficiency${i}`] || '-'}</td></tr>`;
+                    table2.innerHTML += languageProficiencyTable;
+                }
+            }
+
+            secondRowDiv.appendChild(knownLanguages);
+
+        } else {
+        	
+        	academicGap.className = "col-sm-3 border candidatePrfoilesBox";
+            let academicGapTable = `
+                <tr><th colspan="2" class="text-center" style="color: #4154f1;">${data.academic_gap_qualification_name || '-'}</th></tr>
+                <tr><th>Gap In</th><td>${data.academic_gap_type || '-'}</td></tr>
+                <tr><th>Gap Duration</th><td>${data.academic_gap_number || '-'}</td></tr>
+                <tr><th>Academic Gap Reason</th><td>${data.academic_gap_reason || '-'}</td></tr>`;
+            
+                table3.innerHTML += academicGapTable;
+            	secondRowDiv.appendChild(academicGap);
+        	
+            candidateType.className = "col-sm-4 border candidatePrfoilesBox";
+            let candidateTypeTable = `
+                <tr><th colspan="2" class="text-center" style="color: #4154f1;">${data.experience || '-'}</th></tr>
+                <tr><th>Expected Salary (LPA)</th><td>${data.candidate_expected_salary_in_lpa || '-'}</td></tr>
+                <tr><th>Accepted Salary (LPA)</th><td>${offeredCtc || '-'}</td></tr>
+                <tr><th>Current Salary (LPA)</th><td>${data.exp_current_salary_in_lpa || '-'}</td></tr>
+                <tr><th>Interviewed By Us in Last 6 Months?</th><td>${data.interviewed_by_us || '-'}</td></tr>
+                <tr><th>Why Should we Hire You?</th><td>${data.why_should_hire_you_reason || '-'}</td></tr>
+                <tr><th>Joining Time</th><td>${data.candidate_join_time+" days" || '-'}</td></tr>
+                <tr><th>Total Years of Experience</th><td>${data.year_of_exp1 || '-'}</td></tr>
+                <tr><th>Notice Period</th><td>${data.exp_notice_period_type1 || '-'}</td></tr>
+                <tr><th>Reason to Leave Recent Employment</th><td>${data.exp_company_left_reason || '-'}</td></tr>`;
+            
+                for (let i = 1; i <= 5; i++) {
+                if (data[`previous_comp_name${i}`] && data[`exp_from_date${i}`] && data[`exp_to_date${i}`] && data[`exp_notice_period_type${i}`]) {
+                    candidateTypeTable += `
+                        <tr><th colspan="2" class="text-center" style="color: #4154f1;">${data[`previous_comp_name${i}`]}</th></tr>
+                        <tr><th>From</th><td class="monthAndYearFormatter">${data[`exp_from_date${i}`] || '-'}</td></tr>
+                        <tr><th>To</th><td class="monthAndYearFormatter">${data[`exp_to_date${i}`] || '-'}</td></tr>
+                        <tr><th>Designation Name</th><td>${data[`exp_designation_name${i}`] || '-'}</td></tr>
+                        <tr><th>In-hand Salary</th><td>${data[`exp_inhand_salary${i}`] || '-'}</td></tr>`;
+		                }
+		            }
+            
+                table1.innerHTML += candidateTypeTable;
+            	secondRowDiv.appendChild(candidateType);
+
+            
+            	for (let i = 1; i <= 3; i++) {
+                if (data[`language${i}`] && data[`language_proficiency${i}`]) {
+                    let languageProficiencyTable = `
+                    	<tr><th style="color: #4154f1;">${data[`language${i}`]}</th><td>${data[`language_proficiency${i}`] || '-'}</td></tr>`;
+                    table2.innerHTML += languageProficiencyTable;
+                }
+            }
+
+            secondRowDiv.appendChild(knownLanguages);
+        }
+	}
+    document.getElementById('candidateProfile').appendChild(secondRowDiv);
+}
+
+	
+	
+
+function updateExternalCorsesAndRefferedByAndPersonalAndLegalDisclousureDetail(data) {
+	
+	var thirdRowDiv = document.createElement('div');
+	thirdRowDiv.className = "row mb-4 candidateProfileDividerBox";
+
+    var externalCourses = document.createElement('div');
+    externalCourses.className = "col-sm-4 border candidatePrfoilesBox";
+    externalCourses.innerHTML = `<p class="candidatePrfoilesHeading" style="font-size: 14px;">External Course</p><table style="font-size: 14px;" class="table table-hover"></table>`;
+    var table1 = externalCourses.querySelector('table');
+
+    var referredBy = document.createElement('div');
+    referredBy.className = "col-sm-3 border candidatePrfoilesBox";
+    referredBy.innerHTML = `<p class="candidatePrfoilesHeading" style="font-size: 14px;">Referred By</p><table style="font-size: 14px;" class="table table-hover"></table>`;
+    var table2 = referredBy.querySelector('table');
+    
+    var personalAndLegal = document.createElement('div');
+    personalAndLegal.className = "col-sm-4 border candidatePrfoilesBox";
+    personalAndLegal.innerHTML = `<p class="candidatePrfoilesHeading" style="font-size: 14px;">Personal And Legal Disclosure</p><table style="font-size: 14px;" class="table table-hover"></table>`;
+    var table3 = personalAndLegal.querySelector('table');
+    
+    
+    if(data.external_course === "Yes"){
+    	let externalCoursesTable = `
+            <tr><th>Any External Course</th><td>${data.externalCourses || '-'}</td></tr>
+            <tr><th>Course Name</th><td>${data.external_course_name || '-'}</td></tr>
+            <tr><th>Start Date</th><td>${data.external_course_start_date || '-'}</td></tr>
+            <tr><th>Completed Date</th><td>${data.external_course_completed_date || '-'}</td></tr>
+            <tr><th>Certification Name</th><td>${data.external_course_certification_name || '-'}</td></tr>`;
+        
+            table1.innerHTML += externalCoursesTable;
+            thirdRowDiv.appendChild(externalCourses);
+    }else{
+    	let externalCoursesTable = `
+            <tr><th>Any External Course</th><td>${data.external_course || '-'}</td></tr>`;
+        
+            table1.innerHTML += externalCoursesTable;
+            thirdRowDiv.appendChild(externalCourses);
+    }
+    
+    
+    let referredByTable = `
+    	<tr><th colspan="2" class="text-center" style="color: #4154f1;">${data.reference_name || '-'}</th></tr>
+        <tr><th>Source Name</th><td>${data.reference_source_name || '-'}</td></tr>`;
+    
+        table2.innerHTML += referredByTable;
+        thirdRowDiv.appendChild(referredBy);
+        
+        
+    if(data.candidate_police_record === "Yes" || data.candidate_specially_abled === "Yes" || data.candidate_illness === "Yes"){
+    	
+    	let candidate_police_recordTable = `
+            <tr><th>Any Police Record?</th><td>${data.candidate_police_record || '-'}</td></tr>
+            <tr><th>Give Description</th><td>${data.candidate_police_record_reason || '-'}</td></tr><br>`;
+        
+            table3.innerHTML += candidate_police_recordTable;
+            
+            
+            let candidate_specially_abledTable = `
+                <tr><th>Are You Specially Abled?</th><td>${data.candidate_specially_abled || '-'}</td></tr>
+                <tr><th>Give Description</th><td>${data.candidate_specially_abled_reason || '-'}</td></tr><br>`;
+            
+                table3.innerHTML += candidate_specially_abledTable;
+                
+                let candidate_illnessTable = `
+                    <tr><th>Any Illness?</th><td>${data.candidate_illness || '-'}</td></tr>
+                    <tr><th>Give Description</th><td>${data.candidate_illness_reason || '-'}</td></tr>`;
+                
+                    table3.innerHTML += candidate_illnessTable;
+            
+            thirdRowDiv.appendChild(personalAndLegal);
+    }else{
+    	
+    	let candidate_police_recordTable = `
+            <tr><th>Any Police Record?</th><td>${data.candidate_police_record || '-'}</td></tr><br>`;
+        
+            table3.innerHTML += candidate_police_recordTable;
+            
+            
+            let candidate_specially_abledTable = `
+                <tr><th>Are You Specially Abled?</th><td>${data.candidate_specially_abled || '-'}</td></tr><br>`;
+            
+                table3.innerHTML += candidate_specially_abledTable;
+                
+                let candidate_illnessTable = `
+                    <tr><th>Any Illness?</th><td>${data.candidate_illness || '-'}</td></tr>`;
+                
+                    table3.innerHTML += candidate_illnessTable;
+            
+            thirdRowDiv.appendChild(personalAndLegal);
+    }
+    
+    document.getElementById('candidateProfile').appendChild(thirdRowDiv);
+	
+} 
+
+function updateCandidatesDocumentImages(data) {
+    var candidateDocumentImageDiv = document.createElement('div');
+    candidateDocumentImageDiv.className = "row mb-4 candidateProfileDividerBox";
+    
+    var profilePicDiv = document.createElement('div');
+    profilePicDiv.className = "col-sm-4 mb-5 candidateProfilePicBox profileBox";
+    profilePicDiv.innerHTML = `<p style="margin-bottom: 0;" class="candidatePrfoilesHeading">Profile Pic</p><img id="profilePic" width="100%" height="80%" src="" alt="Profile Picture" />`;
+    var profilePicImg = profilePicDiv.querySelector('img');
+    
+ // Update the profile picture if the path is available in the data
+    if (data.profile_pic_path) {
+    	profilePicImg.src = `${data.profile_pic_path}`; //Set the image source
+        $('.profileBox').show(); // Show the profile picture div
+    } else {
+        $('.profileBox').hide(); // Hide if no profile picture path is provided
+    }
+ 
+    candidateDocumentImageDiv.appendChild(profilePicDiv);
+    
+    
+    
+    var panPicDiv = document.createElement('div');
+    panPicDiv.className = "col-sm-4 mb-5 candidateProfilePicBox panBox";
+    panPicDiv.innerHTML = `<p style="margin-bottom: 0;" class="candidatePrfoilesHeading">Pan Pic</p><img id="panPic" width="100%" height="80%" src="" alt="Pan Picture" />`;
+    var panPicImg = panPicDiv.querySelector('img');
+    
+ // Update the profile picture if the path is available in the data
+    if (data.pan_pic_path) {
+    	panPicImg.src = `${data.pan_pic_path}`; //Set the image source
+        $('.panBox').show(); // Show the profile picture div
+    } else {
+        $('.panBox').hide(); // Hide if no profile picture path is provided
+    }
+ 
+    candidateDocumentImageDiv.appendChild(panPicDiv);
+    
+    
+    
+    var aadharPicDiv = document.createElement('div');
+    aadharPicDiv.className = "col-sm-4 mb-5 candidateProfilePicBox aadharBox";
+    aadharPicDiv.style.height = "300px";
+    aadharPicDiv.innerHTML = `<p style="margin-bottom: 0;" class="candidatePrfoilesHeading">Aadhar Pic</p><iframe width="100%" height="100%"></iframe>`;
+    var aadharPicImg = aadharPicDiv.querySelector('iframe');
+    
+ // Update the profile picture if the path is available in the data
+    if (data.aadhar_pic) {
+    	aadharPicImg.src = `${data.aadhar_pic}`; //Set the image source
+        $('.aadharBox').show(); // Show the profile picture div
+    } else {
+        $('.aadharBox').hide(); // Hide if no profile picture path is provided
+    }
+ 
+    candidateDocumentImageDiv.appendChild(aadharPicDiv);
+    
+    
+    
+    var tenthPicDiv = document.createElement('div');
+    tenthPicDiv.className = "col-sm-4 candidateProfilePicBox tenthBox";
+    tenthPicDiv.style.height = "300px";
+    tenthPicDiv.innerHTML = `<p style="margin-bottom: 0;" class="candidatePrfoilesHeading">Tenth Pic</p><iframe width="100%" height="100%"></iframe>`;
+    var tenthPicImg = tenthPicDiv.querySelector('iframe');
+    
+ // Update the profile picture if the path is available in the data
+    if (data.tenth_pic) {
+    	tenthPicImg.src = `${data.tenth_pic}`; //Set the image source
+        $('.tenthBox').show(); // Show the profile picture div
+    } else {
+        $('.tenthBox').hide(); // Hide if no profile picture path is provided
+    }
+ 
+    candidateDocumentImageDiv.appendChild(tenthPicDiv);
+    
+    
+    
+    var pucPicDiv = document.createElement('div');
+    pucPicDiv.className = "col-sm-4 candidateProfilePicBox pucBox";
+    pucPicDiv.style.height = "300px";
+    pucPicDiv.innerHTML = `<p style="margin-bottom: 0;" class="candidatePrfoilesHeading">PUC Pic</p><iframe width="100%" height="100%"></iframe>`;
+    var pucPicImg = pucPicDiv.querySelector('iframe');
+    
+ // Update the profile picture if the path is available in the data
+    if (data.puc_pic) {
+    	pucPicImg.src = `${data.puc_pic}`; //Set the image source
+        $('.pucBox').show(); // Show the profile picture div
+    } else {
+        $('.pucBox').hide(); // Hide if no profile picture path is provided
+    }
+ 
+    candidateDocumentImageDiv.appendChild(pucPicDiv);
+    
+    
+    
+    var degreePicDiv = document.createElement('div');
+    degreePicDiv.className = "col-sm-4 candidateProfilePicBox degreeBox";
+    degreePicDiv.style.height = "300px";
+    degreePicDiv.innerHTML = `<p style="margin-bottom: 0;" class="candidatePrfoilesHeading">Degree Pic</p><iframe width="100%" height="100%"></iframe>`;
+    var degreePicImg = degreePicDiv.querySelector('iframe');
+    
+ // Update the profile picture if the path is available in the data
+    if (data.degree_pic) {
+    	degreePicImg.src = `${data.degree_pic}`; //Set the image source
+        $('.degreeBox').show(); // Show the profile picture div
+    } else {
+        $('.degreeBox').hide(); // Hide if no profile picture path is provided
+    }
+ 
+    candidateDocumentImageDiv.appendChild(degreePicDiv);
+    
+ 
+    document.getElementById('candidateProfile').appendChild(candidateDocumentImageDiv);
+}
+
+</script>
+
+
+</body>
+</html>

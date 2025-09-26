@@ -1,0 +1,2642 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Employee</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <!-- =======================================================
+  * Template Name: NiceAdmin
+  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+  * Updated: Apr 20 2024 with Bootstrap v5.3.3
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+  <style>
+   .table-container {
+            max-height: 345px; /* Adjust as needed */
+            overflow-y: auto;
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .table-container thead {
+            position: sticky;
+            top: 0;
+            background-color: #f8f9fa; /* Light background for the header */
+            z-index: 1; /* Ensure the header is above the scrolling content */
+        }
+
+        .table-container::-webkit-scrollbar {
+            width: 5px; /* Width of the scrollbar */
+        }
+
+        .table-container::-webkit-scrollbar-track {
+            background:#edeef5; /* Track color */
+        }
+
+        .table-container::-webkit-scrollbar-thumb {
+            background: #888; /* Scrollbar color */
+            border-radius: 4px;
+        }
+
+        .table-container::-webkit-scrollbar-thumb:hover {
+            background: #555; /* Hover color */
+        }
+        .form-label{
+        	font-size: 0.9rem;
+        }
+       .centered-table th, .centered-table td {
+	        text-align: center;
+	        vertical-align: middle;
+	    }
+	    /* Custom select container */
+		.select-container {
+		  position: relative;
+		  display: inline-block;
+		}
+		
+		/* Hide default arrow */
+		.select-container select {
+		  appearance: none;
+		  -webkit-appearance: none;
+		  -moz-appearance: none;
+		  background: transparent;
+		  padding-right: 2.5rem; /* Adjust based on the size of the arrow */
+		}
+		#employeeTable th {
+	        vertical-align: middle; /* Ensures consistent vertical alignment */
+	        text-align:center;
+	        background-color:#E9EAEC;
+	       
+	    }
+		/* Custom arrow icon */
+		.select-container::after {
+		  content: "";
+		  position: absolute;
+		  top: 50%;
+		  right: 0.5rem; /* Adjust based on the size of the arrow */
+		  transform: translateY(-50%);
+		  width: 2rem; /* Adjust based on the size of the arrow */
+		  height: 0.8rem; /* Adjust based on the size of the arrow */
+		  background: url('assets/img/down-arrow.png') no-repeat center center;
+		  background-size: contain;
+		  pointer-events: none;
+		}
+		
+		/* Optional: Add focus style to the select element */
+		.select-container select:focus {
+		  outline: none;
+		}
+		/* Create a custom column class for 5 cards per row on large screens */
+		@media (min-width: 1200px) {
+		    .col-lg-2-4 {
+		        flex: 0 0 20%; /* Set width to 20% */
+		        max-width: 20%;
+		    }
+		}
+		/* CSS for clickable card */
+		.clickable-card {
+		    transition: transform 0.2s ease, box-shadow 0.2s ease;
+		}
+		
+		.clickable-card:hover {
+		    transform: translateY(-5px);
+		    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+		    text-decoration: none; /* Ensure no underline on hover */
+		}
+		
+		/* Fullscreen overlay with dim background */
+#loadingPopup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Dim background */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    font-family: Arial, sans-serif;
+    color: white; /* Text color for better contrast */
+}
+
+/* Spinner animation */
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 6px solid rgba(255, 255, 255, 0.3); /* Semi-transparent border */
+    border-top-color: white; /* Bright top border */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Loading text */
+#loadingPopup p {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+}
+
+/* Spinner keyframe animation */
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+.popup-container {
+		     position: fixed;
+		     top: 0;
+		     left: 0;
+		     width: 100%;
+		     height: 100%;
+		     background-color: rgba(0, 0, 0, 0.5);
+		     display: flex;
+		     justify-content: center;
+		     align-items: center;
+		     z-index: 1000;
+		 }
+
+		 .popup-content {
+		     background: white;
+		     min-width: 300px; /* Slightly wider minimum width */
+		     max-width: 80%; /* Maximum width capped at 70% of the viewport */
+		     width: 40%; /* Dynamically adjust based on content */
+		     border-radius: 8px;
+		     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+		     padding: 10px;
+		     text-align: left;
+		 }
+
+		 .popup-header {
+		     display: flex;
+		     justify-content: space-between;
+		     align-items: center;
+		     margin-bottom: 15px;
+		 }
+
+		 .popup-header h5 {
+		     margin: 0;
+		 }
+
+		 .close-popup {
+		     background: none;
+		     border: none;
+		     font-size: 1.5rem;
+		     cursor: pointer;
+		 }
+		 .popup-body {
+		     max-height: 300px; /* Keep height limited for overflow scenarios */
+		     overflow-y: auto;
+		 }
+
+		 .popup-footer {
+		     text-align: right;
+		     margin-top: 15px;
+		 }
+		
+		.list-item {
+		    display: flex;
+		    justify-content: space-between;
+		    align-items: center;
+		    border-bottom: 1px solid #ddd;
+		}
+		
+		.list-item span {
+		    flex-grow: 1; /* Allows the text to take available space */
+		}
+		#missingPunchDatesList{
+			padding:8px 0;
+		}
+		
+		.time-picker-container {
+		    display: flex;
+		    align-items: center;
+		    gap: 10px;
+		    opacity: 0;
+		    transform: translateY(-10px);
+		    transition: all 0.3s ease-in-out;
+		}
+		
+  </style>
+</head>
+
+<body>
+
+   <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center" th:if="${empDetailsByEmpId.deptId > 0}">
+
+   <!--  <div class="app-branding" style="width:100%; margin:0 0 0 10px; padding:5px;">
+				    <a class="app-logo" th:href=@{/dashboard}>
+				        <img class="logo-icon" src="assets/img/logo.png" alt="logo" style="width:200px; height:50px; max-width:100%; padding:0 2px 0 10px; margin:0;">
+				    </a>
+				</div> --><!-- End Logo -->
+	
+		   <div class="d-flex align-items-center" style="width:100%; margin:0 0 0 10px; padding:5px;">
+				    <a class="app-logo" th:href=@{/dashboard}>
+				        <img class="d-none d-lg-block" src="assets/img/logo.png" alt="logo" style="width:200px; height:50px; max-width:100%; padding:0 2px 0 10px; margin:0;">
+				    </a>
+				    <!-- <i class="bi bi-chevron-double-left toggle-sidebar-btn" onclick="toggleIconRotation()"></i> -->
+			</div>	
+    <!--  <div class="search-bar">
+      <form class="search-form d-flex align-items-center" method="POST" action="#">
+        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+      </form>
+    </div> --><!-- End Search Bar -->
+
+       <!-- Include the header fragment -->
+   <div th:replace="fragments/header :: header"></div>
+
+  </header><!-- End Header -->
+   
+   <!-- =======Super Admin Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center" th:if="${empDetailsByEmpId.deptId == 0}">
+
+    <div class="d-flex align-items-center" style="width:100%; margin:0 0 0 10px; padding:5px;">
+				    <a class="app-logo" th:href=@{/dashboard}>
+				        <img class="d-none d-lg-block" src="assets/img/logo.png" alt="logo" style="width:200px; height:50px; max-width:100%; padding:0 2px 0 10px; margin:0;">
+				    </a>
+				    <!-- <i class="bi bi-chevron-double-left toggle-sidebar-btn" onclick="toggleIconRotation()"></i> -->
+	</div><!-- End Logo -->
+
+    <!-- <div class="search-bar">
+      <form class="search-form d-flex align-items-center" method="POST" action="#">
+        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+      </form>
+    </div> --><!-- End Search Bar -->
+
+    <div th:replace="fragments/superAdminHeader :: header"></div>
+
+  </header><!-- End Header -->
+
+  <!-- ======= Sidebar ======= -->
+  
+<aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+		 
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/userDashboard}">
+                <i class="bi bi-grid"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+         <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link"  th:href="@{/viewAdminProfile(empid=${empDetailsByEmpId.empid})}">
+                <i class="bi bi-person"></i>
+                 <span>My Profile</span>
+            </a>
+        </li>  
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/attendanceLive(email=${empDetailsByEmpId.email})}">
+                <i class="bi bi-calendar3"></i>
+                <span>Attendence</span>
+            </a> 
+        </li>      
+       <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/groupMailId}">
+                <i class="bi bi-telephone"></i>
+                <span>Employee Contacts</span>
+            </a>
+        </li>
+        <!-- <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link " th:href="@{/InterCommDetails}">
+                <i class="bi bi-telephone"></i>
+                <span>InterComm Details</span>
+            </a>
+        </li> -->
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/adminHoliday}">
+                <i class="bi bi-calendar4-week"></i>
+                <span>Holiday List</span>
+            </a>
+        </li>
+        
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+		    <a class="nav-link active" th:href="@{/employee}">
+		        <i class="bi bi-people"></i>	
+		        <span>Employee</span>
+		    </a>
+	  </li> 
+        
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/viewAdminLeaves(empid=${empDetailsByEmpId.empid})}">
+                <i class="bi bi-card-text"></i>
+                <span>Team Leaves</span>
+            </a>
+        </li> 
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/events}">
+                <i class="bi bi-megaphone"></i>
+                <span>Announcement</span>
+            </a>
+        </li>              
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/asset}">
+                <i class="bi bi-wallet"></i>
+                <span>Assets</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/ongoingProject}">
+                <i class="bi bi-card-heading"></i>
+                <span>Projects</span>
+            </a>
+        </li>   
+        <!--  <li class="nav-item" th:if="${empDetailsByEmpId.deptId>0}">
+            <a class="nav-link" th:href="@{/viewAdminPayslip(empid=${empDetailsByEmpId.empid})}">
+                <i class="bi bi-file-text"></i>
+                <span>Payslip</span>
+            </a>
+        </li>  -->    
+         <!-- Loop through the permissions map -->
+       <li class="nav-item" th:if="${permissions.interviewAccess && empDetailsByEmpId.deptId>0}" >
+            <a class="nav-link" th:href="@{/moatIframe}">
+                <i class="bi bi-vector-pen"></i>
+                <span>Interview</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.sales && empDetailsByEmpId.deptId>0}" >
+            <a class="nav-link" th:href="@{/sales}">
+                <i class="bi bi-cart3"></i>
+                <span>Sales</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.accountsAccess && empDetailsByEmpId.deptId>0}" >
+            <a class="nav-link" th:href="@{/accounts}">
+                <i class="bi bi-person-vcard"></i>
+                <span>Accounts</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.storeAccess && empDetailsByEmpId.deptId>0}" >
+            <a class="nav-link" th:href="@{/store}">
+                <i class="bi bi-shop-window"></i>
+                <span>Store</span>
+            </a>
+        </li>
+        
+        
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link " th:href="@{/navbar}">
+		        <i class="bi bi-grid"></i>
+		        <span>Dashboard</span>
+		    </a>
+	    </li>
+	    <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+            <a class="nav-link" th:href="@{/attendanceLive(email=${empDetailsByEmpId.email})}">
+                <i class="bi bi-calendar3"></i>
+                <span>Attendence</span>
+            </a>
+        </li> 
+         <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link"  th:href="@{/adminHoliday}">
+		        <i class="bi bi-calendar4-week"></i>
+		        <span>Holiday List</span>
+		    </a>
+	 </li>	
+	 
+	<li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link" th:href="@{/groupMailId}">
+		        <i class="bi bi-telephone"></i>
+		        <span>Employee Contacts</span>
+		    </a>
+	 </li>
+	  <!-- <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+            <a class="nav-link"  th:href="@{/InterCommDetails}">
+                <i class="bi bi-telephone"></i>
+                <span>InterComm Details</span>
+            </a>
+      </li> -->
+      <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link"  th:href="@{/viewAdminLeaves(empid=${empDetailsByEmpId.empid})}">
+		        <i class="bi bi-calendar4-week"></i>
+		        <span>Team Leaves</span>
+		    </a>
+	 </li>
+	 <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link" th:href="@{/events}">
+		        <i class="bi bi-megaphone"></i>
+		        <span>Announcement</span>
+		    </a>
+	 </li> 
+        <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link" th:href="@{/addDepartment}">
+		        <i class="bi bi-calendar4-week"></i>
+		        <span>Department</span>
+		    </a>
+	   </li>
+	 <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link"  th:href="@{/addRole}">
+		        <i class="bi bi-receipt"></i>
+		        <span>Role</span>
+		    </a>
+	 </li>
+	 
+	 <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+		    <a class="nav-link" th:classappend="${empDetailsByEmpId.deptId==0} ? ' active'" th:href="@{/employee}">
+		        <i class="bi bi-people"></i>
+		        <span>Employee</span>
+		    </a>
+	 </li> 
+	
+       
+      <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+            <a class="nav-link"  th:href="@{/ongoingProject}">
+                <i class="bi bi-calendar3"></i>
+                <span>Projects</span>
+            </a>
+      </li>  
+      <li class="nav-item" th:if="${empDetailsByEmpId.deptId==0}">
+            <a class="nav-link"  th:href="@{/asset}">
+                <i class="bi bi-wallet"></i>
+                <span>Assets</span>
+            </a>
+      </li> 
+       <li class="nav-item" th:if="${permissions.interviewAccess && empDetailsByEmpId.deptId==0}" >
+            <a class="nav-link" th:href="@{/moatIframe}">
+                <i class="bi bi-vector-pen"></i>
+                <span>Interview</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.sales && empDetailsByEmpId.deptId==0}" >
+            <a class="nav-link" th:href="@{/sales}">
+                <i class="bi bi-cart3"></i>
+                <span>Sales</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.accountsAccess && empDetailsByEmpId.deptId==0}" >
+            <a class="nav-link" th:href="@{/accounts}">
+                <i class="bi bi-person-vcard"></i>
+                <span>Accounts</span>
+            </a>
+        </li>
+        <li class="nav-item" th:if="${permissions.storeAccess && empDetailsByEmpId.deptId==0}" >
+            <a class="nav-link" th:href="@{/store}">
+                <i class="bi bi-shop-window"></i>
+                <span>Store</span>
+            </a>
+        </li>  
+        <li class="nav-item" th:if="${permissions.apprisalAccess}">
+		    <a class="nav-link" id="apprisalLink" th:href="@{/apprisal(empid=${empDetailsByEmpId.empid})}">
+		        <i class="bi bi-file-text"></i>
+		        <span>Appraisal</span>
+		    </a>
+		</li>
+		<li class="nav-item">
+		    <a class="nav-link" id="apprisalLink" th:href="@{/employeeApprisal(empid=${empDetailsByEmpId.empid})}">
+		        <i class="bi bi-file-text"></i>
+		        <span>Employee Appraisal</span>
+		    </a>
+		</li>
+		<li class="nav-item">
+				<a class="nav-link" th:href="@{/my-favorites}">
+					<i class="bi bi-layout-text-window-reverse"></i>
+					<span>To-Chat & Remind</span><span id="unreadCountBadge" class="badge bg-primary" style="display: none;"></span>
+				</a>
+		</li>
+		<li class="nav-item new-feature" >
+					    <a class="nav-link" th:href="@{/releasenotes}">
+					        <i class="bi bi-layout-text-window-reverse"></i>
+					        <span class="release-note-text">
+					            Release Note 
+					            <span class="version-number">(0.1.1)</span>
+					        </span>
+					    </a>
+		</li>
+    </ul>
+</aside>
+  <!-- End Sidebar-->
+<div id="loadingPopup">
+    <div class="spinner"></div>
+    <p>Loading, please wait...</p>
+</div>
+
+  <main id="main" class="main">
+  
+  <div class="chat-app" style="display: none;">
+                <div id="plist" class="people-list">
+                        <div class="input-group mb-3">
+                                <input type="text" id="searchInputModal" class="form-control" placeholder="Search..."
+                                        aria-label="Search">
+                                <span class="input-group-text">
+                                        <i class="bi bi-search"></i>
+                                </span>
+
+                        </div>
+                        <ul id="employeeNames" class="list-unstyled chat-list mt-2 mb-0">
+                                <!-- Employee names will be dynamically populated here -->
+                        </ul>
+                </div>
+
+                <div class="chat">
+                        <div class="chat-header clearfix">
+                                <div class="row w-100">
+
+                                        <!-- Employee Photo and Name Section -->
+                                        <div class="col-lg-6 d-flex align-items-center">
+                                                <div class="chat-about d-flex align-items-center">
+                                                        <img id="employeePhoto" class="employee-photo" src="default-avatar.png"
+                                                                alt="Employee Photo" />
+                                                        <h6 class="m-b-0 ml-2" id="employeeName">Select an Employee</h6>
+                                                </div>
+                                        </div>
+                                        <!-- Right aligned three dots (Vertical) -->
+                                        <div class="col-lg-6 text-right">
+                                                <div class="dropdown custom-dropdown">
+                                                        <button class="btn btn-outline-secondary" type="button" id="dropdownMenuButton"
+                                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                                <i class="fa fa-ellipsis-v"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                                                                <li><a class="dropdown-item" href="#">Delete Chat</a></li>
+                                                                <li><a class="dropdown-item" href="#">Mute</a></li>
+                                                                <li><a class="dropdown-item" href="#">Contact Info</a></li>
+                                                        </ul>
+                                                </div>
+                                        </div>
+                                </div>
+                        </div>
+                        <div id="chat-window" class="chat-history">
+                                <ul class="m-b-0">
+                                        <!-- Chat messages will be populated here dynamically -->
+
+                                </ul>
+                                <div id="message-icon-container" class="message-icon" style="display: none;">
+
+                                        <!-- Plain square message icon SVG (behind) -->
+                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                                <g id="SVGRepo_iconCarrier">
+                                                        <path
+                                                                d="M10 9H17M10 13H17M7 9H7.01M7 13H7.01M21 20L17.6757 18.3378C17.4237 18.2118 17.2977 18.1488 17.1656 18.1044C17.0484 18.065 16.9277 18.0365 16.8052 18.0193C16.6672 18 16.5263 18 16.2446 18H6.2C5.07989 18 4.51984 18 4.09202 17.782C3.71569 17.5903 3.40973 17.2843 3.21799 16.908C3 16.4802 3 15.9201 3 14.8V7.2C3 6.07989 3 5.51984 3.21799 5.09202C3.40973 4.71569 3.71569 4.40973 4.09202 4.21799C4.51984 4 5.0799 4 6.2 4H17.8C18.9201 4 19.4802 4 19.908 4.21799C20.2843 4.40973 20.5903 4.71569 20.782 5.09202C21 5.51984 21 6.0799 21 7.2V20Z"
+                                                                stroke="#94b7db" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                </g>
+                                        </svg>
+
+                                        <!-- SVG with animation -->
+                                        <svg class="animated-icon" viewBox="0 0 374 374" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <g clip-path="url(#clip0)">
+                                                        <path
+                                                                d="M318.084 132.622C311.339 101.37 287.642 82 256.652 82C238.423 82 217.459 89.3248 197.954 102.509C191.574 106.904 182.642 106.904 176.079 102.672C155.298 88.9992 135.246 82 116.652 82C85.6626 82 61.9647 101.533 55.2199 133.111C44.2824 183.896 80.923 252.26 187.017 291C292.746 251.446 329.204 183.082 318.084 132.622Z" />
+                                                        <path
+                                                                d="M187.466 0C187.366 0 187.166 0 186.866 0C85.666 0 3.36603 82.3 3.36603 183.5C3.36603 224.8 17.466 264.9 43.266 297.2L16.566 359.3C14.366 364.4 16.766 370.3 21.766 372.4C23.566 373.2 25.566 373.4 27.466 373.1L125.366 355.9C144.966 363 165.566 366.6 186.366 366.5C287.566 366.5 369.866 284.2 369.866 183C370.066 82.1 288.366 0.1 187.466 0ZM192.966 269.8C188.966 271.3 184.666 271.3 180.666 269.8C149.066 257.1 124.466 238.3 109.466 215.4C95.966 194.7 90.766 171.4 94.866 149.9C100.466 121.4 121.866 102.3 148.266 102.3C160.966 102.3 173.866 106.5 186.766 114.7C199.366 106.5 212.466 102.3 225.066 102.3C251.866 102.3 272.866 120.9 278.466 149.6C286.066 188.8 262.666 241.3 192.966 269.8Z" />
+                                                </g>
+                                                <defs>
+                                                        <clipPath id="clip0">
+                                                                <rect width="373.232" height="373.232" fill="white" />
+                                                        </clipPath>
+                                                </defs>
+                                        </svg>
+
+
+
+                                        <!-- Dots Animation -->
+                                        <div class="dots">
+                                                <div class="dot"></div>
+                                                <div class="dot"></div>
+                                                <div class="dot"></div>
+                                        </div>
+
+
+
+
+                                </div>
+
+
+                        </div>
+                        <!-- Move the paragraph outside the chat window -->
+                        <p id="logo-text"
+                                style="text-align: center; font-size: 14px; color: #6c757d; margin-top: 10px; display: none;">
+                                "Reach out to your colleagues and stay on top of your projects with quick, seamless communication."
+                        </p>
+                        <div class="chat-message clearfix">
+                                <div class="custom-input-group mb-0">
+                                        <input type="text" id="message" class="custom-form-control" placeholder="Enter your message..." />
+                                        <div class="custom-input-group-append">
+                                                <button class="custom-send-btn" onclick="sendMessage()">
+                                                        <i class="ri ri-send-plane-2-fill"></i>
+                                                </button>
+                                        </div>
+                                </div>
+
+                        </div>
+                </div>
+        </div>
+        <input type="hidden" th:value="${empDetailsByEmpId.email}" id="loggedInMail">
+		<input type="hidden" id="employeeId1" name="empId" th:value="${empDetailsByEmpId.empid}" />
+        <input type="hidden" id="emp_idSessionValue" th:value="${empDetailsByEmpId.empid}">
+	    <input type="hidden" id="loggedEmpEmail" th:value="${empDetailsByEmpId.email}">
+          
+		<div th:if="${message}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <span th:text=${message}></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span th:text=${error}></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+  
+    <div class="pagetitle d-flex mb-0"   th:if="${empDetailsByEmpId.deptId>0}">
+    
+	     <i class="bi bi-chevron-double-left toggle-sidebar-btn mb-1" onclick="toggleIconRotation()" style="font-size:24px;color:#2F73B9;padding:0 10px;margin-left:-10px;margin-top:-10px"></i>
+      
+		      <nav>
+		        <ol class="breadcrumb">
+		          <li class="breadcrumb-item"><a th:href="@{/userDashboard}">Home</a></li>
+		          <li class="breadcrumb-item active">Employees</li>
+		        </ol>
+		      </nav>
+	       
+    </div><!-- End Page Title -->
+	<div class="pagetitle d-flex"   th:if="${empDetailsByEmpId.deptId==0}">
+	       <i class="bi bi-chevron-double-left toggle-sidebar-btn mb-1" onclick="toggleIconRotation()" style="font-size:24px;color:#2F73B9;padding:0 10px;margin-left:-10px;margin-top:-10px"></i>
+      
+		      <nav>
+		        <ol class="breadcrumb">
+		          <li class="breadcrumb-item"><a th:href="@{/navbar}">Home</a></li>
+		          <li class="breadcrumb-item active">Employees</li>
+		        </ol>
+		      </nav>
+    </div><!-- End Page Title -->
+    
+    <section class="section dashboard">
+      <div class="row">
+
+        <!-- Left side columns -->
+        <!-- <div class="col-lg-8">
+          <div class="row">
+		  <div class="col-lg-12">
+
+          <div class="card">
+		    <div class="card-body">
+		        <h5 class="card-title">Employees List</h5>
+		        Small tables
+		        <div class="table-container">
+		          <table class="table table-sm" style="font-size: 0.9rem;">
+				    <thead>
+				        <tr>
+				            <th scope="col">#</th>
+				            <th scope="col">Role Name</th>
+				            <th scope="col">Department</th>
+				            <th scope="col">Role Description</th>
+				            <th scope="col">Action</th>
+				        </tr>
+				    </thead>
+				    <tbody>
+				        Iterating over departments using Thymeleaf
+				        <tr th:each="role, iterStat : ${roles}">
+				            <th scope="row" th:text="${iterStat.count}">1</th>
+				            <td th:text="${role.roleName}">Role Name</td>
+				            <td th:text="${role.deptName}">Department Name</td>
+				            <td th:text="${role.description}">Role Description</td>
+				            <td colspan=2> Flexbox for horizontal alignment
+				                <a href="#" class="text-primary" title="Edit">
+				                    <i class="bi bi-pencil-square"></i>
+				                </a>&nbsp;
+				                <a href="#" class="text-danger" title="Delete">
+				                    <i class="bi bi-trash"></i>
+				                </a>
+				            </td>
+				        </tr>
+				    </tbody>
+				</table>
+		        </div>
+		        End small tables
+		    </div>
+</div> -->
+
+
+          <!-- <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">No Labels / Placeholders as labels Form</h5>
+
+              No Labels Form
+              <form class="row g-3">
+                <div class="col-md-12">
+                  <input type="text" class="form-control" placeholder="Your Name">
+                </div>
+                <div class="col-md-6">
+                  <input type="email" class="form-control" placeholder="Email">
+                </div>
+                <div class="col-md-6">
+                  <input type="password" class="form-control" placeholder="Password">
+                </div>
+                <div class="col-12">
+                  <input type="text" class="form-control" placeholder="Address">
+                </div>
+                <div class="col-md-6">
+                  <input type="text" class="form-control" placeholder="City">
+                </div>
+                <div class="col-md-4">
+                  <select id="inputState" class="form-select">
+                    <option selected>Choose...</option>
+                    <option>...</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <input type="text" class="form-control" placeholder="Zip">
+                </div>
+                <div class="text-center">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                  <button type="reset" class="btn btn-secondary">Reset</button>
+                </div>
+              </form>End No Labels Form
+
+            </div>
+          </div> -->
+
+          <!-- <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Floating labels Form</h5>
+
+              Floating Labels Form
+              <form class="row g-3">
+                <div class="col-md-12">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="floatingName" placeholder="Your Name">
+                    <label for="floatingName">Your Name</label>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-floating">
+                    <input type="email" class="form-control" id="floatingEmail" placeholder="Your Email">
+                    <label for="floatingEmail">Your Email</label>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-floating">
+                    <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                    <label for="floatingPassword">Password</label>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="form-floating">
+                    <textarea class="form-control" placeholder="Address" id="floatingTextarea" style="height: 100px;"></textarea>
+                    <label for="floatingTextarea">Address</label>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="col-md-12">
+                    <div class="form-floating">
+                      <input type="text" class="form-control" id="floatingCity" placeholder="City">
+                      <label for="floatingCity">City</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-floating mb-3">
+                    <select class="form-select" id="floatingSelect" aria-label="State">
+                      <option selected>New York</option>
+                      <option value="1">Oregon</option>
+                      <option value="2">DC</option>
+                    </select>
+                    <label for="floatingSelect">State</label>
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="floatingZip" placeholder="Zip">
+                    <label for="floatingZip">Zip</label>
+                  </div>
+                </div>
+                <div class="text-center">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                  <button type="reset" class="btn btn-secondary">Reset</button>
+                </div>
+              </form>End floating Labels Form
+
+            </div>
+          </div> -->
+
+        </div>
+            <!-- Sales Card -->
+            <!-- <div class="col-xxl-4 col-md-6">
+              <div class="card info-card sales-card">
+
+                <div class="filter">
+                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                    <li class="dropdown-header text-start">
+                      <h6>Filter</h6>
+                    </li>
+
+                    <li><a class="dropdown-item" href="#">Today</a></li>
+                    <li><a class="dropdown-item" href="#">This Month</a></li>
+                    <li><a class="dropdown-item" href="#">This Year</a></li>
+                  </ul>
+                </div>
+
+                <div class="card-body">
+                  <h5 class="card-title">Sales <span>| Today</span></h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-cart"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6>145</h6>
+                      <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span>
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div> --><!-- End Sales Card -->
+
+            <!-- Revenue Card -->
+            <!-- <div class="col-xxl-4 col-md-6">
+              <div class="card info-card revenue-card">
+
+                <div class="filter">
+                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                    <li class="dropdown-header text-start">
+                      <h6>Filter</h6>
+                    </li>
+
+                    <li><a class="dropdown-item" href="#">Today</a></li>
+                    <li><a class="dropdown-item" href="#">This Month</a></li>
+                    <li><a class="dropdown-item" href="#">This Year</a></li>
+                  </ul>
+                </div>
+
+                <div class="card-body">
+                  <h5 class="card-title">Revenue <span>| This Month</span></h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-currency-dollar"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6>$3,264</h6>
+                      <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span>
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div> --><!-- End Revenue Card -->
+
+            <!-- Customers Card -->
+            <!-- <div class="col-xxl-4 col-xl-12">
+
+              <div class="card info-card customers-card">
+
+                <div class="filter">
+                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                    <li class="dropdown-header text-start">
+                      <h6>Filter</h6>
+                    </li>
+
+                    <li><a class="dropdown-item" href="#">Today</a></li>
+                    <li><a class="dropdown-item" href="#">This Month</a></li>
+                    <li><a class="dropdown-item" href="#">This Year</a></li>
+                  </ul>
+                </div>
+
+                <div class="card-body">
+                  <h5 class="card-title">Customers <span>| This Year</span></h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-people"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6>1244</h6>
+                      <span class="text-danger small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">decrease</span>
+
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div> --><!-- End Customers Card -->
+
+            <!-- Reports -->
+            <!-- <div class="col-12">
+              <div class="card">
+
+                <div class="filter">
+                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                    <li class="dropdown-header text-start">
+                      <h6>Filter</h6>
+                    </li>
+
+                    <li><a class="dropdown-item" href="#">Today</a></li>
+                    <li><a class="dropdown-item" href="#">This Month</a></li>
+                    <li><a class="dropdown-item" href="#">This Year</a></li>
+                  </ul>
+                </div>
+
+                <div class="card-body">
+                  <h5 class="card-title">Reports <span>/Today</span></h5>
+
+                  Line Chart
+                  <div id="reportsChart"></div>
+
+                  <script>
+                    document.addEventListener("DOMContentLoaded", () => {
+                      new ApexCharts(document.querySelector("#reportsChart"), {
+                        series: [{
+                          name: 'Sales',
+                          data: [31, 40, 28, 51, 42, 82, 56],
+                        }, {
+                          name: 'Revenue',
+                          data: [11, 32, 45, 32, 34, 52, 41]
+                        }, {
+                          name: 'Customers',
+                          data: [15, 11, 32, 18, 9, 24, 11]
+                        }],
+                        chart: {
+                          height: 350,
+                          type: 'area',
+                          toolbar: {
+                            show: false
+                          },
+                        },
+                        markers: {
+                          size: 4
+                        },
+                        colors: ['#4154f1', '#2eca6a', '#ff771d'],
+                        fill: {
+                          type: "gradient",
+                          gradient: {
+                            shadeIntensity: 1,
+                            opacityFrom: 0.3,
+                            opacityTo: 0.4,
+                            stops: [0, 90, 100]
+                          }
+                        },
+                        dataLabels: {
+                          enabled: false
+                        },
+                        stroke: {
+                          curve: 'smooth',
+                          width: 2
+                        },
+                        xaxis: {
+                          type: 'datetime',
+                          categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
+                        },
+                        tooltip: {
+                          x: {
+                            format: 'dd/MM/yy HH:mm'
+                          },
+                        }
+                      }).render();
+                    });
+                  </script>
+                  End Line Chart
+
+                </div>
+
+              </div>
+            </div> --><!-- End Reports -->
+
+            <!-- Recent Sales -->
+            <!-- <div class="col-12">
+              <div class="card recent-sales overflow-auto">
+
+                <div class="filter">
+                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                    <li class="dropdown-header text-start">
+                      <h6>Filter</h6>
+                    </li>
+
+                    <li><a class="dropdown-item" href="#">Today</a></li>
+                    <li><a class="dropdown-item" href="#">This Month</a></li>
+                    <li><a class="dropdown-item" href="#">This Year</a></li>
+                  </ul>
+                </div>
+
+                <div class="card-body">
+                  <h5 class="card-title">Recent Sales <span>| Today</span></h5>
+
+                  <table class="table table-borderless datatable">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Customer</th>
+                        <th scope="col">Product</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row"><a href="#">#2457</a></th>
+                        <td>Brandon Jacob</td>
+                        <td><a href="#" class="text-primary">At praesentium minu</a></td>
+                        <td>$64</td>
+                        <td><span class="badge bg-success">Approved</span></td>
+                      </tr>
+                      <tr>
+                        <th scope="row"><a href="#">#2147</a></th>
+                        <td>Bridie Kessler</td>
+                        <td><a href="#" class="text-primary">Blanditiis dolor omnis similique</a></td>
+                        <td>$47</td>
+                        <td><span class="badge bg-warning">Pending</span></td>
+                      </tr>
+                      <tr>
+                        <th scope="row"><a href="#">#2049</a></th>
+                        <td>Ashleigh Langosh</td>
+                        <td><a href="#" class="text-primary">At recusandae consectetur</a></td>
+                        <td>$147</td>
+                        <td><span class="badge bg-success">Approved</span></td>
+                      </tr>
+                      <tr>
+                        <th scope="row"><a href="#">#2644</a></th>
+                        <td>Angus Grady</td>
+                        <td><a href="#" class="text-primar">Ut voluptatem id earum et</a></td>
+                        <td>$67</td>
+                        <td><span class="badge bg-danger">Rejected</span></td>
+                      </tr>
+                      <tr>
+                        <th scope="row"><a href="#">#2644</a></th>
+                        <td>Raheem Lehner</td>
+                        <td><a href="#" class="text-primary">Sunt similique distinctio</a></td>
+                        <td>$165</td>
+                        <td><span class="badge bg-success">Approved</span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                </div>
+
+              </div>
+            </div> --><!-- End Recent Sales -->
+
+            <!-- Top Selling -->
+            <!-- <div class="col-12">
+              <div class="card top-selling overflow-auto">
+
+                <div class="filter">
+                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                    <li class="dropdown-header text-start">
+                      <h6>Filter</h6>
+                    </li>
+
+                    <li><a class="dropdown-item" href="#">Today</a></li>
+                    <li><a class="dropdown-item" href="#">This Month</a></li>
+                    <li><a class="dropdown-item" href="#">This Year</a></li>
+                  </ul>
+                </div>
+
+                <div class="card-body pb-0">
+                  <h5 class="card-title">Top Selling <span>| Today</span></h5>
+
+                  <table class="table table-borderless">
+                    <thead>
+                      <tr>
+                        <th scope="col">Preview</th>
+                        <th scope="col">Product</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Sold</th>
+                        <th scope="col">Revenue</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row"><a href="#"><img src="assets/img/product-1.jpg" alt=""></a></th>
+                        <td><a href="#" class="text-primary fw-bold">Ut inventore ipsa voluptas nulla</a></td>
+                        <td>$64</td>
+                        <td class="fw-bold">124</td>
+                        <td>$5,828</td>
+                      </tr>
+                      <tr>
+                        <th scope="row"><a href="#"><img src="assets/img/product-2.jpg" alt=""></a></th>
+                        <td><a href="#" class="text-primary fw-bold">Exercitationem similique doloremque</a></td>
+                        <td>$46</td>
+                        <td class="fw-bold">98</td>
+                        <td>$4,508</td>
+                      </tr>
+                      <tr>
+                        <th scope="row"><a href="#"><img src="assets/img/product-3.jpg" alt=""></a></th>
+                        <td><a href="#" class="text-primary fw-bold">Doloribus nisi exercitationem</a></td>
+                        <td>$59</td>
+                        <td class="fw-bold">74</td>
+                        <td>$4,366</td>
+                      </tr>
+                      <tr>
+                        <th scope="row"><a href="#"><img src="assets/img/product-4.jpg" alt=""></a></th>
+                        <td><a href="#" class="text-primary fw-bold">Officiis quaerat sint rerum error</a></td>
+                        <td>$32</td>
+                        <td class="fw-bold">63</td>
+                        <td>$2,016</td>
+                      </tr>
+                      <tr>
+                        <th scope="row"><a href="#"><img src="assets/img/product-5.jpg" alt=""></a></th>
+                        <td><a href="#" class="text-primary fw-bold">Sit unde debitis delectus repellendus</a></td>
+                        <td>$79</td>
+                        <td class="fw-bold">41</td>
+                        <td>$3,239</td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                </div>
+
+              </div>
+            </div> --><!-- End Top Selling -->
+          </div>
+        </div><!-- End Left side columns -->
+		
+						<!-- Feedback Modal -->
+			<div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+			    <div class="modal-dialog">
+			        <div class="modal-content rounded-4 shadow-lg">
+			            <div class="modal-header border-0">
+			                <h5 class="modal-title" id="feedbackModalLabel">Feedback Form</h5>
+			                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			            </div>
+			            <div class="modal-body">
+			                <form id="feedbackForm" method="post" enctype="multipart/form-data">
+			                    <div class="mb-3" style="display: none;">
+			                        <label for="feedbackName" class="form-label fw-bold">Your Name</label>
+			                        <input type="text" class="form-control" id="feedbackName" name="name" th:value="${empDetailsByEmpId.fullName}" readonly>
+			                    </div>
+			                    <div class="mb-3" style="display: none;">
+			                        <label for="feedbackEmail" class="form-label fw-bold">Your Email</label>
+			                        <input type="email" class="form-control" id="feedbackEmail" name="email" th:value="${empDetailsByEmpId.email}" readonly>
+			                    </div>
+			                    <div class="mb-3">
+			                        <label for="feedbackEmailyy" class="form-label fw-bold">To</label>
+			                        <div class="to-field-container">
+			                            <span class="to-field rounded-pill px-3 py-2 shadow-sm">bugs_msplconnect@melangesystems.com</span>
+			                        </div>
+			                    </div>
+								<div class="mb-3">
+								    <label for="bugType" class="form-label fw-bold">Bug Type</label>
+								    <select class="form-control" id="bugType" name="bugType" required>
+								        <option value="About Application">About Application</option>
+								        <option value="New Feature">New Feature</option>
+								    </select>
+								</div>
+
+			                    <div class="mb-3">
+			                        <label for="feedbackMessage" class="form-label fw-bold">Message</label>
+			                        <textarea class="form-control" id="feedbackMessage" name="message" rows="4" placeholder="Enter your feedback here..." required></textarea>
+			                    </div>
+			                    <div class="mb-3">
+			                        <label for="feedbackAttachment" class="form-label fw-bold">Attachment (optional)</label>
+			                        <input type="file" class="form-control" id="feedbackAttachment" name="attachment" accept=".png, .jpg, .jpeg" multiple>
+			                        <small class="text-muted">Max size: 5MB. You can upload multiple images.</small>
+			                    </div>
+			                    <button type="submit" class="btn btn-primary w-100 mt-3 py-2 shadow-sm" id="submitFeedbackBtn">Submit Feedback</button>
+			                </form>
+			            </div>
+			        </div>
+			    </div>
+			</div>
+			
+						<!-- Popup Div for Missing Punch Dates -->
+						<div id="missingPunchDatesPopup" class="popup-container" style="display: none;">
+						    <div class="popup-content">
+						        <div class="popup-header">
+						            <h5><b>Missed Punch Dates</b></h5>
+						        </div>
+						        <div class="popup-body">
+						            <ul id="missingPunchDatesList">
+						                <!-- Dynamically populated list will appear here -->
+						                <!-- If no missed punches, the following message will be shown -->
+						            </ul>
+						            <p id="noMissedPunchesMessage" style="display: none; text-align: center;">No missed punches.</p>
+						        </div>
+						        <div class="popup-footer">
+						            <button class="btn btn-secondary" onclick="closePopup()">Close</button>
+						        </div>
+						    </div>
+						</div>
+						
+        <!-- Right side columns -->
+         <div class="col-lg-12">
+		 <div class="card" id="addRole" style="display:none;">
+            <div class="card-body">
+             <div class="d-flex justify-content-between">
+               <h5 class="card-title">Add Employee Form</h5>
+              	 <div>
+				    <button type="button" class="btn btn-primary mt-3" id="listButton" onclick="toggleView()">View List</button>
+				</div>  
+              </div>
+
+              <!-- Vertical Form -->
+              <form class="addEmployeeForm addEmployeeFormWithValidation"
+								th:action="@{/addEmployee}" method="post"
+								enctype="multipart/form-data">
+								<div class="row jumbotron box8">
+									<div class="col-sm-4 form-group mb-4">
+										<input type="text" class="form-control custom_textfield"
+											name="empId" id="empId" placeholder="Employee id" required>
+										<span id="empId_error"></span>
+									</div>
+									<div class="col-sm-4 form-group dept_position_box mb-4 select-container" >
+									    <select
+									        class="form-control custom-select browser-default custom_selectfield"
+									        name="deptId" id="deptId" required
+									        onchange="fetchDesignations(this.value)">
+									        <option value="" selected>Select Department</option>
+									        <option th:each="dept : ${departments}" th:value="${dept.dept_id}" th:text="${dept.deptName}"></option>
+									    </select> 
+									    <span id="dept_error"></span>
+									</div>
+
+									<div class="col-sm-4 form-group mb-4 select-container">
+										<select
+											class="form-control custom-select browser-default custom_selectfield"
+											onchange="toggleReportingManager(document.getElementById('designation').value);"
+											name="roleId" id="roleId" required>
+											<option value="" selected>Select Designation</option>
+										</select> <span id="designation_error"></span>
+									</div>
+									<div class="col-sm-6 form-group mb-4">
+										<input type="text" class="form-control custom_textfield"
+											maxlength="20" name="firstName" id="first_name"
+											placeholder="First name" required> <span
+											id="firstName_error"></span>
+									</div>
+									<div class="col-sm-6 form-group mb-4">
+										<input type="text" class="form-control custom_textfield"
+											maxlength="10" name="lastName" id="last_name"
+											placeholder="Last name" required> <span
+											id="lastName_error"></span>
+									</div>
+									<div class="col-sm-6 form-group mb-4">
+										<input type="email" class="form-control custom_emailfield"
+											name="email" id="email" placeholder="Email id" required>
+										<span id="email_error"></span>
+									</div>
+									<div class="col-sm-6 form-group mb-4">
+										<input type="text" class="form-control custom_textfield"
+											maxlength="10" name="mobileNo" id="mobile_no"
+											placeholder="Mobile no" required> <span
+											id="mobile_error"></span>
+									</div>
+									<div class="col-sm-12 form-group mb-4">
+										<textarea class="form-control" name="address"
+											id="address" rows="3"
+											placeholder="Address" required></textarea>
+										<span id="address_error"></span>
+									</div>
+									<div class="col-sm-6 form-group mb-4">
+										<label for="Date">Date Of Birth</label> <input type="date"
+											name="dob" class="form-control custom_date"
+											id="dob" required> <span id="dob_error"></span>
+									</div>
+									<div class="col-sm-6 form-group mb-4">
+										<label for="Date">Date Of Joining</label> <input type="date"
+											name="doj" class="form-control custom_date"
+											id="doj" required> <span id="doj_error"></span>
+									</div>
+									<div class="col-sm-6 form-group mb-4">
+										<input type="text" class="form-control custom_textfield"
+											maxlength="12" name="adharNo" id="aadhar"
+											placeholder="Aadhar no" required> <span
+											id="aadhar_error"></span>
+									</div>
+									<div class="col-sm-6 form-group mb-4">
+										<input type="text" class="form-control custom_textfield"
+											name="panCard" id="pan" placeholder="Pan no" required>
+										<span id="pan_error"></span>
+									</div>
+									<div class="col-sm-6 form-group mb-4 select-container">
+										<select
+											class="form-control custom-select browser-default custom_selectfield"
+											name="gender" id="gender" required>
+											<option value="" selected>Select Gender</option>
+											<option value="Male">Male</option>
+											<option value="Female">Female</option>
+											<option value="Other">Other</option>
+										</select> <span id="gender_error"></span>
+									</div>
+									<div class="col-sm-6 form-group mb-4">
+										<input type="text" name="password"
+											class="form-control custom_passwordfield" id="pass1"
+											placeholder="Password" required> <span
+											id="password_error"></span>
+									</div>
+									<div class="col-sm-6 form-group mb-4">
+										<input type="text" name="twitter_link"
+											class="form-control custom_passwordfield" id="twitter_link"
+											placeholder="twitter Link" required> <span
+											id="twitter_error"></span>
+									</div>
+									<div class="col-sm-6 form-group mb-4">
+										<input type="text" name="linkedin_link"
+											class="form-control custom_passwordfield" id="linkedin_link"
+											placeholder="linkedIn Link" required> <span
+											id="linkedIn_error"></span>
+									</div>
+									<div class="col-sm-3 form-group photo_div mb-4">
+								        <label for="photo">Profile Pic (Png/Jpg)</label>
+								        <input type="file" id="photo" class="form-control" name="profilePic" required>
+								    </div>
+								
+								    <div class="col-sm-3 form-group photo_div mb-4">
+								        <label for="panDoc">Pancard Document (Png/Jpg)</label>
+								        <input type="file" id="panDoc" class="form-control" name="panPic" required>
+								    </div>
+									
+									
+									
+									<div class="col-sm-12 form-group mb-0 customize_btn_div mb-4 text-end">
+										<button type="submit" class="btn btn-primary">Submit</button>
+										<button type="reset" class="btn btn-secondary">Clear</button>
+									</div>
+								</div>
+							</form><!-- Vertical Form -->
+            </div>
+          </div>
+          <div class="card" id="empListId">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+               <h5 class="card-title">Employee List</h5>
+               
+              	 <div class='d-flex'>
+              	    <div id="searchUnapproved" class="search-box m-1 mt-3">
+				 			<button class="btn-search searchUnprovedTable" title="Search" ><i class="bi bi-search"></i></button>
+							<input type="text" oninput="searchUnprovedTable();" class="input-search searchUnprovedTable_inputSearch" placeholder="Search...">
+					</div>
+              	    <button type="button" class="btn btn-primary mt-3 mb-2" id="listImageViewButton" onclick="toggleEmpCards()">Image View</button>
+				    <!-- <button type="button" class="btn btn-primary mt-3" id="toggleButton" onclick="toggleAdd()">Add</button>  -->
+				    <!-- <button type="button" class="btn btn-primary mt-3" id="toggleAddButton" onclick="toggleAdd()">Add</button> -->
+				</div>  
+              </div>	
+					<div  id="tableView" style="overflow-x: auto; max-height: 80vh;">
+		            <table class="table table-hover centered-table" id="employeeTable" style="font-size: 14px;">
+		                <thead style="position: sticky; top: 0; z-index: 2; background-color: #f8f9fa;"	>
+		                    <tr>
+		                        <th scope="col">Sl No</th>
+		                        <th scope="col">Attendence</th>	                       
+		                        <th scope="col">Profile</th>
+		                        <th scope="col">Emp Id</th>
+		                        <th scope="col" style="text-align:left;">Name</th>		                        
+		                        <th scope="col" style="text-align:left;">Email</th>
+		                        <th scope="col">Department</th>
+		                        <th scope="col">Role</th>
+		                         <th scope="col">Missed Punch</th>
+		                        <th scope="col">Emmergency Contanct</th>
+		                        <th scope="col">Blood Group</th>
+		                       
+		                        
+		                    </tr>
+				   </thead>
+					  <tbody>
+					  		<tr th:if="${employeeWithDeptName.size() == 0}">
+					  			<td colspan=7 class="text-center">No data Available</td>
+					  		</tr>
+					        <tr th:each="emp,iterStat:${employeeWithDeptName}" th:unless="${employeeWithDeptName.size() == 0}">
+					            <td th:text="${iterStat.count}">1</td>
+					            <td>
+					            	<a th:href="@{/attendanceLive(email=${emp.email})}" title="Edit">
+		                       			View
+		                			</a>
+		                		</td>		
+					            <td> 
+					            	<a th:href="@{/viewProfile(empid=${emp.empid})}" title="Edit">
+		                       			<i class="ri-eye-line" style="font-size: 18px;"></i>
+		                			</a>
+		                		</td>
+					            <td th:text=${emp.empid}></td>
+					            <td th:text=${emp.fullName} style="text-align:left;"></td>
+					            <td th:text=${emp.email} style="text-align:left;"></td>
+					            <td th:text=${emp.deptName}></td>
+					            <td th:text=${emp.roleName}></td>
+					            <td style="color:blue;cursor:pointer;">
+					            	<a  th:onclick="openPopup([[${emp.empid}]])" title="Edit" th:text=${emp.misspunch_count} ></a>
+		                		</td>
+					            <td th:text="${emp.primary_emergency_contact_number != null and emp.primary_emergency_contact_number != ''} ? ${emp.primary_emergency_contact_number} : '-'"></td>
+								<td th:text="${emp.blood_group} ?: '-'"></td>
+
+					           <!--  <td>
+					            	<a  th:onclick="openPopup([[${emp.empid}]])" title="Edit">
+		                       			View
+		                			</a>
+		                		</td> -->
+		                		
+		                		 
+					            
+					        </tr>					      
+					    </tbody>
+					</table>
+					</div>
+					<div id="imageView" class="container" style="display:none">
+					    <div class="row justify-content-center mt-2" id="employeeList">
+					        <div th:each="emp, iterStat : ${employeeWithDeptName}" class="col-sm-6 col-md-3 col-lg-2-4 mb-2 d-flex">
+					            <a th:href="@{/viewProfile(empid=${emp.empid})}" class="card flex-fill text-decoration-none clickable-card">
+					                <div class="card-body text-center mt-3">
+					                    <img th:src="@{${emp.profilePicPath}}" alt="Profile" class="rounded-circle" style="width: 70px; height: 70px;">
+					                    <h6 class="card-title h6 h5-md h4-lg text-center p-2" th:text="${emp.fullName}"></h6>
+					                    <p class="card-subtitle text-muted" th:text="${emp.roleName}">Role</p>
+					                </div>
+					            </a>
+					        </div>
+					    </div>
+					</div>
+		        </div>
+            </div>
+          </div>
+       <!-- <div class="container">
+		    <div class="row" id="employeeList">
+		        <div th:each="emp, iterStat : ${employeeWithDeptName}" class="col-md-3 mb-4">
+		            <div class="card">
+		                <div class="card-body">
+		                    <h5 class="card-title" th:text="${emp.empid}">Employee ID</h5>
+		                    <h6 class="card-subtitle mb-2 text-muted" th:text="${emp.roleName}">Role</h6>
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+		</div> -->
+		
+          <!-- <div class="card">
+            <div class="filter">
+              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                <li class="dropdown-header text-start">
+                  <h6>Filter</h6>
+                </li>
+
+                <li><a class="dropdown-item" href="#">Today</a></li>
+                <li><a class="dropdown-item" href="#">This Month</a></li>
+                <li><a class="dropdown-item" href="#">This Year</a></li>
+              </ul>
+            </div>
+
+            <div class="card-body">
+              <h5 class="card-title">Recent Activity <span>| Today</span></h5>
+
+              <div class="activity">
+
+                <div class="activity-item d-flex">
+                  <div class="activite-label">32 min</div>
+                  <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
+                  <div class="activity-content">
+                    Quia quae rerum <a href="#" class="fw-bold text-dark">explicabo officiis</a> beatae
+                  </div>
+                </div> End activity item
+
+                <div class="activity-item d-flex">
+                  <div class="activite-label">56 min</div>
+                  <i class='bi bi-circle-fill activity-badge text-danger align-self-start'></i>
+                  <div class="activity-content">
+                    Voluptatem blanditiis blanditiis eveniet
+                  </div>
+                </div> End activity item
+
+                <div class="activity-item d-flex">
+                  <div class="activite-label">2 hrs</div>
+                  <i class='bi bi-circle-fill activity-badge text-primary align-self-start'></i>
+                  <div class="activity-content">
+                    Voluptates corrupti molestias voluptatem
+                  </div>
+                </div> End activity item 
+
+                <div class="activity-item d-flex">
+                  <div class="activite-label">1 day</div>
+                  <i class='bi bi-circle-fill activity-badge text-info align-self-start'></i>
+                  <div class="activity-content">
+                    Tempore autem saepe <a href="#" class="fw-bold text-dark">occaecati voluptatem</a> tempore
+                  </div>
+                </div>!-- End activity item 
+
+                <div class="activity-item d-flex">
+                  <div class="activite-label">2 days</div>
+                  <i class='bi bi-circle-fill activity-badge text-warning align-self-start'></i>
+                  <div class="activity-content">
+                    Est sit eum reiciendis exercitationem
+                  </div>
+                </div>!-- End activity item 
+
+                <div class="activity-item d-flex">
+                  <div class="activite-label">4 weeks</div>
+                  <i class='bi bi-circle-fill activity-badge text-muted align-self-start'></i>
+                  <div class="activity-content">
+                    Dicta dolorem harum nulla eius. Ut quidem quidem sit quas
+                  </div>
+                </div>!-- End activity item
+
+              </div>
+
+            </div>
+          </div> --><!-- End Recent Activity -->
+
+         <!--  Budget Report -->
+          <!-- <div class="card">
+            <div class="filter">
+              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                <li class="dropdown-header text-start">
+                  <h6>Filter</h6>
+                </li>
+
+                <li><a class="dropdown-item" href="#">Today</a></li>
+                <li><a class="dropdown-item" href="#">This Month</a></li>
+                <li><a class="dropdown-item" href="#">This Year</a></li>
+              </ul>
+            </div>
+
+            <div class="card-body pb-0">
+              <h5 class="card-title">Budget Report <span>| This Month</span></h5>
+
+              <div id="budgetChart" style="min-height: 400px;" class="echart"></div>
+
+              <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  var budgetChart = echarts.init(document.querySelector("#budgetChart")).setOption({
+                    legend: {
+                      data: ['Allocated Budget', 'Actual Spending']
+                    },
+                    radar: {
+                      // shape: 'circle',
+                      indicator: [{
+                          name: 'Sales',
+                          max: 6500
+                        },
+                        {
+                          name: 'Administration',
+                          max: 16000
+                        },
+                        {
+                          name: 'Information Technology',
+                          max: 30000
+                        },
+                        {
+                          name: 'Customer Support',
+                          max: 38000
+                        },
+                        {
+                          name: 'Development',
+                          max: 52000
+                        },
+                        {
+                          name: 'Marketing',
+                          max: 25000
+                        }
+                      ]
+                    },
+                    series: [{
+                      name: 'Budget vs spending',
+                      type: 'radar',
+                      data: [{
+                          value: [4200, 3000, 20000, 35000, 50000, 18000],
+                          name: 'Allocated Budget'
+                        },
+                        {
+                          value: [5000, 14000, 28000, 26000, 42000, 21000],
+                          name: 'Actual Spending'
+                        }
+                      ]
+                    }]
+                  });
+                });
+              </script>
+
+            </div>
+          </div> --><!-- End Budget Report -->
+
+         <!--  Website Traffic -->
+          <!-- <div class="card">
+            <div class="filter">
+              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                <li class="dropdown-header text-start">
+                  <h6>Filter</h6>
+                </li>
+
+                <li><a class="dropdown-item" href="#">Today</a></li>
+                <li><a class="dropdown-item" href="#">This Month</a></li>
+                <li><a class="dropdown-item" href="#">This Year</a></li>
+              </ul>
+            </div>
+
+            <div class="card-body pb-0">
+              <h5 class="card-title">Website Traffic <span>| Today</span></h5>
+
+              <div id="trafficChart" style="min-height: 400px;" class="echart"></div>
+
+              <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  echarts.init(document.querySelector("#trafficChart")).setOption({
+                    tooltip: {
+                      trigger: 'item'
+                    },
+                    legend: {
+                      top: '5%',
+                      left: 'center'
+                    },
+                    series: [{
+                      name: 'Access From',
+                      type: 'pie',
+                      radius: ['40%', '70%'],
+                      avoidLabelOverlap: false,
+                      label: {
+                        show: false,
+                        position: 'center'
+                      },
+                      emphasis: {
+                        label: {
+                          show: true,
+                          fontSize: '18',
+                          fontWeight: 'bold'
+                        }
+                      },
+                      labelLine: {
+                        show: false
+                      },
+                      data: [{
+                          value: 1048,
+                          name: 'Search Engine'
+                        },
+                        {
+                          value: 735,
+                          name: 'Direct'
+                        },
+                        {
+                          value: 580,
+                          name: 'Email'
+                        },
+                        {
+                          value: 484,
+                          name: 'Union Ads'
+                        },
+                        {
+                          value: 300,
+                          name: 'Video Ads'
+                        }
+                      ]
+                    }]
+                  });
+                });
+              </script>
+
+            </div>
+          </div> --><!-- End Website Traffic -->
+
+          <!-- News & Updates Traffic -->
+          <!-- <div class="card">
+            <div class="filter">
+              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                <li class="dropdown-header text-start">
+                  <h6>Filter</h6>
+                </li>
+
+                <li><a class="dropdown-item" href="#">Today</a></li>
+                <li><a class="dropdown-item" href="#">This Month</a></li>
+                <li><a class="dropdown-item" href="#">This Year</a></li>
+              </ul>
+            </div>
+
+            <div class="card-body pb-0">
+              <h5 class="card-title">News &amp; Updates <span>| Today</span></h5>
+
+              <div class="news">
+                <div class="post-item clearfix">
+                  <img src="assets/img/news-1.jpg" alt="">
+                  <h4><a href="#">Nihil blanditiis at in nihil autem</a></h4>
+                  <p>Sit recusandae non aspernatur laboriosam. Quia enim eligendi sed ut harum...</p>
+                </div>
+
+                <div class="post-item clearfix">
+                  <img src="assets/img/news-2.jpg" alt="">
+                  <h4><a href="#">Quidem autem et impedit</a></h4>
+                  <p>Illo nemo neque maiores vitae officiis cum eum turos elan dries werona nande...</p>
+                </div>
+
+                <div class="post-item clearfix">
+                  <img src="assets/img/news-3.jpg" alt="">
+                  <h4><a href="#">Id quia et et ut maxime similique occaecati ut</a></h4>
+                  <p>Fugiat voluptas vero eaque accusantium eos. Consequuntur sed ipsam et totam...</p>
+                </div>
+
+                <div class="post-item clearfix">
+                  <img src="assets/img/news-4.jpg" alt="">
+                  <h4><a href="#">Laborum corporis quo dara net para</a></h4>
+                  <p>Qui enim quia optio. Eligendi aut asperiores enim repellendusvel rerum cuder...</p>
+                </div>
+
+                <div class="post-item clearfix">
+                  <img src="assets/img/news-5.jpg" alt="">
+                  <h4><a href="#">Et dolores corrupti quae illo quod dolor</a></h4>
+                  <p>Odit ut eveniet modi reiciendis. Atque cupiditate libero beatae dignissimos eius...</p>
+                </div>
+
+              </div>End sidebar recent posts
+
+            </div>
+          </div> --><!-- End News & Updates -->
+
+        </div> <!-- End Right side columns -->
+
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+    <div class="copyright">
+      &copy; Copyright <strong><span>Melange System pvt ltd</span></strong>. All Rights Reserved
+    </div>
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/chart.js/chart.umd.js"></script>
+  <script src="assets/vendor/echarts/echarts.min.js"></script>
+  <script src="assets/vendor/quill/quill.js"></script>
+  <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+  <script src="assets/vendor/tinymce/tinymce.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+<!-- script to enable and disable the addEmployee Form -->
+<script>
+function toggleAdd() { 
+	
+    var addRoleDiv = document.getElementById('addRole');
+    var tableViewDiv = document.getElementById('empListId');
+    
+    var button = document.getElementById('toggleAddButton');
+
+    if (addRoleDiv.style.display === 'none' || addRoleDiv.style.display === '') {
+        addRoleDiv.style.display = 'block';
+        tableViewDiv.style.display = 'none';
+    } else {
+        addRoleDiv.style.display = 'none';
+        tableViewDiv.style.display = 'block';
+    } 
+    
+}
+
+function toggleView() {
+    var addRoleDiv = document.getElementById('addRole');
+    var tableViewDiv = document.getElementById('tableView');
+    var button = document.getElementById('toggleAddButton');
+    var empListDiv = document.getElementById('empListId');
+    var imageView = document.getElementById('imageView');
+    
+    addRoleDiv.style.display = 'none';
+    empListDiv.style.display = 'block'
+    tableViewDiv.style.display = 'block';
+    imageView.style.display="none";
+}
+</script>
+<!-- script to enable and disable the list view and image view -->
+<script>
+function toggleEmpCards() {
+    var imageView = document.getElementById('imageView');
+    var tableView = document.getElementById('tableView');
+    var listImageViewButton = document.getElementById('listImageViewButton');
+    
+    if (imageView.style.display === 'none' || imageView.style.display === '') {
+        imageView.style.display = 'block';
+        tableView.style.display = 'none';
+        listImageViewButton.textContent = 'List View';
+    } else {
+        imageView.style.display = 'none';
+        tableView.style.display = 'block';
+        listImageViewButton.textContent = 'Image View';
+    }
+}
+
+</script>
+
+<!-- script to fetch the designation based on selected department -->
+<script>
+function fetchDesignations(deptId) {
+     if(deptId) {
+        fetch(`/getDesignations?deptId=${deptId}`)
+            .then(response => response.json())
+            .then(data => {
+            	console.log(data);
+                let designationSelect = document.getElementById('roleId');
+                designationSelect.innerHTML = '<option value="" selected>Select Designation</option>';
+                data.forEach(designation => {
+                    let option = document.createElement('option');
+                    option.value = designation.role_id;
+                    option.text = designation.roleName;
+                    designationSelect.add(option);
+                });
+            })
+            .catch(error => console.error('Error fetching designations:', error));
+    }
+     fetchSubDepartment(deptId);
+}
+function fetchSubDepartment(deptId) {
+    if(deptId) {
+       fetch(`/getSubDepartment?deptId=${deptId}`)
+           .then(response => response.json())
+           .then(data => {
+           	console.log(data);
+           })
+           .catch(error => console.error('Error fetching designations:', error));
+   }
+}
+</script>
+
+
+<!-- script to notification -->
+<!-- script to notification -->
+<!-- <script>
+// Function to fetch flag value from the backend
+function fetchFlag() {
+    $.get("/flag", function(response) {
+        var leaveRequestCountValue = response; 
+        console.log(leaveRequestCountValue);
+        // If total notification count is greater than 0, show the bell icon and notifications
+        if (leaveRequestCountValue.leaveRequestFlagCount > 0) {
+            $("#notificationBellIcon").show();  // Show bell icon
+            $("#leaveRequestNotification").show();  // Show specific notification
+            
+            $("#leaveRequestMessage").text(leaveRequestCountValue.leaveRequestFlagCount + " leave request(s)");
+            $(".badge-number").text(leaveRequestCountValue.leaveRequestFlagCount);
+            $("#leaveRequestFlagCount").text(leaveRequestCountValue.leaveRequestFlagCount);
+        }  
+        
+        //display the asset notifu=ication based on asset count value
+        if(leaveRequestCountValue.asseteRequestFlagCount>0){
+        	 
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#assetRequestNotification").show();  // Show specific notification
+             
+             $("#assetRequestMessage").text(leaveRequestCountValue.asseteRequestFlagCount + " asset request(s)");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+             $("#asseteRequestFlagCount").text(leaveRequestCountValue.asseteRequestFlagCount);
+        	 	
+        }      
+        
+        //display the new project notification based on asset count value
+        if(leaveRequestCountValue.newPrjectValueCount>0){
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#newProjectNotification").show();  // Show specific notification
+             
+             $("#newProjectMessage").text(leaveRequestCountValue.newPrjectValueCount + " project request(s)");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+             $("#newPrjectValueCount").text(leaveRequestCountValue.asseteRequestFlagCount);
+        }
+        
+        //display the appraisal from HR notification
+        if(leaveRequestCountValue.appraisalCount>0){
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#hrAppraisal").show();  // Show specific notification
+             
+             $("#newProjectMessage").text(leaveRequestCountValue.appraisalCount + " Appraisal Form");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+             $("#newPrjectValueCount").text(leaveRequestCountValue.asseteRequestFlagCount);
+        }
+        
+        //display the appraisal from employee notification 
+        if(leaveRequestCountValue.empAppraisalflag>0){
+        	 $("#notificationBellIcon").show();  // Show bell icon
+             $("#empAppraisal").show();  // Show specific notification
+             
+             $("#apprisalempNotification").text(leaveRequestCountValue.empAppraisalflag + " employees sent appraisal");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+             $("#newPrjectValueCount").text(leaveRequestCountValue.asseteRequestFlagCount);
+        }
+        
+        //display the appraisal Due date notification 
+        if(leaveRequestCountValue.adminAppraisalDuedate>0){
+        	 $("#dueAppraisal").show();  // Show bell icon
+             $("#empAppraisal").show();  // Show specific notification
+             
+             $("#apprisalDueNotification").text("Tomorrow is the due date for submit appraisal");
+             $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);
+             $("#newPrjectValueCount").text(leaveRequestCountValue.asseteRequestFlagCount);
+        }
+    });
+}
+
+// Periodically fetch flag value every second (adjust as needed)
+setInterval(fetchFlag, 1000);
+
+</script>
+
+  script to notification link redirect
+<script th:inline="javascript">
+    function redirectToLeaveRequest() {
+        var empid = /*[[${empDetailsByEmpId.empid}]]*/ 'defaultEmpId';
+        window.location.href = '/viewAdminLeaves?empid=' + empid;
+    }
+    function redirectToAsset() {
+        //var empid = /*[[${empDetailsByEmpId.empid}]]*/ 'defaultEmpId';
+        window.location.href = '/asset';
+    }
+    function redirectToProject() {
+        //var empid = /*[[${empDetailsByEmpId.empid}]]*/ 'defaultEmpId';
+        window.location.href = '/ongoingProject';
+    }
+    function redirectToAppraisal() {
+    	var empid = /*[[${empDetailsByEmpId.empid}]]*/ 'defaultEmpId';
+    	window.location.href = '/apprisal?empid=' + empid;
+    }
+    function redirectToemployeeAppraisal() {
+		var empid = /*[[${empDetailsByEmpId.empid}]]*/ 'defaultEmpId';
+		window.location.href = '/employeeApprisal?empid=' + empid;
+	}
+</script> -->
+
+
+
+
+
+<!-- script for profile pic -->
+<script>
+$.ajax({
+    type: "GET",
+    url: "fetchEmployeeDocumentDetailsOnlyByEmpId",
+    data: {
+        "emp_id": $('#emp_idSessionValue').val()
+    },
+    success: function(data) {
+    	console.log("++++data"+JSON.stringify(data));
+        $('#dynamicProfilePic').attr('src', `${data.profilePicPath}`);
+    },
+    error: function(xhr, status, error) {
+        console.error("Error invoking data:", error);
+    }
+});
+</script>
+
+<!-- script for spinner -->
+<script>
+window.addEventListener('load', function () {
+    const loadingPopup = document.getElementById('loadingPopup');
+    const mainContent = document.getElementById('mainContent');
+    
+    // Add a fade-out effect for the loading popup
+    loadingPopup.style.transition = 'opacity 0.5s ease';
+    loadingPopup.style.opacity = '0';
+    
+    setTimeout(() => {
+        loadingPopup.style.display = 'none'; // Hide the popup after fade-out
+        mainContent.style.display = 'block'; // Show the main content
+    }, 500); // Match the transition duration
+});
+</script>
+
+
+<!-- script to search box for unapproved text box -->
+<script>
+
+document.querySelector('.searchUnprovedTable').addEventListener('click', function () {
+    document.querySelector('.searchUnprovedTable_inputSearch').focus();
+  });
+
+    function searchUnprovedTable() {
+        
+    	var input, filter, table, tr, td, i, j, txtValue;
+        
+        input = document.querySelector(".searchUnprovedTable_inputSearch");
+        filter = input.value.toUpperCase();
+        
+        //table = document.getElementById("customTable");
+        table = document.querySelector("#employeeTable");
+        if (!table) return;
+        
+        tr = table.getElementsByTagName("tr");
+        for (i = 1; i < tr.length; i++) {
+            tr[i].style.display = "none";
+            td = tr[i].getElementsByTagName("td");
+            for (j = 0; j < td.length; j++) {
+                if (td[j]) {
+                    txtValue = td[j].textContent || td[j].innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                        break;
+                    }
+                }
+            }
+        }
+    }    
+</script>
+
+<!-- script to open missspunch popup -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+function openPopup(empId) {
+    const dateList = document.getElementById('missingPunchDatesList');
+    const noMissedPunchesMessage = document.getElementById('noMissedPunchesMessage');
+    
+    // Clear any previous list items
+    dateList.innerHTML = '';
+
+    // Make AJAX request to get missing punch dates for the employee
+    fetch(`/getMispunchDAteByEmid?empid=${empId}`)
+        .then(response => response.json())  // Parse JSON response
+        .then(missingPunchDates => {
+            // Check if there are missing punch dates
+            if (missingPunchDates.length === 0) {
+                noMissedPunchesMessage.style.display = 'block';
+            } else {
+            	noMissedPunchesMessage.style.display = 'none';
+                // Populate the missing punch dates list
+                missingPunchDates.forEach(date => {
+                    // Create a new list item
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('list-item'); // Add a class for styling
+                    
+                    // Create a span to hold the date
+                    const dateSpan = document.createElement('span');
+                    dateSpan.textContent = date;
+
+                    // Create a "Fill" button
+                    const fillButton = document.createElement('button');
+                    fillButton.textContent = 'Fill';
+                    fillButton.classList.add('btn', 'btn-primary','m-2'); // Bootstrap classes
+                    
+                    // Add an event listener for the button
+                    fillButton.addEventListener('click', function() {
+                    	  fillPunch(date, event,empId);
+                    });
+
+                    // Append elements to the list item
+                    listItem.appendChild(dateSpan);
+                    listItem.appendChild(fillButton);
+                    
+                    // Append the list item to the date list
+                    dateList.appendChild(listItem);
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching missing punch dates:', error);
+        });
+
+    // Show the popup
+    document.getElementById('missingPunchDatesPopup').style.display = 'flex';
+}
+
+
+function closePopup() {
+    document.getElementById('missingPunchDatesPopup').style.display = 'none';
+}
+
+let previousFillButton = null; // Variable to store the previously clicked "Fill" button
+
+function fillPunch(date, event,empId) {
+    if (!event || !event.target) {
+        console.error('Event object is undefined.');
+        return;
+    }
+
+    // Show the previously hidden "Fill" button, if any
+    if (previousFillButton) {
+        previousFillButton.style.display = 'inline-block';
+    }
+
+    // Hide the clicked "Fill" button
+    const fillButton = event.target;
+    fillButton.style.display = 'none';
+
+    // Update the reference to the currently clicked button
+    previousFillButton = fillButton;
+
+    // Remove existing time picker if present
+    const existingTimePicker = document.getElementById('timePicker');
+    if (existingTimePicker) {
+        existingTimePicker.remove();
+    }
+
+    // Create a div to hold the time picker and button
+    const timePickerContainer = document.createElement('div');
+    timePickerContainer.id = 'timePicker';
+    timePickerContainer.classList.add('time-picker-container');
+
+    // Create time input field
+    const timeInput = document.createElement('input');
+    timeInput.type = 'time';
+    timeInput.classList.add('form-control', 'm-2');
+    timeInput.required = true;
+
+    // Create submit button
+    const submitButton = document.createElement('button');
+    submitButton.textContent = 'Submit';
+    submitButton.classList.add('btn', 'btn-success', 'm-2');
+
+    // Handle submit button click
+    submitButton.addEventListener('click', function () {
+        const selectedTime = timeInput.value;
+        if (!selectedTime) {
+            alert('Please select a time!');
+            return;
+        }
+        
+         const extractedDate = date.split('|')[0].replace('Date:', '').trim(); 
+
+	     // Convert "dd-mm-yyyy" to "yyyy-mm-dd"
+	     const [day, month, year] = extractedDate.split('-');
+	     const formattedDate = `${year}-${month}-${day}`;
+        sendPunchToBackend(formattedDate, selectedTime, fillButton, timePickerContainer,empId);
+        
+    });
+
+    // Append input and button to container
+    timePickerContainer.appendChild(timeInput);
+    timePickerContainer.appendChild(submitButton);
+
+    // Append container below the clicked button's parent
+    fillButton.parentElement.appendChild(timePickerContainer);
+
+    // Apply animation
+    setTimeout(() => {
+        timePickerContainer.style.opacity = 1;
+        timePickerContainer.style.transform = 'translateY(0px)';
+    }, 50);
+}
+
+function sendPunchToBackend(date, time, fillButton, timePickerContainer,empId) {
+
+	 $.ajax({
+	        url: '/fillPunch',
+	        type: 'POST',
+	        contentType: 'application/json',
+	        data: JSON.stringify({
+	            empId: empId,
+	            date: date,
+	            time: time
+	        }),
+	        success: function (data) {
+	            if (data.success) {
+	                alert('Punch filled successfully for ' + date + ' to ' + time);
+	                timePickerContainer.parentElement.remove(); // Remove the entire row (list item)
+	            } else {
+	                alert('Failed to fill punch: ' + data.message);
+	                fillButton.style.display = 'inline-block'; // Show "Fill" button again on failure
+	            }
+	        },
+	        error: function (xhr, status, error) {
+	            console.error('Error filling punch:', error);
+	            fillButton.style.display = 'inline-block'; // Show "Fill" button again on failure
+	        }
+	    });
+}
+
+</script>
+<!-- script to notification on bottom of the page-->
+<!--CHAT BOOT-->
+
+		<!-- Include SockJS and Stomp.js libraries -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.3.0/sockjs.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
+<!-- script to notification on bottom of the page-->
+<script>
+		//CODE FOR CHATBOOT NOTIFICATION 
+		var stompClient = null;
+		var employeeMap = {}; // To store the mapping of employee names to emails
+		let employeePhotoMap = {};
+		let emailToNameMap = {}; // New map for email -> name lookup
+		var email = null;
+		var visibilityState = document.visibilityState; // Track tab visibility
+		var heartbeatInterval = null; // Track heartbeat interval
+
+		function connectWebSocket() {
+			var socket = new SockJS('/chat-websocket');
+			  stompClient = Stomp.over(socket);
+
+			  var email = document.getElementById('loggedInMail').value;
+			  console.log(`Connecting WebSocket as: ${email}`);
+
+			  stompClient.connect({ 'email': email }, function (frame) {
+			      console.log('Connected to WebSocket:', frame);
+
+			      // Mark user as active
+			      stompClient.send("/app/userConnected", {}, JSON.stringify({ email }));
+
+			      // Subscribe to active users list
+			      stompClient.subscribe('/topic/activeUsers', function (message) {
+			          var activeUsers = JSON.parse(message.body);
+			          updateActiveUserUI(activeUsers);
+			      });
+
+			      // Start heartbeat initially
+			      heartbeatInterval = setInterval(() => {
+			          if (stompClient && stompClient.connected) {
+			              stompClient.send("/app/userHeartbeat", {}, JSON.stringify({ email }));
+			              console.log("Heartbeat sent for user: " + email);
+			          }
+			      }, 20000); // 30 seconds
+
+			      // Detect tab visibility change
+			      document.addEventListener("visibilitychange", function () {
+			          if (document.hidden) {
+			              console.log("User switched to another tab. Marking as inactive.");
+			              stompClient.send("/app/userInactive", {}, JSON.stringify({ email }));
+			              clearInterval(heartbeatInterval); // Stop heartbeat
+			              heartbeatInterval = null;
+			          } else {
+			              console.log("User returned to the application tab. Marking as active.");
+			              stompClient.send("/app/userConnected", {}, JSON.stringify({ email }));
+			              if (!heartbeatInterval) {
+			                  heartbeatInterval = setInterval(() => {
+			                      if (stompClient && stompClient.connected) {
+			                          stompClient.send("/app/userHeartbeat", {}, JSON.stringify({ email }));
+			                          console.log("Heartbeat sent for user: " + email);
+			                      }
+			                  }, 30000);
+			              }
+			          }
+			      });
+
+			      // Detect tab close or WebSocket disconnect
+			      socket.onclose = function () {
+			          console.log("WebSocket disconnected. Updating user status.");
+			          stompClient.send("/app/userDisconnected", {}, JSON.stringify({ email }));
+			      };
+
+			      window.addEventListener('beforeunload', function () {
+			          stompClient.send("/app/userDisconnected", {}, JSON.stringify({ email }));
+			      });
+
+			  });
+		}
+
+		function updateActiveUserUI(activeUsers) {
+		//	alert("1");
+		    const employeeItems = document.getElementById('employeeNames').getElementsByTagName('li');
+
+		    Array.from(employeeItems).forEach(item => {
+		        const employeeName = item.querySelector('span').textContent;
+		        const email = employeeMap[employeeName]; 
+		        const statusIndicator = item.querySelector('.status-indicator'); // Get the status dot
+
+		        if (activeUsers.includes(email)) {
+		            item.classList.add('active-user');
+		            statusIndicator.style.backgroundColor = '#66cc66'; // Green for active users
+		        } else {
+		            item.classList.remove('active-user');
+		            statusIndicator.style.backgroundColor = '#ff6666'; // Red for inactive users
+		        }
+
+		        // If this employee is currently selected, update chat header status
+				if (selectedEmployee === email) {
+				           const chatStatusIndicator = document.getElementById('chatStatusIndicator');
+				           if (activeUsers.includes(email)) {
+				               chatStatusIndicator.style.backgroundColor = '#66cc66'; // Green (Online)
+				           } else {
+				               chatStatusIndicator.style.backgroundColor = '#ff6666'; // Red (Offline)
+				           }
+				       }
+		    });
+		}
+
+
+		// Select an employee to chat with
+		function selectEmployee(employeeName) {
+			selectedEmployee = employeeMap[employeeName]; // Get the email from the map
+			console.log(`Employee selected: ${selectedEmployee}`);
+
+			// Highlight the selected employee
+			var employeeItems = document.querySelectorAll('#employeeNames li');
+			employeeItems.forEach(function (item) {
+				item.classList.remove('active');
+			});
+			var selectedItem = Array.from(employeeItems).find(item => item.innerHTML === employeeName);
+			if (selectedItem) {
+				selectedItem.classList.add('active');
+			}
+
+			// Update chat header with employee name and photo
+			document.querySelector('.chat-about h6').innerText = employeeName;
+			document.querySelector('#employeePhoto').src = employeePhotoMap[selectedEmployee] || 'default-profile.jpg';
+
+			// Hide the message icon and dots when an employee is selected
+			document.getElementById('message-icon-container').style.display = 'none';
+			// Hide the paragraph when an employee is selected
+			document.getElementById('logo-text').style.display = 'none';
+
+			// Load messages for the selected employee
+			loadMessages();
+		}
+
+		function loadEmployees() {
+			console.log("Loading employee names...");
+
+			// Fetch employee names from the endpoint
+			fetch('/employees/names')
+				.then(response => {
+					console.log("Response received:", response);
+					if (!response.ok) {
+						throw new Error(`HTTP error! status: ${response.status}`);
+					}
+					return response.json();
+				})
+				.then(data => {
+					console.log("Employee data fetched:", data); // Log the raw data
+
+					const employeeList = document.getElementById('employeeNames');
+					if (!employeeList) {
+						console.error("Element with ID 'employeeNames' not found.");
+						return;
+					}
+
+					employeeList.innerHTML = ''; // Clear the list before adding new items
+
+					// Iterate through employee data
+					data.forEach(employee => {
+						console.log("Processing employee:", employee);
+
+						// Create a list item for each employee
+						const li = document.createElement('li');
+						li.classList.add('d-flex', 'align-items-center', 'employee-item');
+
+						// Handle missing or empty profile photo paths
+						const profilePic = employeePhotoMap[employee.email] || '/static/default-profile.jpg';
+						console.log(`Profile picture for ${employee.name}: ${profilePic}`);
+
+						li.innerHTML = `
+			                    <img src="${profilePic}" 
+			                         alt="Employee Photo" 
+			                         class="employee-photo mr-2" />
+			                    <span>${employee.name}</span>
+			                `;
+
+						// Map employee name to email
+						employeeMap[employee.name] = employee.email;
+						console.log("Mapped employee:", employee.name, "->", employee.email);
+						// Add new reverse mapping (email -> name)
+						emailToNameMap[employee.email] = employee.name;
+						// Add click event to list item
+						li.onclick = () => {
+							console.log(`Selected employee: ${employee.name}`);
+							selectEmployee(employee.name);
+						};
+
+						// Append the list item to the employee list
+						employeeList.appendChild(li);
+
+					});
+
+					console.log("Employee names loaded successfully. Employee map:", employeeMap);
+					// Call the unread messages function after loading employee data
+					fetchUnreadMessages();
+
+					// Set interval to check for new messages every 10 seconds
+						setInterval(fetchUnreadMessages, 10000);
+				})
+				.catch(error => {
+					console.error("Error loading employees:", error);
+				});
+		}
+
+
+		function loadMessages() {
+			// alert("Loading messages...");
+			// Get the logged-in user's email and selected employee's email
+			var loggedInEmail = document.getElementById('loggedInMail').value;
+			var selectedEmployeeEmail = selectedEmployee; // Email is already stored in selectedEmployee
+
+			console.log(`Loading messages between: ${loggedInEmail} and ${selectedEmployeeEmail}`);
+
+			fetch(`/messages?loggedInEmail=${encodeURIComponent(loggedInEmail)}&selectedEmployeeEmail=${encodeURIComponent(selectedEmployeeEmail)}`)
+				.then(response => response.json())
+				.then(data => {
+					console.log("Chat messages loaded:", data);
+					// Clear the chat window before displaying messages
+					var chatWindow = document.getElementById('chat-window').querySelector('ul');
+					chatWindow.innerHTML = '';
+
+					// Display messages
+					data.forEach(function (msg) {
+						// showMessage(msg.senderEmail, msg.content, msg.recipientEmail, loggedInEmail);
+						showMessage(msg.id, msg.senderEmail, msg.content, msg.recipientEmail, msg.timestamp, loggedInEmail);
+					});
+				})
+				.catch(error => console.error("Error loading chat messages:", error));
+		}
+		let activeDeleteDropdown = null;
+		function showMessage(id, senderEmail, message, recipientEmail, timestamp, loggedInEmail) {
+			console.log("Message ID:", id);
+			console.log(`LoggedInEmailrrr: ${loggedInEmail}, SenderEmail: ${senderEmail}`);
+
+			const isSender = senderEmail === loggedInEmail;
+			const senderName = isSender ? "Me" : Object.keys(employeeMap).find(name => employeeMap[name] === senderEmail) || senderEmail;
+			const senderPhoto = employeePhotoMap[senderEmail] || 'default-avatar.png';
+			const formattedTime = new Date(timestamp).toLocaleString(); // Format timestamp
+
+			console.log(`Message ID: ${id}, Time: ${formattedTime}, From: ${senderEmail}, To: ${recipientEmail}, Content: "${message}"`);
+
+			var chatWindow = document.getElementById('chat-window').querySelector('ul');
+			var li = document.createElement('li');
+			li.className = isSender ? 'clearfix right' : 'clearfix left';
+
+			li.innerHTML = `
+					    <div class="message-container" data-message-id="${id}" onclick="toggleDeleteOption(this)">
+					        <img class="sender-photo" src="${senderPhoto}" alt="Sender Photo" />
+					        <div class="message ${isSender ? 'my-message' : 'other-message'}">
+					            <strong>${senderName}:</strong> ${message}
+					        </div>
+					    </div>
+					    <div class="timestamp" style="text-align: ${isSender ? 'right' : 'left'};">
+					        ${formattedTime}
+					    </div>
+					    ${isSender ? `
+					        <div class="message-action-dropdown" >
+					            <a class="dropdown-item" href="#" onclick="deleteMessage(this, ${id})">Delete Message</a>
+					        </div>
+					    ` : ''}`;
+
+			chatWindow.appendChild(li);
+			chatWindow.scrollTop = chatWindow.scrollHeight;
+		}
+		
+		/*function fetchUnreadMessages() {
+			console.log("Fetching unread messages...");
+			var loggedInEmail = document.getElementById('loggedInMail').value;
+
+			fetch(`/unread?email=${loggedInEmail}`)
+				.then(response => response.json())
+				.then(messages => {
+					messages.forEach(message => {
+						let senderName = emailToNameMap[message.senderEmail] || message.senderEmail;
+
+						// Show notification with sender's email as a parameter
+						showToastNotification(`New message from ${senderName}: ${message.content}`, message.senderEmail);
+					});
+				})
+				.catch(error => console.error("Error fetching unread messages:", error));
+		}*/
+
+		let displayedMessageIds = new Set(); // Track displayed messages
+		let closedMessageIds = new Set(); // Track closed messages
+
+		function fetchUnreadMessages() {
+		    console.log("Fetching unread messages...");
+		    var loggedInEmail = document.getElementById('loggedInMail').value;
+
+		    fetch(`/unread?email=${loggedInEmail}`)
+		        .then(response => response.json())
+		        .then(messages => {
+		            messages.forEach(message => {
+		                console.log("Processing message ID:", message.id); // Print message ID to console
+		                
+		                // Ignore messages that were previously closed
+		                if (!displayedMessageIds.has(message.id) && !closedMessageIds.has(message.id)) {
+							//alert(1);
+		                    let senderName = emailToNameMap[message.senderEmail] || message.senderEmail;
+		                    showToastNotification(`New message from ${senderName}: ${message.content}`, message.id, message.senderEmail);
+		                    displayedMessageIds.add(message.id); // Mark message as displayed
+		                }
+						//alert(2);
+		            });
+		        })
+		        .catch(error => console.error("Error fetching unread messages:", error));
+		}
+		// Global flag to track if the user manually dismissed notifications
+		
+		/*function showToastNotification(message, senderEmail) {
+			
+			var toastContainer = document.createElement('div');
+			toastContainer.className = 'toast-notification';
+
+			// Add message and close button
+			toastContainer.innerHTML = `<p>${message}</p> <span class="toast-close">✖</span>`;
+
+			document.body.appendChild(toastContainer);
+
+			// Animate in
+			setTimeout(() => {
+				toastContainer.classList.add('show');
+			}, 100);
+
+			// Auto-hide after 8 seconds
+			let autoHideTimeout = setTimeout(() => closeToast(toastContainer), 10000);
+
+			// Prevent opening chat when clicking the close button
+			toastContainer.querySelector('.toast-close').addEventListener('click', (event) => {
+				event.stopPropagation(); // Prevent click from bubbling to toastContainer
+				clearTimeout(autoHideTimeout);
+				
+				closeToast(toastContainer);
+			});
+
+			// Open chat when clicking on the notification
+			toastContainer.addEventListener('click', () => {
+				openChatWithSender(senderEmail);
+				closeToast(toastContainer); // Remove notification when chat opens
+			});
+		}*/
+		function showToastNotification(message, messageId, senderEmail) {
+			//alert(1);
+		    var toastContainer = document.createElement('div');
+		    toastContainer.className = 'toast-notification';
+		    toastContainer.innerHTML = `<p>${message}</p> <span class="toast-close">✖</span>`;
+
+		    document.body.appendChild(toastContainer);
+
+		    // Animate in
+		    setTimeout(() => {
+		        toastContainer.classList.add('show');
+		    }, 100);
+
+		    // Auto-hide after 8 seconds
+		    let autoHideTimeout = setTimeout(() => closeToast(toastContainer, messageId), 8000);
+
+		    // Prevent opening chat when clicking the close button
+		    toastContainer.querySelector('.toast-close').addEventListener('click', (event) => {
+		        event.stopPropagation(); // Prevent click from bubbling to toastContainer
+		        clearTimeout(autoHideTimeout);
+		        closedMessageIds.add(messageId); // Mark as closed so it won't be shown again
+		        closeToast(toastContainer, messageId);
+		    });
+
+		    // Open chat when clicking on the notification
+		    toastContainer.addEventListener('click', () => {
+		        openChatWithSender(senderEmail);
+		        closeToast(toastContainer, messageId); // Remove notification when chat opens
+		    });
+		}
+
+		// Function to handle toast closing
+		/*function closeToast(toast) {
+			toast.classList.remove('show');
+			setTimeout(() => toast.remove(), 300); // Faster fade-out
+		}*/
+		// Function to handle toast closing and mark as dismissed
+		// Function to handle toast closing
+		function closeToast(toast, messageId) {
+		    toast.classList.remove('show');
+		    setTimeout(() => toast.remove(), 300); // Faster fade-out
+		}
+		/*	function openChatWithSender(senderEmail) {
+				console.log("Opening chat with:", senderEmail);
+			    
+				// Construct the URL for the UserFavorite page with the senderEmail as a query parameter
+				const url = `/my-favorites?email=${encodeURIComponent(senderEmail)}`;
+			    
+				// Redirect to the UserFavorite page
+				window.location.href = url;
+			}*/
+
+		function openChatWithSender(senderEmail) {
+			console.log("Opening chat with:", senderEmail);
+
+			// Store sender email in sessionStorage
+			sessionStorage.setItem("chatSenderEmail", senderEmail);
+
+			// Redirect to the UserFavorite page
+			window.location.href = `/my-favorites`;
+		}
+
+		// Connect to the WebSocket server and load employees when the page is loaded
+		document.addEventListener('DOMContentLoaded', function () {
+			//fetchUnreadMessages();
+			loadEmployees();
+			connectWebSocket();
+		});
+
+	</script>
+
+</body>
+
+</html>

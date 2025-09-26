@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+ <head>
+
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Interview</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+<!--   <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+ -->
+ 
+  <link rel="stylesheet" href="/assets/font/fonts.css">
+  
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+  <!-- Template Main JS File -->
+<!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> -->
+  <script src="assets/js/jquery-3.6.4.min.js"></script>
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+
+  <style>
+  .moat_navbar{
+	  font-size: 14px;
+	  background: #fff;
+	  padding: 15px;
+	  position: sticky;
+	  top: 64px;
+	  width: 100%;
+	  margin-left: auto;
+	  margin-right: auto;
+	  box-shadow: 0 0 10px #0005;
+	  gap: 0.7rem;
+	  backdrop-filter: blur(10px);
+	  background-color: #fff2;
+	  display: flex;
+}
+
+.moattt_anchor {
+    position: relative;
+    display: inline-block;
+    padding: 5px 10px;
+    color: inherit;
+    text-decoration: none;
+    text-shadow: 0 0 5px rgba(#000, 0.8);
+    letter-spacing: 1px;
+    border-right: 1px solid #d5d8dc;
+  }
+
+.moattt_anchor.active{
+	font-weight: bold;
+	color: #4154f1;
+}
+
+.moat_parentDropDown{
+	position: relative;
+    display: inline-block;
+}
+
+.moat_subDropDown {
+    display: none;
+    position: absolute;
+    background-color: #f6f9ff;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+  .progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0.08rem;
+    background-image: linear-gradient(to right, #8ad4ff, #fa7196);
+    border-radius: 0.1rem;
+    animation: progressMove linear both;
+    animation-timeline: scroll(block root);
+  }
+
+.moat_iframe{
+	width: 100%;
+	height: 100vh;
+}
+
+/* Fullscreen overlay with dim background */
+#loadingPopup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Dim background */
+    z-index: 9999;
+    font-family: Arial, sans-serif;
+    color: white; /* Text color for better contrast */
+    display: none;
+}
+
+.spinnerAndParaMerger{
+	display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* background: red; */
+    margin: 18% auto;
+}
+
+/* Spinner animation */
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 6px solid rgba(255, 255, 255, 0.3); /* Semi-transparent border */
+    border-top-color: white; /* Bright top border */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Loading text */
+#loadingPopup p {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+}
+
+/* Spinner keyframe animation */
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.moatBody_content_div{
+	width: 100%;
+	height: 100%;
+}
+
+.add_questions_form_outer_div{
+	width: 98%;
+	height: auto;
+	padding: 10px;
+	box-shadow: 0 0 10px #0005;
+    backdrop-filter: blur(10px);
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 14px;
+}
+
+.add_questions_form_div{
+	width: 100%;
+	height: 100%;
+}
+
+.question_heading{
+	width: 100%;
+	padding: 5px 10px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 10px;
+}
+
+.question_p{
+	color: #566573;
+	font-size: 14px;
+	font-weight: bold;
+	margin-top: 10px;
+}
+
+.addQuestions_language_select{
+	border: none;
+	outline: none;
+	background-color: transparent;
+	border-bottom: 1px solid #566573;
+	color: #566573;
+	font-weight: bold;
+}
+
+.questionType_radio_box{
+	width: auto;
+}
+
+.questionTypeLabel{
+	color: #566573;
+	font-weight: bold;
+}
+
+.question_text_area_box,.correct_answer_box2{
+	width: 100%;
+	height: auto;
+}
+
+.question_text_area{
+	width: 100%;
+	height: 100%;
+	font-size: 14px;
+}
+
+.options_p,.correct_answer_p{
+	color: #566573;
+	padding: 5px 10px;
+	font-weight: bold;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.options_box{
+	width: 100%;
+	height: auto;
+	display: flex;
+	justify-content: space-evenly;
+	gap: 5px;
+}
+
+.question_text_field{
+	padding-left: 5px;
+	font-size: 14px;
+}
+
+.answer_text_area2{
+	width: 100%;
+	font-size: 14px;
+}
+
+.btn_outer_div{
+	width: 100%;
+	height: auto;
+	padding: 5px 10px;
+	margin-top: 2%;
+}
+
+.btn_div{
+	display: flex;
+	width: 100%;
+	height: auto;
+	justify-content: flex-start;
+	gap: 10px;
+}
+
+.questions_table_div{
+	width: 98%;
+	height: 90vh;
+	overflow: auto;
+	box-shadow: 0 0 10px #0005;
+    backdrop-filter: blur(10px);
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 14px;
+}
+
+.cards_container{
+	width: 98%;
+	margin-bottom: 8px;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 5px 10px;
+	display: flex;
+	justify-content: space-between;
+	box-shadow: 0 0 10px #0005;
+    backdrop-filter: blur(10px);
+}
+
+.card1{
+	width: 24%;
+	/*background-color: green;*/
+	display: flex;
+	padding: 5px;
+	border-right: 2px solid #ECF0F1;
+}
+
+.card4{
+	width: 24%;
+	/*background-color: green;*/
+	display: flex;
+	padding: 5px;
+}
+
+.card_numbers{
+	/*background-color: yellow;*/
+	width: auto;
+	height: 100%;
+}
+
+.card_numbers p{
+	font-size: 30px;
+	font-weight: bold;
+	color: #4154f1;
+}
+
+.card_text{
+	/*background-color: red;*/
+	width: auto;
+	height: 100%;
+}
+
+.p2{
+	margin-top: 5px;
+	/*background-color: orange;*/
+	padding-left: 10px;
+	color: #566573;
+	font-size: 15px;
+	font-weight: bold;
+}
+
+.p3{
+	margin-top: -15px;
+	/*background-color: darkgreen;*/
+	padding-left: 10px;
+	color: #AEB6BF;
+	font-size: 14px;
+}
+
+.student_table_outer_div{
+	width: 98%;
+	height: 100%;
+	box-shadow: 0 0 10px #0005;
+	backdrop-filter: blur(10px);
+	margin-left: auto;
+	margin-right: auto;
+	background: transparent !important;
+}
+
+.student_table_div{
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+}
+
+.student_table_div .table,.student_table_url_archive_div .table{
+	width: 100%;
+	font-size: 14px;
+}
+
+.student_table_div .table thead th,.student_table_url_archive_div .table thead th{
+	padding: 12px;
+	font-size: 14px;
+	background: transparent !important;
+	color: #566573;
+}
+
+.emailFormOuterDiv{
+   	width: 100%;
+   	height: 100%;
+   	position: fixed;
+   	background: rgba(0,0,0,0.5);
+   	top: 0;
+   	left: 0;
+   	z-index: 200;
+   	display: none;
+   }
+
+.emailFormInnerBoxCloser{
+   	/* background: red; */
+   	padding-right: 10px;
+   	text-align: right;
+   }
+   
+   .emailFormInnerBoxCloser span{
+   	font-size: 25px;
+   	font-weight: bold;
+   	cursor: pointer;
+   }
+
+.emailFormBox{
+   	/* background: red; */
+   	width: 98%;
+   	margin-right: auto;
+   	margin-left: auto;
+   }
+
+.ctcFormOuterDiv{
+   	width: 100%;
+   	height: 100%;
+   	position: fixed;
+   	background: rgba(0,0,0,0.5);
+   	top: 0;
+   	left: 0;
+   	z-index: 200;
+   	display: none;
+   }
+   
+.ctcFormInnerBox{
+	width: 60%;
+   	height: 400px;
+   	background: rgb(255,255,255);
+   	margin: 3% auto;
+   	border-radius: 10px;
+   	padding: 15px 5px;
+   	overflow: auto;
+}
+
+  .ctcFormInnerBoxCloser{
+   	/* background: red; */
+   	padding-right: 10px;
+   	text-align: right;
+   	margin: 0;
+   }
+   
+   .ctcFormInnerBoxCloser span{
+   	font-size: 25px;
+   	font-weight: bold;
+   	cursor: pointer;
+   }
+
+.hiddenCtcFeedbackFromCandidate{
+   	display: none;
+   }
+
+.docUploadFormOuterDiv{
+   	width: 100%;
+   	height: 100%;
+   	position: fixed;
+   	background: rgba(0,0,0,0.5);
+   	top: 0;
+   	left: 0;
+   	z-index: 200;
+   	display: none;
+   }
+
+.docUploadFormInnerBox{
+	width: 30%;
+   	height: auto;
+   	background: rgb(255,255,255);
+   	margin: 3% auto;
+   	border-radius: 10px;
+   	padding: 15px 5px;
+   	overflow: auto;
+}
+
+.docUploadBox{
+	width: 32%;
+	height: 10px;
+	margin: 40px auto 5px auto;
+	/* background: red; */
+}
+
+.docUploadViewFormOuterDiv{
+   	width: 100%;
+   	height: 100%;
+   	position: fixed;
+   	background: rgba(0,0,0,0.5);
+   	top: 0;
+   	left: 0;
+   	z-index: 200;
+   	display: none;
+   }
+   
+   .docUploadViewFormInnerBox{
+	width: 70%;
+   	height: 440px;
+   	background: rgb(255,255,255);
+   	margin: 2% auto;
+   	border-radius: 10px;
+   	padding: 5px;
+   	overflow-y: auto;
+   	overflow-x: hidden;
+}
+
+.candidateCompleteViewFormOuterDiv{
+   	width: 100%;
+   	height: 100%;
+   	position: fixed;
+   	background: rgba(0,0,0,0.5);
+   	top: 0;
+   	left: 0;
+   	z-index: 200;
+   	display: none;
+   }
+
+.candidateCompleteViewFormInnerBox{
+	width: 86%;
+   	height: 96%;
+   	background: rgb(255,255,255);
+   	margin: 1% auto;
+   	border-radius: 5px;
+   	overflow: auto;
+}
+
+.candidateProfileHeadingAndAddEmpIconMerger{
+	 /* background: red; */
+	 display: flex;
+	 justify-content: space-between;
+	 align-items: center;
+}
+
+.candidateProfileHeadingAndAddEmpIconMerger span{
+	background: #eaeded;
+	padding: 2px 8px;
+	border-radius: 10px;
+	box-shadow: 0 0 4px #0005;
+}
+
+.candidateProfileHeadingAndAddEmpIconMerger span i{
+	font-size: 22px;
+	font-weight: bold;
+	color: #4154f1;
+}
+
+.candidateProfileHeadingAndAddEmpIconMerger span i:hover{
+	color: #52be80;
+}
+
+.student_result_box{
+	width: 98%;
+	height: 200px;
+	padding: 5px;
+	overflow: auto;
+	box-shadow: 0 0 10px #0005;
+    backdrop-filter: blur(10px);
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 14px;
+}
+
+.student_result_box_heading{
+	color: #566573;
+	padding: 5px 10px;
+	font-weight: bold;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	position: sticky;
+	top: 0;
+	left: 0;
+}
+
+.student_result_sheet_heading{
+	color: #566573;
+	padding: 5px 10px;
+	font-weight: bold;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.student_result_box_table thead th,.student_result_box_table tbody td{
+	padding: 10px;
+	font-size: 14px;
+	background: transparent !important;
+	color: #566573;
+}
+
+.candidate_resultSheet_box{
+	width: 98%;
+	height: auto;
+	box-shadow: 0 0 10px #0005;
+    backdrop-filter: blur(10px);
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 14px;
+	margin-top: 15px;
+	padding: 5px 10px;
+	display: none;
+}
+
+.questions_filter_box{
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.marksDetails_outerBox{
+	width: 50%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.5);
+	z-index: 5;
+	position: fixed;
+	top: 0;
+    right: 0; /* Initially positioned outside the screen */
+    transform: translateX(100%); /* Initial position outside the viewport */
+    transition: transform 0.8s ease;
+}
+
+.marksDetails_outerBox.active {
+    transform: translateX(0); /* When the modal is active, it slides to the right edge of the screen */
+}
+
+.marksDetails_outerBox_closeBox{
+	/* background-color: red; */
+	margin-top: 2vh;
+	margin-bottom: 3px;
+}
+
+.close_marksDetails_outerBox_span{
+	font-size: 20px;
+	color: #fff;
+	margin-left: 10px;
+	cursor: pointer;
+}
+
+.marksDetails_outerBox{
+	width: 50%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.5);
+	z-index: 5;
+	position: fixed;
+	top: 0;
+    right: 0; /* Initially positioned outside the screen */
+    transform: translateX(100%); /* Initial position outside the viewport */
+    transition: transform 0.8s ease;
+}
+
+.marksDetails_outerBox.active {
+    transform: translateX(0); /* When the modal is active, it slides to the right edge of the screen */
+}
+
+.marksDetails_outerBox_closeBox{
+	/* background-color: red; */
+	margin-top: 2vh;
+	margin-bottom: 3px;
+}
+
+.close_marksDetails_outerBox_span{
+	font-size: 20px;
+	color: #fff;
+	margin-left: 10px;
+	cursor: pointer;
+}
+
+.markDetails_table_and_chartBox{
+	width: 86%;
+	height: 82vh;
+	/* background-color: green; */
+	margin: 1px auto; 
+	padding: 4px;
+	overflow: auto;
+}
+
+.markDetails_tableBox{
+	width: 100%;
+	height: 46vh;
+	background-color: #fff;
+	padding: 8px;
+	margin-bottom: 5px;
+	overflow: auto;
+}
+
+.markDetails_table{
+	width: 100%;
+	height: 100%;
+}
+
+.markDetails_grapghBox{
+	width: 100%;
+	height: auto;
+	background-color: #fff;
+	padding: 5px;
+	margin-bottom: 5px;
+}
+
+.student_marksDetail_table{
+	width: 100%;
+	height: 100%;
+	font-size: 14px;
+	padding: 5px;
+	color: #566573;
+}
+
+.marksDetail_table_heading{
+	text-align: center;	
+	font-size: 15px;
+	font-weight: bold;
+	padding: 5px;
+	color: #566573;
+}
+
+.updateQuestionPopupOuterDiv{
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.2);
+	z-index: 9999;
+	position: fixed;
+	top: 0;
+	display: none;
+	overflow: auto;
+}
+
+.update_questions_form_outer_div{
+	width: 90%;
+	height: auto;
+	padding: 10px;
+	background-color: #f6f9ff;
+	margin: 2% auto;
+	border-radius: 10px;
+}
+
+.update_questions_form_div{
+	width: 100%;
+	height: 100%;
+}
+
+.UpdateQuestionPopupCloseBtnDiv{
+	margin-top: -20px;
+}
+
+.UpdateQuestionPopupCloseBtnDiv span{
+	font-size: 25px;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.update_questions_form_outer_div{
+	width: 90%;
+	height: auto;
+	padding: 10px;
+	background-color: #f6f9ff;
+	margin: 2% auto;
+	border-radius: 10px;
+}
+
+.update_questions_form_div{
+	width: 100%;
+	height: 100%;
+}
+
+.questions_table_div{
+	width: 98%;
+	height: 90vh;
+	overflow: auto;
+	box-shadow: 0 0 10px #0005;
+    backdrop-filter: blur(10px);
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 14px;
+}
+.customTable2{
+	width: 100%;
+	font-size: 14px;
+}
+
+.customTable2 thead{
+	position: sticky;
+	top: 0;
+	background-color: #f6f9ff;
+}
+
+.customTable2 thead th{
+	padding: 10px;
+	font-size: 14px;
+	background: transparent !important;
+	color: #566573;
+}
+
+.customTable2 tbody td{
+	font-size: 14px;
+}
+
+.viewQuestions_language_select{
+	border: none;
+	outline: none;
+	background-color: transparent;
+	border-bottom: 1px solid #566573;
+	color: #566573;
+	font-weight: bold;
+}
+
+.questions{
+	color: #EC7063 !important;
+}
+
+.answers{
+	color: #229954 !important;
+}
+
+.moatResultView_icon{
+	cursor: pointer;
+}
+
+.student_table_url_archive_div{
+	width: 98%;
+	height: 100%;
+	box-shadow: 0 0 10px #0005;
+	backdrop-filter: blur(10px);
+	margin-left: auto;
+	margin-right: auto;
+	background: transparent !important;
+	overflow: auto;
+}
+
+.emailSentLoadingDiv{
+   	width: 100%;
+   	height: 100%;
+   	position: fixed;
+   	background: rgba(0,0,0,0.5);
+   	top: 0;
+   	left: 0;
+   	z-index: 200;
+   	display: none;
+   }
+   
+   .emailFormInnerBox{
+   	width: 40%;
+   	height: auto;
+   	background: rgb(255,255,255);
+   	margin: 10% auto;
+   	border-radius: 10px;
+   	padding: 15px 5px;
+   }
+
+.emailSentLoadingInnerBox{
+   	width: 40%;
+   	height: auto;
+   	background: rgb(255,255,255);
+   	margin: 10% auto;
+   	border-radius: 10px;
+   	padding: 15px 5px;
+   }
+   
+   .emailFormInnerBoxCloser{
+   	/* background: red; */
+   	padding-right: 10px;
+   	text-align: right;
+   }
+   
+   .emailFormInnerBoxCloser span{
+   	font-size: 25px;
+   	font-weight: bold;
+   	cursor: pointer;
+   }
+   
+   .emailFormBox{
+   	/* background: red; */
+   	width: 98%;
+   	margin-right: auto;
+   	margin-left: auto;
+   }
+
+.linkGenerateFormBox{
+   	width: 35%;
+    height: auto;
+    padding: 10px;
+    margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 10px;
+    box-shadow: 0 0 10px #0005;
+    backdrop-filter: blur(10px);
+   }
+
+.customTable{
+    	width: 100%;
+    	height: 100%;
+    	font-size: 14px;
+   }
+        
+     .customTable td{
+     	padding-bottom: 15px;
+     	padding: 10px;
+     	text-align: left !important;
+     	font-size: 14px;
+     }
+
+#emailList{
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+}
+
+.test_link_generator_btn {
+  color: #4154f1;
+  border: 1px solid #4154f1;
+  font-size: 14px;
+}
+
+.test_link_generator_btn:focus,
+.test_link_generator_btn:hover 
+{
+  color: #fff;
+  background-color: #4154f1;
+}
+
+.generatedLink {
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+  </style>
+</head>
+
+<body style="overflow-x: hidden;">
+
+  <main id="moatMain" class="moatMain">
+  
+  <div id="loadingPopup">
+	<div class="spinnerAndParaMerger">
+	    <div class="spinner"></div>
+	    <p id="loadingPopupPara"></p>
+    </div>
+</div>
+  
+			<section class="section dashboard">
+				<div class="col-lg-12">
+					<div class="row">
+						<div class="moatBody_content_div">
+							
+							<div class="student_table_url_archive_div">
+							
+								<div class="d-flex justify-content-between align-items-center" style="position: sticky; top: 0; background: #f6f9ff;">
+						               	<h5 class="card-title m-0 p-0 px-2">Test History<span></span></h5>
+						               	  <div class="search-box m-1">
+									        <button class="btn-search" title="Search"><i class="bi bi-search"></i></button>
+									        <input type="text" oninput="searchTable();" class="input-search" placeholder="Search...">
+									      </div>
+					              	</div>
+							
+								<table class="table table-hover tableSearch" id="customTable">
+									<thead style="position: sticky; top: 45px; background: #f6f9ff">
+										<tr>
+											<th>#</th>
+											<th>Candidate Email</th>
+											<th>Link Created By</th>
+											<th>Hiring Dept</th>
+											<th>Test Duration</th>
+											<th>Link Created Test Type</th>
+											<th>Test Status by Candidate</th>
+											<th>Link Created Date</th>
+										</tr>
+									</thead>
+									<tbody id="urlTbody">
+										
+									</tbody>		
+								</table>
+							</div>
+							
+						</div>
+					</div>
+				</div>
+			</section>
+
+	</main><!-- End #main -->
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/chart.js/chart.umd.js"></script>
+  <script src="assets/vendor/echarts/echarts.min.js"></script>
+  <script src="assets/vendor/quill/quill.js"></script>
+  <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+  <script src="assets/vendor/tinymce/tinymce.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+
+
+<!-- Template Main JS File -->
+<script src="assets/js/main.js"></script>
+
+<!-- script for spinner -->
+<script>
+function displayOnLoadingPopup(){
+	$('#loadingPopup').show();
+	$('#loadingPopupPara').text("Loading, please wait...");
+}
+
+function displayAppraisalEmailSendingLoadingPopup(){
+	$('#loadingPopup').show();
+	$('#loadingPopupPara').text("Please hold on, the appraisal reminder emails are currently being sent...");
+}
+
+function hideLoadingPopup(){
+	$('#loadingPopup').hide();
+}
+
+window.onload = function() {
+	hideLoadingPopup();
+};
+</script>
+
+<script>
+
+var formattedDate;
+
+displayOnLoadingPopup();
+$.ajax({
+    type: "GET",
+    url: "getAllLinkGeneratedData",
+    success: function(data) {
+        updateTestLinkHistoryData(data);
+        hideLoadingPopup();
+    },
+    error: function(xhr, status, error) {
+        console.error("Error invoking data:", error);
+        hideLoadingPopup();
+    }
+});
+
+//Function to update student data in the table
+function updateTestLinkHistoryData(data) {
+var tbody = $('#urlTbody');
+tbody.empty();
+
+//console.log(JSON.stringify(data))
+
+if (data && data.length > 0) {
+    for (let i = 0; i < data.length; i++) {
+    	
+    	var testTypeData, testStatusData;
+    	
+    	if(data[i].test_type === "dont_skip"){
+    		testTypeData = "Attend All the Rounds";
+    	}else if(data[i].test_type === "skip_first_round"){
+    		testTypeData = "Skip the First Round";
+    	}else if(data[i].test_type === "skip_all"){
+    		testTypeData = "Skip All the Rounds";
+    	}
+    	
+    	if(data[i].test_valid_flag === "1"){
+    		testStatusData = "Not attend the test";
+    	}else if(data[i].test_valid_flag === "0"){
+    		testStatusData = "Test attended";
+    	}
+
+        var row = "<tr class='td_tr'>" +
+            "<td>" + (i + 1) + "</td>" +
+            "<td>" + data[i].candidateEmail + "</td>" +
+            "<td>" + data[i].supervisor_name + "</td>" +
+            "<td style='min-width: 0px;'>" + (data[i].dept_name || '-') + "</td>" +
+            "<td>" + data[i].test_duration + "</td>" +
+            "<td>" + testTypeData + "</td>" +
+            "<td>" + testStatusData + "</td>" +
+            "<td class='dateColumn dateFormatter' id='dateFormat'>" + data[i].linkCreatedDate + "</td>" +
+            "</tr>";
+
+        tbody.append(row);
+    }
+    
+    formatDates();
+    
+} else {
+    var noDataRow = "<tr class='td_tr'><td class='error_msg' colspan='20'>No data available</td></tr>";
+    tbody.append(noDataRow);
+	}
+}
+
+
+function formatDates() {
+    var dateElements = document.querySelectorAll('.dateFormatter');
+    dateElements.forEach(function(dateElement) {
+        var dateStr = dateElement.innerText; // Get the date string in yyyy-mm-dd format
+        var dateParts = dateStr.split('-'); // Split the date string into parts
+        
+        // Format the date as dd-mm-yyyy
+        if(dateParts.length === 3) {
+            var formattedDate = dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0];
+            // Update the text of the date element
+            dateElement.innerText = formattedDate;
+        }
+    });
+}
+
+</script>
+
+
+<!-- Script to search table -->
+<script>
+
+document.querySelector('.btn-search').addEventListener('click', function () {
+    document.querySelector('.input-search').focus();
+  });
+
+    function searchTable() {
+        
+    	var input, filter, table, tr, td, i, j, txtValue;
+        
+        input = document.querySelector(".input-search");
+        filter = input.value.toUpperCase();
+        
+        //table = document.getElementById("customTable");
+        table = document.querySelector(".tableSearch");
+        if (!table) return;
+        
+        tr = table.getElementsByTagName("tr");
+        for (i = 1; i < tr.length; i++) {
+            tr[i].style.display = "none";
+            td = tr[i].getElementsByTagName("td");
+            for (j = 0; j < td.length; j++) {
+                if (td[j]) {
+                    txtValue = td[j].textContent || td[j].innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    
+    </script>
+
+</body>
+
+</html>

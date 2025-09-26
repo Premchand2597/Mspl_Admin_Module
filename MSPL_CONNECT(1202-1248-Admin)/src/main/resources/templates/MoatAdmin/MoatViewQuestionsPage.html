@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Interview</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+  <!-- Template Main JS File -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+
+  <!-- =======================================================
+  * Template Name: NiceAdmin
+  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+  * Updated: Apr 20 2024 with Bootstrap v5.3.3
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+  
+  <style>
+  .moat_navbar{
+	  font-size: 14px;
+	  background: #fff;
+	  padding: 15px;
+	  position: sticky;
+	  top: 64px;
+	  width: 100%;
+	  margin-left: auto;
+	  margin-right: auto;
+	  box-shadow: 0 0 10px #0005;
+	  gap: 0.7rem;
+	  backdrop-filter: blur(10px);
+	  background-color: #fff2;
+	  display: flex;
+}
+
+.moattt_anchor {
+    position: relative;
+    display: inline-block;
+    padding: 5px 10px;
+    color: inherit;
+    text-decoration: none;
+    text-shadow: 0 0 5px rgba(#000, 0.8);
+    letter-spacing: 1px;
+    border-right: 1px solid #d5d8dc;
+  }
+
+.moattt_anchor.active{
+	font-weight: bold;
+	color: #4154f1;
+}
+
+.moat_parentDropDown{
+	position: relative;
+    display: inline-block;
+}
+
+.moat_subDropDown {
+    display: none;
+    position: absolute;
+    background-color: #f6f9ff;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+  .progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0.08rem;
+    background-image: linear-gradient(to right, #8ad4ff, #fa7196);
+    border-radius: 0.1rem;
+    animation: progressMove linear both;
+    animation-timeline: scroll(block root);
+  }
+
+.moat_iframe{
+	width: 100%;
+	height: 100vh;
+}
+
+/* Fullscreen overlay with dim background */
+#loadingPopup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Dim background */
+    z-index: 9999;
+    font-family: Arial, sans-serif;
+    color: white; /* Text color for better contrast */
+    display: none;
+}
+
+.spinnerAndParaMerger{
+	display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* background: red; */
+    margin: 18% auto;
+}
+
+/* Spinner animation */
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 6px solid rgba(255, 255, 255, 0.3); /* Semi-transparent border */
+    border-top-color: white; /* Bright top border */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Loading text */
+#loadingPopup p {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+}
+
+/* Spinner keyframe animation */
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.moatBody_content_div{
+	width: 100%;
+	height: 100%;
+}
+
+.add_questions_form_outer_div{
+	width: 98%;
+	height: auto;
+	padding: 10px;
+	box-shadow: 0 0 10px #0005;
+    backdrop-filter: blur(10px);
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 14px;
+}
+
+.add_questions_form_div{
+	width: 100%;
+	height: 100%;
+}
+
+.question_heading{
+	width: 100%;
+	padding: 5px 10px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 10px;
+}
+
+.question_p{
+	color: #566573;
+	font-size: 14px;
+	font-weight: bold;
+	margin-top: 10px;
+}
+
+.addQuestions_language_select{
+	border: none;
+	outline: none;
+	background-color: transparent;
+	border-bottom: 1px solid #566573;
+	color: #566573;
+	font-weight: bold;
+}
+
+.questionType_radio_box{
+	width: auto;
+}
+
+.questionTypeLabel{
+	color: #566573;
+	font-weight: bold;
+}
+
+.question_text_area_box,.correct_answer_box2{
+	width: 100%;
+	height: auto;
+}
+
+.question_text_area{
+	width: 100%;
+	height: 100%;
+	font-size: 14px;
+}
+
+.options_p,.correct_answer_p{
+	color: #566573;
+	padding: 5px 10px;
+	font-weight: bold;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.options_box{
+	width: 100%;
+	height: auto;
+	display: flex;
+	justify-content: space-evenly;
+	gap: 5px;
+}
+
+.question_text_field{
+	padding-left: 5px;
+	font-size: 14px;
+}
+
+.answer_text_area2{
+	width: 100%;
+	font-size: 14px;
+}
+
+.btn_outer_div{
+	width: 100%;
+	height: auto;
+	padding: 5px 10px;
+	margin-top: 2%;
+}
+
+.btn_div{
+	display: flex;
+	width: 100%;
+	height: auto;
+	justify-content: flex-start;
+	gap: 10px;
+}
+
+.questions_table_div{
+	width: 98%;
+	height: 90vh;
+	overflow: auto;
+	box-shadow: 0 0 10px #0005;
+    backdrop-filter: blur(10px);
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 14px;
+}
+
+.cards_container{
+	width: 98%;
+	margin-bottom: 8px;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 5px 10px;
+	display: flex;
+	justify-content: space-between;
+	box-shadow: 0 0 10px #0005;
+    backdrop-filter: blur(10px);
+}
+
+.card1{
+	width: 24%;
+	/*background-color: green;*/
+	display: flex;
+	padding: 5px;
+	border-right: 2px solid #ECF0F1;
+}
+
+.card4{
+	width: 24%;
+	/*background-color: green;*/
+	display: flex;
+	padding: 5px;
+}
+
+.card_numbers{
+	/*background-color: yellow;*/
+	width: auto;
+	height: 100%;
+}
+
+.card_numbers p{
+	font-size: 30px;
+	font-weight: bold;
+	color: #4154f1;
+}
+
+.card_text{
+	/*background-color: red;*/
+	width: auto;
+	height: 100%;
+}
+
+.p2{
+	margin-top: 5px;
+	/*background-color: orange;*/
+	padding-left: 10px;
+	color: #566573;
+	font-size: 15px;
+	font-weight: bold;
+}
+
+.p3{
+	margin-top: -15px;
+	/*background-color: darkgreen;*/
+	padding-left: 10px;
+	color: #AEB6BF;
+	font-size: 14px;
+}
+
+.student_table_outer_div{
+	width: 98%;
+	height: 100%;
+	box-shadow: 0 0 10px #0005;
+	backdrop-filter: blur(10px);
+	margin-left: auto;
+	margin-right: auto;
+	background: transparent !important;
+}
+
+.student_table_div{
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+}
+
+.student_table_div .table,.student_table_url_archive_div .table{
+	width: 100%;
+	font-size: 14px;
+}
+
+.student_table_div .table thead th,.student_table_url_archive_div .table thead th{
+	padding: 12px;
+	font-size: 14px;
+	background: transparent !important;
+	color: #566573;
+}
+
+.emailFormOuterDiv{
+   	width: 100%;
+   	height: 100%;
+   	position: fixed;
+   	background: rgba(0,0,0,0.5);
+   	top: 0;
+   	left: 0;
+   	z-index: 200;
+   	display: none;
+   }
+
+.emailFormInnerBoxCloser{
+   	/* background: red; */
+   	padding-right: 10px;
+   	text-align: right;
+   }
+   
+   .emailFormInnerBoxCloser span{
+   	font-size: 25px;
+   	font-weight: bold;
+   	cursor: pointer;
+   }
+
+.emailFormBox{
+   	/* background: red; */
+   	width: 98%;
+   	margin-right: auto;
+   	margin-left: auto;
+   }
+
+.ctcFormOuterDiv{
+   	width: 100%;
+   	height: 100%;
+   	position: fixed;
+   	background: rgba(0,0,0,0.5);
+   	top: 0;
+   	left: 0;
+   	z-index: 200;
+   	display: none;
+   }
+   
+.ctcFormInnerBox{
+	width: 60%;
+   	height: 400px;
+   	background: rgb(255,255,255);
+   	margin: 3% auto;
+   	border-radius: 10px;
+   	padding: 15px 5px;
+   	overflow: auto;
+}
+
+  .ctcFormInnerBoxCloser{
+   	/* background: red; */
+   	padding-right: 10px;
+   	text-align: right;
+   	margin: 0;
+   }
+   
+   .ctcFormInnerBoxCloser span{
+   	font-size: 25px;
+   	font-weight: bold;
+   	cursor: pointer;
+   }
+
+.hiddenCtcFeedbackFromCandidate{
+   	display: none;
+   }
+
+.docUploadFormOuterDiv{
+   	width: 100%;
+   	height: 100%;
+   	position: fixed;
+   	background: rgba(0,0,0,0.5);
+   	top: 0;
+   	left: 0;
+   	z-index: 200;
+   	display: none;
+   }
+
+.docUploadFormInnerBox{
+	width: 30%;
+   	height: auto;
+   	background: rgb(255,255,255);
+   	margin: 3% auto;
+   	border-radius: 10px;
+   	padding: 15px 5px;
+   	overflow: auto;
+}
+
+.docUploadBox{
+	width: 32%;
+	height: 10px;
+	margin: 40px auto 5px auto;
+	/* background: red; */
+}
+
+.docUploadViewFormOuterDiv{
+   	width: 100%;
+   	height: 100%;
+   	position: fixed;
+   	background: rgba(0,0,0,0.5);
+   	top: 0;
+   	left: 0;
+   	z-index: 200;
+   	display: none;
+   }
+   
+   .docUploadViewFormInnerBox{
+	width: 70%;
+   	height: 440px;
+   	background: rgb(255,255,255);
+   	margin: 2% auto;
+   	border-radius: 10px;
+   	padding: 5px;
+   	overflow-y: auto;
+   	overflow-x: hidden;
+}
+
+.candidateCompleteViewFormOuterDiv{
+   	width: 100%;
+   	height: 100%;
+   	position: fixed;
+   	background: rgba(0,0,0,0.5);
+   	top: 0;
+   	left: 0;
+   	z-index: 200;
+   	display: none;
+   }
+
+.candidateCompleteViewFormInnerBox{
+	width: 86%;
+   	height: 96%;
+   	background: rgb(255,255,255);
+   	margin: 1% auto;
+   	border-radius: 5px;
+   	overflow: auto;
+}
+
+.candidateProfileHeadingAndAddEmpIconMerger{
+	 /* background: red; */
+	 display: flex;
+	 justify-content: space-between;
+	 align-items: center;
+}
+
+.candidateProfileHeadingAndAddEmpIconMerger span{
+	background: #eaeded;
+	padding: 2px 8px;
+	border-radius: 10px;
+	box-shadow: 0 0 4px #0005;
+}
+
+.candidateProfileHeadingAndAddEmpIconMerger span i{
+	font-size: 22px;
+	font-weight: bold;
+	color: #4154f1;
+}
+
+.candidateProfileHeadingAndAddEmpIconMerger span i:hover{
+	color: #52be80;
+}
+
+.student_result_box{
+	width: 98%;
+	height: 200px;
+	padding: 5px;
+	overflow: auto;
+	box-shadow: 0 0 10px #0005;
+    backdrop-filter: blur(10px);
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 14px;
+}
+
+.student_result_box_heading{
+	color: #566573;
+	padding: 5px 10px;
+	font-weight: bold;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	position: sticky;
+	top: 0;
+	left: 0;
+}
+
+.student_result_sheet_heading{
+	color: #566573;
+	padding: 5px 10px;
+	font-weight: bold;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.student_result_box_table thead th,.student_result_box_table tbody td{
+	padding: 10px;
+	font-size: 14px;
+	background: transparent !important;
+	color: #566573;
+}
+
+.candidate_resultSheet_box{
+	width: 98%;
+	height: auto;
+	box-shadow: 0 0 10px #0005;
+    backdrop-filter: blur(10px);
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 14px;
+	margin-top: 15px;
+	padding: 5px 10px;
+	display: none;
+}
+
+.questions_filter_box{
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.marksDetails_outerBox{
+	width: 50%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.5);
+	z-index: 5;
+	position: fixed;
+	top: 0;
+    right: 0; /* Initially positioned outside the screen */
+    transform: translateX(100%); /* Initial position outside the viewport */
+    transition: transform 0.8s ease;
+}
+
+.marksDetails_outerBox.active {
+    transform: translateX(0); /* When the modal is active, it slides to the right edge of the screen */
+}
+
+.marksDetails_outerBox_closeBox{
+	/* background-color: red; */
+	margin-top: 2vh;
+	margin-bottom: 3px;
+}
+
+.close_marksDetails_outerBox_span{
+	font-size: 20px;
+	color: #fff;
+	margin-left: 10px;
+	cursor: pointer;
+}
+
+.marksDetails_outerBox{
+	width: 50%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.5);
+	z-index: 5;
+	position: fixed;
+	top: 0;
+    right: 0; /* Initially positioned outside the screen */
+    transform: translateX(100%); /* Initial position outside the viewport */
+    transition: transform 0.8s ease;
+}
+
+.marksDetails_outerBox.active {
+    transform: translateX(0); /* When the modal is active, it slides to the right edge of the screen */
+}
+
+.marksDetails_outerBox_closeBox{
+	/* background-color: red; */
+	margin-top: 2vh;
+	margin-bottom: 3px;
+}
+
+.close_marksDetails_outerBox_span{
+	font-size: 20px;
+	color: #fff;
+	margin-left: 10px;
+	cursor: pointer;
+}
+
+.markDetails_table_and_chartBox{
+	width: 86%;
+	height: 82vh;
+	/* background-color: green; */
+	margin: 1px auto; 
+	padding: 4px;
+	overflow: auto;
+}
+
+.markDetails_tableBox{
+	width: 100%;
+	height: 46vh;
+	background-color: #fff;
+	padding: 8px;
+	margin-bottom: 5px;
+	overflow: auto;
+}
+
+.markDetails_table{
+	width: 100%;
+	height: 100%;
+}
+
+.markDetails_grapghBox{
+	width: 100%;
+	height: auto;
+	background-color: #fff;
+	padding: 5px;
+	margin-bottom: 5px;
+}
+
+.student_marksDetail_table{
+	width: 100%;
+	height: 100%;
+	font-size: 14px;
+	padding: 5px;
+	color: #566573;
+}
+
+.marksDetail_table_heading{
+	text-align: center;	
+	font-size: 15px;
+	font-weight: bold;
+	padding: 5px;
+	color: #566573;
+}
+
+.updateQuestionPopupOuterDiv{
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.2);
+	z-index: 9999;
+	position: fixed;
+	top: 0;
+	display: none;
+	overflow: auto;
+}
+
+.update_questions_form_outer_div{
+	width: 90%;
+	height: auto;
+	padding: 10px;
+	background-color: #f6f9ff;
+	margin: 2% auto;
+	border-radius: 10px;
+}
+
+.update_questions_form_div{
+	width: 100%;
+	height: 100%;
+}
+
+.UpdateQuestionPopupCloseBtnDiv{
+	margin-top: -20px;
+}
+
+.UpdateQuestionPopupCloseBtnDiv span{
+	font-size: 25px;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.update_questions_form_outer_div{
+	width: 90%;
+	height: auto;
+	padding: 10px;
+	background-color: #f6f9ff;
+	margin: 2% auto;
+	border-radius: 10px;
+}
+
+.update_questions_form_div{
+	width: 100%;
+	height: 100%;
+}
+
+.questions_table_div{
+	width: 98%;
+	height: 100%;
+	overflow: auto;
+	box-shadow: 0 0 10px #0005;
+    backdrop-filter: blur(10px);
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 14px;
+}
+.customTable2{
+	width: 100%;
+	font-size: 14px;
+}
+
+.customTable2 thead{
+	position: sticky;
+	top: 0;
+	background-color: #f6f9ff;
+}
+
+.customTable2 thead th{
+	padding: 10px;
+	font-size: 14px;
+	background: transparent !important;
+	color: #566573;
+}
+
+.customTable2 tbody td{
+	font-size: 14px;
+}
+
+.viewQuestions_language_select{
+	border: none;
+	outline: none;
+	background-color: transparent;
+	border-bottom: 1px solid #566573;
+	color: #566573;
+	font-weight: bold;
+}
+
+.questions{
+	color: #EC7063 !important;
+}
+
+.answers{
+	color: #229954 !important;
+}
+
+.moatResultView_icon{
+	cursor: pointer;
+}
+
+.student_table_url_archive_div{
+	width: 98%;
+	height: 82vh;
+	box-shadow: 0 0 10px #0005;
+	backdrop-filter: blur(10px);
+	margin-left: auto;
+	margin-right: auto;
+	background: transparent !important;
+	overflow: auto;
+}
+
+.emailSentLoadingDiv{
+   	width: 100%;
+   	height: 100%;
+   	position: fixed;
+   	background: rgba(0,0,0,0.5);
+   	top: 0;
+   	left: 0;
+   	z-index: 200;
+   	display: none;
+   }
+   
+   .emailFormInnerBox{
+   	width: 40%;
+   	height: auto;
+   	background: rgb(255,255,255);
+   	margin: 10% auto;
+   	border-radius: 10px;
+   	padding: 15px 5px;
+   }
+
+.emailSentLoadingInnerBox{
+   	width: 40%;
+   	height: auto;
+   	background: rgb(255,255,255);
+   	margin: 10% auto;
+   	border-radius: 10px;
+   	padding: 15px 5px;
+   }
+   
+   .emailFormInnerBoxCloser{
+   	/* background: red; */
+   	padding-right: 10px;
+   	text-align: right;
+   }
+   
+   .emailFormInnerBoxCloser span{
+   	font-size: 25px;
+   	font-weight: bold;
+   	cursor: pointer;
+   }
+   
+   .emailFormBox{
+   	/* background: red; */
+   	width: 98%;
+   	margin-right: auto;
+   	margin-left: auto;
+   }
+
+.linkGenerateFormBox{
+   	width: 35%;
+    height: auto;
+    padding: 10px;
+    margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 10px;
+    box-shadow: 0 0 10px #0005;
+    backdrop-filter: blur(10px);
+   }
+
+.customTable{
+    	width: 100%;
+    	height: 100%;
+    	font-size: 14px;
+   }
+        
+     .customTable td{
+     	padding-bottom: 15px;
+     	padding: 10px;
+     	text-align: left !important;
+     	font-size: 14px;
+     }
+
+#emailList{
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+}
+
+.test_link_generator_btn {
+  color: #4154f1;
+  border: 1px solid #4154f1;
+  font-size: 14px;
+}
+
+.test_link_generator_btn:focus,
+.test_link_generator_btn:hover 
+{
+  color: #fff;
+  background-color: #4154f1;
+}
+
+.generatedLink {
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+  </style>
+</head>
+
+<body style="overflow-x: hidden;">
+
+  <main id="moatMain" class="moatMain">
+  
+  <div id="loadingPopup">
+	<div class="spinnerAndParaMerger">
+	    <div class="spinner"></div>
+	    <p id="loadingPopupPara"></p>
+    </div>
+</div>
+  
+  <div class="updateQuestionPopupOuterDiv" id="updateQuestionPopupOuterDiv">
+		<div class="update_questions_form_outer_div">
+			<div class="update_questions_form_div" id="update_questions_form">
+						
+						<input type="text" class='auto_id' id="auto_id" name="id">
+						
+						<div class="viewMoatUpdateQuestionAndCloseBtnContainer">
+							<div class="question_heading">
+								<p class="question_p">Update Question:</p>
+							</div>
+							
+							<div class="UpdateQuestionPopupCloseBtnDiv">
+								<span onclick="closePopup();">&times;</span>
+							</div>
+						</div>
+						
+						<div class="question_text_area_box">
+							<textarea class="form-control question_text_area" rows="4" id="questions" name="questions"></textarea>
+						</div>
+						
+							<p class="options_p" style="font-size: 14px;">Update Options:</p>
+						
+						<div class="options_box" id="options_box">
+							<input type="text" placeholder="Option A" class="form-control question_text_field" id="op1" name="op1">
+							<input type="text" placeholder="Option B" class="form-control question_text_field" id="op2" name="op2">
+							<input type="text" placeholder="Option C" class="form-control question_text_field" id="op3" name="op3">
+							<input type="text" placeholder="Option D" class="form-control question_text_field" id="op4" name="op4">
+						</div>
+						
+							<p class="correct_answer_p" style="font-size: 14px;">Update Correct Answer:</p>
+						
+						<div class="correct_answer_box2" id="correct_answer_box2">
+		            		<textarea class="form-control answer_text_area2" rows="4" id="answers" name="answers"></textarea>
+		        		</div>
+						
+						<div class="btn_outer_div">
+							<div class="btn_div">
+								<button type="button" id="update_btn" style="font-size: 14px;" class="btn test_link_generator_btn">Update</button>
+								<button type="button" style="font-size: 14px;" class="btn btn-outline-secondary" onclick="closePopup();">Cancel</button>
+							</div>
+						</div>
+				</div>
+			</div>
+		</div>
+  
+  
+			<section class="section dashboard">
+				<div class="col-lg-12">
+					<div class="row">
+						<div class="moatBody_content_div">
+							
+							<div class="questions_table_div">
+							
+								<div class="d-flex justify-content-between align-items-center" style="position: sticky; top: 0; background: #f6f9ff;">
+						               	<h5 class="card-title m-0 p-0 px-2">View Questions<span></span></h5>
+						               	  <div class="search-box m-1">
+									        <button class="btn-search" title="Search"><i class="bi bi-search"></i></button>
+									        <input type="text" oninput="searchTable();" class="input-search" placeholder="Search...">
+									      </div>
+					              	</div>
+							
+								<table class="customTable2 table table-hover tableSearch">
+									<thead style="position: sticky; top: 45px; background-color: #f6f9ff;">
+									    <tr>
+									        <th rowspan="2" class="auto_id">Id</th>
+									        <th rowspan="2">SL No</th>
+									        <th rowspan="2">Questions from <select class="viewQuestions_language_select" onchange="retrieveData();" id="languageSelected" name="languageSelected">
+																						<option id="option_value" selected value="Aptitude">Aptitude</option>
+																						<option id="option_value" value="C">C</option>
+																						<option id="option_value" value="Java">Java</option>
+																						<option id="option_value" value="Python">Python</option>
+																						<option id="option_value" value="SQL">SQL</option>
+																					</select> </th>
+									        <th colspan="4" class="text-center" id="table_options_heading">Options</th>
+									        <th rowspan="2">Answers</th>
+									        <th rowspan="2" colspan="2" class="center_text">Action</th>
+									    </tr>
+									    <tr id="sub_option_heading_row">
+									        <th id="sub_option_heading">A</th>
+									        <th id="sub_option_heading">B</th>
+									        <th id="sub_option_heading">C</th>
+									        <th id="sub_option_heading">D</th>
+									    </tr>
+									</thead>
+						
+									<tbody id="tbody">
+										
+									</tbody>		
+								</table>
+							</div>
+							
+						</div>
+					</div>
+				</div>
+			</section>
+
+	</main><!-- End #main -->
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/chart.js/chart.umd.js"></script>
+  <script src="assets/vendor/echarts/echarts.min.js"></script>
+  <script src="assets/vendor/quill/quill.js"></script>
+  <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+  <script src="assets/vendor/tinymce/tinymce.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+
+
+<!-- Template Main JS File -->
+<script src="assets/js/main.js"></script>
+
+<!-- Script to auto logout the session if user is idle for more than 15 minutes -->
+<script>
+        let timeout;
+
+        // Function to reset the timeout
+        function resetTimeout() {
+            clearTimeout(timeout);
+            timeout = setTimeout(logout, 900000); // 15 minutes
+        }
+
+        // Function to logout the user
+        function logout() {
+        	 window.location.href = '/';
+        }
+
+        // Attach event listeners for user activity
+        document.addEventListener('mousemove', resetTimeout);
+        document.addEventListener('keypress', resetTimeout);
+        document.addEventListener('click', resetTimeout);
+        document.addEventListener('scroll', resetTimeout);
+
+        // Start the initial timeout
+        resetTimeout();
+</script>
+
+<!-- script for spinner -->
+<script>
+function displayOnLoadingPopup(){
+	$('#loadingPopup').show();
+	$('#loadingPopupPara').text("Loading, please wait...");
+}
+
+function displayAppraisalEmailSendingLoadingPopup(){
+	$('#loadingPopup').show();
+	$('#loadingPopupPara').text("Please hold on, the appraisal reminder emails are currently being sent...");
+}
+
+function hideLoadingPopup(){
+	$('#loadingPopup').hide();
+}
+
+window.onload = function() {
+	hideLoadingPopup();
+};
+</script>
+
+<script>
+	
+	function retrieveData(){
+		
+		var languageSelected = $('#languageSelected').val();
+		//alert(languageSelected);
+		
+		displayOnLoadingPopup();
+		
+			$.ajax({
+	        type: 'GET',
+	        url: 'fetchAllQuestionsData',
+	        data: {
+				"languageSelected": languageSelected
+			},
+	        success: function (data) {
+				//alert(JSON.stringify(data));
+	            updateQuestionsData(data);
+	            hideLoadingPopup();
+	        },
+	        error: function (xhr, status, error) {
+	            console.error("Error invoking data:", error);
+	            hideLoadingPopup();
+	        }
+	    });
+	}
+	
+    function updateQuestionsData(data) {
+        var tbody = $('#tbody');
+        tbody.empty();
+
+        if (data && data.length > 0) {
+        for (var i = 0; i < data.length; i++) {
+            var questions = data[i].questions.replace(/&new_line;/g, "<br>")
+		                                       .replace(/&lt;/g, "&lt;")
+                                               .replace(/&gt;/g, "&gt;")
+		                                       .replace(/&quot;/g, "\"")
+		                                       .replace(/&apos;/g, "'")
+		                                       .replace(/&slash;/g, "/"); 
+            
+            var answers = data[i].answers.replace(/&new_line;/g, "<br>")
+	                                       .replace(/&lt;/g, "&lt;")
+                                           .replace(/&gt;/g, "&gt;")
+	                                       .replace(/&quot;/g, "\"")
+	                                       .replace(/&apos;/g, "'")
+	                                       .replace(/&slash;/g, "/");
+	                                       
+	                                       
+	                                       
+           var newRow = $("<tr class='td_tr'>");
+		   newRow.append("<td class='auto_id'>" + data[i].id + "</td>");
+		   newRow.append("<td>" + (i + 1) + "</td>");
+		   newRow.append("<td class='questions'>" + questions + "</td>");
+		   if((data[i].op1 !== '' && data[i].op1 !== null) || (data[i].op2 !== '' && data[i].op2 !== null) || (data[i].op3 !== '' && data[i].op3 !== null) || (data[i].op4 !== ''  && data[i].op4 !== null)){
+			   newRow.append("<td>" + data[i].op1 + "</td>");
+			   newRow.append("<td>" + data[i].op2 + "</td>");
+			   newRow.append("<td>" + data[i].op3 + "</td>");
+			   newRow.append("<td>" + data[i].op4 + "</td>");
+		   }else{
+			   newRow.append("<td>" + "-" + "</td>");
+			   newRow.append("<td>" + "-" + "</td>");
+			   newRow.append("<td>" + "-" + "</td>");
+			   newRow.append("<td>" + "-" + "</td>");
+		   }
+		   newRow.append("<td class='answers'>" + answers + "</td>");
+		   newRow.append("<td>" + "<div class='edit_icon_div' onclick='displayUpdateForm(\"" + data[i].id + "\", \"" +
+                data[i].questions.replace(/"/g, '\\"') + "\", \"" + data[i].op1 + "\", \"" + data[i].op2 + "\", \"" + data[i].op3 + "\", \"" +
+                data[i].op4 + "\", \"" + data[i].answers + "\")'><i class='bi bi-eye-fill' style='font-size: 14px; color: #4154f1; cursor: pointer;'></i></div>" + "</td>");
+       		 newRow.append("<td>" + "<div class='delete_icon_div' onclick='deleteById(" + data[i].id + ")'><i class='bi bi-trash-fill' style='font-size: 14px; color: #4154f1; cursor: pointer;'></i></div>" + "</td>");
+       		tbody.append(newRow);
+	                                       
+
+          /*  var row = "<tr class='td_tr'>" +
+                "<td class='auto_id'>" + data[i].id + "</td>" +
+                "<td>" + (i + 1) + "</td>" +
+                "<td class='questions'>" + questions + "</td>" + 
+                "<td>" + data[i].op1 + "</td>" +
+                "<td>" + data[i].op2 + "</td>" +
+                "<td>" + data[i].op3 + "</td>" +
+                "<td>" + data[i].op4 + "</td>" +
+                "<td class='answers'>" + answers + "</td>" +
+                "<td>" + "<div class='edit_icon_div' onclick='displayUpdateForm(\"" + data[i].id + "\", \"" +
+                questions.replace(/"/g, '\\"') + "\", \"" + data[i].op1 + "\", \"" + data[i].op2 + "\", \"" + data[i].op3 + "\", \"" +
+                data[i].op4 + "\", \"" + answers + "\")'><img alt='edit_icon' src='/images/moat_edit_icon3.png' class='edit_icon'></div>" +
+                "</td>" +
+                "<td>" + "<div class='delete_icon_div' onclick='deleteById(" + data[i].id + ")'><img alt='delete_icon' src='/images/moat_delete_icon1.png' class='delete_icon'></div>" + "</td>" +
+                "</tr>";
+
+
+            tbody.append(row); */
+        }
+    } else {
+        var noDataRow = "<tr><td class='error_msg' colspan='8'>No data available</td></tr>";
+        tbody.append(noDataRow);
+    }
+}
+    
+    $(document).ready(function() {
+        retrieveData();
+    });
+
+	
+function displayUpdateForm(id, question, a, b, c, d, answer) {
+		
+			question = question.replace(/&new_line;/g, "\n")
+                       .replace(/&lt;/g, "&lt;")
+                       .replace(/&gt;/g, "&gt;")
+                       .replace(/&quot;/g, "\"")
+                       .replace(/&apos;/g, "'")
+                       .replace(/&slash;/g, "/"); 
+
+  answer = answer.replace(/&new_line;/g, "\n")
+                   .replace(/&lt;/g, "&lt;")
+                   .replace(/&gt;/g, "&gt;")
+                   .replace(/&quot;/g, "\"")
+                   .replace(/&apos;/g, "'")
+                   .replace(/&slash;/g, "/"); 
+                   
+                   //alert(answer);
+		
+		if(a.length === 0 && b.length === 0 && c.length === 0 && d.length === 0){
+			$('#options_heading').hide();
+			$('#options_box').hide();
+			$('#auto_id').val(id);
+			document.getElementById("questions").value = question;
+			// $('#questions').val(question);
+			document.getElementById("answers").value = answer;
+        	// $('#answers').val(answer);
+		}else{
+			$('#options_heading').show();
+			$('#options_box').show();
+			$('#auto_id').val(id);
+			document.getElementById("questions").value = question;
+	        // $('#questions').val(question);
+	        $('#op1').val(a);
+	        $('#op2').val(b);
+	        $('#op3').val(c);
+	        $('#op4').val(d);
+	        document.getElementById("answers").value = answer;
+	        // $('#answers').val(answer);
+		}
+		
+        $('#updateQuestionPopupOuterDiv').show();
+    }
+
+	
+	function closePopup(){
+		$('#updateQuestionPopupOuterDiv').hide();
+	}
+	
+
+$('#update_btn').click(function() {
+	
+	var languageSelected = $('#languageSelected').val();
+	var id = $('#auto_id').val();
+	var questions = $('#questions').val().trim();
+	var op1 = $('#op1').val();
+	var op2 = $('#op2').val();
+	var op3 = $('#op3').val();
+	var op4 = $('#op4').val();
+	var answers = $('#answers').val().trim();
+    
+    //alert(id);
+    
+    questions = questions.replace(/\n/g, "&new_line;")
+                           .replace(/</g, "&lt;")
+                           .replace(/>/g, "&gt;")
+                           .replace(/"/g, "'")
+                           .replace(/'/g, "&apos;")
+                           .replace(/\//g, "&slash;");
+		                           
+	 answers = answers.replace(/\n/g, "&new_line;")
+					   .replace(/</g, "&lt;")
+					   .replace(/>/g, "&gt;")
+					   .replace(/"/g, "'")
+					   .replace(/'/g, "&apos;")
+					   .replace(/\//g, "&slash;");
+    
+    
+ 	$.ajax({
+        type: 'POST', 
+        url: 'updateQuestions', 
+        data: {
+		        "languageSelected" : languageSelected,
+		        "id" : id,
+		        "questions" : questions,
+		        "op1" : op1,
+		        "op2" : op2,
+		        "op3" : op3,
+		        "op4" : op4,
+		        "answers" : answers
+    		},
+        success: function(response) {
+            $("#updateQuestionPopupOuterDiv").hide();
+            $.ajax({
+                type: 'GET',
+                url: 'fetchAllQuestionsData', 
+                data: {
+						"languageSelected": languageSelected
+					},
+                success: function(data) {
+                    updateQuestionsData(data);
+                     
+                    Swal.fire({
+					  title: 'Data has been updated!',
+					  icon: 'success',
+					  confirmButtonColor: '#007bff', 
+					  confirmButtonText: 'OK',
+					  customClass: {
+	                        popup: 'custom-swal-font'
+	                    },
+					});
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching updated data:', error);
+                    alert('Error updating data. Please try again.');
+                }
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error('Error updating record:');
+            console.log('XHR object:', xhr);
+            console.log('Status:', status);
+            console.log('Error:', error);
+            alert('Error updating record. Please try again.');
+        }
+    }); 
+});
+
+
+// Used to delete the question
+function deleteById(id) {
+	var languageSelected = $('#languageSelected').val();
+	
+	//alert(languageSelected+" "+id);
+	
+			Swal.fire({
+				title: "Are you sure?",
+				text: "You want to delete this data!",
+				icon: "warning",
+				showCancelButton: true,
+				confirmButtonColor: "#007bff",
+				cancelButtonColor: "#EC7063",
+				confirmButtonText: "Yes, delete it!",
+				customClass: {
+                    popup: 'custom-swal-font'
+                },
+			}).then((result) => {
+				if (result.isConfirmed) {
+
+					$.ajax({
+						type: 'POST',
+						url: 'deleteQuestionsById',
+						data: {
+							"languageSelected": languageSelected,
+							"id": id
+						},
+						success: function (response) {
+							$.ajax({
+				                type: 'GET',
+				                url: 'fetchAllQuestionsData', 
+				                data: {
+										"languageSelected": languageSelected
+									},
+				                success: function(data) {
+				                    updateQuestionsData(data); 
+				                    
+				                    Swal.fire({
+										title: "Deleted!",
+										text: "Data has been deleted.",
+										icon: "success",
+										confirmButtonColor: '#007bff',
+										confirmButtonText: 'OK',
+										customClass: {
+					                        popup: 'custom-swal-font'
+					                    },
+									});
+				
+				                },
+				                error: function(xhr, status, error) {
+				                    console.error('Error fetching updated data:', error);
+				                    alert('Error updating data. Please try again.');
+				                }
+				            });
+						},
+						error: function (xhr, status, error) {
+							console.error('Error updating record:');
+							console.log('XHR object:', xhr);
+							console.log('Status:', status);
+							console.log('Error:', error);
+							alert('Error deleting record. Please try again.');
+						}
+					});
+				}
+			});
+		}
+
+</script>
+
+
+<!-- Script to search table -->
+<script>
+
+document.querySelector('.btn-search').addEventListener('click', function () {
+    document.querySelector('.input-search').focus();
+  });
+
+    function searchTable() {
+        
+    	var input, filter, table, tr, td, i, j, txtValue;
+        
+        input = document.querySelector(".input-search");
+        filter = input.value.toUpperCase();
+        
+        //table = document.getElementById("customTable");
+        table = document.querySelector(".tableSearch");
+        if (!table) return;
+        
+        tr = table.getElementsByTagName("tr");
+        for (i = 1; i < tr.length; i++) {
+            tr[i].style.display = "none";
+            td = tr[i].getElementsByTagName("td");
+            for (j = 0; j < td.length; j++) {
+                if (td[j]) {
+                    txtValue = td[j].textContent || td[j].innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    
+    </script>
+
+</body>
+
+</html>
