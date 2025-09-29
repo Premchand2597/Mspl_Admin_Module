@@ -2690,7 +2690,20 @@
 											    </div>
 											  </div>
 											</div>
-
+											<!-- Leave Usage History Modal -->
+																<div class="modal fade" id="leaveUsageHistoryModal" tabindex="-1" aria-hidden="true">
+																  <div class="modal-dialog modal-xl modal-dialog-centered">
+																    <div class="modal-content">
+																      <div class="modal-header bg-light">
+																        <h5 class="modal-title">Leave Usage History</h5>
+																        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+																      </div>
+																      <div class="modal-body">
+																        <!-- Table will be injected here -->
+																      </div>
+																    </div>
+																  </div>
+																</div>
 
 						<div class="d-flex justify-content-end" style="margin-top:-22px; margin-bottom:0;">
 											  <label for="financialYearSelect" class="fw-bold me-2" 
@@ -3881,32 +3894,28 @@
 
 							            // ✅ Refresh clickSelection
 							            clickSelection = {
-								                startCell: startCell,
-								                startHalf: startHalf,
-								                endCell: endCell,
-								                endHalf: endHalf
-								            };
-								            selectedCells = [];
+							                startCell: startCell,
+							                startHalf: startHalf,
+							                endCell: endCell,
+							                endHalf: endHalf
+							            };
+							            selectedCells = [];
 
-								            highlightRange(startCell, startHalf, endCell, endHalf);
+							            highlightRange(startCell, startHalf, endCell, endHalf);
 
-								            const totalDays = calculateSelectedDays();
-											
-								            if (totalDays > 0) {
-												
-								                updateLeaveSummary(fromDate, toDate, totalDays);
-								                showLeaveTooltip(totalDays, endCell);
-								            }
-											
-											//const totalDays = calculateSelectedDays();
-											// ✅ 🔥 Fetch leave balances + update leave type options
-								           fetchLeaveBalances().then(() => {
-								               updateLeaveTypeOptions(fromDate, toDate, document.getElementById('employeeGender').value,totalDays);
-								           });
-								        }
-								    }
-								});
-
+							            const totalDays = calculateSelectedDays();
+							            if (totalDays > 0) {
+							                updateLeaveSummary(fromDate, toDate, totalDays);
+							                showLeaveTooltip(totalDays, endCell);
+							            }
+										
+										// ✅ 🔥 Fetch leave balances + update leave type options
+										           fetchLeaveBalances().then(() => {
+										               updateLeaveTypeOptions(fromDate, toDate, document.getElementById('employeeGender').value,totalDays);
+										           });
+							        }
+							    }
+							});
 
 
 							// Utility to remove highlights
@@ -4133,100 +4142,99 @@
 									
 
 									// ✅ Validate for Sunday-only OR Sunday-ending selection
-									/*	if (clickSelection.startCell && clickSelection.endCell) {
-										    const startDateStr = clickSelection.startCell.getAttribute("data-date");
-										    const endDateStr = clickSelection.endCell.getAttribute("data-date");
+								/*	if (clickSelection.startCell && clickSelection.endCell) {
+									    const startDateStr = clickSelection.startCell.getAttribute("data-date");
+									    const endDateStr = clickSelection.endCell.getAttribute("data-date");
 
-										    const startDay = new Date(startDateStr).getDay();
-										    const endDay = new Date(endDateStr).getDay();
+									    const startDay = new Date(startDateStr).getDay();
+									    const endDay = new Date(endDateStr).getDay();
 
-										    if (
-										        (startDateStr === endDateStr && startDay === 0) || // Sunday only
-										        endDay === 0                                       // Ends on Sunday
-										    ) {
-										        clearSelections();
-										        resetDateInputs();   // ✅ also clear input values
+									    if (
+									        (startDateStr === endDateStr && startDay === 0) || // Sunday only
+									        endDay === 0                                       // Ends on Sunday
+									    ) {
+									        clearSelections();
+									        resetDateInputs();   // ✅ also clear input values
 
-										        const msgBox = document.getElementById("dateErrorMsg");
-										        msgBox.innerText = "Leave cannot end on a Sunday. Please select a valid working day range.";
-										        msgBox.style.display = "block";
+									        const msgBox = document.getElementById("dateErrorMsg");
+									        msgBox.innerText = "Leave cannot end on a Sunday. Please select a valid working day range.";
+									        msgBox.style.display = "block";
 
-										        picker.hide();   // hide calendar
-										        return; // stop further actions
-										    }
-										}*/
-									
-										if (clickSelection.startCell && clickSelection.endCell) {
-										    const startDateStr = clickSelection.startCell.getAttribute("data-date");
-										    const endDateStr = clickSelection.endCell.getAttribute("data-date");
+									        picker.hide();   // hide calendar
+									        return; // stop further actions
+									    }
+									}*/
+								
+									if (clickSelection.startCell && clickSelection.endCell) {
+									    const startDateStr = clickSelection.startCell.getAttribute("data-date");
+									    const endDateStr = clickSelection.endCell.getAttribute("data-date");
 
-										    const startDay = new Date(startDateStr).getDay();
-										    const endDay = new Date(endDateStr).getDay();
+									    const startDay = new Date(startDateStr).getDay();
+									    const endDay = new Date(endDateStr).getDay();
 
-										    // Check Sundays first
-										    if ((startDateStr === endDateStr && startDay === 0) || endDay === 0) {
-										        clearSelections();
-										        resetDateInputs();
-												// Clear leave summary
-												  updateLeaveSummary(0, 0, 0);
-										        msgBox.innerText = "Leave cannot be applied on Sundays.";
-										        msgBox.style.display = "block";
-										        picker.hide();
-										        return;
-										    }
+									    // Check Sundays first
+									    if ((startDateStr === endDateStr && startDay === 0) || endDay === 0) {
+									        clearSelections();
+									        resetDateInputs();
+											// Clear leave summary
+											  updateLeaveSummary(0, 0, 0);
+									        msgBox.innerText = "Leave cannot be applied on Sundays.";
+									        msgBox.style.display = "block";
+									        picker.hide();
+									        return;
+									    }
 
-										    // Check 2nd/4th Saturdays
-										    if ((startDateStr === endDateStr && isSecondOrFourthSat(startDateStr)) || isSecondOrFourthSat(endDateStr)) {
-										        clearSelections();
-										        resetDateInputs();
-												// Clear leave summary
-												  updateLeaveSummary(0, 0, 0);
-										        msgBox.innerText = "Leave cannot be applied on 2nd or 4th Saturdays.";
-										        msgBox.style.display = "block";
-										        picker.hide();
-										        return;
-										    }
-											
+									    // Check 2nd/4th Saturdays
+									    if ((startDateStr === endDateStr && isSecondOrFourthSat(startDateStr)) || isSecondOrFourthSat(endDateStr)) {
+									        clearSelections();
+									        resetDateInputs();
+											// Clear leave summary
+											  updateLeaveSummary(0, 0, 0);
+									        msgBox.innerText = "Leave cannot be applied on 2nd or 4th Saturdays.";
+									        msgBox.style.display = "block";
+									        picker.hide();
+									        return;
+									    }
 										
-											    // Only update if range changed
-											    if (previousDateRange.from !== startDateStr || previousDateRange.to !== endDateStr) {
-											        previousDateRange.from = startDateStr;
-											        previousDateRange.to = endDateStr;
+									
+										    // Only update if range changed
+										    if (previousDateRange.from !== startDateStr || previousDateRange.to !== endDateStr) {
+										        previousDateRange.from = startDateStr;
+										        previousDateRange.to = endDateStr;
 
-											        document.getElementById('fromDate').value = startDateStr;
-											        document.getElementById('toDate').value = endDateStr;
-											        document.getElementById("dateRange").value = startDateStr + " to " + endDateStr;
-													const totalDays = calculateSelectedDays();
-											        fetchLeaveBalances().then(() => {
-											            updateLeaveTypeOptions(startDateStr, endDateStr,document.getElementById('employeeGender').value,totalDays);
-											        });
+										        document.getElementById('fromDate').value = startDateStr;
+										        document.getElementById('toDate').value = endDateStr;
+										        document.getElementById("dateRange").value = startDateStr + " to " + endDateStr;
+												const totalDays = calculateSelectedDays();
+										        fetchLeaveBalances().then(() => {
+										            updateLeaveTypeOptions(startDateStr, endDateStr,document.getElementById('employeeGender').value,totalDays);
+										        });
+										    }
+										
+											if (
+											    lastTooltipRange.from !== startDateStr ||
+											    lastTooltipRange.to !== endDateStr ||
+											    lastTooltipRange.startHalf !== clickSelection.startHalf ||
+											    lastTooltipRange.endHalf !== clickSelection.endHalf
+											) {
+											    const totalDays = calculateSelectedDays();
+											    if (totalDays > 0) {
+											        showLeaveTooltip(totalDays, clickSelection.endCell);
+											        updateLeaveSummary(startDateStr, endDateStr, totalDays);
 											    }
-											
-												if (
-												    lastTooltipRange.from !== startDateStr ||
-												    lastTooltipRange.to !== endDateStr ||
-												    lastTooltipRange.startHalf !== clickSelection.startHalf ||
-												    lastTooltipRange.endHalf !== clickSelection.endHalf
-												) {
-												    const totalDays = calculateSelectedDays();
-												    if (totalDays > 0) {
-												        showLeaveTooltip(totalDays, clickSelection.endCell);
-												        updateLeaveSummary(startDateStr, endDateStr, totalDays);
-												    }
-													fetchLeaveBalances().then(() => {
-																																	
-																																//	alert("lood1 " + totalDays);
-																							  updateLeaveTypeOptions(startDateStr, endDateStr,document.getElementById('employeeGender').value,totalDays);
-																							  });
-												    // Save both dates + halves
-												    lastTooltipRange.from = startDateStr;
-												    lastTooltipRange.to = endDateStr;
-												    lastTooltipRange.startHalf = clickSelection.startHalf;
-												    lastTooltipRange.endHalf = clickSelection.endHalf;
-												}
+												fetchLeaveBalances().then(() => {
+																																
+																															//	alert("lood1 " + totalDays);
+																						  updateLeaveTypeOptions(startDateStr, endDateStr,document.getElementById('employeeGender').value,totalDays);
+																						  });
+											    // Save both dates + halves
+											    lastTooltipRange.from = startDateStr;
+											    lastTooltipRange.to = endDateStr;
+											    lastTooltipRange.startHalf = clickSelection.startHalf;
+											    lastTooltipRange.endHalf = clickSelection.endHalf;
+											}
 
-										}
-
+									}
 		//alert(oo);							// At the end of endDrag()
 									const dateRangeInput = document.getElementById("dateRange");
 									dateRangeInput.removeAttribute("readonly");  // now editable after drag
@@ -4542,7 +4550,6 @@
 							   
 								  // NEW hidden input for halves (add this to your form)
 								  const halvesInput = document.getElementById('dailyHalves');
-								  //alert(JSON.stringify(dailyHalves));
 								  if (halvesInput) {
 								      halvesInput.value = JSON.stringify(dailyHalves);
 								  }
@@ -4581,155 +4588,154 @@
 		    ]);
 		}
 		function updateLeaveTypeOptions(fromStr, toStr, gender, totalDays) {
-			//alert("lood" +totalDays);
-			console.log("Function called with:", fromStr, toStr);
-			const leaveTypeSelect = document.getElementById('leaveType');
-			   if (!leaveTypeSelect) return;
+								//alert("lood");
+								console.log("Function called with:", fromStr, toStr);
+								const leaveTypeSelect = document.getElementById('leaveType');
+								   if (!leaveTypeSelect) return;
 
-			   console.log("Function called with:", fromStr, toStr);
+								   console.log("Function called with:", fromStr, toStr);
 
-			   const fromDate = new Date(fromStr);
-			   const toDate = new Date(toStr);
-			console.log("Parsed dates:", fromDate, toDate);
-		    // Your existing SL, CL, EL logic here...
-			if (fromDate && toDate && fromDate <= toDate) {
-						       const diffTime = toDate - fromDate;
-						       // +1 because both endpoints count
-						       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
-							   console.log("Difference in days (inclusive):", diffDays);
-						       leaveTypeSelect.innerHTML = `<option value="">Select Leave Type</option>`;
-							   const addedOptions = new Set();
+								   const fromDate = new Date(fromStr);
+								   const toDate = new Date(toStr);
+								console.log("Parsed dates:", fromDate, toDate);
+							    // Your existing SL, CL, EL logic here...
+								if (fromDate && toDate && fromDate <= toDate) {
+											       const diffTime = toDate - fromDate;
+											       // +1 because both endpoints count
+											       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+												   console.log("Difference in days (inclusive):", diffDays);
+											       leaveTypeSelect.innerHTML = `<option value="">Select Leave Type</option>`;
+												   const addedOptions = new Set();
 
-							   if (totalDays <= 2) {
-								console.log("Leave period <= 2 days, checking SL/CL/EL options...");
-							              let slAdded = false;
-							              let clAdded = false;
+												   if (totalDays <= 2) {
+													console.log("Leave period <= 2 days, checking SL/CL/EL options...");
+												              let slAdded = false;
+												              let clAdded = false;
 
-							              // Full SL?
-							              if (leaveBalances1.sl >= totalDays) {
-							                //  leaveTypeSelect.innerHTML += `<option value="SL">Sick Leave (SL)</option>`;
-							               //   slAdded = true;
-										   if (!addedOptions.has("SL")) {
-										                           leaveTypeSelect.innerHTML += `<option value="SL">Sick Leave (SL)</option>`;
-										                           addedOptions.add("SL");
-										                           slAdded = true;
-										                       }
-							              }
-							              // Full CL?
-							              if (leaveBalances1.cl >= totalDays) {
-							               //   leaveTypeSelect.innerHTML += `<option value="CL">Casual Leave (CL)</option>`;
-							                //  clAdded = true;
-											if (!addedOptions.has("CL")) {
-											                       leaveTypeSelect.innerHTML += `<option value="CL">Casual Leave (CL)</option>`;
-											                       addedOptions.add("CL");
-											                       clAdded = true;
-											                   }
-							              }
-										  // Special case: CL = 0, SL = 1, EL > 0 — show both SL and EL
-										        if (leaveBalances1.cl === 0 && leaveBalances1.sl === 1 && leaveBalances1.el > 0 && totalDays == 2) {
-													
-										         //   leaveTypeSelect.innerHTML += `<option value="SL">Sick Leave (SL)</option>`;
-							//			            leaveTypeSelect.innerHTML += `<option value="EL">Earned Leave (EL)</option>`;
-										           // slAdded = true;
-												 /*  if (!addedOptions.has("SL")) {
-												                         leaveTypeSelect.innerHTML += `<option value="SL">Sick Leave (SL)</option>`;
-												                         addedOptions.add("SL");
-												                     }*/
-												                     if (!addedOptions.has("EL")) {
-												                         leaveTypeSelect.innerHTML += `<option value="EL">Earned Leave (EL)</option>`;
-												                         addedOptions.add("EL");
-												                     }
-										        }
-												
-												// Special case: CL = 0, SL = 1, EL > 0 — show both SL and EL
-																				        if (leaveBalances1.sl === 0 && leaveBalances1.cl === 1 && leaveBalances1.el > 0 && totalDays == 2) {
-																				          //  leaveTypeSelect.innerHTML += `<option value="CL">Casual Leave (CL)</option>`;
-																				            //leaveTypeSelect.innerHTML += `<option value="EL">Earned Leave (EL)</option>`;
-																				            //slAdded = true;
-																							/*if (!addedOptions.has("CL")) {
-																							                       leaveTypeSelect.innerHTML += `<option value="CL">Casual Leave (CL)</option>`;
-																							                       addedOptions.add("CL");
-																							                   }*/
-																							                   if (!addedOptions.has("EL")) {
-																							                       leaveTypeSelect.innerHTML += `<option value="EL">Earned Leave (EL)</option>`;
-																							                       addedOptions.add("EL");
-																							                   }
-																				        }
-																						// Special case: SL = 1, CL = 1, EL > 0 and diffDays <= 2 — show SL, CL, EL
-																						if (leaveBalances1.sl === 1 && leaveBalances1.cl === 1 && leaveBalances1.el > 0 && totalDays == 2) {
-																						  //  leaveTypeSelect.innerHTML += `<option value="SL">Sick Leave (SL)</option>`;
-																						  //  leaveTypeSelect.innerHTML += `<option value="CL">Casual Leave (CL)</option>`;
-																						//    leaveTypeSelect.innerHTML += `<option value="EL">Earned Leave (EL)</option>`;
-																						//    slAdded = clAdded = true;
-																						/*if (!addedOptions.has("SL")) {
-																						                        leaveTypeSelect.innerHTML += `<option value="SL">Sick Leave (SL)</option>`;
-																						                        addedOptions.add("SL");
-																						                    }
-																						                    if (!addedOptions.has("CL")) {
-																						                        leaveTypeSelect.innerHTML += `<option value="CL">Casual Leave (CL)</option>`;
-																						                        addedOptions.add("CL");
-																						                    }*/
-																						                    if (!addedOptions.has("EL")) {
-																						                        leaveTypeSelect.innerHTML += `<option value="EL">Earned Leave (EL)</option>`;
-																						                        addedOptions.add("EL");
-																						                    }
-																						}
-																
-																						
-										  // Combined SL + CL sufficient, but neither alone
-										      /*    if (!slAdded || !clAdded) {
-										              if ((leaveBalances.sl + leaveBalances.cl) >= diffDays) {
-										                  if (!slAdded) {
-										                      leaveTypeSelect.innerHTML += `<option value="SL">Sick Leave (SL)</option>`;
-										                  }
-										                  if (!clAdded) {
-										                      leaveTypeSelect.innerHTML += `<option value="CL">Casual Leave (CL)</option>`;
-										                  }
-										                  slAdded = clAdded = true;
-										              }
-										          }*/
+												              // Full SL?
+												              if (leaveBalances1.sl >= totalDays) {
+												                //  leaveTypeSelect.innerHTML += `<option value="SL">Sick Leave (SL)</option>`;
+												               //   slAdded = true;
+															   if (!addedOptions.has("SL")) {
+															                           leaveTypeSelect.innerHTML += `<option value="SL">Sick Leave (SL)</option>`;
+															                           addedOptions.add("SL");
+															                           slAdded = true;
+															                       }
+												              }
+												              // Full CL?
+												              if (leaveBalances1.cl >= totalDays) {
+												               //   leaveTypeSelect.innerHTML += `<option value="CL">Casual Leave (CL)</option>`;
+												                //  clAdded = true;
+																if (!addedOptions.has("CL")) {
+																                       leaveTypeSelect.innerHTML += `<option value="CL">Casual Leave (CL)</option>`;
+																                       addedOptions.add("CL");
+																                       clAdded = true;
+																                   }
+												              }
+															  // Special case: CL = 0, SL = 1, EL > 0 — show both SL and EL
+															        if (leaveBalances1.cl === 0 && leaveBalances1.sl === 1 && leaveBalances1.el > 0 && totalDays == 2) {
+																		
+															         //   leaveTypeSelect.innerHTML += `<option value="SL">Sick Leave (SL)</option>`;
+												//			            leaveTypeSelect.innerHTML += `<option value="EL">Earned Leave (EL)</option>`;
+															           // slAdded = true;
+																	 /*  if (!addedOptions.has("SL")) {
+																	                         leaveTypeSelect.innerHTML += `<option value="SL">Sick Leave (SL)</option>`;
+																	                         addedOptions.add("SL");
+																	                     }*/
+																	                     if (!addedOptions.has("EL")) {
+																	                         leaveTypeSelect.innerHTML += `<option value="EL">Earned Leave (EL)</option>`;
+																	                         addedOptions.add("EL");
+																	                     }
+															        }
+																	
+																	// Special case: CL = 0, SL = 1, EL > 0 — show both SL and EL
+																									        if (leaveBalances1.sl === 0 && leaveBalances1.cl === 1 && leaveBalances1.el > 0 && totalDays == 2) {
+																									          //  leaveTypeSelect.innerHTML += `<option value="CL">Casual Leave (CL)</option>`;
+																									            //leaveTypeSelect.innerHTML += `<option value="EL">Earned Leave (EL)</option>`;
+																									            //slAdded = true;
+																												/*if (!addedOptions.has("CL")) {
+																												                       leaveTypeSelect.innerHTML += `<option value="CL">Casual Leave (CL)</option>`;
+																												                       addedOptions.add("CL");
+																												                   }*/
+																												                   if (!addedOptions.has("EL")) {
+																												                       leaveTypeSelect.innerHTML += `<option value="EL">Earned Leave (EL)</option>`;
+																												                       addedOptions.add("EL");
+																												                   }
+																									        }
+																											// Special case: SL = 1, CL = 1, EL > 0 and diffDays <= 2 — show SL, CL, EL
+																											if (leaveBalances1.sl === 1 && leaveBalances1.cl === 1 && leaveBalances1.el > 0 && totalDays == 2) {
+																											  //  leaveTypeSelect.innerHTML += `<option value="SL">Sick Leave (SL)</option>`;
+																											  //  leaveTypeSelect.innerHTML += `<option value="CL">Casual Leave (CL)</option>`;
+																											//    leaveTypeSelect.innerHTML += `<option value="EL">Earned Leave (EL)</option>`;
+																											//    slAdded = clAdded = true;
+																											/*if (!addedOptions.has("SL")) {
+																											                        leaveTypeSelect.innerHTML += `<option value="SL">Sick Leave (SL)</option>`;
+																											                        addedOptions.add("SL");
+																											                    }
+																											                    if (!addedOptions.has("CL")) {
+																											                        leaveTypeSelect.innerHTML += `<option value="CL">Casual Leave (CL)</option>`;
+																											                        addedOptions.add("CL");
+																											                    }*/
+																											                    if (!addedOptions.has("EL")) {
+																											                        leaveTypeSelect.innerHTML += `<option value="EL">Earned Leave (EL)</option>`;
+																											                        addedOptions.add("EL");
+																											                    }
+																											}
+																					
+																											
+															  // Combined SL + CL sufficient, but neither alone
+															      /*    if (!slAdded || !clAdded) {
+															              if ((leaveBalances.sl + leaveBalances.cl) >= diffDays) {
+															                  if (!slAdded) {
+															                      leaveTypeSelect.innerHTML += `<option value="SL">Sick Leave (SL)</option>`;
+															                  }
+															                  if (!clAdded) {
+															                      leaveTypeSelect.innerHTML += `<option value="CL">Casual Leave (CL)</option>`;
+															                  }
+															                  slAdded = clAdded = true;
+															              }
+															          }*/
 
-							              // Fallback to EL or LOP if still nothing
-							              if (!slAdded && !clAdded) {
-							                 // if (leaveBalances.el >= diffDays) {
-							                   //   leaveTypeSelect.innerHTML += `<option value="EL">Earned Leave (EL)</option>`;
-							                 // } else {
-							                    //  leaveTypeSelect.innerHTML += `<option value="LOP">Loss of Pay (LOP)</option>`;
-							                 // }
-											 if (leaveBalances1.el >= totalDays) {
-											                         if (!addedOptions.has("EL")) {
-											                             leaveTypeSelect.innerHTML += `<option value="EL">Earned Leave (EL)</option>`;
-											                             addedOptions.add("EL");
-											                         }
-											                     } else {
-											                         leaveTypeSelect.innerHTML += `<option value="LOP">Loss of Pay (LOP)</option>`;
-											                     }
-							              }
+												              // Fallback to EL or LOP if still nothing
+												              if (!slAdded && !clAdded) {
+												                 // if (leaveBalances.el >= diffDays) {
+												                   //   leaveTypeSelect.innerHTML += `<option value="EL">Earned Leave (EL)</option>`;
+												                 // } else {
+												                    //  leaveTypeSelect.innerHTML += `<option value="LOP">Loss of Pay (LOP)</option>`;
+												                 // }
+																 if (leaveBalances1.el >= totalDays) {
+																                         if (!addedOptions.has("EL")) {
+																                             leaveTypeSelect.innerHTML += `<option value="EL">Earned Leave (EL)</option>`;
+																                             addedOptions.add("EL");
+																                         }
+																                     } else {
+																                         leaveTypeSelect.innerHTML += `<option value="LOP">Loss of Pay (LOP)</option>`;
+																                     }
+												              }
 
-							              // Always offer maternity leave for women
-							              if (gender === 'Female') {
-							                //  leaveTypeSelect.innerHTML += `<option value="ML">Maternity Leave (ML)</option>`;
-											if (!addedOptions.has("ML")) {
-											                       leaveTypeSelect.innerHTML += `<option value="ML">Maternity Leave (ML)</option>`;
-											                       addedOptions.add("ML");
-											                   }
-							              }
-				            }
+												              // Always offer maternity leave for women
+												              if (gender === 'Female') {
+												                //  leaveTypeSelect.innerHTML += `<option value="ML">Maternity Leave (ML)</option>`;
+																if (!addedOptions.has("ML")) {
+																                       leaveTypeSelect.innerHTML += `<option value="ML">Maternity Leave (ML)</option>`;
+																                       addedOptions.add("ML");
+																                   }
+												              }
+									            }
 
-				            // Leave between 3 and 30 days
-				            else if (totalDays > 2 && totalDays <= 30) {
-				                const selectedValue = leaveBalances1.el >= totalDays ? 'EL' : 'LOP';
-				                leaveTypeSelect.innerHTML = `
-				                    <option value="EL" ${selectedValue === 'EL' ? 'selected' : ''}>Earned Leave (EL)</option>
-				                    <option value="LOP" ${selectedValue === 'LOP' ? 'selected' : ''}>Loss of Pay (LOP)</option>
-				                `;
-								if (gender === 'Female') {
-								                    leaveTypeSelect.innerHTML += `<option value="ML">Maternity Leave (ML)</option>`;
-								                }
-				            }
-				        }
-		}
-
+									            // Leave between 3 and 30 days
+									            else if (totalDays > 2 && totalDays <= 30) {
+									                const selectedValue = leaveBalances1.el >= totalDays ? 'EL' : 'LOP';
+									                leaveTypeSelect.innerHTML = `
+									                    <option value="EL" ${selectedValue === 'EL' ? 'selected' : ''}>Earned Leave (EL)</option>
+									                    <option value="LOP" ${selectedValue === 'LOP' ? 'selected' : ''}>Loss of Pay (LOP)</option>
+									                `;
+													if (gender === 'Female') {
+													                    leaveTypeSelect.innerHTML += `<option value="ML">Maternity Leave (ML)</option>`;
+													                }
+									            }
+									        }
+							}
 
 	</script>
 	<script>
@@ -7143,6 +7149,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		}
 
 		function fetchLeavesData() {
+			
 				var email=document.getElementById('employeeEmail1').value;
 				fetch(`/employee-leaves/${email}`, {
 					method: 'GET'
@@ -7407,7 +7414,6 @@ document.addEventListener('DOMContentLoaded', function () {
 						let leaveDurationText = '';
 
 						if (application.leaveDuration) {
-							//alert(application.leaveDuration);
 						    // If leaveDuration is numeric (e.g., "1.5", "2", "3.5")
 						    if (!isNaN(application.leaveDuration)) {
 						        leaveDurationText = `${application.leaveDuration} day(s)`;
@@ -8028,7 +8034,13 @@ document.addEventListener("DOMContentLoaded", () => {
 		                            row.innerHTML = `
 		                                <td>${record.leaveType}</td>
 		                                <td>${record.totalAdded || '0'}</td>
-		                                <td>${record.totalUsed || '0'}</td>
+										<td>
+																				           <a href="#" class="used-link" 
+																				              data-leavetype="${record.leaveType}" 
+																				              data-year="${new Date().getFullYear()}">
+																				              ${record.totalUsed || '0'}
+																				           </a>
+																				       </td>
 		                                <td>${record.remaining || '0'}</td>
 		                            `;
 		                            tbody.appendChild(row);
@@ -8110,7 +8122,13 @@ document.addEventListener("DOMContentLoaded", () => {
 		                    row.innerHTML = `
 		                        <td>Earned Leave</td>
 		                        <td>${earnedLeave.earnedLeave || '0'}</td>
-		                        <td>${earnedLeave.elUsed || '0'}</td>
+								<td>
+																       <a href="#" class="used-link" 
+																          data-leavetype="Earned Leave" 
+																          data-year="${new Date().getFullYear()}">
+																          ${earnedLeave.elUsed || '0'}
+																       </a>
+																   </td>
 		                        <td>${earnedLeave.elRemaining || '0'}</td>
 		                    `;
 		                    const tbody = document.querySelector('#leaveRecordsTable');
@@ -8253,6 +8271,142 @@ document.addEventListener("DOMContentLoaded", () => {
 				});
 			}
 		});
+		
+		document.addEventListener("click", function (event) {
+				    if (event.target.classList.contains("used-link")) {
+				        event.preventDefault();
+				        let leaveType = event.target.dataset.leavetype;
+				        let year = parseInt(event.target.dataset.year, 10); 
+
+				        console.log("Clicked used leave:", leaveType, "Year:", year);
+
+				        // Only map Earned Leave → EL
+				        if (leaveType === "Earned Leave") {
+				            leaveType = "EL";
+				        }
+
+				        const financialYear = getCustomFinancialYear(year, leaveType);
+				        console.log("Converted financial year:", financialYear);
+
+				        // Close Leave Details Modal (if open)
+				        const leaveDetailsModalEl = document.getElementById("leaveDetailsModal");
+				        const leaveDetailsModal = bootstrap.Modal.getInstance(leaveDetailsModalEl);
+				        if (leaveDetailsModal) {
+				            leaveDetailsModal.hide();
+				        }
+
+				        fetch(`/leave-usage-history?leaveType=${leaveType}&year=${financialYear}`)
+				            .then(response => {
+				                if (!response.ok) throw new Error("Failed to fetch leave usage history");
+				                return response.json();
+				            })
+				            .then(historyList => {
+				                console.log("Leave usage history received:", historyList);
+
+				                let historyHtml = "";
+
+				                if (historyList.length === 0) {
+				                    historyHtml = `<p class="text-center text-muted my-3">
+				                        No leave usage history found for <b>${leaveType}</b> in <b>${financialYear}</b>.
+				                    </p>`;
+				                } else {
+				                    historyHtml = `
+				                        <div class="table-responsive">
+				                            <table class="table table-hover table-bordered text-center align-middle shadow-sm">
+				                                <thead class="table-dark">
+				                                    <tr>
+				                                        <th rowspan="2" style="color: black; background: #f8f9fa;">From</th>
+				                                        <th rowspan="2" style="color: black; background: #f8f9fa;">To</th>
+				                                        <th rowspan="2" style="color: black; background: #f8f9fa;">Reason</th>
+				                                        <th colspan="2" class="table-secondary">Before Deduction</th>
+				                                        <th colspan="2" class="table-success">After Deduction</th>
+				                                        <th rowspan="2" style="color: black; background: #f8f9fa;">Log Date</th>
+				                                    </tr>
+				                                    <tr>
+				                                        <th style="color: black; background: #f8f9fa;">Used</th>
+				                                        <th style="color: black; background: #f8f9fa;">Remaining</th>
+				                                        <th style="color: black; background: #f8f9fa;">Used</th>
+				                                        <th style="color: black; background: #f8f9fa;">Remaining</th>
+				                                    </tr>
+				                                </thead>
+				                                <tbody>
+				                    `;
+
+				                    historyList.forEach(h => {
+				                        const formatDateTime = (dateStr) => {
+				                            if (!dateStr) return "";
+				                            const d = new Date(dateStr);
+				                            return `${d.toLocaleDateString()} ${d.toLocaleTimeString()}`;
+				                        };
+				                        const formatDate = (dateStr) => {
+				                            if (!dateStr) return "";
+				                            const d = new Date(dateStr);
+				                            return `${d.toLocaleDateString()}`;
+				                        };
+
+				                        historyHtml += `
+				                            <tr>
+				                                <td>${formatDate(h.fromDate)}</td>
+				                                <td>${formatDate(h.toDate)}</td>
+				                                <td class="text-start">${h.reason || "-"}</td>
+				                                <td>${h.previousUsed}</td>
+				                                <td>${h.previousRemaining}</td>
+				                                <td class="fw-bold text-danger">${h.newUsed}</td>
+				                                <td class="fw-bold text-success">${h.newRemaining}</td>
+				                                <td>${formatDateTime(h.logDate)}</td>
+				                            </tr>
+				                        `;
+				                    });
+
+				                    historyHtml += "</tbody></table></div>";
+				                }
+
+				                const historyModalBody = document.querySelector("#leaveUsageHistoryModal .modal-body");
+				                historyModalBody.innerHTML = historyHtml;
+
+				                const usageModalEl = document.getElementById("leaveUsageHistoryModal");
+				                const usageModal = new bootstrap.Modal(usageModalEl);
+				                usageModal.show();
+
+				                // When usage modal closes, reopen leave details modal
+				                usageModalEl.addEventListener("hidden.bs.modal", function () {
+				                    const reopenModal = new bootstrap.Modal(leaveDetailsModalEl);
+				                    reopenModal.show();
+				                }, { once: true }); // ensure only once
+				            })
+				            .catch(error => console.error("Error loading leave usage history:", error));
+				    }
+				});
+
+
+				function getCustomFinancialYear(year, leaveType) {
+				    const fyStart = new Date(year, 2, 26); // March 26
+				    const fyEnd = new Date(year + 1, 2, 25); // March 25 next year
+
+				    const today = new Date();
+				    let startYear, endYear;
+
+				    if (today >= fyStart && today <= fyEnd) {
+				        startYear = year;
+				        endYear = year + 1;
+				    } else if (today < fyStart) {
+				        startYear = year - 1;
+				        endYear = year;
+				    } else {
+				        startYear = year + 1;
+				        endYear = year + 2;
+				    }
+
+				    if (leaveType === "EL") {
+				        // Return full year format for EL
+				        return `${startYear}-${endYear}`;
+				    } else {
+				        // Return compact format for other leave types
+				        return `${startYear}-${endYear.toString().slice(-2)}`;
+				    }
+				}
+
+
 </script>
 
 

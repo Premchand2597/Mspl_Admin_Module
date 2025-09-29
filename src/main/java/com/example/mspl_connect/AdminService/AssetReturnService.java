@@ -131,6 +131,12 @@ public class AssetReturnService {
                 request.getRefAssetId()   // include reference asset ID
             )
             .orElseThrow(() -> new RuntimeException("Assigned asset record not found"));
+     // 🔽 Decrease assigned quantity
+        int newAssignedQty = assignedAsset.getQuantity() - request.getQuantity();
+        if (newAssignedQty < 0) {
+            throw new RuntimeException("Assigned quantity cannot go negative");
+        }
+        assignedAsset.setQuantity(newAssignedQty);
 
      // Instead of null, assign the approvedBy value
         assignedAsset.setAssigned_to(request.getApprovedBy());   // mark as no longer assigned

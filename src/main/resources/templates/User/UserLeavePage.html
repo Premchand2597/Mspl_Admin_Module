@@ -1163,7 +1163,7 @@
 																			title="Leave Balance"
 																			th:onclick="displayLeaveBalanceold('[[${userlist.employeeEmail}]]')"
 																			style="font-size: 22px; cursor: pointer;"></i> 
-																		<th:block th:if="${userlist.sender_id != 'The Melange Team'}">	
+																		<th:block th:if="${userlist.sender_id != 'The Melange Team' and !userlist.processed}">	
 																		   <i class="bx bx-edit text-primary" title="Edit"
 																				th:data-id="${userlist.id}"
 																				th:data-emp-id="${userlist.empid}"
@@ -1272,6 +1272,8 @@
 											    const [y, m, d] = dateStr.split('-');
 											    return `${d}-${m}-${y}`;
 											};
+
+
 										</script>
 
 
@@ -1338,7 +1340,7 @@
 											                           style="font-size: 22px; cursor: pointer;cursor: pointer;"></i>
 											                           
 											                           
-											                        <th:block th:if="${adminDeptProccessedLeaveRequest.sender_id != 'The Melange Team'}">	
+											                        <th:block th:if="${adminDeptProccessedLeaveRequest.sender_id != 'The Melange Team'and !adminDeptProccessedLeaveRequest.processed}">	
 												                        <i class="bx bx-edit text-primary" title="Edit"
 												                           th:data-id="${adminDeptProccessedLeaveRequest.id}"
 												                           th:data-emp-id="${adminDeptProccessedLeaveRequest.empid}"
@@ -1449,7 +1451,7 @@
 
 																		style="font-size: 22px; cursor: pointer;"></i>
 																	 
-																	 <th:block th:if="${adminDeptRejectedLeaveRequest.sender_id != 'The Melange Team'}">	
+																	 <th:block th:if="${adminDeptRejectedLeaveRequest.sender_id != 'The Melange Team'and !adminDeptRejectedLeaveRequest.processed}">	
 																	 <i class="bx bx-edit text-primary" title="Edit"
 																		th:data-id="${adminDeptRejectedLeaveRequest.id}"
 																		th:data-emp-id="${adminDeptRejectedLeaveRequest.empid}"

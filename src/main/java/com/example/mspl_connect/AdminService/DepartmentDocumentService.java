@@ -44,86 +44,85 @@ public class DepartmentDocumentService {
 		   
 		   public DepartmentDocument saveDoc(MultipartFile file, String title, Long dept, String empId, String createdBy) throws IOException {
 
-               Path uploadDirectory = Paths.get("D:/Desktop/EmpDocs/");
-                  Path uploadDirectory2 = Paths.get("src/main/resources/static/assets/EmpBackupDocs/");
+		    	 Path uploadDirectory = Paths.get("D:/Desktop/EmpDocs/");
+		    	    Path uploadDirectory2 = Paths.get("src/main/resources/static/assets/EmpBackupDocs/");
 
-                  if (!Files.exists(uploadDirectory)) {
-                      Files.createDirectories(uploadDirectory);
-                  }
-                  if (!Files.exists(uploadDirectory2)) {
-                      Files.createDirectories(uploadDirectory2);
-                  }
+		    	    if (!Files.exists(uploadDirectory)) {
+		    	        Files.createDirectories(uploadDirectory);
+		    	    }
+		    	    if (!Files.exists(uploadDirectory2)) {
+		    	        Files.createDirectories(uploadDirectory2);
+		    	    }
 
-          // Clean and define filename
-          String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+		        // Clean and define filename
+		        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
-          // Define full paths for both
-          Path internalPath = uploadDirectory.resolve(fileName);
-          Path externalPath = uploadDirectory2.resolve(fileName);
+		        // Define full paths for both
+		        Path internalPath = uploadDirectory.resolve(fileName);
+		        Path externalPath = uploadDirectory2.resolve(fileName);
 
-          // Copy file to both paths
-          Files.copy(file.getInputStream(), internalPath, StandardCopyOption.REPLACE_EXISTING);
-          Files.copy(file.getInputStream(), externalPath, StandardCopyOption.REPLACE_EXISTING);
+		        // Copy file to both paths
+		        Files.copy(file.getInputStream(), internalPath, StandardCopyOption.REPLACE_EXISTING);
+		        Files.copy(file.getInputStream(), externalPath, StandardCopyOption.REPLACE_EXISTING);
 
-          String normalizedPath = "Desktop/EmpDocs/" + fileName;
-          // Save file path of either location (internal, external or both — your choice)
-          DepartmentDocument doc = new DepartmentDocument();
-          doc.setTitle(title);
-          doc.setDepartment(dept);
-          doc.setUpdatedDate(LocalDateTime.now());
-          doc.setFileName(fileName);
+		        String normalizedPath = "Desktop/EmpDocs/" + fileName;
+		        // Save file path of either location (internal, external or both — your choice)
+		        DepartmentDocument doc = new DepartmentDocument();
+		        doc.setTitle(title);
+		        doc.setDepartment(dept);
+		        doc.setUpdatedDate(LocalDateTime.now());
+		        doc.setFileName(fileName);
 
-          // Option 1: Save internal path
-          doc.setFilePath(normalizedPath);
-          doc.setEmpId(empId);
-          doc.setCreatedBy(createdBy); // ✅ Save createdBy
+		        // Option 1: Save internal path
+		        doc.setFilePath(normalizedPath);
+		        doc.setEmpId(empId);
+		        doc.setCreatedBy(createdBy); // ✅ Save createdBy
 
-          // Option 2 (alternative): Save external path
-          // doc.setFilePath(externalPath.toString());
+		        // Option 2 (alternative): Save external path
+		        // doc.setFilePath(externalPath.toString());
 
-          return repository.save(doc);
-      }
-
+		        return repository.save(doc);
+		    }
 	    
-		   public DepartmentDocument saveDocWithBookDept(MultipartFile file, String title, Long dept,
-	                Long bookDeptId, String empId, String createdBy) throws IOException {
-	                      // Define your two upload directories
-	                Path uploadDirectory = Paths.get("D:/Desktop/EmpDocs/");
-	                Path uploadDirectory2 = Paths.get("src/main/resources/static/assets/EmpBackupDocs/");
+	    public DepartmentDocument saveDocWithBookDept(MultipartFile file, String title, Long dept,
+                Long bookDeptId, String empId, String createdBy) throws IOException {
+	    	  // Define your two upload directories
+	        Path uploadDirectory = Paths.get("D:/Desktop/EmpDocs/");
+	        Path uploadDirectory2 = Paths.get("src/main/resources/static/assets/EmpBackupDocs/");
 
-	                // Ensure both folders exist
-	                if (!Files.exists(uploadDirectory)) {
-	                    Files.createDirectories(uploadDirectory);
-	                }
-	                if (!Files.exists(uploadDirectory2)) {
-	                    Files.createDirectories(uploadDirectory2);
-	                }
-	// Clean and define filename
-	String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+	        // Ensure both folders exist
+	        if (!Files.exists(uploadDirectory)) {
+	            Files.createDirectories(uploadDirectory);
+	        }
+	        if (!Files.exists(uploadDirectory2)) {
+	            Files.createDirectories(uploadDirectory2);
+	        }
+// Clean and define filename
+String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
-	// Define full paths
-	Path internalPath = uploadDirectory.resolve(fileName);
-	Path externalPath = uploadDirectory2.resolve(fileName);
+// Define full paths
+Path internalPath = uploadDirectory.resolve(fileName);
+Path externalPath = uploadDirectory2.resolve(fileName);
 
-	// Copy file to both paths
-	Files.copy(file.getInputStream(), internalPath, StandardCopyOption.REPLACE_EXISTING);
-	Files.copy(file.getInputStream(), externalPath, StandardCopyOption.REPLACE_EXISTING);
-	//Normalize path for DB
-	String normalizedPath = "Desktop/EmpDocs/" + fileName;
+// Copy file to both paths
+Files.copy(file.getInputStream(), internalPath, StandardCopyOption.REPLACE_EXISTING);
+Files.copy(file.getInputStream(), externalPath, StandardCopyOption.REPLACE_EXISTING);
+//Normalize path for DB
+String normalizedPath = "Desktop/EmpDocs/" + fileName;
 
-	// Build entity
-	DepartmentDocument doc = new DepartmentDocument();
-	doc.setTitle(title);
-	doc.setDepartment(dept);              // default employee dept
-	doc.setBookOfKnowledgeDeptId(bookDeptId); // ✅ new field
-	doc.setUpdatedDate(LocalDateTime.now());
-	doc.setFileName(fileName);
-	doc.setFilePath(normalizedPath); // Option 1: internal path
-	doc.setEmpId(empId);
-	doc.setCreatedBy(createdBy);
+// Build entity
+DepartmentDocument doc = new DepartmentDocument();
+doc.setTitle(title);
+doc.setDepartment(dept);              // default employee dept
+doc.setBookOfKnowledgeDeptId(bookDeptId); // ✅ new field
+doc.setUpdatedDate(LocalDateTime.now());
+doc.setFileName(fileName);
+doc.setFilePath(normalizedPath); // Option 1: internal path
+doc.setEmpId(empId);
+doc.setCreatedBy(createdBy);
 
-	return repository.save(doc);
-	}
+return repository.save(doc);
+}
 
 
 

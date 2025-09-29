@@ -33,8 +33,12 @@ public interface AssignedAssetsRepo extends JpaRepository<AssignedAssets, Intege
 		        @Param("description") String description);
 
 	 
-	 @Query(value="select count(quantity),asset_id from assigned_assets group by asset_id",nativeQuery = true)
+	 /*@Query(value="select count(quantity),asset_id from assigned_assets group by asset_id",nativeQuery = true)
+	 List<Object[]> getAssetCountGroupedByAssetId();*/
+	 
+	 @Query(value="SELECT SUM(a.quantity), a.asset_id FROM assigned_assets a WHERE a.quantity > 0 GROUP BY a.asset_id",nativeQuery = true)
 	 List<Object[]> getAssetCountGroupedByAssetId();
+
 	 
 	 @Query(value = "SELECT * FROM assigned_assets WHERE assigned_asset_id = :assignedAssetId AND assigned_to = :assignedTo AND asset_type = :assetType AND description = :description AND asset_id = :assetId AND ref_asset_id = :refAssetId", 
 		       nativeQuery = true)
@@ -46,5 +50,10 @@ public interface AssignedAssetsRepo extends JpaRepository<AssignedAssets, Intege
 		        @Param("assetId") String assetId,
 		        @Param("refAssetId") String refAssetId);
 
+	 
+	 @Query("SELECT a.assigned_to AS empId, COUNT(a) AS assetCount " +
+	           "FROM AssignedAssets a " +
+	           "GROUP BY a.assigned_to")
+	    List<Object[]> countAssetsGroupedByEmployee();
 
 }

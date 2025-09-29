@@ -137,9 +137,78 @@
     	margin:0;
     	font-size:14px;
     }
+	/* Card hover effect */
+	  .hover-scale {
+	    transition: transform 0.3s ease, box-shadow 0.3s ease;
+		cursor: pointer; 
+	  }
+	  .hover-scale:hover {
+	    transform: translateY(-6px);
+	    box-shadow: 0 12px 25px rgba(0,0,0,0.18);
+	  }
 
+	  /* Circle behind the number */
+	  .circle-icon {
+	    width: 60px;   /* smaller circle */
+	    height: 60px;  /* smaller circle */
+	    border-radius: 50%;
+	    display: flex;
+	    flex-direction: column;
+	    align-items: center;
+	    justify-content: center;
+	    color: white;
+	    margin: 0 auto 8px auto;
+	    box-shadow: 0 3px 8px rgba(0,0,0,0.12); /* softer shadow */
+	    transition: transform 0.3s ease, box-shadow 0.3s ease;
+	    position: relative;
+	  }
 
-    
+	  /* Tiny icon inside the circle */
+	  .circle-icon i {
+	    font-size: 0.7rem; /* subtle and small */
+	    position: absolute;
+	    top: 6px;
+	    opacity: 0.85;
+	  }
+
+	  /* Big number in center */
+	  .circle-icon span {
+	    font-size: 1.5rem;  /* slightly smaller to match smaller circle */
+	    font-weight: 700;
+	    line-height: 1;
+	  }
+
+	  /* Gradient backgrounds */
+	  .circle-icon.bg-primary { background: linear-gradient(135deg, #4e73df, #224abe); }
+	  .circle-icon.bg-success { background: linear-gradient(135deg, #1cc88a, #17a673); }
+	  .circle-icon.bg-warning { background: linear-gradient(135deg, #f6c23e, #dda20a); }
+	  .circle-icon.bg-danger  { background: linear-gradient(135deg, #e74a3b, #be2617); }
+
+	  /* Card styling */
+	  .card {
+	    border-radius: 1rem;
+	    text-align: center;
+	    transition: all 0.3s ease;
+	  }
+	  .card h6 {
+	    font-weight: 500;
+	    margin-top: 5px;
+	    color: #555;
+	  }
+	  /* Back button styling */
+	   .btn-outline-secondary {
+	     border-radius: 20px;
+	     padding: 0.25rem 0.8rem;
+	     font-size: 0.85rem;
+	     transition: all 0.3s ease;
+	   }
+	   .btn-outline-secondary:hover {
+	     background-color: #6c757d;
+	     color: #fff;
+	     border-color: #6c757d;
+	   }
+
+	 
   </style> 
 </head>
 <body>
@@ -781,11 +850,39 @@
             <label for="remarks" class="form-label">Remarks</label>
             <textarea id="remarks" name="remarks" class="form-control" placeholder="Optional notes or comments..." style="font-size:13px;"></textarea>
           </div>-->
+		  <!-- Replace Info : only visible when flag === 'replace' -->
+		  	  <div class="card mb-3 shadow-sm d-none" id="replaceInfoCard">
+		  	    <div class="card-header bg-secondary text-white py-2 px-3">
+		  	      Replace Asset Details
+		  	    </div>
+		  	    <div class="card-body row g-3">
+		  	      <div class="col-md-4">
+		  	        <label class="form-label">Replace Asset ID</label>
+		  	        <input type="text" id="replaceAssetId" name="replaceAssetId"
+		  	               class="form-control" readonly>
+		  	      </div>
+		  	      <div class="col-md-4">
+		  	        <label class="form-label">Replace Assigned Asset ID</label>
+		  	        <input type="text" id="replaceAssignedAssetId" name="replaceAssignedAssetId"
+		  	               class="form-control" readonly>
+		  	      </div>
+		  	      <div class="col-md-4">
+		  	        <label class="form-label">Replace Reference ID</label>
+		  	        <input type="text" id="replaceRefAssetId" name="replaceRefAssetId"
+		  	               class="form-control" readonly>
+		  	      </div>
+				  
+				  <input type="hidden" name="oldAssetId" id="oldAssetId" />
+
+		  	    </div>
+		  	  </div>
 		  <!-- Remarks -->
 		  <div class="mb-3" id="remarksDefault1">
-		    <label for="remarks" class="form-label">Remarks</label>
+		    <label for="remarks[0]" class="form-label">Remarks</label>
 		    <textarea id="remarks" name="remarks" class="form-control" placeholder="Optional notes or comments..." style="font-size:13px;"></textarea>
 		  </div>
+		 
+
 
           <!-- Submit Buttons -->
           <div class="text-center mt-4">
@@ -1287,8 +1384,10 @@
 	        </ol>
 	      </nav>
 	 </div>
+	 
 	 <div class="d-flex gap-2" id="buttonContainer">
 	   <button class="btn btn-primary mb-1 action-btn" id="addAssets" onclick="openAssetForm()">Add Asset</button>
+	   
 	   <button type="button" class="btn btn-primary mb-1" id="addProjectButton" onclick="requestAsset()">Request</button>
 	   <button type="button" class="btn btn-primary mb-1" id="viewListButton" onclick="viewProject()" style="display:none">View List</button>
 	 </div>
@@ -1305,7 +1404,15 @@
 	        </ol>
 	      </nav>
       </div>
+	
+
       <div class="d-flex gap-2">
+		<button type="button" class="btn btn-info mb-1"
+		        data-bs-toggle="modal"
+		        data-bs-target="#assetSummaryModal">
+		    Asset Details
+		</button>
+
         <button class="btn btn-primary mb-1 action-btn" id="addAssets" onclick="openAssetForm()">Add Asset</button>
 	    <button type="button" class="btn btn-primary mb-1" id="addProjectButton" onclick="requestAsset()">Request</button>
 		<button type="button" class="btn btn-primary mb-1" id="viewListButton" onclick="viewProject()" style="display:none">View List</button>
@@ -1405,6 +1512,7 @@
 																       style="cursor: pointer;">
 																    </a>
 																</td>
+																
 																<td>
 																    <a href="#"
 																	   th:attr="data-id=${asset.id}, data-name=${asset.asset_name}, data-description=${asset.description}, data-inhandQty=${asset.quantity}"
@@ -1483,6 +1591,227 @@
 											</div>
 										
 										</div>
+									
+										
+
+										<!-- Summary Modal -->
+										<div class="modal fade" id="assetSummaryModal" tabindex="-1" aria-hidden="true">
+										  <div class="modal-dialog modal-dialog-centered modal-sm" id="assetModalDialog">
+										    <div class="modal-content shadow-lg">
+
+										      <!-- Modal Header -->
+										      <div class="modal-header bg-primary text-white">
+										        <h5 class="modal-title">All Assets – Detailed Summary</h5>
+										        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+										      </div>
+
+										      <!-- Modal Body -->
+										      <div class="modal-body">
+
+												<div class="row g-4" id="summaryCards">
+
+												  <!-- Total Quantity Card -->
+												  <div class="col-md-3">
+												    <div class="card shadow-sm hover-scale cursor-pointer" onclick="toggleDetails('totalQtyDetails')">
+												      <div class="card-body">
+												        <div class="circle-icon bg-primary">
+												          <i class="fas fa-boxes mb-1"></i>
+												          <span th:text="${totalQuantity ?: 0}">0</span>
+												        </div>
+												        <h6>Total Quantity</h6>
+												      </div>
+												    </div>
+												  </div>
+
+												  <!-- Total Assigned Card -->
+												  <div class="col-md-3">
+												    <div class="card shadow-sm hover-scale cursor-pointer" onclick="toggleDetails('assignedQtyDetails')">
+												      <div class="card-body">
+												        <div class="circle-icon bg-success">
+												          <i class="fas fa-user-check mb-1"></i>
+												          <span th:text="${totalAssigned ?: 0}">0</span>
+												        </div>
+												        <h6>Total Assigned</h6>
+												      </div>
+												    </div>
+												  </div>
+
+												  <!-- Assets by Employee Card -->
+												  <div class="col-md-3">
+												    <div class="card shadow-sm hover-scale cursor-pointer" onclick="toggleDetails('employeeQtyDetails')">
+												      <div class="card-body">
+												        <div class="circle-icon bg-warning">
+												          <i class="fas fa-users mb-1"></i>
+												          <span th:text="${empAssetCounts?.size() ?: 0}">0</span>
+												        </div>
+												        <h6>Assets by Employee</h6>
+												      </div>
+												    </div>
+												  </div>
+
+												  <!-- Scrap Quantity Card -->
+												  <div class="col-md-3">
+												    <div class="card shadow-sm hover-scale cursor-pointer" onclick="toggleDetails('scrapQtyDetails')">
+												      <div class="card-body">
+												        <div class="circle-icon bg-danger">
+												          <i class="fas fa-recycle mb-1"></i>
+												          <span th:text="${totalScrap ?: 0}">0</span>
+												        </div>
+												        <h6>Scrap Quantity</h6>
+												      </div>
+												    </div>
+												  </div>
+
+												</div>
+										        <!-- Total Quantity Details -->
+										        <div id="totalQtyDetails" class="mt-4 d-none">
+										           <!-- Container for alignment -->
+												  <div class="d-flex justify-content-start mb-3">
+												    <button class="btn btn-sm btn-outline-secondary mb-2" id="backBtn" onclick="backToCards()">Back</button>
+												  </div>
+
+										          <div class="table-responsive">
+										            <table class="table table-hover table-striped align-middle">
+										              <thead class="table-light">
+										                <tr>
+										                  <th>Type</th>
+										                  <th>Description</th>
+										                  <th>Total Qty</th>
+										                </tr>
+										              </thead>
+										              <tbody>
+										                <tr th:each="a : ${assetDetails}" th:if="${a.quantity > 0}">
+										                  <td th:text="${a.type}"></td>
+										                  <td th:text="${a.description}"></td>
+										                  <td th:text="${a.quantity}"></td>
+										                </tr>
+										                <tr th:if="${#lists.isEmpty(assetDetails) || assetDetails.?[quantity > 0].size() == 0}">
+										                  <td colspan="3" class="text-center text-muted">No data available</td>
+										                </tr>
+										              </tbody>
+										            </table>
+										          </div>
+										        </div>
+
+										        <!-- Assigned Quantity Details -->
+										        <div id="assignedQtyDetails" class="mt-4 d-none">
+										           <div class="d-flex justify-content-start mb-3">
+												  											    <button class="btn btn-sm btn-outline-secondary mb-2"  onclick="backToCards()">Back</button>
+												  											  </div>
+										          <div class="table-responsive">
+										            <table class="table table-hover table-striped align-middle">
+										              <thead class="table-light">
+										                <tr>
+										                  <th>Type</th>
+										                  <th>Description</th>
+										                  <th>Assigned</th>
+										                </tr>
+										              </thead>
+										              <tbody>
+										                <tr th:each="a : ${assetDetails}">
+										                  <td th:text="${a.type}"></td>
+										                  <td th:text="${a.description}"></td>
+										                  <td th:text="${a.assigned}"></td>
+										                </tr>
+										                <tr th:if="${#lists.isEmpty(assetDetails)}">
+										                  <td colspan="3" class="text-center text-muted">No data available</td>
+										                </tr>
+										              </tbody>
+										            </table>
+										          </div>
+										        </div>
+
+										        <!-- Employee Assets Details -->
+										        <div id="employeeQtyDetails" class="mt-4 d-none">
+													<div class="d-flex justify-content-start mb-3">
+																								    <button class="btn btn-sm btn-outline-secondary mb-2" onclick="backToCards()">Back</button>
+																								  </div>
+										           <div class="table-responsive">
+										            <table class="table table-hover table-striped align-middle">
+										              <thead class="table-light">
+										                <tr>
+										                  <th>Employee Name</th>
+										                  <th>Assets Count</th>
+										                </tr>
+										              </thead>
+										              <tbody>
+										                <tr th:each="entry : ${empAssetCounts}">
+										                  <td th:text="${entry.key}"></td>
+										                  <td th:text="${entry.value}"></td>
+										                </tr>
+										                <tr th:if="${#lists.isEmpty(empAssetCounts)}">
+										                  <td colspan="2" class="text-center text-muted">No data available</td>
+										                </tr>
+										              </tbody>
+										            </table>
+										          </div>
+										        </div>
+
+										        <!-- Scrap Quantity Details -->
+										        <div id="scrapQtyDetails" class="mt-4 d-none">
+													<div class="d-flex justify-content-start mb-3">
+																								    <button class="btn btn-sm btn-outline-secondary mb-2"  onclick="backToCards()">Back</button>
+																								  </div>
+										            <div class="table-responsive">
+										            <table class="table table-hover table-striped align-middle">
+										              <thead class="table-light">
+										                <tr>
+										                  <th>Type</th>
+										                  <th>Description</th>
+										                  <th>Quantity</th>
+										                </tr>
+										              </thead>
+										              <tbody>
+										                <tr th:each="s : ${scrapDetails}" th:if="${s.quantity > 0}">
+										                  <td th:text="${s.assetType}"></td>
+										                  <td th:text="${s.description}"></td>
+										                  <td th:text="${s.quantity}"></td>
+										                </tr>
+										                <tr th:if="${#lists.isEmpty(scrapDetails) || scrapDetails.?[quantity > 0].size() == 0}">
+										                  <td colspan="3" class="text-center text-muted">No data available</td>
+										                </tr>
+										              </tbody>
+										            </table>
+										          </div>
+										        </div>
+
+										      </div> <!-- End Modal Body -->
+										    </div>
+										  </div>
+										</div>
+
+										<!-- JS Logic -->
+										<script>
+										  const modalDialog = document.getElementById('assetModalDialog');
+
+										  function toggleDetails(sectionId) {
+										    // Hide cards
+										    document.getElementById('summaryCards').classList.add('d-none');
+										    // Hide all detail sections
+										    document.querySelectorAll('#assetSummaryModal .mt-4').forEach(el => el.classList.add('d-none'));
+										    // Show selected detail section
+										    document.getElementById(sectionId).classList.remove('d-none');
+
+										    // Enlarge modal dynamically
+										    modalDialog.classList.remove('modal-sm');
+										    modalDialog.classList.add('modal-lg');
+										  }
+
+										  function backToCards() {
+										    // Hide all detail sections
+										    document.querySelectorAll('#assetSummaryModal .mt-4').forEach(el => el.classList.add('d-none'));
+										    // Show cards
+										    document.getElementById('summaryCards').classList.remove('d-none');
+
+										    // Shrink modal back
+										    modalDialog.classList.remove('modal-lg');
+										    modalDialog.classList.add('modal-sm');
+										  }
+										</script>
+
+
+
+
 									    <!-- Assets requests Tab Content -->
 									    <div class="tab-pane fade" id="bordered-justified-home" role="tabpanel" aria-labelledby="home-tab">
 										    <div style="min-height: 200px; max-height: 400px; overflow-y: auto;">
@@ -1650,9 +1979,37 @@
 																			    </div>
 																			  </div>
 																			</div>
+																		
+																			<div class="tab-pane fade" id="bordered-justified-return" role="tabpanel">
+																				<div class="d-flex justify-content-end mb-2">
+																				  <div class="dropdown">
+																				    <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" id="requestMenu" data-bs-toggle="dropdown" aria-expanded="false">
+																				      Return Requests
+																				    </button>
+																				    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="requestMenu">
+																				      <li><a class="dropdown-item active" href="#" id="btnReturn">Return Requests</a></li>
+																				      <li><a class="dropdown-item" href="#" id="btnReplace">Replace Requests</a></li>
+																				    </ul>
+																				  </div>
+																				</div>
 
-									
-																			  <div class="tab-pane fade" id="bordered-justified-return" role="tabpanel">
+
+
+
+
+																			  <!-- Table -->
+																			  <div class="table-responsive mt-0" style="max-height: 400px; overflow-y: auto;">
+																			    <table class="table table-bordered table-striped table-hover align-middle" id="adminRequestsTable">
+																			      <thead class="table-light">
+																			        <tr id="adminRequestsHead"></tr> <!-- Columns will be dynamically added -->
+																			      </thead>
+																			      <tbody></tbody>
+																			    </table>
+																			  </div>
+
+																			</div>
+																			
+																			<!--  <div class="tab-pane fade" id="bordered-justified-return" role="tabpanel">
 																				<div class="table-responsive mt-0" style="max-height: 400px; overflow-y: auto;">
 																			    <table class="table table-bordered table-striped table-hover align-middle" id="returnRequestsTable">
 																			      <thead class="table-light">
@@ -1673,10 +2030,28 @@
 																			      <tbody></tbody>
 																			    </table>
 																				</div>
-																			  </div>
+																			  </div>-->
 																	
 
+																			  <script>
+																			    document.addEventListener("DOMContentLoaded", function () {
+																			      const dropdownButton = document.getElementById("requestMenu");
+																			      const items = document.querySelectorAll(".dropdown-item");
 
+																			      items.forEach(item => {
+																			        item.addEventListener("click", function (e) {
+																			          e.preventDefault();
+
+																			          // Update button text
+																			          dropdownButton.textContent = this.textContent;
+
+																			          // Remove active from all, add to clicked one
+																			          items.forEach(i => i.classList.remove("active"));
+																			          this.classList.add("active");
+																			        });
+																			      });
+																			    });
+																			  </script>
 
 									    <!--Admin Assets Requests Tab Content -->
 									    <div class="tab-pane fade" id="bordered-justified-profile" role="tabpanel" th:if="${empDetailsByEmpId.deptId!=74}" aria-labelledby="profile-tab">
@@ -1857,8 +2232,21 @@
 document.addEventListener("DOMContentLoaded", function() {
     loadReturnRequests();
 });
+// Toggle buttons
+document.getElementById("btnReturn").addEventListener("click", function () {
+    setActiveTab(this);
+    loadReturnRequests();
+});
 
-function loadReturnRequests() {
+document.getElementById("btnReplace").addEventListener("click", function () {
+    setActiveTab(this);
+    loadReplaceRequests();
+});
+function setActiveTab(button) {
+    document.querySelectorAll(".btn").forEach(btn => btn.classList.remove("active"));
+    button.classList.add("active");
+}
+/*function loadReturnRequests() {
     fetch("/api/asset-returns")
         .then(res => res.json())
         .then(data => {
@@ -1896,7 +2284,7 @@ function loadReturnRequests() {
                 tbody.insertAdjacentHTML("beforeend", row);
             });
         });
-}
+}*/
 
 function formatDateTime(dateTimeString) {
     if (!dateTimeString) return "-";
@@ -1908,6 +2296,186 @@ function formatDateTime(dateTimeString) {
     const minutes = String(date.getMinutes()).padStart(2, '0');
     const seconds = String(date.getSeconds()).padStart(2, '0');
     return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+}
+ 
+
+// Load Return Requests
+function loadReturnRequests() {
+    const thead = document.getElementById("adminRequestsHead");
+    thead.innerHTML = `
+        <tr>
+            <th>ID</th>
+            <th>Asset ID</th>
+            <th>Type</th>
+            <th>Quantity</th>
+            <th>Description</th>
+            <th>Requested by</th>
+            <th>Remarks</th>
+            <th>Reject Reason</th>
+            <th>Returned At</th>
+            <th>Status</th>
+        </tr>
+    `;
+
+    fetch("/api/asset-returns")
+        .then(res => res.json())
+        .then(data => {
+            const tbody = document.querySelector("#adminRequestsTable tbody");
+            tbody.innerHTML = "";
+            data.forEach(req => {
+                let statusHtml;
+                if (req.status === "Approved") {
+                    statusHtml = `<span class="badge bg-success">Approved</span>`;
+                } else if (req.status === "Rejected") {
+                    statusHtml = `<span class="badge bg-danger">Rejected</span>`;
+                } else {
+                    statusHtml = `
+                        <span class="badge bg-primary">Pending</span>
+                        <i class="bx bx-check text-success fs-5 ms-2" style="cursor:pointer;"
+                           title="Approve" onclick="approveRequestReturn(${req.id})"></i>
+                        <i class="bx bx-x text-danger fs-5 ms-2" style="cursor:pointer;"
+                           title="Reject" onclick="rejectRequestReturn(${req.id})"></i>`;
+                }
+
+                const row = `
+                    <tr>
+                        <td>${req.id}</td>
+                        <td>${req.assetId}</td>
+                        <td>${req.assetType}</td>
+                        <td>${req.quantity}</td>
+                        <td>${req.description || ""}</td>
+                        <td>${req.senderName || ""}</td>
+                        <td>${req.remarks || ""}</td>
+                        <td>${req.rejectionRemarks ? req.rejectionRemarks : "-"}</td>
+                        <td>${formatDateTime(req.returnedAt)}</td>
+                        <td>${statusHtml}</td>
+                    </tr>`;
+                tbody.insertAdjacentHTML("beforeend", row);
+            });
+        });
+}
+
+function loadReplaceRequests() {
+    const thead = document.getElementById("adminRequestsHead");
+    thead.innerHTML = `
+        <tr>
+            <th>ID</th>
+            <th>Old Asset ID</th>
+            <th>Asset ID</th>
+            <th>Type</th>
+            <th>Quantity</th>
+            <th>Description</th>
+            <th>Requested by</th>
+            <th>Remarks</th>
+            <th>Requested At</th>
+            <th>Status</th>
+        </tr>
+    `;
+
+	fetch("/api/asset-replacements")
+	    .then(res => res.json())
+	    .then(data => {
+	        console.log("Full response data:", data); 
+	        const tbody = document.querySelector("#adminRequestsTable tbody");
+	        tbody.innerHTML = "";
+
+	        data.forEach(req => {
+	            let statusHtml;
+
+	            if (req.status === "Assigned") {
+	                // Already assigned → show badge only, no assign icon
+	                statusHtml = `<span class="badge bg-secondary">Assigned</span>`;
+	            } else if (req.status === "Approved") {
+	                // Approved → show Assign icon
+	                statusHtml = `
+	                    <span class="badge bg-success">Approved</span>
+	                    <i class="bi bi-person-check text-success"
+	                       role="button"
+	                       data-id="${req.id}"
+	                       data-flag="replace"
+	                       data-emp-id="${req.senderEmpId}"
+	                       data-asset-type="${req.assetType}"
+	                       data-quantity="${req.quantity}"
+	                       data-description="${req.description || ""}"
+	                       data-asset-id="${req.assetId}"
+	                       data-ref-asset-id="${req.refAssetId || ''}"
+	                       data-assigned-asset-id="${req.assignedAssetId || ''}"
+	                       data-old-asset-id="${req.oldAssetId || ''}"
+	                       onclick="openAssignFormFromElement(this)"
+	                       title="Assign"
+	                       style="font-size: 22px; cursor: pointer;"></i>
+	                `;
+	            } else if (req.status === "Rejected") {
+	                statusHtml = `<span class="badge bg-danger">Rejected</span>`;
+	            } else {
+	                // Pending → show Approve/Reject icons
+	                statusHtml = `
+	                    <span class="badge bg-primary">Pending</span>
+	                    <i class="bx bx-check text-success fs-5 ms-2" style="cursor:pointer;"
+	                       title="Approve" onclick="approveRequestReplace(${req.id})"></i>
+	                    <i class="bx bx-x text-danger fs-5 ms-2" style="cursor:pointer;"
+	                       title="Reject" onclick="rejectRequestReplace(${req.id})"></i>`;
+	            }
+
+	            const row = `
+	                <tr>
+	                    <td>${req.id}</td>
+	                    <td>${req.oldAssetId || ""}</td>
+	                    <td>${req.assetId}</td>
+	                    <td>${req.assetType}</td>
+	                    <td>${req.quantity}</td>
+	                    <td>${req.description || ""}</td>
+	                    <td>${req.senderName || ""}</td>
+	                    <td>${req.remarks || ""}</td>
+	                    <td>${formatDateTime(req.requestedAt)}</td>
+	                    <td>${statusHtml}</td>
+	                </tr>`;
+	            tbody.insertAdjacentHTML("beforeend", row);
+	        });
+	    });
+
+}
+
+
+function approveRequestReplace(id) {
+	const empId = document.getElementById("employeeId1").value; // get logged-in emp id
+ // you can fetch dynamically from session or hidden input
+    fetch(`/api/asset-replacements/replace/${id}/approve?empId=${empId}`, {
+        method: 'POST'
+    })
+    .then(res => res.json())
+    .then(data => {
+        Swal.fire({
+            icon: 'success',
+            title: 'Approved!',
+            text: `Replacement request #${data.id} approved successfully`,
+            timer: 1500,
+            showConfirmButton: false
+        });
+        loadReplaceRequests(); // refresh the table
+        loadAssignedAssets(); // optional: refresh assigned assets table
+    })
+    .catch(err => console.error(err));
+}
+function rejectRequestReplace(id) {
+    const empId = document.getElementById("employeeId1").value; // logged-in emp id
+
+    fetch(`/api/asset-replacements/replace/${id}/reject?empId=${empId}`, {
+        method: 'POST'
+    })
+    .then(res => res.json())
+    .then(data => {
+        Swal.fire({
+            icon: 'error',
+            title: 'Rejected!',
+            text: `Replacement request #${data.id} rejected successfully`,
+            timer: 1500,
+            showConfirmButton: false
+        });
+        loadReplaceRequests(); // refresh table
+        loadAssignedAssets();  // optional
+    })
+    .catch(err => console.error(err));
 }
 
 function approveRequestReturn(id) {
@@ -3100,17 +3668,101 @@ $.ajax({
 	<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
 	
 	<script>
+		function openAssignFormForReplacement(button) {
+		    const id = button.dataset.id;
+		    const empId = button.dataset.empId;
+		    const assetType = button.dataset.assetType;
+		    const quantity = button.dataset.quantity;
+		    const description = button.dataset.description;
+		    const assetId = button.dataset.assetId || "";
+		    const refAssetId = button.dataset.refAssetId || "";
+
+		    // Populate hidden form fields
+		    document.getElementById("assignId").value = id;
+		    document.getElementById("empId").value = empId;
+
+		    // Pre-fill Asset Type
+		    if (assetType) document.getElementById("assetName").value = assetType;
+
+		    // Pre-fill Description & Asset ID after small delay (for dynamic dropdown population)
+		    setTimeout(() => {
+		        if (description) document.getElementById("description").value = description;
+		        if (assetId) document.getElementById("assetId").value = assetId;
+		    }, 100);
+
+		    // Hidden refAssetId field
+		    let refField = document.getElementById("refAssetId");
+		    if (!refField) {
+		        refField = document.createElement("input");
+		        refField.type = "hidden";
+		        refField.id = "refAssetId";
+		        refField.name = "ref_asset_id";
+		        document.getElementById("assignForm").appendChild(refField);
+		    }
+		    refField.value = refAssetId;
+
+		    // Open the modal
+		    var myModal = new bootstrap.Modal(document.getElementById("assignAssetModal"));
+		    myModal.show();
+		}
+
+		function openAssignFormForReplacement(button) {
+		    const id = button.dataset.id;
+		    const empId = button.dataset.empId;
+		    const assetType = button.dataset.assetType;
+		    const quantity = button.dataset.quantity;
+		    const description = button.dataset.description;
+		    const assetId = button.dataset.assetId || "";
+		    const refAssetId = button.dataset.refAssetId || "";
+
+		    // Populate hidden form fields
+		    document.getElementById("assignId").value = id;
+		    document.getElementById("empId").value = empId;
+
+		    // Pre-fill Asset Type
+		    if (assetType) document.getElementById("assetName").value = assetType;
+
+		    // Pre-fill Description & Asset ID after small delay (for dynamic dropdown population)
+		    setTimeout(() => {
+		        if (description) document.getElementById("description").value = description;
+		        if (assetId) document.getElementById("assetId").value = assetId;
+		    }, 100);
+
+		    // Hidden refAssetId field
+		    let refField = document.getElementById("refAssetId");
+		    if (!refField) {
+		        refField = document.createElement("input");
+		        refField.type = "hidden";
+		        refField.id = "refAssetId";
+		        refField.name = "ref_asset_id";
+		        document.getElementById("assignForm").appendChild(refField);
+		    }
+		    refField.value = refAssetId;
+
+		    // Open the modal
+		    var myModal = new bootstrap.Modal(document.getElementById("assignAssetModal"));
+		    myModal.show();
+		}
+
+		
+		
 	function openAssignFormFromElement(button) {
 	    const id = button.dataset.id;
 	    const empId = button.dataset.empId;
 	    const assetType = button.dataset.assetType;
 	    const quantity = button.dataset.quantity;
 	    const description = button.dataset.description;
+		const flag          = button.dataset.flag || "";          // <— new
+		   const refAssetId    = button.dataset.refAssetId || "";
+		   const assignedAssetId = button.dataset.assignedAssetId || "";
+		   const assetId       = button.dataset.assetId || "";
+		   const oldAssetId = button.dataset.oldAssetId || "";
 
-	    openAssignForm(id, empId, assetType, quantity, description);
+		
+	    openAssignForm(id, empId, assetType, quantity, description,  flag, refAssetId, assignedAssetId, assetId,oldAssetId);
 	}
 
-	function openAssignForm(id, empId, assetType, quantity, description) {
+	/*function openAssignForm(id, empId, assetType, quantity, description, flag, refAssetId, assignedAssetId, assetId) {
 	    
 		// Populate hidden form fields
 		document.getElementById("assignId").value = id;
@@ -3118,12 +3770,60 @@ $.ajax({
 		//document.getElementById("quantity").value = quantity;
 		document.getElementById("description").value = description;
   		
+		// Store replace data temporarily on the modal (for later use in generator)
+		  const modal = document.getElementById("assignAssetModal");
+		  modal.dataset.flag = flag;
+		  modal.dataset.refAssetId = refAssetId;
+		  modal.dataset.assignedAssetId = assignedAssetId;
+		  modal.dataset.assetId = assetId;
+
 		// Open the modal
-		var myModal = new bootstrap.Modal(document.getElementById("assignAssetModal"));
+	//	var myModal = new bootstrap.Modal(document.getElementById("assignAssetModal"));
+	// Open the modal
+	   var myModal = new bootstrap.Modal(modal);
 		myModal.show();
 		
+	}*/
+	function openAssignForm(id, empId, assetType, quantity, description,
+	                        flag, refAssetId, assignedAssetId, assetId, oldAssetId = null) {
+
+	    document.getElementById("assignId").value = id;
+	    document.getElementById("empId").value   = empId;
+	    document.getElementById("description").value = description;
+		
+	    const modal = document.getElementById("assignAssetModal");
+	    modal.dataset.flag           = flag;
+	    modal.dataset.refAssetId     = refAssetId;
+	    modal.dataset.assignedAssetId= assignedAssetId;
+	    modal.dataset.assetId        = assetId;
+
+	    // 🔑 Toggle replace-info card
+	    const replaceCard = document.getElementById("replaceInfoCard");
+	    if (flag === "replace") {
+	        replaceCard.classList.remove("d-none");
+	        document.getElementById("replaceAssetId").value        = assetId;
+	        document.getElementById("replaceAssignedAssetId").value = assignedAssetId;
+	        document.getElementById("replaceRefAssetId").value      = refAssetId;
+			document.getElementById("quantity").value       = quantity; 
+			// ✅ Set old asset ID in hidden field
+			       document.getElementById("oldAssetId").value = oldAssetId || "";
+				   modal.dataset.flag = "replace";
+				   // ✅ Change form action to replace endpoint
+				          assignForm.action = "/assigned_assets_replace"; 
+	    } else {
+	        replaceCard.classList.add("d-none");
+			document.getElementById("oldAssetId").value            = "";
+			// ❌ Don't pre-fill quantity for normal assign
+			      document.getElementById("quantity").value = "";
+				  modal.dataset.flag = ""; 
+			// ✅ Restore default form action
+			     assignForm.action = "/assigned_assets_save";
+	    }
+
+	    new bootstrap.Modal(modal).show();
 	}
-		 
+
+	
 		function filterDescriptions() {
 		 
 			let assetType = document.getElementById("assetName").value;
@@ -3701,13 +4401,22 @@ document.getElementById("assetForm").addEventListener("submit", function(e) {
 <!-- script to create dynamic input field based asset quantity while assiging assets to user -->
 <script>
 	
-document.getElementById("quantity").addEventListener("input", function () {
+/*document.getElementById("quantity").addEventListener("input", function () {
 	//alert("hii2");
   const quantity = parseInt(this.value);
   const container = document.getElementById("referIdsContainer");
   container.innerHTML = ""; // Clear old inputs
+  // Get modal dataset for replace case
+   const modal = document.getElementById("assignAssetModal");
+   const flag = modal.dataset.flag || "";
+   const refAssetId = modal.dataset.refAssetId || "";
+   const assignedAssetId = modal.dataset.assignedAssetId || "";
+   const assetId = modal.dataset.assetId || "";
 
-  
+   // 🔔 Show what we picked up
+    alert(
+      `Flag: ${flag}\nRefAssetId: ${refAssetId}\nAssignedAssetId: ${assignedAssetId}\nAssetId: ${assetId}`
+    );
   
   if (!isNaN(quantity) && quantity > 0) {
     for (let i = 0; i < quantity; i++) {
@@ -3724,13 +4433,124 @@ document.getElementById("quantity").addEventListener("input", function () {
       input.className = "form-control";
       input.required = true;
 
+
+	  // 🔥 Pre-fill if replace mode
+	  if (flag === "replace") {
+	    if (i === 0) input.value = refAssetId;
+	    if (i === 1) input.value = assignedAssetId;
+	    if (i === 2) input.value = assetId;
+	  }
+
       col.appendChild(label);
       col.appendChild(input);
       container.appendChild(col);
     }
   }
-});
+});*/
 
+/*document.getElementById("quantity").addEventListener("input", function () {
+  const modal = document.getElementById("assignAssetModal");
+  const flag  = modal.dataset.flag || "";
+
+  // 🚫 Do nothing when in replace mode
+  if (flag === "replace") {
+    console.log("[INFO] Replace mode: quantity listener skipped");
+    return;
+  }
+
+  const quantity  = parseInt(this.value);
+  const container = document.getElementById("referIdsContainer");
+  container.innerHTML = "";
+
+  if (!isNaN(quantity) && quantity > 0) {
+    for (let i = 0; i < quantity; i++) {
+      const col   = document.createElement("div");
+      col.className = "col-md-6";
+
+      const label = document.createElement("label");
+      label.className = "form-label";
+      label.textContent = `Refer Asset ID ${i + 1}`;
+
+      const input = document.createElement("input");
+      input.type  = "text";
+      input.name  = "referAssetIds";
+      input.className = "form-control";
+      input.required  = true;
+
+      col.appendChild(label);
+      col.appendChild(input);
+      container.appendChild(col);
+    }
+  }
+});*/
+
+
+document.getElementById("quantity").addEventListener("input", function () {
+    const modal = document.getElementById("assignAssetModal");
+    const flag = modal.dataset.flag || "";
+    console.log("[DEBUG] Quantity input triggered");
+    console.log("[DEBUG] Modal flag:", flag);
+    console.log("[DEBUG] Input value:", this.value);
+
+    // 🚫 Skip everything if in replace mode
+    if (flag === "replace") {
+        console.log("[INFO] Replace mode: quantity listener skipped");
+        return;
+    }
+
+    const quantity = parseInt(this.value);
+    console.log("[DEBUG] Parsed quantity:", quantity);
+
+    const container = document.getElementById("referIdsContainer");
+    const defaultRemarksBlock = document.getElementById("remarksDefault1");
+    container.innerHTML = "";
+    console.log("[DEBUG] Cleared referIdsContainer");
+
+    if (!isNaN(quantity) && quantity > 0) {
+        // Hide default remarks
+        defaultRemarksBlock.style.display = "none";
+        console.log("[DEBUG] Default remarks hidden");
+
+        for (let i = 0; i < quantity; i++) {
+            console.log("[DEBUG] Creating inputs for index:", i);
+
+            const wrapper = document.createElement("div");
+            wrapper.className = "col-md-12 border p-2 mb-2 rounded";
+
+            const refLabel = document.createElement("label");
+            refLabel.className = "form-label";
+            refLabel.textContent = `Refer Asset ID ${i + 1}`;
+
+            const refInput = document.createElement("input");
+            refInput.type = "text";
+            refInput.name = "referAssetIds";
+            refInput.className = "form-control";
+            refInput.required = true;
+
+            const remarksLabel = document.createElement("label");
+            remarksLabel.className = "form-label mt-2";
+            remarksLabel.textContent = `Remarks ${i + 1}`;
+
+            const remarksInput = document.createElement("textarea");
+            remarksInput.name = "remarks";
+            remarksInput.className = "form-control";
+            remarksInput.placeholder = "Optional notes or comments...";
+            remarksInput.style.fontSize = "13px";
+
+            wrapper.appendChild(refLabel);
+            wrapper.appendChild(refInput);
+            wrapper.appendChild(remarksLabel);
+            wrapper.appendChild(remarksInput);
+
+            container.appendChild(wrapper);
+        }
+        console.log("[DEBUG] Added all refer ID and remarks inputs");
+    } else {
+        // Show default remarks if quantity is empty/invalid
+        defaultRemarksBlock.style.display = "block";
+        console.log("[DEBUG] Invalid or empty quantity -> showing default remarks");
+    }
+});
 
 
 // for assign asset without req modal
@@ -3810,11 +4630,117 @@ document.getElementById("quantity").addEventListener("input", function () {
 
 </script>
 <script>
-document.getElementById("quantity").addEventListener("input", function () {
+	/*document.getElementById("quantity").addEventListener("input", function () {previously working
+	    const modal = document.getElementById("assignAssetModal");
+	    const flag = modal.dataset.flag || "";
+	    console.log("[DEBUG] Quantity input triggered111");
+	    console.log("[DEBUG] Modal flag:", flag);
+	    console.log("[DEBUG] Input value (raw):", this.value);
+
+	    const quantity = parseInt(this.value);
+	    console.log("[DEBUG] Parsed quantity:", quantity);
+
+	    const container = document.getElementById("referIdsContainer");
+	    container.innerHTML = ""; // Clear old inputs
+	    console.log("[DEBUG] Cleared referIdsContainer");
+
+	    // 🚫 Do nothing when in replace mode
+	    if (flag === "replace") {
+	        console.log("[INFO] Replace mode: quantity listener skipped");
+	        return;
+	    }
+
+	    if (!isNaN(quantity) && quantity > 0) {
+	        console.log("[DEBUG] Creating inputs for quantity:", quantity);
+
+	        for (let i = 0; i < quantity; i++) {
+	            console.log(`[DEBUG] Creating input block for index: ${i}`);
+
+	            const col = document.createElement("div");
+	            col.className = "col-md-6";
+
+	            const label = document.createElement("label");
+	            label.className = "form-label";
+	            label.textContent = `Refer Asset ID ${i + 1}`;
+
+	            const input = document.createElement("input");
+	            input.type = "text";
+	            input.name = "referAssetIds"; // Submit as array
+	            input.className = "form-control";
+	            input.required = true;
+
+	            col.appendChild(label);
+	            col.appendChild(input);
+	            container.appendChild(col);
+
+	            console.log(`[DEBUG] Added Refer Asset ID input for index: ${i}`);
+	        }
+
+	        console.log("[DEBUG] All refer ID inputs added successfully");
+	    } else {
+	        console.log("[INFO] Invalid or empty quantity -> no inputs created");
+	    }
+	});*/
+
+	/*document.getElementById("quantity").addEventListener("input", function () {============
+	    const modal = document.getElementById("assignAssetModal");
+	    const flag = modal.dataset.flag || "";
+	    console.log("[DEBUG] Quantity input triggered");
+	    console.log("[DEBUG] Modal flag:", flag);
+	    console.log("[DEBUG] Input value:", this.value);
+
+	    const quantity = parseInt(this.value);
+	    console.log("[DEBUG] Parsed quantity:", quantity);
+
+	    const container = document.getElementById("referIdsContainer");
+
+	    // Clear old inputs
+	    container.innerHTML = "";
+	    console.log("[DEBUG] Cleared referIdsContainer");
+
+	    // Skip if replace mode
+	    if (flag === "replace") {
+	        console.log("[INFO] Replace mode: quantity listener skipped");
+	        return;
+	    }
+
+	    if (!isNaN(quantity) && quantity > 0) {
+	        console.log("[DEBUG] Creating inputs for quantity:", quantity);
+
+	        for (let i = 0; i < quantity; i++) {
+	            const wrapper = document.createElement("div");
+	            wrapper.className = "col-12 border p-2 mb-2 rounded"; // full-width
+
+	            const refLabel = document.createElement("label");
+	            refLabel.className = "form-label";
+	            refLabel.textContent = `Refer Asset ID ${i + 1}`;
+
+	            const refInput = document.createElement("input");
+	            refInput.type = "text";
+	            refInput.name = "referAssetIds";
+	            refInput.className = "form-control";
+	            refInput.required = true;
+
+	            wrapper.append(refLabel, refInput);
+
+	            // Append after small delay to ensure modal DOM is ready
+	            setTimeout(() => container.appendChild(wrapper), 0);
+	        }
+
+	        console.log("[DEBUG] All Refer Asset ID inputs added successfully");
+	    }
+	});*/
+
+
+/*document.getElementById("quantity").addEventListener("input", function () {
   const quantity = parseInt(this.value);
   const container = document.getElementById("referIdsContainer");
   container.innerHTML = ""; // Clear old inputs
-
+  // 🚫 Do nothing when in replace mode
+   if (flag === "replace") {
+     console.log("[INFO] Replace mode: quantity listener skipped");
+     return;
+   }
   if (!isNaN(quantity) && quantity > 0) {
     for (let i = 0; i < quantity; i++) {
       const col = document.createElement("div");
@@ -3835,7 +4761,7 @@ document.getElementById("quantity").addEventListener("input", function () {
       container.appendChild(col);
     }
   }
-});
+});*/
 </script>
 <script>
 /*document.getElementById("quantity").addEventListener("input", function () {
@@ -3865,14 +4791,17 @@ document.getElementById("quantity").addEventListener("input", function () {
   }
 });*/
 
-document.getElementById("quantity").addEventListener("input", function () {
+/*document.getElementById("quantity").addEventListener("input", function () {previous working
 //	alert("hii1");
   const quantity = parseInt(this.value);
   const container = document.getElementById("referIdsContainer");
   const defaultRemarksBlock = document.getElementById("remarksDefault1"); // use ID now ✅
 
   container.innerHTML = ""; // Clear old inputs
-
+  if (flag === "replace") {
+     console.log("[INFO] Replace mode: quantity listener skipped");
+     return;
+   }
   if (!isNaN(quantity) && quantity > 0) {
     // Hide default remarks
     defaultRemarksBlock.style.display = "none";
@@ -3914,7 +4843,63 @@ document.getElementById("quantity").addEventListener("input", function () {
     // If quantity is empty or invalid -> show default remarks back
     defaultRemarksBlock.style.display = "block";
   }
+});*/
+
+document.getElementById("quantity").addEventListener("input", function () {
+    const modal = document.getElementById("assignAssetModal");
+    const flag = modal.dataset.flag || "";
+
+    const quantity = parseInt(this.value);
+    const container = document.getElementById("referIdsContainer");
+    const defaultRemarksBlock = document.getElementById("remarksDefault1");
+
+    container.innerHTML = ""; // Clear old inputs
+
+    if (flag === "replace") {
+        console.log("[INFO] Replace mode: quantity listener skipped");
+        return;
+    }
+
+    if (!isNaN(quantity) && quantity > 0) {
+        defaultRemarksBlock.style.display = "none";
+
+        for (let i = 0; i < quantity; i++) {
+            const wrapper = document.createElement("div");
+            wrapper.className = "col-md-12 border p-2 mb-2 rounded";
+
+            // Refer Asset ID
+            const refLabel = document.createElement("label");
+            refLabel.className = "form-label";
+            refLabel.textContent = `Refer Asset ID ${i + 1}`;
+
+            const refInput = document.createElement("input");
+            refInput.type = "text";
+            refInput.name = "referAssetIds";
+            refInput.className = "form-control";
+            refInput.required = true;
+
+            // Remarks
+            const remarksLabel = document.createElement("label");
+            remarksLabel.className = "form-label mt-2";
+            remarksLabel.textContent = `Remarks ${i + 1}`;
+
+            const remarksInput = document.createElement("textarea");
+            remarksInput.name = "remarks";
+            remarksInput.className = "form-control";
+            remarksInput.placeholder = "Optional notes or comments...";
+            remarksInput.style.fontSize = "13px";
+
+            wrapper.append(refLabel, refInput, remarksLabel, remarksInput);
+
+            // Append safely
+            setTimeout(() => container.appendChild(wrapper), 0);
+        }
+        console.log("[DEBUG] All inputs added successfully");
+    } else {
+        defaultRemarksBlock.style.display = "block";
+    }
 });
+
 
 </script>
 <!-- script to assign asset  without request-->
@@ -4059,7 +5044,7 @@ function validateUniqueRefIds(changedInput) {
 	   // Pass assetType and description to backend
 	         fetch(`/validate-ref-id?refId=${encodeURIComponent(value)}&assetType=${encodeURIComponent(assetType)}&description=${encodeURIComponent(description)}`)
 		.then(response => {
-		  alert("Raw response: " + response); // alert the Response object
+		 // alert("Raw response: " + response); // alert the Response object
 		  return response.json(); // then parse it as JSON
 		})
           .then(isAvailable => {

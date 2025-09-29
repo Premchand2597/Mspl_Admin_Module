@@ -256,6 +256,32 @@ public class AsseteController {
 	        
 	    } 
 	    
+	    @PostMapping("/assigned_assets_replace")
+	    public String replaceAsset(@ModelAttribute AssignedAssets assignedAsset,
+	                               @RequestParam(name = "referAssetIds", required = false) List<String> referAssetIds,
+	                               @RequestParam(name = "remarks", required = false) List<String> remarks,
+	                               @RequestParam("sourceTab") String sourceTab,
+	                               @RequestParam("oldAssetId") Integer oldAssetId,
+	                               @RequestParam(name = "requestId", required = false) Integer requestId) {
+	    	 System.out.println("Received remarks list: " + remarks);
+	        // Wrap single referAssetId into list if null
+	        if ((referAssetIds == null || referAssetIds.isEmpty()) && assignedAsset.getRef_asset_id() != null) {
+	            referAssetIds = List.of(assignedAsset.getRef_asset_id());
+	        }
+
+	        // Wrap single remark into list if null
+	        if ((remarks == null || remarks.isEmpty()) && assignedAsset.getRemarks() != null) {
+	            remarks = List.of(assignedAsset.getRemarks());
+	        }
+
+	        assetRequestService.replaceAsset(assignedAsset, referAssetIds, remarks, oldAssetId, requestId);
+
+	        return "redirect:/asset?tab=" + sourceTab;
+	    }
+
+
+
+	    
 	    @GetMapping("/getAssetLogs")
 	    public ResponseEntity<List<AssetUpdateLog>> getAssetLogs(@RequestParam String assetId) {
 	    	

@@ -46,6 +46,8 @@ import com.example.mspl_connect.AdminEntity.InterCommDetailsEntity;
 import com.example.mspl_connect.AdminEntity.LeaveApplication;
 import com.example.mspl_connect.AdminEntity.LeaveApplicationWithProfile;
 import com.example.mspl_connect.AdminEntity.LeaveUtilized;
+
+import com.example.mspl_connect.AdminEntity.Scap;
 import com.example.mspl_connect.AdminEntity.assetsDTO;
 import com.example.mspl_connect.AdminRepo.AdminInterCommRepo;
 import com.example.mspl_connect.AdminRepo.AppraisalHrREpo;
@@ -53,6 +55,7 @@ import com.example.mspl_connect.AdminRepo.AppraisalRepository;
 import com.example.mspl_connect.AdminRepo.AssignedAssetsRepo;
 import com.example.mspl_connect.AdminRepo.AttendenceRepo;
 import com.example.mspl_connect.AdminRepo.Events_Repo;
+import com.example.mspl_connect.AdminRepo.ScapRepository;
 import com.example.mspl_connect.AdminService.AdminHolidayService;
 import com.example.mspl_connect.AdminService.AppraisalService;
 import com.example.mspl_connect.AdminService.AssetRequestService;
@@ -185,6 +188,9 @@ public class AdminMainPage {
 	
 	@Autowired
 	private AssignedAssetsRepo assignedAssetsRepo;
+	
+	@Autowired
+	private ScapRepository scapRepo;
 	
 	@Autowired
 	private Holiday_notification_Service holiday_notification_Service;
@@ -1175,6 +1181,7 @@ public class AdminMainPage {
 			adminDeptLeaveRequests.stream().forEach(i->System.out.println("kkk"+i.getFrom_date()));
 			model.addAttribute("usersList", adminDeptLeaveRequests);
 			System.out.println("Admin Dept Processed Leave Requests: " + adminDeptProccessedLeaveRequests);
+			System.out.println("Admin Dept Rejected Leave Requests: " + adminDeptRejectedLeaveRequests);
 			model.addAttribute("adminDeptProccessedLeaveRequests", adminDeptProccessedLeaveRequests);
 			model.addAttribute("adminDeptRejectedLeaveRequests", adminDeptRejectedLeaveRequests); 
 			
@@ -1398,10 +1405,52 @@ public class AdminMainPage {
 	        String fullName = (assignedTo == null) ? "" : empMap.getOrDefault(assignedTo, "");
 	        asset.setEmpName(fullName);
 	    });
-		
+	
+	 // 1. Overall totals
+	    long totalQuantity = getAllAssets.stream()
+	            .filter(Objects::nonNull)
+	            .mapToLong(a -> a.getQuantity())     // quantity is primitive int/long
+	            .sum();
+
+	    long totalAssigned = getAllAssets.stream()
+	            .filter(Objects::nonNull)
+	            .mapToLong(a -> {
+	                Long assigned = assignedQtyMap.get(a.getAsset_id());
+	                return assigned == null ? 0L : assigned;
+	            })
+	            .sum();
+
+	    // 2. List of all assets for the modal
+	    // Example fields: type, description, assigned count
+	    List<Map<String,Object>> assetDetails = getAllAssets.stream().map(a -> {
+	        Map<String,Object> m = new HashMap<>();
+	        m.put("type", a.getAsset_name());
+	        m.put("description", a.getDescription());
+	        m.put("quantity", a.getQuantity());
+	        m.put("assigned", assignedQtyMap.getOrDefault(a.getAsset_id(), 0L));
+	        return m;
+	    }).toList();
+
+	    // 3. Breakdown by employee
+	    // Suppose you have a service that returns Map<empName, count>
+	    Map<String, Long> empAssetCounts = assetRequestService.countAssetsByEmployee();
+	    model.addAttribute("empAssetCounts", empAssetCounts);
+
+	    // scrap totals
+	    int totalScrap = scapRepo.sumQuantity(); // sum all scrap quantities
+	    List<Scap> scrapDetails = scapRepo.findAll(); // or filter as needed
+
+	    model.addAttribute("totalQuantity", totalQuantity);
+	    model.addAttribute("totalAssigned", totalAssigned);
+	    model.addAttribute("assetDetails", assetDetails);
+	    model.addAttribute("empAssetCounts", empAssetCounts);
+
+	    model.addAttribute("totalScrap", totalScrap);
+	    model.addAttribute("scrapDetails", scrapDetails);
+
 		model.addAttribute("empDetailsByEmpId", empDetailsByEmpId);
 		model.addAttribute("usersList", usersList);
-		
+		System.out.println("All Assets "+getAllAssets);
 		// Add the assetEntity and empDetailsByEmpId to the model
 		model.addAttribute("assetRequest", new AssetRequest()); // For form binding assetRequest
 		model.addAttribute("requests",allAssetsRequest);

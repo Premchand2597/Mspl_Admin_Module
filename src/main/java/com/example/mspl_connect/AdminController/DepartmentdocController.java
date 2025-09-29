@@ -209,6 +209,31 @@ public class DepartmentdocController {
     
     
     
+  /*  @GetMapping("/view/{id}")
+    public ResponseEntity<Resource> viewDocumentInline(@PathVariable Long id) {
+        DepartmentDocument document = service.getById(id); // This fetches document by ID
+
+        if (document == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // FIX Windows path separator (replace \ with /)
+        String cleanedPath = document.getFilePath().replace("\\", "/");
+
+        Path path = Paths.get(cleanedPath);
+
+        if (!Files.exists(path)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Resource resource = new FileSystemResource(path);
+
+        return ResponseEntity.ok()
+            .contentType(MediaType.APPLICATION_PDF)
+            .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + document.getFileName() + "\"")
+            .body(resource);
+    }*/
+
     @GetMapping("/view/{id}")
     public ResponseEntity<Resource> viewDocumentInline(@PathVariable Long id) {
         DepartmentDocument document = service.getById(id); // Fetch document by ID
@@ -239,7 +264,6 @@ public class DepartmentdocController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + document.getFileName() + "\"")
                 .body(resource);
     }
-
 
     
     @PostMapping("/documents/{id}/view")

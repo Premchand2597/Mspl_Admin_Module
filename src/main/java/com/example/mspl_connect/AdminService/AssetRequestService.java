@@ -2,13 +2,15 @@ package com.example.mspl_connect.AdminService;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
-import org.apache.poi.ss.formula.functions.Now;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.mspl_connect.AdminEntity.AssetReplace;
 import com.example.mspl_connect.AdminEntity.AssetRequest;
 import com.example.mspl_connect.AdminEntity.AssetUpdateLog;
 import com.example.mspl_connect.AdminEntity.Assetes;
@@ -16,13 +18,14 @@ import com.example.mspl_connect.AdminEntity.AssignedAssetDetailsDTO;
 import com.example.mspl_connect.AdminEntity.AssignedAssets;
 import com.example.mspl_connect.AdminEntity.assetsDTO;
 import com.example.mspl_connect.AdminRepo.AssetLogRepository;
+import com.example.mspl_connect.AdminRepo.AssetReplaceRepository;
 import com.example.mspl_connect.AdminRepo.AssetRepository;
 import com.example.mspl_connect.AdminRepo.AssetRequestRepository;
 import com.example.mspl_connect.AdminRepo.AssetsDTORepo;
 import com.example.mspl_connect.AdminRepo.AssignedAssetDetailsRepo;
 import com.example.mspl_connect.AdminRepo.AssignedAssetsRepo;
-
-import jakarta.servlet.http.HttpSession;
+import com.example.mspl_connect.Entity.DisplayEmployessEntity;
+import com.example.mspl_connect.Repository.EmployeeRepositoryWithDeptName;
 
 @Service
 public class AssetRequestService {
@@ -40,7 +43,14 @@ public class AssetRequestService {
 	private AssignedAssetsRepo assignedAssetsRepo; 
 	
 	@Autowired
+	private AssetReplaceRepository assetReplaceRepository; 
+	
+	@Autowired
     private AssetLogRepository assetLogRepository;
+	
+	@Autowired
+	private EmployeeRepositoryWithDeptName employeeWitFullDetailes;
+
 	
 	@Autowired
 	private AssignedAssetDetailsRepo assignedAssetDetailsRepo;
@@ -180,6 +190,109 @@ public class AssetRequestService {
 		 }
 	 }
 	 
+	 public void replaceAsset(AssignedAssets assignedAsset,
+             List<String> referAssetIds,
+             List<String> remarks,
+             Integer oldAssetId,
+             Integer requestId) {
+
+System.out.println("replaceAsset called with oldAssetId=" + oldAssetId +
+           ", requestId=" + requestId +
+           ", assignedAsset=" + assignedAsset);
+
+if (oldAssetId == null) {
+System.out.println("Old Asset ID is null, exiting method.");
+return;
+}
+
+// Fetch existing assigned asset row
+Optional<AssignedAssets> existingOpt = assignedAssetsRepo.findById(oldAssetId);
+if (existingOpt.isPresent()) {
+AssignedAssets existing = existingOpt.get();
+System.out.println("Existing assigned asset found: " + existing);
+
+// Fetch asset by type and description
+Optional<Assetes> assetOpt = assetRepository.findByAssetNameAndDescription(
+    assignedAsset.getAsset_type(), assignedAsset.getDescription());
+
+if (assetOpt.isPresent()) {
+Assetes asset = assetOpt.get();
+System.out.println("Matching asset found in assets table: " + asset);
+
+// Set the asset_id in assigned asset
+existing.setAsset_id(asset.getAsset_id());
+System.out.println("Set asset_id in assigned asset: " + asset.getAsset_id());
+
+// Reduce quantity in assets table
+int remainingQuantity = asset.getQuantity() - assignedAsset.getQuantity();
+System.out.println("Reducing asset quantity from " + asset.getQuantity() + " to " + remainingQuantity);
+asset.setQuantity(remainingQuantity);
+asset.setAction("assigned");
+asset.setAssigned_to(assignedAsset.getAssigned_to());
+assetRepository.save(asset);
+System.out.println("Updated asset in assets table.");
+
+// Update assignedAssets fields
+existing.setAsset_type(assignedAsset.getAsset_type());
+existing.setDescription(assignedAsset.getDescription());
+existing.setQuantity(assignedAsset.getQuantity());
+
+if (remarks != null && !remarks.isEmpty()) {
+    existing.setRemarks(remarks.get(0));
+    System.out.println("Set remarks: " + remarks.get(0));
+}
+
+if (referAssetIds != null && !referAssetIds.isEmpty()) {
+    existing.setRef_asset_id(referAssetIds.get(0));
+    System.out.println("Set refer_asset_id: " + referAssetIds.get(0));
+}
+
+assignedAssetsRepo.save(existing);
+System.out.println("Updated assigned asset in assignedAssetsRepo.");
+
+// Update assetRequest table
+if (requestId != null) {
+    Optional<AssetRequest> requestOpt = assetRequestRepository.findById(requestId.longValue());
+    if (requestOpt.isPresent()) {
+        AssetRequest request = requestOpt.get();
+        int oldAssignedQty = request.getAssigned_asset_qty() != null ? request.getAssigned_asset_qty() : 0;
+        request.setAssigned_asset_qty(oldAssignedQty + assignedAsset.getQuantity());
+        assetRequestRepository.save(request);
+        System.out.println("Updated assigned_asset_qty in assetRequest: " + request.getAssigned_asset_qty());
+    } else {
+        System.out.println("AssetRequest not found for ID: " + requestId);
+    }
+}
+//After updating assigned asset and asset request
+Optional<AssetReplace> replaceOpt = assetReplaceRepository.findByOldAssetId(oldAssetId);
+
+if (replaceOpt.isPresent()) {
+ AssetReplace assetReplace = replaceOpt.get();
+ assetReplace.setStatus("Assigned"); // ✅ Change status
+ assetReplace.setReplacementAssetId(existing.getAssigned_asset_id()); // set the new asset id
+ assetReplace.setApprovedAt(LocalDateTime.now());
+ assetReplace.setApprovedName(assignedAsset.getAssigned_to()); // whoever assigned it
+ assetReplaceRepository.save(assetReplace);
+ System.out.println("AssetReplace status updated to Assigned.");
+} else {
+ System.out.println("No AssetReplace record found for oldAssetId=" + oldAssetId);
+}
+
+
+} else {
+System.out.println("Asset not found for type: " + assignedAsset.getAsset_type() +
+                   " and description: " + assignedAsset.getDescription());
+throw new RuntimeException("Asset not found.");
+}
+
+} else {
+System.out.println("Assigned asset not found for ID: " + oldAssetId);
+}
+}
+
+
+
+	 
 	 public boolean deleteAssetById(Integer id) {
 	     if (assetRepository.existsById(id)) {
 	          assetRepository.deleteById(id);
@@ -265,5 +378,39 @@ public class AssetRequestService {
 	    }
 	}	  
 	
+	
+	/* public Map<String, Long> countAssetsByEmployee() {
+	        List<Object[]> results = assignedAssetsRepo.countAssetsGroupedByEmployee();
+	        Map<String, Long> empAssetCounts = new HashMap<>();
+
+	        for (Object[] row : results) {
+	            String empId = (String) row[0];
+	            Long count = (Long) row[1];
+	            empAssetCounts.put(empId, count);
+	        }
+
+	        return empAssetCounts;
+	    }*/
+	 
+	 public Map<String, Long> countAssetsByEmployee() {
+		    // Fetch raw counts grouped by empId
+		    List<Object[]> results = assignedAssetsRepo.countAssetsGroupedByEmployee();
+		    Map<String, Long> empAssetCounts = new HashMap<>();
+
+		    for (Object[] row : results) {
+		        String empId = (String) row[0];
+		        Long count = (Long) row[1];
+
+		        // Fetch full employee details using empId
+		        DisplayEmployessEntity empDetails = employeeWitFullDetailes.findByEmpid(empId);
+
+		        // Use full name if available, else fallback to empId
+		        String empName = (empDetails != null) ? empDetails.getFullName() : empId;
+
+		        empAssetCounts.put(empName, count);
+		    }
+
+		    return empAssetCounts;
+		}
 }
  
