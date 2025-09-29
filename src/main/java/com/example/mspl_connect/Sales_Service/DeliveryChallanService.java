@@ -28,12 +28,9 @@ import com.example.mspl_connect.Sales_Repository.DeliveryChallanDetailRepository
 import com.example.mspl_connect.Sales_Repository.DeliveryChallanRepository;
 import com.itextpdf.layout.element.Paragraph;
 
-<<<<<<< HEAD
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpSession;
-=======
->>>>>>> origin/sania_admin_module
 import jakarta.transaction.Transactional;
 
 @Service

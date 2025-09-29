@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -51,6 +52,7 @@ import com.example.mspl_connect.Repository.EmployeeRepositoryWithDeptName;
 import com.example.mspl_connect.Repository.PermissionRepo;
 import com.example.mspl_connect.Service.EmployeeDetaisService;
 import com.example.mspl_connect.Service.PermissionService;
+import com.itextpdf.io.IOException;
 
 import jakarta.servlet.http.HttpSession;
 
