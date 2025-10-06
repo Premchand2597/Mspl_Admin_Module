@@ -14,7 +14,31 @@ import jakarta.persistence.Transient;
 @Table(name = "asset_replace")
 public class AssetReplace {
 
-    public AssetReplace() {
+    public AssetReplace(int id, String assignedAssetId, String assetId, String assetType, Integer quantity,
+			String refAssetId, String description, String senderEmpId, LocalDateTime requestedAt, String remarks,
+			String replacementAssetId, String status, LocalDateTime approvedAt, String approvedName, Integer oldAssetId,
+			String senderName, boolean notification) {
+		super();
+		this.id = id;
+		this.assignedAssetId = assignedAssetId;
+		this.assetId = assetId;
+		this.assetType = assetType;
+		this.quantity = quantity;
+		this.refAssetId = refAssetId;
+		this.description = description;
+		this.senderEmpId = senderEmpId;
+		this.requestedAt = requestedAt;
+		this.remarks = remarks;
+		this.replacementAssetId = replacementAssetId;
+		this.status = status;
+		this.approvedAt = approvedAt;
+		this.approvedName = approvedName;
+		this.oldAssetId = oldAssetId;
+		this.senderName = senderName;
+		this.notification = notification;
+	}
+
+	public AssetReplace() {
 		super();
 	}
 
@@ -66,6 +90,9 @@ public class AssetReplace {
 
     @Transient  // not stored in DB
     private String senderName;
+
+    @Column(name = "notification")
+    private boolean notification;   // true = new/unread, false = cleared
 
     
     
@@ -219,6 +246,14 @@ public class AssetReplace {
 
 	public void setApprovedName(String approvedName) {
 		this.approvedName = approvedName;
+	}
+
+	public boolean isNotification() {
+		return notification;
+	}
+
+	public void setNotification(boolean notification) {
+		this.notification = notification;
 	}
 
 }

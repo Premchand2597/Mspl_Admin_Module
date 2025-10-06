@@ -15,6 +15,8 @@ import com.example.mspl_connect.AdminRepo.AppraisalRepository;
 import com.example.mspl_connect.AdminRepo.Events_Repo;
 import com.example.mspl_connect.AdminRepo.ToDoListRepository;
 import com.example.mspl_connect.AdminService.AppraisalService;
+import com.example.mspl_connect.AdminService.AssetReplaceService;
+import com.example.mspl_connect.AdminService.AssetReturnService;
 import com.example.mspl_connect.AdminService.NotificationService;
 import com.example.mspl_connect.Entity.NtificationCountEntity;
 import com.example.mspl_connect.Entity.PermissionsEntity;
@@ -43,7 +45,11 @@ public class NotificationController {
 	
 	@Autowired
 	private DepartmentRepo departmentRepo; 
-	
+	  @Autowired
+	    private AssetReplaceService assetReplaceservice;
+	  @Autowired
+	    private AssetReturnService assetReturnservice;
+
 	@Autowired
 	private AppraisalRepository appraisalRepository;
 
@@ -94,7 +100,11 @@ public class NotificationController {
 		
 		//to get leave request is accepted or not
 		int leaveStatusChangeValue = notificationService.getLeaveStatusChange(email);
-		 
+		// Fetch asset return & replace notification flags (1 = new notification)
+		Integer assetReturnFlag = assetReturnservice.getAssetReplaceNotification(session); // returns 1 or 0
+		   Integer assetReplaceFlag = assetReplaceservice.getAssetReplaceNotification(session);
+		//Integer assetReplaceFlag = assetReplaceservice.getAssetReplaceNotification(empId); // returns 1 or 0
+
 		//System.out.println(leaveStatusChangeValue);
 		NtificationCountEntity response;
 		
@@ -128,8 +138,8 @@ public class NotificationController {
 		Integer getNewReleaseNoteNotification = toDoListRepository.getNewFeatureNotification(empId);
 		
 		Optional<PermissionsEntity> permissions = permissionRepo.findByUserId(empId);
-		// System.out.println("permissions....." + permissions);
-		
+		 System.out.println("permissions....." + assetReturnFlag);
+		// System.out.println("permissions....." + assetReplaceFlag);
 		// if sale permission is enable then only notification should display
 		Integer quotationNotification = 0;
 		Integer getReviseQuotationCount = 0;
@@ -147,8 +157,10 @@ public class NotificationController {
 			totalNotificationCount = leaveCountForSA + 0 + announcementNotification + leaveStatusChangeValue + tasksByUpcomingDeadline + getNewFeatureFlagCountValue + getNewReleaseNoteNotification + getReviseQuotationCount;
 			response = new NtificationCountEntity(leaveCountForSA,totalNotificationCount,prjectflagValue,hrAppraisalNotification,empAppraisalflag,adminAppraisalDuedate,announcementNotification,leaveStatusChangeValue,tasksByUpcomingDeadline,getNewFeatureFlagCountValue,getNewReleaseNoteNotification,quotationNotification,getReviseQuotationCount);
 		} else {
-			totalNotificationCount = leavecount  + prjectflagValue + hrAppraisalNotification + empAppraisalflag + adminAppraisalDuedate + announcementNotification + leaveStatusChangeValue + tasksByUpcomingDeadline + getNewFeatureFlagCountValue + getNewReleaseNoteNotification + quotationNotification + getReviseQuotationCount;
-			response = new NtificationCountEntity(leavecount,totalNotificationCount,prjectflagValue,hrAppraisalNotification,empAppraisalflag,adminAppraisalDuedate,announcementNotification,leaveStatusChangeValue,tasksByUpcomingDeadline,getNewFeatureFlagCountValue,getNewReleaseNoteNotification,quotationNotification,getReviseQuotationCount);
+			totalNotificationCount = leavecount  + prjectflagValue + hrAppraisalNotification + empAppraisalflag + adminAppraisalDuedate + announcementNotification + leaveStatusChangeValue + tasksByUpcomingDeadline + getNewFeatureFlagCountValue + getNewReleaseNoteNotification + quotationNotification + getReviseQuotationCount + assetReturnFlag + assetReplaceFlag ;
+			 System.out.println("permissions....44444." + totalNotificationCount);
+			response = new NtificationCountEntity(leavecount,totalNotificationCount,prjectflagValue,hrAppraisalNotification,empAppraisalflag,adminAppraisalDuedate,announcementNotification,leaveStatusChangeValue,tasksByUpcomingDeadline,getNewFeatureFlagCountValue,getNewReleaseNoteNotification,quotationNotification,getReviseQuotationCount,assetReturnFlag,assetReplaceFlag);
+			 System.out.println("permissions....44444." + response);
 		}
 	 	
 	 	//System.out.println("totalNotificationCount"+totalNotificationCount);

@@ -5,8 +5,9 @@ import java.util.List;
 
 @Entity
 public class NtificationCountEntity {
-    
-    @Id
+
+
+	@Id
     private int id;  // Add an ID field if not present
     private int leaveRequestFlagCount;
     private int newPrjectValueCount;
@@ -19,9 +20,24 @@ public class NtificationCountEntity {
 	private int toDoEvents;
 	private int newFeatureNotification;
 	private int newReleaseNoteNotification;
+
+	public int getAssetReturnFlag() {
+		return assetReturnFlag;
+	}
+	public void setAssetReturnFlag(int assetReturnFlag) {
+		this.assetReturnFlag = assetReturnFlag;
+	}
+	public int getAssetReplaceFlag() {
+		return assetReplaceFlag;
+	}
+	public void setAssetReplaceFlag(int assetReplaceFlag) {
+		this.assetReplaceFlag = assetReplaceFlag;
+	}
+
 	private int quotationNotification;
 	private int reviseQuotationCount;
-	
+	private int assetReturnFlag;
+	private int assetReplaceFlag   ;
 	
 	public int getReviseQuotationCount() {
 		return reviseQuotationCount;
@@ -120,9 +136,33 @@ public class NtificationCountEntity {
 				+ announcementNotification + ", leaveRequestStatusChangeValue=" + leaveRequestStatusChangeValue
 				+ ", toDoEvents=" + toDoEvents + ", newFeatureNotification=" + newFeatureNotification
 				+ ", newReleaseNoteNotification=" + newReleaseNoteNotification + ", quotationNotification="
-				+ quotationNotification + ", getReviseQuotationCount=" + reviseQuotationCount + "]";
+				+ quotationNotification + ", reviseQuotationCount=" + reviseQuotationCount + ", assetReturnFlag="
+				+ assetReturnFlag + ", assetReplaceFlag=" + assetReplaceFlag + "]";
 	}
 	
+	public NtificationCountEntity(int leaveRequestFlagCount,  int totalNotificationCount,int newPrjectValueCount,
+			int appraisalCount, int empAppraisalflag, int adminAppraisalDuedate, int announcementNotification,
+			int leaveRequestStatusChangeValue, int toDoEvents, int newFeatureNotification,
+			int newReleaseNoteNotification, int quotationNotification, int reviseQuotationCount, int assetReturnFlag,
+			int assetReplaceFlag) {
+		super();
+		this.leaveRequestFlagCount = leaveRequestFlagCount;
+		
+		this.totalNotificationCount = totalNotificationCount;
+		this.newPrjectValueCount = newPrjectValueCount;
+		this.appraisalCount = appraisalCount;
+		this.empAppraisalflag = empAppraisalflag;
+		this.adminAppraisalDuedate = adminAppraisalDuedate;
+		this.announcementNotification = announcementNotification;
+		this.leaveRequestStatusChangeValue = leaveRequestStatusChangeValue;
+		this.toDoEvents = toDoEvents;
+		this.newFeatureNotification = newFeatureNotification;
+		this.newReleaseNoteNotification = newReleaseNoteNotification;
+		this.quotationNotification = quotationNotification;
+		this.reviseQuotationCount = reviseQuotationCount;
+		this.assetReturnFlag = assetReturnFlag;
+		this.assetReplaceFlag = assetReplaceFlag;
+	}
 	public NtificationCountEntity(int leaveRequestFlagCount , int totalNotificationCount,int newPrjectValueCount,
 								  int appraisalCount,int empAppraisalflag,int adminAppraisalDuedate,
 								  int announcementNotification,int leaveRequestStatusChangeValue,

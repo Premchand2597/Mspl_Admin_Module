@@ -15,6 +15,29 @@ import jakarta.persistence.Transient;
 public class AssetReturn {
 	  public AssetReturn(int id, String assignedAssetId, String assetId, String assetType, Integer quantity,
 			String refAssetId, String description, String senderEmpId, LocalDateTime returnedAt, String remarks,
+			String rejectionRemarks, String status, String approvedBy, LocalDateTime approvedAt, String senderName,
+			String approvedName, boolean notification) {
+		super();
+		this.id = id;
+		this.assignedAssetId = assignedAssetId;
+		this.assetId = assetId;
+		this.assetType = assetType;
+		this.quantity = quantity;
+		this.refAssetId = refAssetId;
+		this.description = description;
+		this.senderEmpId = senderEmpId;
+		this.returnedAt = returnedAt;
+		this.remarks = remarks;
+		this.rejectionRemarks = rejectionRemarks;
+		this.status = status;
+		this.approvedBy = approvedBy;
+		this.approvedAt = approvedAt;
+		this.senderName = senderName;
+		this.approvedName = approvedName;
+		this.notification = notification;
+	}
+	public AssetReturn(int id, String assignedAssetId, String assetId, String assetType, Integer quantity,
+			String refAssetId, String description, String senderEmpId, LocalDateTime returnedAt, String remarks,
 			String rejectionRemarks, String status, String approvedBy, LocalDateTime approvedAt, String approvedName) {
 		super();
 		this.id = id;
@@ -110,6 +133,10 @@ public class AssetReturn {
 	    
 	    @Column(name = "approved_name")
 	    private String approvedName;  
+	    
+	    @Column(name = "notification")
+	    private boolean notification = true; // default true when request is created
+
 	    
 		public int getId() {
 			return id;
@@ -213,6 +240,12 @@ public class AssetReturn {
 		}
 		public void setSenderName(String senderName) {
 			this.senderName = senderName;
+		}
+		public boolean isNotification() {
+			return notification;
+		}
+		public void setNotification(boolean notification) {
+			this.notification = notification;
 		}
 	    
 	    

@@ -25,7 +25,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.mspl_connect.AdminEntity.AssetReplace;
 import com.example.mspl_connect.AdminEntity.AssetRequest;
+import com.example.mspl_connect.AdminEntity.AssetReturn;
 import com.example.mspl_connect.AdminEntity.AssetUpdateLog;
 import com.example.mspl_connect.AdminEntity.AssetUpdateRequest;
 import com.example.mspl_connect.AdminEntity.Assetes;
@@ -34,8 +36,11 @@ import com.example.mspl_connect.AdminEntity.AssignedAssets;
 import com.example.mspl_connect.AdminEntity.assetsDTO;
 import com.example.mspl_connect.AdminRepo.AssetRepository;
 import com.example.mspl_connect.AdminRepo.AssignedAssetsRepo;
+import com.example.mspl_connect.AdminService.AssetReplaceService;
 import com.example.mspl_connect.AdminService.AssetRequestService;
+import com.example.mspl_connect.AdminService.AssetReturnService;
 import com.example.mspl_connect.Repository.EmployeeRepository;
+
 
 import jakarta.servlet.http.HttpSession;
 
@@ -44,7 +49,8 @@ public class AsseteController {
 	
 	@Autowired
 	private EmployeeRepository employeeRepository;
-	
+	  @Autowired
+	    private AssetReturnService assetReturnservice;
     @Autowired
     private AssetRequestService assetRequestService;
 	
@@ -52,6 +58,10 @@ public class AsseteController {
     private AssetRepository assetRepository;
     @Autowired
     private  AssignedAssetsRepo AssignedAssetDetailsRepo;
+    
+    @Autowired
+    private AssetReplaceService assetReplaceservice;
+
     
 	/* @PostMapping("/save")
 	 public String requestAsset(@ModelAttribute AssetRequest request,HttpSession session) {
@@ -443,4 +453,35 @@ public class AsseteController {
 
 	        return assets;
 	    }
+	    
+		 @GetMapping("/employee/returns")
+		 @ResponseBody
+		 public List<AssetReturn> getReturnsByLoggedInEmployee(HttpSession session) {
+		     // Retrieve user details from session
+		     String email = (String) session.getAttribute("email");
+		     System.out.println("user login " + email);
+
+		     if (email == null) { // Session expired
+		         return Collections.emptyList(); // or throw exception
+		     }
+
+		     // Find empId using email
+		     String empId = employeeRepository.findEmpidByEmail(email);
+		     System.out.println("user empid " + empId);
+
+		     // Fetch returns for that empId
+		     return assetReturnservice.getReturnsByEmployee(empId);
+		 }
+		 
+		 @GetMapping("/employee/replacements")
+		 @ResponseBody
+		 public List<AssetReplace> getReplacementsByLoggedInEmployee(HttpSession session) {
+		     String email = (String) session.getAttribute("email");
+		     if (email == null) {
+		         return Collections.emptyList();
+		     }
+		     String empId = employeeRepository.findEmpidByEmail(email);
+		     return assetReplaceservice.getReplacementsByEmployee(empId);
+		 }
+
 }

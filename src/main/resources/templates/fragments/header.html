@@ -95,6 +95,29 @@
 							</div>
 						</div>
 					</li>
+					
+					<li><hr class="dropdown-divider"></li>
+									<li class="notification-item" id="assetreturnRequestNotification"
+										onclick="redirectToAsset()" style="display: none;">
+										<div class="d-flex">
+											<i class="bi bi-card-text icon-color"></i>
+											<div>
+												<p id="assetreturnRequestMessage">asset Return request</p>
+											</div>
+										</div>
+									</li>
+									
+									<li><hr class="dropdown-divider"></li>
+													<li class="notification-item" id="assetreplaceRequestNotification"
+														onclick="redirectToAsset()" style="display: none;">
+														<div class="d-flex">
+															<i class="bi bi-card-text icon-color"></i>
+															<div>
+																<p id="assetreplaceRequestMessage">Asset replace request</p>
+															</div>
+														</div>
+													</li>
+					
 					<!-- if admin didn't send appraisal within due date this will display notification -->
 					<li><hr class="dropdown-divider"></li>
 					<li class="notification-item" id="dueAppraisal"

@@ -2533,6 +2533,92 @@
 
                 </div>
                 
+				<!-- Return Assets Modal -->
+					<div class="modal fade" id="returnAssetsModal" tabindex="-1" aria-hidden="true">
+					  <div class="modal-dialog modal-lg modal-dialog-centered">
+					    <div class="modal-content">
+					      <div class="modal-header">
+					        <h5 class="modal-title">Return Assets</h5>
+					        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+					      </div>
+					      <div class="modal-body">
+					        <form id="returnAssetsForm">
+					          <table class="table table-bordered">
+					            <thead>
+					              <tr>
+					                <th>Select</th>
+					                <th>Asset ID</th>
+					                <th>Asset Type</th>
+					                <th>Quantity</th>
+					                <th>Ref Asset ID</th>
+					                <th>Remarks</th>
+					              </tr>
+					            </thead>
+					            <tbody>
+					              <tr th:each="asset : ${employeesAssetDataByEmp}">
+					                <td><input type="checkbox" name="assetIds" th:value="${asset.id}"></td>
+					                <td th:text="${asset.assetId}"></td>
+					                <td th:text="${asset.assetType}"></td>
+					                <td th:text="${asset.quantity}"></td>
+					                <td th:text="${asset.ref_asset_id}"></td>
+					                <td>
+					                  <textarea class="form-control remarks" rows="2" 
+					                            placeholder="Enter remarks"></textarea>
+					                </td>
+					              </tr>
+					            </tbody>
+					          </table>
+					          <button type="button" class="btn btn-success" onclick="submitReturnAssets()">Return Selected</button>
+					        </form>
+					      </div>
+					    </div>
+					  </div>
+					</div>
+
+					<!-- Replace Assets Modal -->
+					<div class="modal fade" id="replaceAssetsModal" tabindex="-1" aria-hidden="true">
+					  <div class="modal-dialog modal-lg modal-dialog-centered">
+					    <div class="modal-content">
+					      <div class="modal-header">
+					        <h5 class="modal-title">Replace Assets</h5>
+					        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+					      </div>
+					      <div class="modal-body">
+					        <form id="replaceAssetsForm">
+					          <table class="table table-bordered">
+					            <thead>
+					              <tr>
+					                <th>Select</th>
+					                <th>Asset ID</th>
+					                <th>Asset Type</th>
+					                <th>Quantity</th>
+									
+					                <th>Ref Asset ID</th>
+					                <th>Remarks</th>
+					                
+					              </tr>
+					            </thead>
+					            <tbody>
+					              <tr th:each="asset : ${employeesAssetDataByEmp}">
+					                <td><input type="checkbox" name="replaceAssetIds" th:value="${asset.id}"></td>
+					                <td th:text="${asset.assetId}"></td>
+					                <td th:text="${asset.assetType}"></td>
+					                <td th:text="${asset.quantity}"></td>
+					                <td th:text="${asset.ref_asset_id}"></td>
+					                <td>
+					                  <textarea class="form-control remarks" rows="2" 
+					                            placeholder="Enter remarks"></textarea>
+					                </td>
+					           
+					              </tr>
+					            </tbody>
+					          </table>
+					          <button type="button" class="btn btn-info" onclick="submitReplaceAssets()">Replace Selected</button>
+					        </form>
+					      </div>
+					    </div>
+					  </div>
+					</div>
 
                 <div class="tab-pane fade pt-3 changePassword" id="profile-change-password">
                   <!-- Change Password Form -->
@@ -4188,14 +4274,29 @@ document.addEventListener("DOMContentLoaded", function () {
     assetTabButton.addEventListener("click", function () {
         const container = document.getElementById("profile-assets");
 
-        // Show the request button regardless of data
-        let contentHTML = `
-            <div class="d-flex justify-content-end mb-2">
-                <button type="button" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#assetRequestModal">
-                    Request
-                </button>
-            </div>
-        `;
+      
+		// Show the request, return, and replace buttons
+		let contentHTML = `
+		    <div class="d-flex justify-content-end mb-2 gap-2">
+		        <!-- Request Button -->
+		        <button type="button" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#assetRequestModal">
+		            Request
+		        </button>
+
+		        <!-- Return Button -->
+		        <button type="button" class="btn btn-warning mb-1 custom-btn" 
+		                id="returnAssetsButton" onclick="showReturnAssets()">
+		            <i class="fas fa-undo-alt me-1"></i> Return
+		        </button>
+
+		        <!-- Replace Button -->
+		        <button type="button" class="btn btn-info mb-1 custom-btn" 
+		                id="replaceAssetsButton" onclick="showReplaceAssets()">
+		            <i class="fas fa-exchange-alt me-1"></i> Replace
+		        </button>
+		    </div>
+		`;
+
 
         fetch(`/getAssetsByEmpId?empId=${encodeURIComponent(empId)}`)
             .then(response => {
@@ -4254,8 +4355,85 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     });
 });
-</script>
 
+
+</script>
+<script>
+
+	function showReturnAssets() {
+	    var modal = new bootstrap.Modal(document.getElementById('returnAssetsModal'));
+	    modal.show();
+	}
+
+	function submitReturnAssets() {
+	    let selectedAssets = [];
+
+	    document.querySelectorAll('input[name="assetIds"]:checked').forEach(cb => {
+	        let row = cb.closest('tr');
+	        let remarks = row.querySelector('.remarks').value.trim();
+
+	        selectedAssets.push({
+	            id: cb.value,
+	            remarks: remarks
+	        });
+	    });
+
+	    if (selectedAssets.length === 0) {
+	        alert("Please select at least one asset to return.");
+	        return;
+	    }
+
+	    fetch('/api/asset-returns/assets/return', {
+	        method: 'POST',
+	        headers: { 'Content-Type': 'application/json' },
+	        body: JSON.stringify(selectedAssets)
+	    })
+	    .then(response => response.json())
+	    .then(data => {
+	        alert(data.message);
+	        location.reload();
+	    });
+	}
+
+	function showReplaceAssets() {
+	    var modal = new bootstrap.Modal(document.getElementById('replaceAssetsModal'));
+	    modal.show();
+	}
+
+	function submitReplaceAssets() {
+	    let selectedAssets = [];
+
+	    document.querySelectorAll('input[name="replaceAssetIds"]:checked').forEach(cb => {
+	        let row = cb.closest('tr');
+	        let remarks = row.querySelector('.remarks').value.trim();
+	        // let replacementId = row.querySelector('.replacement-id').value.trim();
+
+	        selectedAssets.push({
+	            id: cb.value,
+	            // replacementAssetId: replacementId, // temporarily removed
+	            remarks: remarks
+	        });
+	    });
+
+	    if (selectedAssets.length === 0) {
+	        alert("Please select at least one asset to replace.");
+	        return;
+	    }
+
+	    fetch('/api/asset-replacements/assets/replace', {
+	        method: 'POST',
+	        headers: { 'Content-Type': 'application/json' },
+	        body: JSON.stringify(selectedAssets)
+	    })
+	    .then(response => response.json())
+	    .then(data => {
+	        alert(data.message);
+	        location.reload();
+	    });
+	}
+
+
+	</script>
 <!-- script to submit the asset request -->
 <script>
 document.addEventListener("DOMContentLoaded", function () {

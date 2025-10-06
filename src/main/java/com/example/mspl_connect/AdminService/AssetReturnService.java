@@ -18,6 +18,8 @@ import com.example.mspl_connect.Entity.PermissionsEntity;
 import com.example.mspl_connect.Repository.EmployeeRepository;
 import com.example.mspl_connect.Repository.PermissionRepo;
 
+import jakarta.servlet.http.HttpSession;
+
 @Service
 public class AssetReturnService {
 	
@@ -27,6 +29,8 @@ public class AssetReturnService {
 	  @Autowired
 	    private  AssignedAssetsRepo AssignedAssetDetailsRepo;
 	 
+	  
+	  
 	 @Autowired
 	    private AssetRepository assetRepository;
     
@@ -100,6 +104,8 @@ public class AssetReturnService {
         request.setApprovedBy(approverEmpId);
         request.setApprovedAt(LocalDateTime.now());
         request.setApprovedName("Asset Admin");
+        
+        request.setNotification(false);
         System.out.println("Request status updated to Approved");
 
         // 4. Update assets quantity
@@ -156,8 +162,84 @@ public class AssetReturnService {
         AssetReturn request = repo.findById(id).orElseThrow(() -> new RuntimeException("Request not found"));
         request.setStatus("Rejected");
         request.setRejectionRemarks(remarks);
+        request.setNotification(false);
         return repo.save(request);
     }
     
-    
+    // Add this method
+   
+    public Integer getAssetReplaceNotification(HttpSession session) {
+        // Count total pending asset return notifications
+        Integer pendingCount = repo.countPendingAssetReturns();
+        System.out.println("Pending Asset Replace Notifications Count: " + pendingCount);
+
+        // Fetch all employees who are asset admins
+        List<String> assetAdmins = permissionRepo.findAllAssetAdmins();
+        System.out.println("Asset Admins: " + assetAdmins);
+
+        if (assetAdmins.isEmpty()) {
+            System.out.println("No Asset Admins found. Returning 0 notifications.");
+            return 0;
+        }
+
+        // ✅ Get logged-in employee email from session
+        String email = (String) session.getAttribute("email");
+
+        // ✅ Convert email → empId
+        String empId = employeeRepository.findEmpidByEmail(email);
+        System.out.println("Logged-in EmpId: " + empId);
+
+        // ✅ Check if this empId is in assetAdmins list
+        if (assetAdmins.contains(empId)) {
+            System.out.println("EmpId " + empId + " is an Asset Admin. Returning count.");
+            return pendingCount;  // Show notification
+        } else {
+            System.out.println("EmpId " + empId + " is NOT an Asset Admin. Returning 0.");
+            return 0;  // No notifications for non-admins
+        }
+    }
+
+    public void returnAssets(List<AssetReturn> assetRequests, String empId) {
+        for (AssetReturn req : assetRequests) {
+            AssignedAssets asset = AssignedAssetDetailsRepo.findById(req.getId()).orElse(null);
+            if (asset != null) {
+            	
+
+                // 🔍 Check if already in pending state for same assigned + ref asset
+                boolean existsPending = repo.existsByAssignedAssetIdAndRefAssetId(
+                        asset.getAssigned_asset_id(),
+                        asset.getRef_asset_id()
+                        
+                );
+
+                if (existsPending) {
+                    throw new RuntimeException("Asset " + asset.getAsset_type() + " already has a pending return request!");
+                }
+                
+                AssetReturn assetReturn = new AssetReturn();
+                assetReturn.setAssignedAssetId(asset.getAssigned_asset_id());
+                assetReturn.setAssetId(asset.getAsset_id());
+                assetReturn.setAssetType(asset.getAsset_type());
+                assetReturn.setQuantity(asset.getQuantity());
+                assetReturn.setRefAssetId(asset.getRef_asset_id());
+                assetReturn.setDescription(asset.getDescription());
+                assetReturn.setSenderEmpId(empId);
+                assetReturn.setReturnedAt(LocalDateTime.now());
+                assetReturn.setRemarks(req.getRemarks());   // save remarks
+                assetReturn.setStatus("Pending");           // default
+                assetReturn.setNotification(true); // ✅ mark as new notification
+
+                repo.save(assetReturn);
+
+                // optionally mark as returned
+                // assignedAssetRepo.deleteById(req.getId());
+            }
+        }
+    }
+
+    public List<AssetReturn> getReturnsByEmployee(String empId) {
+        return repo.findBySenderEmpId(empId);
+    }
+
+
 }

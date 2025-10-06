@@ -1,14 +1,19 @@
 package com.example.mspl_connect.AdminController;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.mspl_connect.AdminEntity.AssetReplace;
@@ -16,6 +21,9 @@ import com.example.mspl_connect.AdminEntity.Scap;
 import com.example.mspl_connect.AdminRepo.AssetReplaceRepository;
 import com.example.mspl_connect.AdminRepo.ScapRepository;
 import com.example.mspl_connect.AdminService.AssetReplaceService;
+import com.example.mspl_connect.Repository.EmployeeRepository;
+
+import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/api/asset-replacements")
@@ -27,6 +35,9 @@ public class AssetReplaceController {
 	  @Autowired
 	    private AssetReplaceService assetReplaceservice;
 
+		@Autowired
+		private EmployeeRepository employeeRepository;
+	  
 	 @Autowired
 	    private AssetReplaceRepository assetReplaceRepo;
 
@@ -49,6 +60,7 @@ public class AssetReplaceController {
 	     request.setStatus("Approved");
 	     request.setApprovedName(empId); // or senderEmpId depending on logic
 	     request.setApprovedAt(LocalDateTime.now());
+	     request.setNotification(false);
 	     assetReplaceRepo.save(request);
 
 	     Scap scap = new Scap();
@@ -87,6 +99,24 @@ public class AssetReplaceController {
 	     request.setStatus("Rejected");
 	     request.setApprovedName(empId); // or a separate rejectedBy field if you want
 	     request.setApprovedAt(LocalDateTime.now()); // timestamp for rejection
+	     request.setNotification(false);
 	     return assetReplaceRepo.save(request);
 	 }
+	 
+	 
+	 @PostMapping("/assets/replace")
+	 @ResponseBody
+	 public Map<String, String> replaceAssets(@RequestBody List<AssetReplace> assetRequests,
+	                                          HttpSession session) {
+	     String email = (String) session.getAttribute("email");
+	     String empId = employeeRepository.findEmpidByEmail(email);
+
+	     assetReplaceservice.replaceAssets(assetRequests, empId);
+
+	     Map<String, String> response = new HashMap<>();
+	     response.put("message", "Assets replacement request submitted successfully!");
+	     return response;
+	 }
+	 
+
 }

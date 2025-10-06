@@ -1,5 +1,6 @@
 package com.example.mspl_connect.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -31,5 +32,11 @@ public interface PermissionRepo extends JpaRepository<PermissionsEntity, Integer
    @Query(nativeQuery = true, value="insert into permissions(emp_id, interview_access, other_permission1, sales, store, accounts, apprisal_link, attendance, doc_upload, doc_date, crm) values(:empId, false, false, false, false, false, false, false, false, null, false)")
    void insertPermissionAccessForNewEmployee(@Param("empId") String empId);
    
+   
+   @Query(value = "SELECT p.emp_id " +
+           "FROM permissions p " +
+           "WHERE p.asset_admin = true", nativeQuery = true)
+List<String> findAllAssetAdmins();
+
 }
 

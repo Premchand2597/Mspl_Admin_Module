@@ -26,6 +26,21 @@ public interface AssetReplaceRepository extends JpaRepository<AssetReplace, Inte
 
 
 
+    /*@Query("SELECT COUNT(a) FROM AssetReplace a WHERE a.senderEmpId = :empId AND a.notification = true")
+    Integer countPendingAssetReplaces(@Param("empId") String empId);*/
+    
+   /* @Query("SELECT COUNT(a) " +
+    	       "FROM AssetReplace a " +
+    	       "JOIN a.employeeDetails ed " +
+    	       "WHERE ed.empId = :empId AND a.notification = true")
+    	Integer countPendingAssetReplaces(@Param("empId") String empId);*/
+    
+    @Query(value = "SELECT COUNT(ar.id) " +
+            "FROM asset_replace ar " +
+            "WHERE ar.notification = true",
+    nativeQuery = true)
+Integer countPendingAssetReplaces();
+
 
 
 }

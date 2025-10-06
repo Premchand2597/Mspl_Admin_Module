@@ -1,3 +1,4 @@
+
 /**
 * Template Name: NiceAdmin
 * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
@@ -785,6 +786,21 @@ function fetchFlag() {
 		     $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);             
 		} 
 
+		//display Asset Return notification
+		if(leaveRequestCountValue.assetReturnFlag > 0){
+		    $("#notificationBellIcon").show();
+		    $("#assetreturnRequestNotification").show();
+		    $("#assetreturnRequestMessage").html("You have " + leaveRequestCountValue.assetReturnFlag + " asset return request(s) pending.");
+		    $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);  
+		}
+
+		//display Asset Replace notification
+		if(leaveRequestCountValue.assetReplaceFlag > 0){
+		    $("#notificationBellIcon").show();
+		    $("#assetreplaceRequestNotification").show();
+		    $("#assetreplaceRequestMessage").html("You have " + leaveRequestCountValue.assetReplaceFlag + " asset replace request(s) pending.");
+		    $(".badge-number").text(leaveRequestCountValue.totalNotificationCount);  
+		}
 		//display the Quotation
 		if(leaveRequestCountValue.reviseQuotationCount > 0){
 			 $("#notificationBellIcon").show();  // Show bell icon
@@ -1016,11 +1032,16 @@ async function checkForNotifications() {
     }
 }
 
+//
+
 // Store previous notification counts separately
 let previousNotificationCount = parseInt(localStorage.getItem("notificationCount")) || 0;
 let previousLeaveNotificationCount = parseInt(localStorage.getItem("leaveNotificationCount")) || 0;
 let previousLeaveStatusChangeCount = parseInt(localStorage.getItem("leaveStatusChangeCount")) || 0;
 let previousAnnouncementNotification = parseInt(localStorage.getItem("announcementNotificationCount")) || 0;
+let previousAssetReturnCount = parseInt(localStorage.getItem("assetReturnCount")) || 0;
+let previousAssetReplaceCount = parseInt(localStorage.getItem("assetReplaceCount")) || 0;
+
 
 async function checkNotificationCount() {
     const loggedAdminEmpId = document.getElementById("loggedAdminEmpId2")?.value || null;
@@ -1035,6 +1056,9 @@ async function checkNotificationCount() {
         let newLeaveStatusChangeCount = data.leaveRequestStatusChangeValue;
         let newAnnouncementNotification = data.announcementNotification;
 
+		// New asset notifications
+		       let newAssetReturnCount = data.assetReturnFlag;
+		       let newAssetReplaceCount = data.assetReplaceFlag;
         if (newLeaveNotification > previousLeaveNotificationCount) {
             showNotification(
                 "New Leave Request",
@@ -1061,6 +1085,30 @@ async function checkNotificationCount() {
                 data.senderEmail || ""
             );
         }
+		// Asset Return notification
+		       if (newAssetReturnCount > previousAssetReturnCount) {
+		           showNotification(
+		               "Asset Return",
+		               `You have ${newAssetReturnCount - previousAssetReturnCount} asset return requests.`,
+		               "/assets",
+		               data.senderEmail || ""
+		           );
+		       }
+
+		       // Asset Replace notification
+		       if (newAssetReplaceCount > previousAssetReplaceCount) {
+		           showNotification(
+		               "Asset Replace",
+		               `You have ${newAssetReplaceCount - previousAssetReplaceCount} asset replace requests.`,
+		               "/assets",
+		               data.senderEmail || ""
+		           );
+		       }
+		// Update localStorage for asset notifications
+		       previousAssetReturnCount = newAssetReturnCount;
+		       previousAssetReplaceCount = newAssetReplaceCount;
+		       localStorage.setItem("assetReturnCount", String(newAssetReturnCount));
+		       localStorage.setItem("assetReplaceCount", String(newAssetReplaceCount));
 
         // Update stored notification counts
         previousNotificationCount = newNotificationCount;

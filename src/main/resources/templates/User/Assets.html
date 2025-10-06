@@ -1470,10 +1470,21 @@
 										      </button>
 										  </li>
 									    <li class="nav-item flex-fill" role="presentation">
-									        <button class="nav-link w-100" id="profile-tab" data-bs-toggle="tab" data-bs-target="#bordered-justified-profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Admin</button>
+									        <button class="nav-link w-100" id="profile-tab" data-bs-toggle="tab" data-bs-target="#bordered-justified-profile" type="button" role="tab" aria-controls="profile" aria-selected="false">  Requested Assets</button>
 									    </li>
-									    
+										<li class="nav-item flex-fill" role="presentation">
+										       <button class="nav-link w-100" id="return-requests-tab" data-bs-toggle="tab" 
+										               data-bs-target="#return-requests" type="button" role="tab">Return Requests</button>
+										   </li>
+										   <li class="nav-item flex-fill" role="presentation">
+										       <button class="nav-link w-100" id="replace-requests-tab" data-bs-toggle="tab" 
+										               data-bs-target="#replace-requests" type="button" role="tab">Replace Requests</button>
+										   </li>	
 									  </ul>
+									
+									  
+									  
+									  
 									
 									<div class="tab-content pt-2" id="borderedTabJustifiedContent">
 									    <!-- Home Tab Content -->
@@ -1592,7 +1603,49 @@
 										
 										</div>
 									
-										
+										<div class="tab-pane fade" id="return-requests" role="tabpanel" aria-labelledby="return-requests-tab">
+										    <table class="table table-bordered" id="returnRequestsTable">
+										        <thead>
+										            <tr>
+										                <th>Assigned Asset ID</th>
+										                <th>Asset ID</th>
+										                <th>Asset Type</th>
+										                <th>Qty</th>
+										                <th>Description</th>
+										                <th>Ref Asset ID</th>
+										                <th>Requested At</th>
+										                <th>Remarks</th>
+										                <th>Approved By</th>
+										                <th>Approved At</th>
+										                <th>Status</th>
+										            </tr>
+										        </thead>
+										        <tbody></tbody>
+										    </table>
+										</div>
+
+
+										  <!-- Replace Requests -->
+										  <div class="tab-pane fade" id="replace-requests" role="tabpanel" aria-labelledby="replace-requests-tab">
+										      <table class="table table-bordered" id="replaceRequestsTable">
+										          <thead>
+										              <tr>
+										                  <th>Assigned Asset ID</th>
+										                  <th>Asset ID</th>
+										                  <th>Asset Type</th>
+										                  <th>Qty</th>
+										                  <th>Description</th>
+										                  <th>Ref Asset ID</th>
+										                  <th>Requested At</th>
+										                  <th>Remarks</th>
+										                  <th>Approved By</th>
+										                  <th>Approved At</th>
+										                  <th>Status</th>
+										              </tr>
+										          </thead>
+										          <tbody></tbody>
+										      </table>
+										  </div>
 
 										<!-- Summary Modal -->
 										<div class="modal fade" id="assetSummaryModal" tabindex="-1" aria-hidden="true">
@@ -2246,6 +2299,165 @@ function setActiveTab(button) {
     document.querySelectorAll(".btn").forEach(btn => btn.classList.remove("active"));
     button.classList.add("active");
 }
+
+document.getElementById("replace-requests-tab").addEventListener("click", function () {
+	    loadReplaceRequests1();
+	});
+
+	function loadReplaceRequests1() {
+	    fetch(`/employee/replacements`)
+	        .then(res => res.json())
+	        .then(data => {
+	            const tbody = document.querySelector("#replaceRequestsTable tbody");
+	            tbody.innerHTML = "";
+
+	            if (!data || data.length === 0) {
+	                tbody.innerHTML = `
+	                    <tr>
+	                        <td colspan="10" class="text-center text-muted">
+	                            No data available
+	                        </td>
+	                    </tr>
+	                `;
+	                return;
+	            }
+
+	            data.forEach(req => {
+	                // Format requestedAt
+	                let formattedDate = "";
+	                if (req.requestedAt) {
+	                    const d = new Date(req.requestedAt);
+	                    formattedDate = `${String(d.getDate()).padStart(2,'0')}-${String(d.getMonth()+1).padStart(2,'0')}-${d.getFullYear()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')}`;
+	                }
+
+	                // Format approvedAt
+	                let formattedApprovedAt = "";
+	                if (req.approvedAt) {
+	                    const a = new Date(req.approvedAt);
+	                    formattedApprovedAt = `${String(a.getDate()).padStart(2,'0')}-${String(a.getMonth()+1).padStart(2,'0')}-${a.getFullYear()} ${String(a.getHours()).padStart(2,'0')}:${String(a.getMinutes()).padStart(2,'0')}:${String(a.getSeconds()).padStart(2,'0')}`;
+	                }
+
+	                // Status badge
+	                let statusBadge = "";
+	                if (req.status === "Approved") {
+	                    statusBadge = `<span class="badge rounded-pill bg-primary">${req.status}</span>`;
+	                } else if (req.status === "Rejected") {
+	                    statusBadge = `<span class="badge rounded-pill bg-danger">${req.status}</span>`;
+	                } else {
+	                    statusBadge = `<span class="badge rounded-pill bg-info text-white">${req.status}</span>`;
+	                }
+
+	                const row = `
+	                    <tr>
+	                        <td>${req.assignedAssetId}</td>
+	                        <td>${req.assetId}</td>
+	                        <td>${req.assetType}</td>
+	                        <td>${req.quantity}</td>
+	                        <td>${req.description}</td>
+							<td>${req.refAssetId || ""}</td> <!-- NEW -->
+	                        <td>${formattedDate}</td>
+	                        <td>${req.remarks || ""}</td>
+							<td>Asset Admin</td>
+	                        <td>${formattedApprovedAt}</td>
+	                        <td>${statusBadge}</td>
+	                    </tr>
+	                `;
+	                tbody.innerHTML += row;
+	            });
+	        });
+	}
+
+
+	document.addEventListener("DOMContentLoaded", function () {
+	    // Attach event listener to tab
+	    document.getElementById("return-requests-tab").addEventListener("click", function () {
+	        loadReturnRequests1();
+	    });
+	});
+
+	function loadReturnRequests1() {
+	    fetch(`/employee/returns`)
+	        .then(res => res.json())
+	        .then(data => {
+	            console.log("[DEBUG] Return Requests Response:", data);
+
+	            const tbody = document.querySelector("#returnRequestsTable tbody");
+	            tbody.innerHTML = "";
+
+	            if (!data || data.length === 0) {
+	                tbody.innerHTML = `
+	                    <tr>
+	                        <td colspan="11" class="text-center text-muted">
+	                            No data available
+	                        </td>
+	                    </tr>
+	                `;
+	                return;
+	            }
+
+	            data.forEach(req => {
+	                // ✅ Format Requested At (from returnedAt)
+	                let formattedDate = "";
+	                if (req.returnedAt) {
+	                    const d = new Date(req.returnedAt);
+	                    const day = String(d.getDate()).padStart(2, '0');
+	                    const month = String(d.getMonth() + 1).padStart(2, '0');
+	                    const year = d.getFullYear();
+	                    const hours = String(d.getHours()).padStart(2, '0');
+	                    const minutes = String(d.getMinutes()).padStart(2, '0');
+	                    const seconds = String(d.getSeconds()).padStart(2, '0');
+	                    formattedDate = `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+	                }
+
+	                // ✅ Format Approved At
+	                let formattedApprovedAt = "";
+	                if (req.approvedAt) {
+	                    const a = new Date(req.approvedAt);
+	                    const day = String(a.getDate()).padStart(2, '0');
+	                    const month = String(a.getMonth() + 1).padStart(2, '0');
+	                    const year = a.getFullYear();
+	                    const hours = String(a.getHours()).padStart(2, '0');
+	                    const minutes = String(a.getMinutes()).padStart(2, '0');
+	                    const seconds = String(a.getSeconds()).padStart(2, '0');
+	                    formattedApprovedAt = `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+	                }
+
+	                // ✅ Status Badge
+	                let statusBadge = "";
+	                if (req.status === "Approved") {
+	                    statusBadge = `<span class="badge rounded-pill bg-primary">${req.status}</span>`;
+	                } else if (req.status === "Rejected") {
+	                    statusBadge = `<span class="badge rounded-pill bg-danger">${req.status}</span>`;
+	                } else {
+	                    statusBadge = `<span class="badge rounded-pill bg-info text-white">${req.status}</span>`;
+	                }
+
+	                // ✅ Build Table Row
+	                const row = `
+	                    <tr>
+	                        <td>${req.assignedAssetId || ""}</td>
+	                        <td>${req.assetId || ""}</td>
+	                        <td>${req.assetType || ""}</td>
+	                        <td>${req.quantity || ""}</td>
+	                        <td>${req.description || ""}</td>
+	                        <td>${req.refAssetId || ""}</td>
+	                        <td>${formattedDate}</td> <!-- Requested At -->
+	                        <td>${req.remarks || ""}</td>
+	                        <td>${req.approvedName || ""}</td>
+	                        <td>${formattedApprovedAt}</td>
+	                        <td>${statusBadge}</td>
+	                    </tr>
+	                `;
+	                tbody.innerHTML += row;
+	            });
+	        })
+	        .catch(err => {
+	            console.error("[ERROR] Failed to load return requests:", err);
+	        });
+	}
+
+
+
 /*function loadReturnRequests() {
     fetch("/api/asset-returns")
         .then(res => res.json())
@@ -2306,8 +2518,9 @@ function loadReturnRequests() {
         <tr>
             <th>ID</th>
             <th>Asset ID</th>
+			<th>Ref Asset ID</th>
             <th>Type</th>
-            <th>Quantity</th>
+            <th>Qty</th>
             <th>Description</th>
             <th>Requested by</th>
             <th>Remarks</th>
@@ -2341,6 +2554,7 @@ function loadReturnRequests() {
                     <tr>
                         <td>${req.id}</td>
                         <td>${req.assetId}</td>
+						<td>${req.refAssetId || "-"}</td>
                         <td>${req.assetType}</td>
                         <td>${req.quantity}</td>
                         <td>${req.description || ""}</td>
@@ -2360,8 +2574,9 @@ function loadReplaceRequests() {
     thead.innerHTML = `
         <tr>
             <th>ID</th>
-            <th>Old Asset ID</th>
+          
             <th>Asset ID</th>
+			<th>Ref Asset ID</th>
             <th>Type</th>
             <th>Quantity</th>
             <th>Description</th>
@@ -2420,8 +2635,9 @@ function loadReplaceRequests() {
 	            const row = `
 	                <tr>
 	                    <td>${req.id}</td>
-	                    <td>${req.oldAssetId || ""}</td>
+	                    
 	                    <td>${req.assetId}</td>
+						<td>${req.refAssetId || "-"}</td>
 	                    <td>${req.assetType}</td>
 	                    <td>${req.quantity}</td>
 	                    <td>${req.description || ""}</td>
@@ -4275,6 +4491,10 @@ function fetchAssignedDetails(assetId) {
 
 	      // --- Populate table ---
 	      data.forEach((item, index) => {
+			// If remarks indicate returned, set name to "Asset Admin"
+			 const displayName = (item.remarks && item.remarks === "Returned to inventory") 
+			                       ? "Asset Admin" 
+			                       : item.empName;
 	        const row = `
 	          <tr>
 	            <td>${index + 1}</td>
@@ -4282,7 +4502,7 @@ function fetchAssignedDetails(assetId) {
 	            <td>${item.assetType}</td>
 	            <td>${item.assignedAssetId}</td>
 	            <td>${item.assignedTo}</td>
-	            <td>${item.empName}</td> 
+				<td>${displayName}</td> 
 				<td>${item.ref_asset_id || '-'}</td> <!-- 🔹 New field -->
 				<td>${item.remarks || '-'}</td> <!-- 🔹 New field -->
 	          </tr>
@@ -4506,6 +4726,18 @@ document.getElementById("quantity").addEventListener("input", function () {
     container.innerHTML = "";
     console.log("[DEBUG] Cleared referIdsContainer");
 
+	// ⏳ Wait for validation result before generating
+	  setTimeout(() => {
+	      const assignBtn = document.querySelector("#assignForm button[type='submit']");
+	      console.log("[DEBUG] assignBtn.disabled:", assignBtn.disabled);
+
+	      // 🚫 If validation failed → stop here
+	      if (assignBtn.disabled) {
+	          console.log("[INFO] Validation failed -> skipping input generation");
+	          defaultRemarksBlock.style.display = "block"; // show default remarks
+	          return;
+	      }
+	
     if (!isNaN(quantity) && quantity > 0) {
         // Hide default remarks
         defaultRemarksBlock.style.display = "none";
@@ -4550,6 +4782,7 @@ document.getElementById("quantity").addEventListener("input", function () {
         defaultRemarksBlock.style.display = "block";
         console.log("[DEBUG] Invalid or empty quantity -> showing default remarks");
     }
+	}, 300);
 });
 
 
@@ -4583,13 +4816,21 @@ document.getElementById("quantity").addEventListener("input", function () {
 	});*/
 	
 	document.getElementById("quantityWithoutReq").addEventListener("input", function () {
+		
 	  const quantity = parseInt(this.value);
 	  const container = document.getElementById("referIdsContainerWithoutReq");
 	  container.innerHTML = ""; // Clear old inputs
 
 	  // Hide the default remarks block
 	  document.getElementById("remarksDefault").style.display = "none";
+	  // Small delay so validation can complete before generating inputs
+	  setTimeout(() => {
+	    const assignBtn = document.querySelector("#assignFormWithoutReq button[type='submit']");
 
+	    // 🚫 If button is disabled → validation failed → don't generate
+	    if (assignBtn.disabled) {
+	      return;
+	    }
 	  if (!isNaN(quantity) && quantity > 0) {
 	    for (let i = 0; i < quantity; i++) {
 	      const wrapper = document.createElement("div");
@@ -4625,6 +4866,8 @@ document.getElementById("quantity").addEventListener("input", function () {
 	      container.appendChild(wrapper);
 	    }
 	  }
+	  }, 300); 
+	  
 	});
 
 
@@ -4845,7 +5088,7 @@ document.getElementById("quantity").addEventListener("input", function () {
   }
 });*/
 
-document.getElementById("quantity").addEventListener("input", function () {
+/*document.getElementById("quantity").addEventListener("input", function () { mondatary but comiited
     const modal = document.getElementById("assignAssetModal");
     const flag = modal.dataset.flag || "";
 
@@ -4898,7 +5141,7 @@ document.getElementById("quantity").addEventListener("input", function () {
     } else {
         defaultRemarksBlock.style.display = "block";
     }
-});
+});*/
 
 
 </script>

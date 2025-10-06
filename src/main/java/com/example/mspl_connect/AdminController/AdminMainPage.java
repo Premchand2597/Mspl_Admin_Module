@@ -37,6 +37,7 @@ import com.example.mspl_connect.AdminEntity.AppraisalHrEntity;
 import com.example.mspl_connect.AdminEntity.AssetDisplayEnityt;
 import com.example.mspl_connect.AdminEntity.AssetRequest;
 import com.example.mspl_connect.AdminEntity.Assetes;
+import com.example.mspl_connect.AdminEntity.AssignedAssetDetailsDTO;
 import com.example.mspl_connect.AdminEntity.AssignedAssets;
 import com.example.mspl_connect.AdminEntity.EarnedLeaveDTO;
 import com.example.mspl_connect.AdminEntity.EmployeeEvent;
@@ -52,6 +53,7 @@ import com.example.mspl_connect.AdminEntity.assetsDTO;
 import com.example.mspl_connect.AdminRepo.AdminInterCommRepo;
 import com.example.mspl_connect.AdminRepo.AppraisalHrREpo;
 import com.example.mspl_connect.AdminRepo.AppraisalRepository;
+import com.example.mspl_connect.AdminRepo.AssignedAssetDetailsRepo;
 import com.example.mspl_connect.AdminRepo.AssignedAssetsRepo;
 import com.example.mspl_connect.AdminRepo.AttendenceRepo;
 import com.example.mspl_connect.AdminRepo.Events_Repo;
@@ -89,6 +91,7 @@ import com.example.mspl_connect.Service.EmployeeDetaisService;
 import com.example.mspl_connect.Service.Holiday_Service;
 import com.example.mspl_connect.Service.PermissionService;
 import com.example.mspl_connect.Service.ProjectService;
+
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -182,6 +185,9 @@ public class AdminMainPage {
 	
 	@Autowired
 	private Add_Quotation_Service add_Quotation_Service;
+	
+	@Autowired
+	private AssignedAssetDetailsRepo assignedAssetRepo;
 	
 	@Autowired
 	private IAdd_Quotation iadd_Quotation;
@@ -658,7 +664,10 @@ public class AdminMainPage {
 		DisplayEmployessEntity empDetailsByEmpId = employeeWitFullDetailes.findByEmpid(empid);
 		AssetRequest assetRequest = new AssetRequest();
 		assetRequest.setEmpId(empId); // 🔥 Set empId by default
-		    
+		 List<AssignedAssetDetailsDTO> assets = assignedAssetRepo.getAssetByEmpId(empId);
+		    System.out.println("assigned assests "+assets );
+	        model.addAttribute("employeesAssetDataByEmp", assets);
+		
 		model.addAttribute("departments", departments);
 		model.addAttribute("employee", employee);
 		model.addAttribute("empDetailsByEmpId", empDetailsByEmpId);
