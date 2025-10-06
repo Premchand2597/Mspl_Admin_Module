@@ -396,7 +396,7 @@
 				    <a class="app-logo" th:href=@{/dashboard}>
 				        <img class="d-none d-lg-block" src="assets/img/logo.png" alt="logo" style="width:200px; height:50px; max-width:100%; padding:0 2px 0 10px; margin:0;">
 				    </a>
-				    <i class="bi bi-list toggle-sidebar-btn"></i>
+				    <!-- <i class="bi bi-list toggle-sidebar-btn"></i> -->
 			</div>	
     <!--  <div class="search-bar">
       <form class="search-form d-flex align-items-center" method="POST" action="#">
@@ -417,7 +417,7 @@
 				    <a class="app-logo" th:href=@{/dashboard}>
 				        <img class="d-none d-lg-block" src="assets/img/logo.png" alt="logo" style="width:200px; height:50px; max-width:100%; padding:0 2px 0 10px; margin:0;">
 				    </a>
-				    <i class="bi bi-list toggle-sidebar-btn"></i>
+				    <!-- <i class="bi bi-list toggle-sidebar-btn"></i> -->
 	</div><!-- End Logo -->
 
     <!-- <div class="search-bar">
@@ -936,16 +936,36 @@
                 </div>
             </nav> -->
             
+            <div class="pagetitle d-flex"  th:if="${session.empDetailsByEmpId.deptId==0}">
+		      <i class="bi bi-chevron-double-left toggle-sidebar-btn mb-1" onclick="toggleIconRotation()" style="font-size:24px;color:#2F73B9;padding:0 10px;margin-left:-10px;margin-top:-10px"></i>
+		      <nav>
+		        <ol class="breadcrumb mb-0">
+		          <li class="breadcrumb-item"><a th:href="@{/navbar}">Home</a></li>
+		          <li class="breadcrumb-item active">Accounts</li>
+		        </ol>
+		      </nav>
+		    </div><!-- End Page Title -->	
+		    
+		    <div class="pagetitle d-flex"  th:if="${session.empDetailsByEmpId.deptId>0}">
+		     <i class="bi bi-chevron-double-left toggle-sidebar-btn mb-1" onclick="toggleIconRotation()" style="font-size:24px;color:#2F73B9;padding:0 10px;margin-left:-10px;margin-top:-10px"></i>
+		      <nav>
+		        <ol class="breadcrumb mb-0">
+		          <li class="breadcrumb-item"><a th:href="@{/userDashboard}">Home</a></li>
+		          <li class="breadcrumb-item active">Accounts</li>
+		        </ol>
+		      </nav>
+		    </div>
             
 						            <div class="d-flex justify-content-between">
-						            	 <div class="pagetitle">
+						            	 <!-- <div class="pagetitle">
 													      <nav>
 													        <ol class="breadcrumb">
 													          <li class="breadcrumb-item"><a href="index.html">Employees</a></li>
 													          <li class="breadcrumb-item active">Accounts</li>
 													        </ol>
 													      </nav>
-													    </div><!-- End Page Title -->
+													    </div> --><!-- End Page Title -->
+													    <p></p>
 													    
 						            					<!-- Bordered Tabs Justified -->
 												        <div class="d-flex justify-content-end">

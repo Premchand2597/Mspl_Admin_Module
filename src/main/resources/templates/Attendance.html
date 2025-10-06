@@ -1036,6 +1036,67 @@
 																																																																																				  																						    max-width: 900px; /* larger than first modal */
 																																																																																				  																						  }
 
+	  @media screen and (max-width: 500px) {
+	  	.attendance_indication_colors{
+			display: block;
+		}
+		
+		.attendance_indication_colors div div{
+			width: 20px;
+		}
+		
+		.attendanceNewDataInsertFormInnerBox{
+			width: 90%;
+		}
+		
+		.attendance_indication_colors .flex.items-center {
+	          margin-left: -5px; /* move the whole present/label container slightly left */
+	      }
+	      
+	      .attendance_indication_colors .presentclass {
+	          width: 0.75rem; /* Tailwind w-3 = 0.75rem, you can increase if needed */
+	          height: 0.75rem;
+	      }
+
+	      .attendance_indication_colors span {
+	          margin-left: 0.25rem; /* reduce spacing between circle and text */
+	      }
+	      
+	      .card-body {
+	          flex-direction: column !important; /* Stack chart above buttons */
+	          align-items: center !important;
+	      }
+
+	      #donutChart {
+	          width: 100% !important;
+	          max-width: 320px;
+	          margin-bottom: 76px;
+	      }
+
+	      .button-group {
+	          width: 100%;
+	          display: flex;
+	          flex-direction: column;
+	          align-items: center;
+	      }
+
+	      .button-group .btn {
+	          width: 80%;
+	          max-width: 250px;
+	          margin-bottom: 8px;
+	      }
+	      
+		  .table-responsive {
+		      width: 100%;
+		      overflow-x: auto;
+		  }
+
+	      #leaveApplicationsTable {
+	          font-size: 12px !important;
+	      }
+	      
+	  }
+	
 	</style>
 </head>
 
@@ -1915,7 +1976,7 @@
 				</div>-->
 								<div class="w-full p-1 m-1 bg-gray-100 rounded-lg">
 								<div class="mb-2 bg-white p-1 m-1 rounded-md shadow-md mx-auto"  style="margin:0 12px 4px 12px !important">
-                                      <div class="flex justify-end space-x-3">
+                                      <div class="flex justify-end space-x-3 attendance_indication_colors">
                                           <div class="flex items-center">
                                               <div class="w-3 h-3 bg-green-200 rounded-full"></div>
                                               <span class="ml-1 text-xs font-bold text-gray-800">Present</span> <!-- Bold text -->
@@ -2718,7 +2779,7 @@
 
 
 
-						<div class="app-card app-card-orders-table shadow-sm data-container"
+						<div class="app-card app-card-orders-table shadow-sm data-container table-responsive"
 							style="border-radius:5px;width:100%;">
 							<table class="table table-hover" id="leaveApplicationsTable"
 								style="text-align: center !important; font-size: 14px; margin-right: 8px; margin-left: 0;">

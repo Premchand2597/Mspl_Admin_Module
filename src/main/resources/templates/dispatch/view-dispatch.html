@@ -311,6 +311,164 @@ body {
     text-decoration: none;
     color: #333;
 }
+
+.dispatchViewTableDiv{
+	height: 600px; 
+	overflow: auto;
+}
+   
+@media screen and (max-width: 1301px){
+	.navbar ul {
+	    display: flex;
+	}
+}
+
+@media screen and (max-width: 1050px) and (min-width: 965px) {
+	.navbar ul {
+	    display: block;
+	}
+	
+     .tables-container {
+	    margin-top: 32%; 
+	}
+	
+	  .sendEmailForCustomerInnerBox{
+		width: 60%;
+	   	height: auto;
+	   	margin: 32% auto 0 auto;
+	}
+	
+	.emailPasswordInnerBox{
+		width: 60%;
+	   	margin: 32% auto 0 auto;
+	}
+}
+
+@media screen and (max-width: 964px) and (min-width: 695px) {
+	.navbar ul {
+	    display: block;
+	}
+	
+     .tables-container {
+	    margin-top: 42%; 
+	}
+	
+	.sendEmailForCustomerInnerBox{
+		width: 80%;
+	   	height: auto;
+	   	margin: 42% auto 0 auto;
+	}
+	
+	.emailPasswordInnerBox{
+		width: 60%;
+	   	margin: 42% auto 0 auto;
+	}
+}
+
+@media screen and (max-width: 694px) and (min-width: 560px) {
+	.navbar ul {
+	    display: block;
+	}
+	
+     .tables-container {
+	    margin-top: 52%; 
+	}
+	
+	.sendEmailForCustomerInnerBox{
+		width: 80%;
+	   	height: auto;
+	   	margin: 52% auto 0 auto;
+	}
+	
+	.emailPasswordInnerBox{
+		width: 60%;
+	   	margin: 52% auto 0 auto;
+	}
+}
+
+@media screen and (max-width: 559px) and (min-width: 464px) {
+	.navbar ul {
+	    display: block;
+	}
+	
+     .tables-container {
+	    margin-top: 62%; 
+	}
+	
+	.sendEmailForCustomerInnerBox{
+		width: 98%;
+	   	height: auto;
+	   	margin: 62% auto 0 auto;
+	}
+	
+	.emailPasswordInnerBox{
+		width: 60%;
+	   	margin: 62% auto 0 auto;
+	}
+}
+
+@media screen and (max-width: 463px) and (min-width: 410px) {
+	.navbar ul {
+	    display: block;
+	}
+	
+     .tables-container {
+	    margin-top: 72%; 
+	}
+	
+	.sendEmailForCustomerInnerBox{
+		width: 98%;
+	   	height: auto;
+	   	margin: 72% auto 0 auto;
+	}
+	
+	.emailPasswordInnerBox{
+		width: 60%;
+	   	margin: 72% auto 0 auto;
+	}
+}
+
+@media screen and (max-width: 409px) and (min-width: 380px) {
+	.navbar ul {
+	    display: block;
+	}
+	
+     .tables-container {
+	    margin-top: 82%; 
+	}
+	
+	.sendEmailForCustomerInnerBox{
+		width: 98%;
+	   	height: auto;
+	   	margin: 82% auto 0 auto;
+	}
+	
+	.emailPasswordInnerBox{
+		width: 80%;
+	   	margin: 82% auto 0 auto;
+	}
+}
+
+@media screen and (max-width: 379px) {
+	.navbar ul {
+	    display: block;
+	}
+	
+     .tables-container {
+	    margin-top: 92%; 
+	}
+	
+	.sendEmailForCustomerInnerBox{
+		width: 98%;
+	   	height: auto;
+	   	margin: 92% auto 0 auto;
+	}
+	
+	.emailPasswordInnerBox{
+		width: 80%;
+	   	margin: 92% auto 0 auto;
+	}
+}
    
 </style>
 </head>
@@ -822,7 +980,7 @@ body {
 
  <div class="tables-container">
     <div class="table-box">
-        <div class="table-responsive" style="height: 460px; overflow: auto;">
+        <div class="table-responsive dispatchViewTableDiv">
       <div class="table-header" style="display: flex; justify-content: space-between; align-items: center;">
          <div style="display: flex; justify-content: space-around; align-items: center; gap: 10px;">
          	<i title="Generate Excel" onclick="export_To_Excel();" class="fas fa-file-excel" style="color: green; font-size: 25px; cursor: pointer;"></i>

@@ -217,7 +217,30 @@
 		.activity-item .disabled {
 		    pointer-events: none; /* Disable interactions */
 		    opacity: 0.5; /* Make the item appear grayed out */
-		}                
+		}  
+		
+		@media screen and (max-width: 900px) {
+			.appraisalHikeFormInnerBox{
+				width: 50%;
+			}
+			
+			.appraisalSentNotSubmittedInnerBox{
+				width: 98%;
+			}
+			
+			.appraisal_tracker_outer_merger{
+				display: flex;
+				flex-direction: column;
+			}
+			
+			.appraisal_financial_year_box{
+				width: 100%; height: auto; overflow: visible;
+			}
+			
+			.appraisal_main_data_box_merger{
+				width: 100%;
+			}
+		}              
   </style> 
 </head>
 <body>
@@ -825,7 +848,7 @@
 		       <nav>
 		        <ol class="breadcrumb">
 		          	<li class="breadcrumb-item"><a th:href="@{/navbar}">Home</a></li>
-		          <li class="breadcrumb-item active">InterComm</li>
+		          <li class="breadcrumb-item active">Appraisal Lists</li>
 		        </ol>
 		      </nav>
 	      </div>

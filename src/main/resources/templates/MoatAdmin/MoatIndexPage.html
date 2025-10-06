@@ -12,7 +12,6 @@
   <!-- Favicons -->
   <link href="assets/img/favicon.png" rel="icon">
   <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
-
   <!-- Google Fonts -->
 <!--   <link href="https://fonts.gstatic.com" rel="preconnect">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
@@ -36,6 +35,17 @@
 
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
+  
+  
+   <script src="assets/js/highcharts.js"></script>
+
+  <!-- =======================================================
+  * Template Name: NiceAdmin
+  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+  * Updated: Apr 20 2024 with Bootstrap v5.3.3
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
 
   <style>
 
@@ -954,7 +964,28 @@
 	    margin-right: auto;
 	    text-align: center;
 	}
+@media screen and (max-width: 800px) {
+	.moat_iframe{
+		height: 500%;
+	}
+}
 
+@media screen and (max-width: 500px) {
+	.moat_navbar{
+	  display: block;
+	}
+	
+	.moattt_anchor {
+    	display: block;
+    	border: none;
+  	}
+}
+
+@media screen and (max-width: 2500px) and (min-width: 1500px) {
+	.moat_iframe{
+		height: 480%;
+	}
+  }
 
 </style> 
 </head>
@@ -970,7 +1001,7 @@
 				</div> --><!-- End Logo -->
 	
 		   <div class="d-flex align-items-center logo-container" style="width:45%;margin:0 0 0 10px; padding:5px;">
-				    <a class="app-logo" th:href=@{/dashboard}>
+				    <a class="app-logo" th:href=@{/userDashboard}>
 				        <img class="d-none d-lg-block" src="assets/img/logo.png" alt="logo" style="width:200px; height:50px; max-width:100%; padding:0 2px 0 10px; margin:0;">
 				    </a>
 				   
@@ -991,10 +1022,10 @@
   <header id="header" class="header fixed-top d-flex align-items-center" th:if="${empDetailsByEmpId.deptId == 0}">
 
     <div class="d-flex align-items-center logo-container" style="width:45%; margin:0 0 0 10px; padding:5px;">
-				    <a class="app-logo" th:href=@{/dashboard}>
+				    <a class="app-logo" th:href=@{/navbar}>
 				        <img class="d-none d-lg-block" src="assets/img/logo.png" alt="logo" style="width:200px; height:50px; max-width:100%; padding:0 2px 0 10px; margin:0;">
 				    </a>
-				    <i class="bi bi-chevron-double-left toggle-sidebar-btn" onclick="toggleIconRotation()"></i>
+				    <!-- <i class="bi bi-chevron-double-left toggle-sidebar-btn" onclick="toggleIconRotation()"></i> -->
 	</div><!-- End Logo -->
 
     <!-- <div class="search-bar">
@@ -1538,6 +1569,26 @@
         </ol>
       </nav>
     </div> -->
+    
+    <div class="pagetitle d-flex"  th:if="${session.empDetailsByEmpId.deptId==0}">
+      <i class="bi bi-chevron-double-left toggle-sidebar-btn mb-1" onclick="toggleIconRotation()" style="font-size:24px;color:#2F73B9;padding:0 10px;margin-left:-10px;margin-top:-10px"></i>
+      <nav>
+        <ol class="breadcrumb mb-0">
+          <li class="breadcrumb-item"><a th:href="@{/navbar}">Home</a></li>
+          <li class="breadcrumb-item active">Interview</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->	
+    
+    <div class="pagetitle d-flex"  th:if="${session.empDetailsByEmpId.deptId>0}">
+     <i class="bi bi-chevron-double-left toggle-sidebar-btn mb-1" onclick="toggleIconRotation()" style="font-size:24px;color:#2F73B9;padding:0 10px;margin-left:-10px;margin-top:-10px"></i>
+      <nav>
+        <ol class="breadcrumb mb-0">
+          <li class="breadcrumb-item"><a th:href="@{/userDashboard}">Home</a></li>
+          <li class="breadcrumb-item active">Interview</li>
+        </ol>
+      </nav>
+    </div>
 
 		<section class="section dashboard">
 				<div class="col-lg-12">

@@ -187,6 +187,15 @@
 	/* background: red; */
 	overflow: auto;
 }
+
+.appraisalSubBox{
+	border-radius: 10px;
+	padding: 10px;
+	/* margin-left: auto;
+	margin-right: auto; */
+	background: white;
+	overflow: auto;
+}
   
   #loadingPopup {
     position: fixed;
@@ -253,7 +262,14 @@
 		.activity-item .disabled {
 		    pointer-events: none; /* Disable interactions */
 		    opacity: 0.5; /* Make the item appear grayed out */
-		}                
+		}       
+		
+		@media screen and (max-width: 900px){
+			.appraisalManualEntryFormInnerBox{
+				width: 80%;
+			   	height: 98%;
+			}
+		}         
   </style> 
 </head>
 <body>
@@ -890,7 +906,7 @@
 		       <nav>
 		        <ol class="breadcrumb">
 		          	<li class="breadcrumb-item"><a th:href="@{/navbar}">Home</a></li>
-		          <li class="breadcrumb-item active">InterComm</li>
+		          <li class="breadcrumb-item active">Appraisal Lists</li>
 		        </ol>
 		      </nav>
 	      </div>
@@ -983,6 +999,7 @@
 						<div class="tab-pane fade table-responsive" id="bordered-justified-salary"
 									role="tabpanel" aria-labelledby="profile-tab">
 							<div style="text-align: right; font-size: 20px; color: blue; padding-right: 20px;"><i style="cursor: pointer;" title="Add Row" onclick="openAppraisalManualEntryFormInnerBox();" class="bi bi-plus-lg"></i></div>			
+									<div class="table-responsive">
 									<table id="salaryDetailsTable" class="table table-hover mb-0 text-center">
 										<thead class="fixTHead">
 											<tr>
@@ -1000,6 +1017,7 @@
 										</thead>
 										<tbody id="viewSalaryDetailsTBody"></tbody>
 									</table>
+									</div>
 								</div>
 							</div>
 						</div>

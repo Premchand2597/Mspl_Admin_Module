@@ -678,6 +678,16 @@ body {
 	    align-items: center;
 	}
 	
+	@media screen and (max-width: 1050px){
+		.compProjectCardsRow {
+			display: block;
+		}
+		
+		.compProjectHiddenCards {
+			width:100%; /* Ensure 4 cards per row, adjust for margin */
+		}
+	}
+	
 </style>
 </head>
 
@@ -1379,10 +1389,12 @@ window.onload = function() {
 			        </div>   there is no  -->
 						<div></div>
 
-						<div class="compProjectCardsBody" id="compProjectCardsBody"
-							style="border-radius: 5px;">
+						<div class="compProjectCardsBody" id="compProjectCardsBody" style="border-radius: 5px;">
 							<div class="compProjectCardsRow" id="compProjectCardsRow"></div>
 						</div>
+						
+						
+						
 						<div class="tab-content mt-2" id="addProject"
 							style="display: none; margin-left: 5px;">
 							<div class="" id="orders-all1" role="tabpanel"

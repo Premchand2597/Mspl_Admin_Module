@@ -267,7 +267,17 @@
 		.activity-item .disabled {
 		    pointer-events: none; /* Disable interactions */
 		    opacity: 0.5; /* Make the item appear grayed out */
-		}                
+		}        
+		
+		@media screen and (max-width: 900px){
+			.viewAttachmentInnerBox{
+				width: 98%;
+			}
+			
+			.replyMailFormInnerBox{
+				width: 98%;
+			}
+		}        
   </style> 
 </head>
 <body>
@@ -840,7 +850,7 @@
 		       <nav>
 		        <ol class="breadcrumb">
 		          	<li class="breadcrumb-item"><a th:href="@{/navbar}">Home</a></li>
-		          <li class="breadcrumb-item active">InterComm</li>
+		          <li class="breadcrumb-item active">Feedback Reports</li>
 		        </ol>
 		      </nav>
 	      </div>

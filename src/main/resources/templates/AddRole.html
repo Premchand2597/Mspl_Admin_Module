@@ -31,7 +31,7 @@
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
   <script src="assets/js/main.js"></script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="assets/js/jquery-3.6.4.min.js"></script> 
   <script src="assets/js/sweetalert2.all.min.js"></script>
   <!-- =======================================================
   * Template Name: NiceAdmin
@@ -119,7 +119,6 @@
 				    <a class="app-logo" th:href=@{/navbar}>
 				        <img class="d-none d-lg-block" src="assets/img/logo.png" alt="logo" style="width:200px; height:50px; max-width:100%; padding:0 2px 0 10px; margin:0;">
 				    </a>
-				   <!--  <i class="bi bi-chevron-double-left toggle-sidebar-btn" onclick="toggleIconRotation()"></i> -->
 	</div><!-- End Logo -->
 
     <!-- <div class="search-bar">
@@ -554,12 +553,12 @@
       <i class="bi bi-chevron-double-left toggle-sidebar-btn mb-1" onclick="toggleIconRotation()" style="font-size:24px;color:#2F73B9;padding:0 10px;margin-left:-10px;margin-top:-10px"></i>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+          <li class="breadcrumb-item"><a th:href="@{/navbar}">Home</a></li>
           <li class="breadcrumb-item active">Role</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
-
+    
     <section class="section dashboard">
       <div class="row">
 
@@ -1406,9 +1405,12 @@
   <script src="assets/vendor/php-email-form/validate.js"></script>
 
 
-  <!-- Template Main JS File -->
+<!-- Template Main JS File -->
+<script src="assets/js/main.js"></script>
+<!-- Template Main JS File -->
 <!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> -->
-<script src="assets/js/jquery-3.6.4.min.js"></script>  
+<script src="assets/js/jquery-3.6.4.min.js"></script>
+
 
 <script>
 function showDeleteModal(roleId) {

@@ -231,6 +231,37 @@
 		    border: 1px solid #ccc;
 		    
 		}
+		
+		.salesNavBar{
+			background-color:#DEF5FA;
+			border-radius:5px;
+			padding:0 10px 0 10px;
+		}
+		
+		.salesHeadingAndButtonsMerger{
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+		
+		@media screen and (max-width: 1000px){
+			.salesNavBar{
+				display: block;
+			}
+			
+			.tab-content nav{
+				display: block;
+			}
+			
+			.tab-content nav a{
+				display: block;
+				text-align: left;
+			}
+			
+			.salesHeadingAndButtonsMerger{
+				display: block;
+			}
+		}
 
   </style>
   
@@ -999,8 +1030,8 @@
         <div class="pagetitle  mb-0 d-flex"  th:if="${empDetailsByEmpId.deptId==0}">
          <i class="bi bi-chevron-double-left toggle-sidebar-btn mb-1" onclick="toggleIconRotation()" style="font-size:24px;color:#2F73B9;padding:0 10px;margin-left:-10px;margin-top:-10px;cursor:pointer;"></i>
       
-			<nav class="w-100">
-				<div class="d-flex justify-content-between align-items-center">
+			<nav class="w-100 table-responsive">
+				<div class="salesHeadingAndButtonsMerger">
 					<div>
 						<ol class="breadcrumb">
 							<li class="breadcrumb-item"><a th:href="@{/navbar}">Home</a></li>
@@ -1025,8 +1056,8 @@
 		<div class="pagetitle mb-0 d-flex" th:if="${empDetailsByEmpId.deptId > 0}">
 	    <i class="bi bi-chevron-double-left toggle-sidebar-btn mb-1" onclick="toggleIconRotation()" style="font-size:24px; color:#2F73B9; padding:0 10px; margin-left:-10px; margin-top:-10px; cursor:pointer;"></i>
 	
-	    <nav class="w-100">
-	        <div class="d-flex justify-content-between align-items-center">
+	    <nav class="w-100 table-responsive">
+	        <div class="salesHeadingAndButtonsMerger">
 	            <div>
 	                <ol class="breadcrumb">
 	                    <li class="breadcrumb-item"><a th:href="@{/userDashboard}">Home</a></li>
@@ -1049,7 +1080,7 @@
 	</div>
 
    <div class="text-end mb-1" >
-		  <div class="navbar navbar-expand-lg navbar-light" style="background-color:#DEF5FA;border-radius:5px;padding:0 10px 0 10px;">
+		  <div class="navbar navbar-expand-lg navbar-light salesNavBar">
 				<div id="main-content">
 		   			 <!-- Sales Content (Initial Load) -->
 				    <div id="sales" class="tab-content">

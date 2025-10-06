@@ -368,6 +368,21 @@
 											    text-decoration: none !important;
 											}
 											
+.scheduleCallDateBox,.scheduleMeetingDateBox{
+		 display: flex; 
+		 gap: 10px;
+	}
+											
+@media screen and (max-width: 1330px){
+		.scheduleCallDateBox,.scheduleMeetingDateBox{
+			 display: block; 
+		}
+		
+		.scheduleCallDateBox #toTime,.scheduleMeetingDateBox #meetingToTime{
+			margin-top: 10px;
+		}
+	}
+											
 	</style>
 </head>
 
@@ -791,7 +806,7 @@
 				            </div>
 				            <div class="form-group" style="margin-bottom: 15px;">
 				                <label>Schedule (From - To)</label>
-				                <div style="display: flex; gap: 10px;">
+				                <div class="scheduleCallDateBox">
 				                    <input type="datetime-local" id="fromTime" class="form-control" style="flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #ddd;" >
 				                    <input type="datetime-local" id="toTime" class="form-control" style="flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #ddd;">
 				                </div>
@@ -876,7 +891,7 @@
 
 				            <div class="form-group" style="margin-bottom: 15px;">
 				                <label>Schedule (From - To)</label>
-				                <div style="display: flex; gap: 10px;">
+				                <div class="scheduleMeetingDateBox">
 				                    <input type="datetime-local" id="meetingFromTime" class="form-control" style="flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #ddd;">
 				                    <input type="datetime-local" id="meetingToTime" class="form-control" style="flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #ddd;">
 				                </div>

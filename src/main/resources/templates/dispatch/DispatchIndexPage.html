@@ -219,7 +219,30 @@
         transform: rotate(360deg);
     }
 }
-  </style>
+
+@media screen and (max-width: 500px) {
+	.moat_navbar{
+	  display: block;
+	}
+	
+	.moattt_anchor {
+    	display: block;
+    	border: none;
+  	}
+}
+
+@media screen and (max-width: 2500px) and (min-width: 1500px) {
+	.dispatch_iframe{
+		height: 600%;
+	}
+}
+
+@media screen and (max-width: 1350px) {
+	.dispatch_iframe{
+		height: 600%;
+	}
+}
+</style>
 </head>
 
 <body>
@@ -731,6 +754,25 @@
     <p>Loading please wait...</p>
 </div> -->
 
+<div class="pagetitle d-flex"  th:if="${session.empDetailsByEmpId.deptId==0}">
+      <i class="bi bi-chevron-double-left toggle-sidebar-btn mb-1" onclick="toggleIconRotation()" style="font-size:24px;color:#2F73B9;padding:0 10px;margin-left:-10px;margin-top:-10px"></i>
+      <nav>
+        <ol class="breadcrumb mb-0">
+          <li class="breadcrumb-item"><a th:href="@{/navbar}">Home</a></li>
+          <li class="breadcrumb-item active">Dispatched Details</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->	
+    
+    <div class="pagetitle d-flex"  th:if="${session.empDetailsByEmpId.deptId>0}">
+     <i class="bi bi-chevron-double-left toggle-sidebar-btn mb-1" onclick="toggleIconRotation()" style="font-size:24px;color:#2F73B9;padding:0 10px;margin-left:-10px;margin-top:-10px"></i>
+      <nav>
+        <ol class="breadcrumb mb-0">
+          <li class="breadcrumb-item"><a th:href="@{/userDashboard}">Home</a></li>
+          <li class="breadcrumb-item active">Dispatched Details</li>
+        </ol>
+      </nav>
+    </div>
 
 <!-- Feedback Modal -->
 <input type="hidden" id="loggedInDeptName" th:value="${session.empDetailsByEmpId.deptName}">
