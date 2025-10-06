@@ -2345,4 +2345,19 @@ h6 {
 	overflow: auto;
 	padding: 0 14px;
 }
+
+@media screen and (max-width: 1200px) {
+		    /* Keep toggle button visible */
+		    .toggle-sidebar-btn {
+		        position: fixed; /* stays visible */
+		        top: 20px;       /* adjust as needed */
+		        left: 10px;      /* adjust so it’s not hidden */
+		        z-index: 1050;   /* make sure it’s above everything */
+		    }
+
+		    /* Hide search icon/input */
+		    .search-container { /* or the class wrapping your search input */
+		        display: none !important;
+		    }
+		}
 			

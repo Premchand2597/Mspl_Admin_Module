@@ -925,6 +925,7 @@
 									<div class="card-body" th:if="${appraisalByEmpId == null}">
 										<h5 class="card-title pt-0">Employees Appraisals</h5>
 
+										<div class="table-responsive">
 										<!-- Table with stripped rows -->
 										<table class="table datatable" style="font-size:14px;">
 											<thead>
@@ -958,6 +959,7 @@
 											</tbody>
 										</table>
 										<!-- End Table with stripped rows -->
+										</div>
 									</div>
 									<div class="card-body" th:if="${appraisalByEmpId}">
 										<div class="d-flex justify-content-between mb-2">
