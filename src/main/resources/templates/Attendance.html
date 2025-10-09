@@ -3167,6 +3167,12 @@
 							};
 							let selectedCells = []; // keep track of only highlighted cells
 							let leaveBalances1 = { el: 0, sl: 0, cl: 0 };
+							const pendingLeaveBalances = {
+																			    sl: 0,
+																			    cl: 0,
+																			    el: 0
+																			};
+
 							let previousDateRange = { from: null, to: null };
 							// Add a global variable to track last tooltip range
 							let lastTooltipRange = { from: null, to: null };
@@ -4621,33 +4627,68 @@
 		}
 
 		function fetchLeaveBalances() {
-			var email=document.getElementById('employeeEmail1').value;
+		    var email = document.getElementById('employeeEmail1').value;
+		  //  alert("hiii");
 
 		    return Promise.all([
-			
-				    // Fetch Earned Leave balance
-				    fetch(`/calculate-earned-leave?year=${new Date().getFullYear()}&email=${email}`)
-		        //fetch(`/calculate-earned-leave?year=${new Date().getFullYear()}`)
+		        // 1️⃣ Fetch Earned Leave balance
+		        fetch(`/calculate-earned-leave?year=${new Date().getFullYear()}&email=${email}`)
 		            .then(res => res.json())
 		            .then(data => {
 		                leaveBalances1.el = data?.elRemaining || 0;
 		                console.log("Earned Leave fetched:", leaveBalances1.el);
 		            }),
 
-		      //  fetch('/leaveRecords')
-				fetch(`/leaveRecords/${email}`, { method: 'GET' })
+		        // 2️⃣ Fetch Sick & Casual Leave records
+		        fetch(`/leaveRecords/${email}`, { method: 'GET' })
 		            .then(res => res.json())
 		            .then(data => {
 		                if (Array.isArray(data)) {
 		                    data.forEach(record => {
-		                        if (record.leaveType === 'Sick Leave') leaveBalances1.sl = record.remaining || 0;
-		                        else if (record.leaveType === 'Casual Leave') leaveBalances1.cl = record.remaining || 0;
+		                        if (record.leaveType === 'Sick Leave') {
+		                            leaveBalances1.sl = record.remaining || 0;
+		                        } else if (record.leaveType === 'Casual Leave') {
+		                            leaveBalances1.cl = record.remaining || 0;
+		                        }
 		                    });
 		                }
 		                console.log("SL & CL fetched:", leaveBalances1.sl, leaveBalances1.cl);
+		            }),
+
+		        // 3️⃣ Fetch Pending Leaves and adjust balances
+		        fetch(`/pending-leaves?email=${email}`)
+		            .then(res => res.json())
+		            .then(data => {
+		                pendingLeaveBalances.sl = data.sl || 0;
+		                pendingLeaveBalances.cl = data.cl || 0;
+		                pendingLeaveBalances.el = data.el || 0;
+
+		                console.log("✅ Pending balances fetched:", pendingLeaveBalances);
+
+		                // Subtract pending from available balances
+		                leaveBalances1.sl = Math.max(0, leaveBalances1.sl - pendingLeaveBalances.sl);
+		                leaveBalances1.cl = Math.max(0, leaveBalances1.cl - pendingLeaveBalances.cl);
+		                leaveBalances1.el = Math.max(0, leaveBalances1.el - pendingLeaveBalances.el);
+
+		                console.log("🎯 Final Adjusted Balances:", leaveBalances1);
+
+		                // Optional alert for user visibility
+		              /*  alert(
+		                    `✅ Pending Leaves:\n` +
+		                    `Sick Leave (SL): ${pendingLeaveBalances.sl}\n` +
+		                    `Casual Leave (CL): ${pendingLeaveBalances.cl}\n` +
+		                    `Earned Leave (EL): ${pendingLeaveBalances.el}\n\n` +
+		                    `🎯 Final Adjusted Balances:\n` +
+		                    `SL: ${leaveBalances1.sl}\n` +
+		                    `CL: ${leaveBalances1.cl}\n` +
+		                    `EL: ${leaveBalances1.el}`
+		                );*/
 		            })
 		    ]);
 		}
+
+		
+		
 		function updateLeaveTypeOptions(fromStr, toStr, gender, totalDays) {
 								//alert("lood");
 								console.log("Function called with:", fromStr, toStr);
@@ -4659,6 +4700,15 @@
 								   const fromDate = new Date(fromStr);
 								   const toDate = new Date(toStr);
 								console.log("Parsed dates:", fromDate, toDate);
+								
+								if (isNaN(fromDate.getTime()) || isNaN(toDate.getTime())) return;
+
+														    const adjustedSL = leaveBalances1.sl;
+														    const adjustedCL = leaveBalances1.cl;
+														    const adjustedEL = leaveBalances1.el;
+
+														    console.log("Adjusted balances used in dropdown:", adjustedSL, adjustedCL, adjustedEL);
+
 							    // Your existing SL, CL, EL logic here...
 								if (fromDate && toDate && fromDate <= toDate) {
 											       const diffTime = toDate - fromDate;
@@ -4674,7 +4724,7 @@
 												              let clAdded = false;
 
 												              // Full SL?
-												              if (leaveBalances1.sl >= totalDays) {
+												              if (adjustedSL >= totalDays) {
 												                //  leaveTypeSelect.innerHTML += `<option value="SL">Sick Leave (SL)</option>`;
 												               //   slAdded = true;
 															   if (!addedOptions.has("SL")) {
@@ -4684,7 +4734,7 @@
 															                       }
 												              }
 												              // Full CL?
-												              if (leaveBalances1.cl >= totalDays) {
+												              if (adjustedCL >= totalDays) {
 												               //   leaveTypeSelect.innerHTML += `<option value="CL">Casual Leave (CL)</option>`;
 												                //  clAdded = true;
 																if (!addedOptions.has("CL")) {
@@ -4694,7 +4744,7 @@
 																                   }
 												              }
 															  // Special case: CL = 0, SL = 1, EL > 0 — show both SL and EL
-															        if (leaveBalances1.cl === 0 && leaveBalances1.sl === 1 && leaveBalances1.el > 0 && totalDays == 2) {
+															        if (adjustedCL === 0 && adjustedSL === 1 && adjustedEL > 0 && totalDays == 2) {
 																		
 															         //   leaveTypeSelect.innerHTML += `<option value="SL">Sick Leave (SL)</option>`;
 												//			            leaveTypeSelect.innerHTML += `<option value="EL">Earned Leave (EL)</option>`;
@@ -4710,7 +4760,7 @@
 															        }
 																	
 																	// Special case: CL = 0, SL = 1, EL > 0 — show both SL and EL
-																									        if (leaveBalances1.sl === 0 && leaveBalances1.cl === 1 && leaveBalances1.el > 0 && totalDays == 2) {
+																									        if (adjustedSL === 0 && adjustedCL === 1 && adjustedEL > 0 && totalDays == 2) {
 																									          //  leaveTypeSelect.innerHTML += `<option value="CL">Casual Leave (CL)</option>`;
 																									            //leaveTypeSelect.innerHTML += `<option value="EL">Earned Leave (EL)</option>`;
 																									            //slAdded = true;
@@ -4724,7 +4774,7 @@
 																												                   }
 																									        }
 																											// Special case: SL = 1, CL = 1, EL > 0 and diffDays <= 2 — show SL, CL, EL
-																											if (leaveBalances1.sl === 1 && leaveBalances1.cl === 1 && leaveBalances1.el > 0 && totalDays == 2) {
+																											if (adjustedSL === 1 && adjustedCL === 1 && adjustedEL > 0 && totalDays == 2) {
 																											  //  leaveTypeSelect.innerHTML += `<option value="SL">Sick Leave (SL)</option>`;
 																											  //  leaveTypeSelect.innerHTML += `<option value="CL">Casual Leave (CL)</option>`;
 																											//    leaveTypeSelect.innerHTML += `<option value="EL">Earned Leave (EL)</option>`;
@@ -4764,7 +4814,7 @@
 												                 // } else {
 												                    //  leaveTypeSelect.innerHTML += `<option value="LOP">Loss of Pay (LOP)</option>`;
 												                 // }
-																 if (leaveBalances1.el >= totalDays) {
+																 if (adjustedEL >= totalDays) {
 																                         if (!addedOptions.has("EL")) {
 																                             leaveTypeSelect.innerHTML += `<option value="EL">Earned Leave (EL)</option>`;
 																                             addedOptions.add("EL");
@@ -4786,7 +4836,7 @@
 
 									            // Leave between 3 and 30 days
 									            else if (totalDays > 2 && totalDays <= 30) {
-									                const selectedValue = leaveBalances1.el >= totalDays ? 'EL' : 'LOP';
+									                const selectedValue = adjustedEL >= totalDays ? 'EL' : 'LOP';
 									                leaveTypeSelect.innerHTML = `
 									                    <option value="EL" ${selectedValue === 'EL' ? 'selected' : ''}>Earned Leave (EL)</option>
 									                    <option value="LOP" ${selectedValue === 'LOP' ? 'selected' : ''}>Loss of Pay (LOP)</option>

@@ -102,5 +102,11 @@ public interface LeaveApplicationRepository  extends JpaRepository<LeaveApplicat
 		    @Param("fromDate") String fromDate,
 		    @Param("toDate") String toDate
 		);
+
+	
+	@Query("SELECT l FROM LeaveApplication l " +
+		       "WHERE l.empid = :empId AND l.leaveType = :type " +
+		       "AND (l.approvedstatus = 'Pending' OR (l.approvedstatus = 'Approved' AND l.processed = false))")
+		List<LeaveApplication> getPendingLeaves(@Param("empId") String empId, @Param("type") String type);
 	
 }

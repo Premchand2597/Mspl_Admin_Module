@@ -2634,5 +2634,125 @@ private void revertLeaveUsage(LeaveApplication leaveApplication) {
 		        System.out.println("Leave request count reset for email: " + email);
 		        return ResponseEntity.ok().build();
 		    }*/
+			
+			
+			@GetMapping("/pending-leaves")
+			@ResponseBody
+			public Map<String, Double> getPendingLeaves(@RequestParam String email) {
+			    System.out.println("Fetching leaves for user: " + email);
+
+			    // Fetch employee ID by email
+			    String empId = employeeRepository.findEmpidByEmail(email);
+			    System.out.println("Employee ID retrieved:8888 " + empId);
+
+			    Map<String, Double> pending = new HashMap<>();
+			    pending.put("sl", calculatePendingLeaveDays(empId, "SL"));
+			    pending.put("cl", calculatePendingLeaveDays(empId, "CL"));
+			    pending.put("el", calculatePendingLeaveDays(empId, "EL"));
+
+			    return pending;
+			}
+		
+			
+			public double calculatePendingLeaveDays(String empId, String leaveType) {
+			    System.out.println("\n===============================");
+			    System.out.println("🔍 Calculating pending leaves");
+			    System.out.println("Employee ID: " + empId);
+			    System.out.println("Leave Type: " + leaveType);
+			    System.out.println("===============================");
+
+			    // Fetch all pending leaves for the employee and leave type
+			    List<LeaveApplication> leaves = leaveApplicationRepository.getPendingLeaves(empId, leaveType);
+			    System.out.println("Fetched pending leaves count: " + leaves.size());
+
+			    // Get the current financial year dates
+			    LocalDate[] fy = getFinancialYearDates();
+			    LocalDate fyStart = fy[0];
+			    LocalDate fyEnd = fy[1];
+			    System.out.println("Financial Year Range: " + fyStart + " → " + fyEnd);
+
+			    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+			    double total = leaves.stream()
+			        // Filter leaves that overlap with the financial year
+			        .filter(l -> {
+			            LocalDate from = LocalDate.parse(l.getFrom_date(), formatter);
+			            LocalDate to = LocalDate.parse(l.getTo_date(), formatter);
+			            boolean overlaps = !to.isBefore(fyStart) && !from.isAfter(fyEnd);
+
+			            System.out.println("---------------------------------------------------");
+			            System.out.println("📅 Checking Leave Record:");
+			            System.out.println("From: " + from + " | To: " + to + " | Duration: " + l.getLeaveDuration());
+			            System.out.println("Overlaps with FY: " + overlaps);
+
+			            return overlaps;
+			        })
+			        .mapToDouble(l -> {
+			            String duration = l.getLeaveDuration();
+			            LocalDate from = LocalDate.parse(l.getFrom_date(), formatter);
+			            LocalDate to = LocalDate.parse(l.getTo_date(), formatter);
+
+			            if ("Half Day".equalsIgnoreCase(duration)) {
+			                System.out.println("✅ Half Day leave detected. Adding 0.5 days.");
+			                return 0.5;
+
+			            } else if ("Full Day".equalsIgnoreCase(duration)) {
+			                // Adjust dates to fall within the financial year
+			                LocalDate start = from.isBefore(fyStart) ? fyStart : from;
+			                LocalDate end = to.isAfter(fyEnd) ? fyEnd : to;
+			                long days = ChronoUnit.DAYS.between(start, end) + 1;
+
+			                System.out.println("✅ Full Day leave detected.");
+			                System.out.println("Adjusted range: " + start + " → " + end + " (" + days + " days)");
+			                return days;
+
+			            } else {
+			                try {
+			                    // Support numeric like "1.5" or "1.5 Days"
+			                    String numericStr = duration.replaceAll("[^0-9.]", "");
+			                    if (!numericStr.isEmpty()) {
+			                        double numeric = Double.parseDouble(numericStr);
+			                        System.out.println("✅ Numeric leave detected: " + numeric + " days");
+			                        return numeric;
+			                    } else {
+			                        System.out.println("⚠️ Unable to parse leave duration: " + duration);
+			                        return 0;
+			                    }
+			                } catch (NumberFormatException e) {
+			                    System.out.println("❌ Invalid leaveDuration format: " + duration);
+			                    return 0;
+			                }
+			            }
+			        })
+			        .sum();
+
+			    System.out.println("---------------------------------------------------");
+			    System.out.println("🧮 Total pending " + leaveType + " leaves for EmpID " + empId + ": " + total);
+			    System.out.println("===================================================\n");
+
+			    return total;
+			}
+
+
+
+
+			  private LocalDate[] getFinancialYearDates() {
+				    LocalDate today = LocalDate.now();
+				    int year = today.getYear();
+
+				    LocalDate fyStart;
+				    LocalDate fyEnd;
+
+				    // If today is before March 26, current FY started last year
+				    if (today.isBefore(LocalDate.of(year, 3, 26))) {
+				        fyStart = LocalDate.of(year - 1, 3, 26);
+				        fyEnd = LocalDate.of(year, 3, 25);
+				    } else {
+				        fyStart = LocalDate.of(year, 3, 26);
+				        fyEnd = LocalDate.of(year + 1, 3, 25);
+				    }
+
+				    return new LocalDate[]{fyStart, fyEnd};
+				}
 }
 
