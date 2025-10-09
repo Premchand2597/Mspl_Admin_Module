@@ -208,7 +208,160 @@
 	     border-color: #6c757d;
 	   }
 
-	 
+	   #totalQtyDetails .card {
+	     background: #ffffff;
+	     transition: box-shadow 0.3s ease, transform 0.3s ease;
+	   }
+
+	   #totalQtyDetails .card:hover {
+	     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+	     transform: translateY(-2px);
+	   }
+
+	   #totalQtyDetails table thead {
+	     background: linear-gradient(90deg, #4a90e2, #007bff);
+	     color: #fff;
+	   }
+
+	   #totalQtyDetails th, 
+	   #totalQtyDetails td {
+	     vertical-align: middle;
+	   }
+
+	   #totalQtyDetails tbody tr:hover {
+	     background-color: #f8f9fa;
+	   }
+
+	   #backBtn i {
+	     transition: transform 0.3s ease;
+	   }
+
+	   #backBtn:hover i {
+	     transform: translateX(-4px);
+	   }
+	   #searchQtyInput:focus {
+	     box-shadow: 0 0 6px rgba(0, 123, 255, 0.3);
+	     border-color: #007bff;
+	   }
+
+	   .input-group-text i {
+	     font-size: 0.95rem;
+	   }
+
+	   #totalQtyDetails .card:hover {
+	     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+	     transform: translateY(-2px);
+	     transition: 0.3s ease;
+	   }
+	   /* Smooth gradient text */
+	   .text-gradient {
+	     background: linear-gradient(90deg, #007bff, #6610f2);
+	     -webkit-background-clip: text;
+	     -webkit-text-fill-color: transparent;
+	   }
+
+	   /* Gradient header for table */
+	   .table-header {
+	     background: linear-gradient(90deg, #007bff, #6610f2);
+	     color: white;
+	     font-weight: 500;
+	     letter-spacing: 0.5px;
+	     border: none;
+	   }
+
+	   /* Card styling */
+	   .soft-card {
+	     background: #fff;
+	     transition: all 0.3s ease;
+	   }
+	   .soft-card:hover {
+	     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+	     transform: translateY(-2px);
+	   }
+
+	   /* Table styling */
+	   #qtyTable th, #qtyTable td {
+	     border: none !important;
+	     vertical-align: middle;
+	   }
+	   #qtyTable tbody tr:hover {
+	     background-color: rgba(0, 123, 255, 0.05);
+	     transition: background-color 0.3s ease;
+	   }
+
+	  
+
+	    /* Align the first column text */
+	    #qtyTable th:first-child,
+	    #qtyTable td:first-child {
+	      text-align: center !important;
+	    }
+
+	    /* Consistent spacing and table look */
+	    #qtyTable th {
+	      vertical-align: middle;
+	    }
+
+	    #qtyTable td {
+	      vertical-align: middle;
+	    }
+
+	    /* Add subtle hover for rows only (not the button) */
+	    #qtyTable tbody tr:hover {
+	      background-color: #f6f9ff;
+	    }
+		/* Remove hover effect for the Back button */
+		 #backBtnAssigned.no-hover:hover,
+		 #backBtnAssigned.no-hover:focus {
+		   background-color: transparent !important;
+		   color: var(--bs-primary) !important;
+		   border-color: var(--bs-primary) !important;
+		   box-shadow: none !important;
+		 }
+		 
+
+		 /* Align the first column text */
+		 #assignedQtyTable th:first-child,
+		 #assignedQtyTable td:first-child {
+		   text-align: left !important;
+		 }
+
+		 /* Consistent spacing and table look */
+		 #assignedQtyTable th {
+		   vertical-align: middle;
+		 }
+
+		 #assignedQtyTable td {
+		   vertical-align: middle;
+		 }
+
+		 /* Add subtle hover for rows only */
+		 #assignedQtyTable tbody tr:hover {
+		   background-color: #f6f9ff;
+		 }
+		 /* Remove hover effect for Back buttons */
+		 											  .no-hover:hover,
+		 											  .no-hover:focus {
+		 											    background-color: transparent !important;
+		 											    color: var(--bs-primary) !important;
+		 											    border-color: var(--bs-primary) !important;
+		 											    box-shadow: none !important;
+		 											  }
+
+		 											  /* First column left-aligned */
+		 											  table th:first-child,
+		 											  table td:first-child {
+		 											    text-align: left !important;
+		 											  }
+
+		 											  /* Table vertical align & subtle row hover */
+		 											  table th, table td {
+		 											    vertical-align: middle;
+		 											  }
+
+		 											  table tbody tr:hover {
+		 											    background-color: #f6f9ff;
+		 											  }
   </style> 
 </head>
 <body>
@@ -1716,117 +1869,296 @@
 												  </div>
 
 												</div>
-										        <!-- Total Quantity Details -->
-										        <div id="totalQtyDetails" class="mt-4 d-none">
-										           <!-- Container for alignment -->
-												  <div class="d-flex justify-content-start mb-3">
-												    <button class="btn btn-sm btn-outline-secondary mb-2" id="backBtn" onclick="backToCards()">Back</button>
+										      
+												<!-- Total Quantity Details -->
+												<div id="totalQtyDetails" class="mt-4 d-none">
+
+												  <!-- Header & Back Button + Search -->
+												  <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+												    <h5 class="fw-bold text-primary mb-0">
+												      <i class="bi bi-box-seam me-2"></i> Total Quantity Details
+												    </h5>
+
+												    <div class="d-flex align-items-center gap-2">
+												      <!-- Search Bar -->
+												      <div class="input-group input-group-sm" style="width: 230px;">
+												        <span class="input-group-text bg-primary text-white border-primary">
+												          <i class="bi bi-search"></i>
+												        </span>
+												        <input type="text" id="searchQtyInput" class="form-control border-primary" placeholder="Search...">
+												      </div>
+
+												      <!-- Back Button -->
+												      <button class="btn btn-sm btn-outline-primary no-hover" id="backBtn" onclick="backToCards()">
+												        <i class="bi bi-arrow-left-circle me-1"></i> Back
+												      </button>
+												    </div>
 												  </div>
 
-										          <div class="table-responsive">
-										            <table class="table table-hover table-striped align-middle">
-										              <thead class="table-light">
-										                <tr>
-										                  <th>Type</th>
-										                  <th>Description</th>
-										                  <th>Total Qty</th>
-										                </tr>
-										              </thead>
-										              <tbody>
-										                <tr th:each="a : ${assetDetails}" th:if="${a.quantity > 0}">
-										                  <td th:text="${a.type}"></td>
-										                  <td th:text="${a.description}"></td>
-										                  <td th:text="${a.quantity}"></td>
-										                </tr>
-										                <tr th:if="${#lists.isEmpty(assetDetails) || assetDetails.?[quantity > 0].size() == 0}">
-										                  <td colspan="3" class="text-center text-muted">No data available</td>
-										                </tr>
-										              </tbody>
-										            </table>
-										          </div>
-										        </div>
+												  <!-- Card Wrapper -->
+												  <div class="card shadow-sm border-0 rounded-3">
+												    <div class="card-body p-0">
+												      <div class="table-responsive">
+												        <table id="qtyTable" class="table table-hover align-middle mb-0">
+												          <thead class="table-primary text-center">
+												            <tr>
+												              <th class="text-start ps-4">Type</th>
+												              <th>Description</th>
+												              <th>Total Qty</th>
+												            </tr>
+												          </thead>
+												          <tbody>
+												            <!-- Loop Data -->
+												            <tr th:each="a : ${assetDetails}" th:if="${a.quantity > 0}">
+												              <td th:text="${a.type}" class="fw-semibold text-start ps-4"></td>
+												              <td th:text="${a.description}" class="text-center"></td>
+												              <td th:text="${a.quantity}" class="text-center"></td>
+												            </tr>
 
-										        <!-- Assigned Quantity Details -->
-										        <div id="assignedQtyDetails" class="mt-4 d-none">
-										           <div class="d-flex justify-content-start mb-3">
-												  											    <button class="btn btn-sm btn-outline-secondary mb-2"  onclick="backToCards()">Back</button>
-												  											  </div>
-										          <div class="table-responsive">
-										            <table class="table table-hover table-striped align-middle">
-										              <thead class="table-light">
-										                <tr>
-										                  <th>Type</th>
-										                  <th>Description</th>
-										                  <th>Assigned</th>
-										                </tr>
-										              </thead>
-										              <tbody>
-										                <tr th:each="a : ${assetDetails}">
-										                  <td th:text="${a.type}"></td>
-										                  <td th:text="${a.description}"></td>
-										                  <td th:text="${a.assigned}"></td>
-										                </tr>
-										                <tr th:if="${#lists.isEmpty(assetDetails)}">
-										                  <td colspan="3" class="text-center text-muted">No data available</td>
-										                </tr>
-										              </tbody>
-										            </table>
-										          </div>
-										        </div>
+												            <!-- No Data -->
+												            <tr th:if="${#lists.isEmpty(assetDetails) || assetDetails.?[quantity > 0].size() == 0}">
+												              <td colspan="3" class="text-center text-muted py-4">
+												                <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+												                No data available
+												              </td>
+												            </tr>
+												          </tbody>
+												        </table>
+												      </div>
+												    </div>
+												  </div>
+												</div>
 
-										        <!-- Employee Assets Details -->
-										        <div id="employeeQtyDetails" class="mt-4 d-none">
-													<div class="d-flex justify-content-start mb-3">
-																								    <button class="btn btn-sm btn-outline-secondary mb-2" onclick="backToCards()">Back</button>
-																								  </div>
-										           <div class="table-responsive">
-										            <table class="table table-hover table-striped align-middle">
-										              <thead class="table-light">
-										                <tr>
-										                  <th>Employee Name</th>
-										                  <th>Assets Count</th>
-										                </tr>
-										              </thead>
-										              <tbody>
-										                <tr th:each="entry : ${empAssetCounts}">
-										                  <td th:text="${entry.key}"></td>
-										                  <td th:text="${entry.value}"></td>
-										                </tr>
-										                <tr th:if="${#lists.isEmpty(empAssetCounts)}">
-										                  <td colspan="2" class="text-center text-muted">No data available</td>
-										                </tr>
-										              </tbody>
-										            </table>
-										          </div>
-										        </div>
+												<script>
+												  document.getElementById("searchQtyInput").addEventListener("keyup", function() {
+												    const searchValue = this.value.toLowerCase();
+												    const table = document.getElementById("qtyTable");
+												    const rows = table.getElementsByTagName("tr");
 
-										        <!-- Scrap Quantity Details -->
-										        <div id="scrapQtyDetails" class="mt-4 d-none">
-													<div class="d-flex justify-content-start mb-3">
-																								    <button class="btn btn-sm btn-outline-secondary mb-2"  onclick="backToCards()">Back</button>
-																								  </div>
-										            <div class="table-responsive">
-										            <table class="table table-hover table-striped align-middle">
-										              <thead class="table-light">
-										                <tr>
-										                  <th>Type</th>
-										                  <th>Description</th>
-										                  <th>Quantity</th>
-										                </tr>
-										              </thead>
-										              <tbody>
-										                <tr th:each="s : ${scrapDetails}" th:if="${s.quantity > 0}">
-										                  <td th:text="${s.assetType}"></td>
-										                  <td th:text="${s.description}"></td>
-										                  <td th:text="${s.quantity}"></td>
-										                </tr>
-										                <tr th:if="${#lists.isEmpty(scrapDetails) || scrapDetails.?[quantity > 0].size() == 0}">
-										                  <td colspan="3" class="text-center text-muted">No data available</td>
-										                </tr>
-										              </tbody>
-										            </table>
-										          </div>
-										        </div>
+												    for (let i = 1; i < rows.length; i++) { // skip header row
+												      const typeCell = rows[i].getElementsByTagName("td")[0];
+												      const descCell = rows[i].getElementsByTagName("td")[1];
+												      
+												      if (typeCell && descCell) {
+												        const typeText = typeCell.textContent.toLowerCase();
+												        const descText = descCell.textContent.toLowerCase();
+
+												        if (typeText.includes(searchValue) || descText.includes(searchValue)) {
+												          rows[i].style.display = "";
+												        } else {
+												          rows[i].style.display = "none";
+												        }
+												      }
+												    }
+												  });
+												</script>
+
+
+												<!-- Assigned Quantity Details -->
+												<div id="assignedQtyDetails" class="mt-4 d-none">
+
+												  <!-- Header & Back Button + Search -->
+												  <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+												    <h5 class="fw-bold text-primary mb-0">
+												      <i class="bi bi-person-check me-2"></i> Assigned Quantity Details
+												    </h5>
+
+												    <div class="d-flex align-items-center gap-2">
+												      <!-- Search Bar -->
+												      <div class="input-group input-group-sm" style="width: 230px;">
+												        <span class="input-group-text bg-primary text-white border-primary">
+												          <i class="bi bi-search"></i>
+												        </span>
+												        <input type="text" id="searchAssignedInput" class="form-control border-primary" placeholder="Search...">
+												      </div>
+
+												      <!-- Back Button -->
+												      <button class="btn btn-sm btn-outline-primary no-hover" id="backBtnAssigned" onclick="backToCards()">
+												        <i class="bi bi-arrow-left-circle me-1"></i> Back
+												      </button>
+												    </div>
+												  </div>
+
+												  <!-- Card Wrapper -->
+												  <div class="card shadow-sm border-0 rounded-3">
+												    <div class="card-body p-0">
+												      <div class="table-responsive">
+												        <table id="assignedQtyTable" class="table table-hover align-middle mb-0">
+												          <thead class="table-primary text-center">
+												            <tr>
+												              <th class="text-start ps-4">Type</th>
+												              <th>Description</th>
+												              <th>Assigned</th>
+												            </tr>
+												          </thead>
+												          <tbody>
+												            <!-- Loop Data -->
+												            <tr th:each="a : ${assetDetails}" th:if="${a.assigned > 0}">
+												              <td th:text="${a.type}" class="fw-semibold text-start ps-4"></td>
+												              <td th:text="${a.description}" class="text-center"></td>
+												              <td th:text="${a.assigned}" class="text-center"></td>
+												            </tr>
+
+												            <!-- No Data -->
+												            <tr th:if="${#lists.isEmpty(assetDetails) || assetDetails.?[assigned > 0].size() == 0}">
+												              <td colspan="3" class="text-center text-muted py-4">
+												                <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+												                No data available
+												              </td>
+												            </tr>
+												          </tbody>
+												        </table>
+												      </div>
+												    </div>
+												  </div>
+												</div>
+												<script>
+												  // Live search for Assigned Quantity Table
+												  document.getElementById("searchAssignedInput").addEventListener("keyup", function () {
+												    const searchValue = this.value.toLowerCase();
+												    const rows = document.querySelectorAll("#assignedQtyTable tbody tr");
+
+												    rows.forEach(row => {
+												      const text = row.innerText.toLowerCase();
+												      row.style.display = text.includes(searchValue) ? "" : "none";
+												    });
+												  });
+												</script>
+												<!-- Employee Assets Details -->
+												<div id="employeeQtyDetails" class="mt-4 d-none">
+
+												  <!-- Header & Back Button + Search -->
+												  <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+												    <h5 class="fw-bold text-primary mb-0">
+												      <i class="bi bi-people me-2"></i> Employee Assets Details
+												    </h5>
+
+												    <div class="d-flex align-items-center gap-2">
+												      <!-- Search Bar -->
+												      <div class="input-group input-group-sm" style="width: 230px;">
+												        <span class="input-group-text bg-primary text-white border-primary">
+												          <i class="bi bi-search"></i>
+												        </span>
+												        <input type="text" id="searchEmpInput" class="form-control border-primary" placeholder="Search...">
+												      </div>
+
+												      <!-- Back Button -->
+												      <button class="btn btn-sm btn-outline-primary no-hover" id="backBtnEmp" onclick="backToCards()">
+												        <i class="bi bi-arrow-left-circle me-1"></i> Back
+												      </button>
+												    </div>
+												  </div>
+
+												  <!-- Card Wrapper -->
+												  <div class="card shadow-sm border-0 rounded-3">
+												    <div class="card-body p-0">
+												      <div class="table-responsive">
+												        <table id="employeeQtyTable" class="table table-hover align-middle mb-0">
+												          <thead class="table-primary text-center">
+												            <tr>
+												              <th class="text-start ps-4">Employee Name</th>
+												              <th>Assets Count</th>
+												            </tr>
+												          </thead>
+												          <tbody>
+												            <!-- Loop Data -->
+												            <tr th:each="entry : ${empAssetCounts}">
+												              <td th:text="${entry.key}" class="fw-semibold text-start ps-4"></td>
+												              <td th:text="${entry.value}" class="text-center"></td>
+												            </tr>
+
+												            <!-- No Data -->
+												            <tr th:if="${#lists.isEmpty(empAssetCounts)}">
+												              <td colspan="2" class="text-center text-muted py-4">
+												                <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+												                No data available
+												              </td>
+												            </tr>
+												          </tbody>
+												        </table>
+												      </div>
+												    </div>
+												  </div>
+												</div>
+
+												<!-- Scrap Quantity Details -->
+												<div id="scrapQtyDetails" class="mt-4 d-none">
+
+												  <!-- Header & Back Button + Search -->
+												  <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+												    <h5 class="fw-bold text-primary mb-0">
+												      <i class="bi bi-trash3 me-2"></i> Scrap Quantity Details
+												    </h5>
+
+												    <div class="d-flex align-items-center gap-2">
+												      <!-- Search Bar -->
+												      <div class="input-group input-group-sm" style="width: 230px;">
+												        <span class="input-group-text bg-primary text-white border-primary">
+												          <i class="bi bi-search"></i>
+												        </span>
+												        <input type="text" id="searchScrapInput" class="form-control border-primary" placeholder="Search...">
+												      </div>
+
+												      <!-- Back Button -->
+												      <button class="btn btn-sm btn-outline-primary no-hover" id="backBtnScrap" onclick="backToCards()">
+												        <i class="bi bi-arrow-left-circle me-1"></i> Back
+												      </button>
+												    </div>
+												  </div>
+
+												  <!-- Card Wrapper -->
+												  <div class="card shadow-sm border-0 rounded-3">
+												    <div class="card-body p-0">
+												      <div class="table-responsive">
+												        <table id="scrapQtyTable" class="table table-hover align-middle mb-0">
+												          <thead class="table-primary text-center">
+												            <tr>
+												              <th class="text-start ps-4">Type</th>
+												              <th>Description</th>
+												              <th>Quantity</th>
+												            </tr>
+												          </thead>
+												          <tbody>
+												            <!-- Loop Data -->
+												            <tr th:each="s : ${scrapDetails}" th:if="${s.quantity > 0}">
+												              <td th:text="${s.assetType}" class="fw-semibold text-start ps-4"></td>
+												              <td th:text="${s.description}" class="text-center"></td>
+												              <td th:text="${s.quantity}" class="text-center"></td>
+												            </tr>
+
+												            <!-- No Data -->
+												            <tr th:if="${#lists.isEmpty(scrapDetails) || scrapDetails.?[quantity > 0].size() == 0}">
+												              <td colspan="3" class="text-center text-muted py-4">
+												                <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+												                No data available
+												              </td>
+												            </tr>
+												          </tbody>
+												        </table>
+												      </div>
+												    </div>
+												  </div>
+												</div>
+
+												
+
+												<!-- Search Scripts -->
+												<script>
+												  // Generic live search for tables
+												  function setupSearch(inputId, tableId) {
+												    document.getElementById(inputId).addEventListener("keyup", function () {
+												      const searchValue = this.value.toLowerCase();
+												      const rows = document.querySelectorAll(`#${tableId} tbody tr`);
+												      rows.forEach(row => {
+												        const text = row.innerText.toLowerCase();
+												        row.style.display = text.includes(searchValue) ? "" : "none";
+												      });
+												    });
+												  }
+
+												  setupSearch("searchEmpInput", "employeeQtyTable");
+												  setupSearch("searchScrapInput", "scrapQtyTable");
+												</script>
 
 										      </div> <!-- End Modal Body -->
 										    </div>

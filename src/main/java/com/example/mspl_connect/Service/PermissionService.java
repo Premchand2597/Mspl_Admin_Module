@@ -169,6 +169,10 @@ public class PermissionService {
 		return permissionsListsDisplay_Repo.fetchAllPermissionsDetails();
 	}
 	
+	public int getAllPermissionsDetailsCountForAssetEnabled(){
+		return permissionsListsDisplay_Repo.fetchAllPermissionsDetailsForAssetsEnabled().size();
+	}
+	
 	public List<PermissionsListsDisplay_Entity> getPermissionsDetailsBasedOnEmpId(List<String> empIds){
 		return permissionsListsDisplay_Repo.fetchPermissionsDetailsBasedOnEmpId(empIds);
 	}

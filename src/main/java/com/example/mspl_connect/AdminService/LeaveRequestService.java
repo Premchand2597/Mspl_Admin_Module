@@ -368,7 +368,7 @@ public class LeaveRequestService {
 	            helper.setSubject("Your Leave Request Has Been "+ status);  
 	            //helper.setText("Dear "+ prefix + employeeData.getFullName() + ",\n\n Your leave Request has been  " + status +"\n\nThank you for using our services.\n\nBest regards,\nThe Melange Team");
 	            
-	            if(status.equals("Approved")) {
+	            /*if(status.equals("Approved")) {
 	            	helper.setText(
 	            		    "Dear " + prefix + employeeData.getFullName() +
 	            		    ",<br><br>We are pleased to inform you that your leave request has been " + status + " by<b> "+loggedAdminPrefix+" "+loggedUserName+"</b>. Below are the details:" +
@@ -398,7 +398,42 @@ public class LeaveRequestService {
 	            		    "<br><br>The Melange Team",
 	            		    true
 	            		);
-	            }
+	            }*/
+	            
+	            if(status.equals("Approved")) {
+	               	helper.setText(
+	               		    "Dear " + prefix + employeeData.getFullName() +
+	               		    ",<br><br>We are pleased to inform you that your leave request has been <b>" + status + "</b> by <b>"+loggedAdminPrefix+" "+loggedUserName+"</b>." +
+	               		    "<br><br><b>Leave Request Details:</b><br>" +
+	               		    "<ul>" +
+	               		    "<li><b>Leave Type:</b> " + leaveType +"</li>" +
+	               		    "<li><b>Leave Dates:</b> " + formattedFromDate + " to " + formattedToDate +"</li>" +
+	               		    "<li><b>Leave Reason:</b> " + leaveReason +"</li>" +
+	               		    "</ul>" +
+	               		    "If you have any questions or need to make adjustments, please contact [" + teamLeadPrefix + " " + teamLeadFullName + "/" + teamCoOrdinatorPrefix + " " + teamCoordinatorFullName+"/"+hrPrefix+" "+hrFullName + "]" +
+	               		    "<br><br>Best regards," +
+	               		    "<br>The Melange Team",
+	               		    true
+	               		);
+	               }
+	               else {	            	
+	               	helper.setText(
+	               		    "Dear " + prefix + employeeData.getFullName() +
+	               		    ",<br><br>We regret to inform you that your recent leave request has been <b>Rejected</b> by <b>"+loggedAdminPrefix+" "+loggedUserName+"</b>." +
+	               		    "<br><br><b>Leave Request Details:</b><br>" +
+	               		    "<ul>" +
+	               		    "<li><b>Leave Type:</b> " + leaveType +"</li>" +
+	               		    "<li><b>Leave Dates:</b> " + formattedFromDate + " to " + formattedToDate +"</li>" +
+	               		    "<li><b>Leave Reason:</b> " + leaveReason +"</li>" +
+	               		    "<li><b>Rejection Reason:</b> " + reason +"</li>" +
+	               		    "</ul>" +
+	               		    "Please contact your manager directly if you need further clarification on the decision or if you would like to discuss alternate arrangements." +
+	               		    "<br><br>If you wish to submit a new request or make any changes, please feel free to update your leave request in the MSPL_CONNECT Application" +
+	               		    "<br><br>Best regards," +
+	               		    "<br>The Melange Team",
+	               		    true
+	               		);
+	               }
 	            try {
 	            		System.out.println("message-----"+message);
 			            mailSender.send(message);

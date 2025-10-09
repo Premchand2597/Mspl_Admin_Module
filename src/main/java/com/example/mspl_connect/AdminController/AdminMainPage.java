@@ -309,7 +309,7 @@ public class AdminMainPage {
 
 		//System.out.println("empId----" + empId);
 		int totalEmployeCount = employeeRepository.totalDeptEmployeCountByEmpId(empId);
-
+		System.out.println("empId----" + totalEmployeCount);
 		List<TodayPresentEmpEntity> todayPresentEmpsList = detaisService.getTodayPresentEmpListByDept(empId);
 		for(TodayPresentEmpEntity presntees : todayPresentEmpsList) {
 	    	if(presntees.getFirst_punch_time().equals(presntees.getLast_punch_time())) {
@@ -1188,8 +1188,14 @@ public class AdminMainPage {
 			List<LeaveApplicationWithProfile> adminDeptRejectedLeaveRequests = leaveRequestService.getRejectedleaveRequest(adminDept, empid);
 			
 			adminDeptLeaveRequests.stream().forEach(i->System.out.println("kkk"+i.getFrom_date()));
+			adminDeptLeaveRequests.forEach(leave -> {
+			    System.out.println("Out of Station: " + leave.getOut_of_station());
+			    System.out.println("Available on Phone: " + leave.getAvailable_on_phone());
+			    System.out.println("Email Access: " + leave.getEmail_access());
+			});
+
 			model.addAttribute("usersList", adminDeptLeaveRequests);
-			System.out.println("Admin Dept Processed Leave Requests: " + adminDeptProccessedLeaveRequests);
+			System.out.println("Admin Dept Processed Leave Requests: " + adminDeptLeaveRequests);
 			System.out.println("Admin Dept Rejected Leave Requests: " + adminDeptRejectedLeaveRequests);
 			model.addAttribute("adminDeptProccessedLeaveRequests", adminDeptProccessedLeaveRequests);
 			model.addAttribute("adminDeptRejectedLeaveRequests", adminDeptRejectedLeaveRequests); 

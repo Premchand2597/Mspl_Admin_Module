@@ -1,5 +1,6 @@
 package com.example.mspl_connect.AdminRepo;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -32,5 +33,15 @@ public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> 
     int markMessagesAsRead(@Param("recipientEmail") String recipientEmail, @Param("senderEmail") String senderEmail);
 
     List<ChatMessage> findByRecipientEmailOrSenderEmailOrderByTimestampDesc(String email1, String email2);
+
+    
+    @Transactional
+    @Modifying
+    @Query("UPDATE ChatMessage m SET m.isRead = true, m.readTimestamp = :readTime " +
+           "WHERE m.recipientEmail = :recipientEmail AND m.senderEmail = :senderEmail AND m.isRead = false")
+    int markMessagesAsRead(
+            @Param("recipientEmail") String recipientEmail,
+            @Param("senderEmail") String senderEmail,
+            @Param("readTime") LocalDateTime readTime);
 
 }

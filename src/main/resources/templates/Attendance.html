@@ -8612,64 +8612,69 @@ function isSameFinancialYear(fromDate, toDate) {
 			}
 
 
-	// Function to validate leave including financial year check
-	function validateLeave() {
-		//alert("hii");
-		const fromDate = new Date(fromDateInput.value);
-		const toDate = new Date(toDateInput.value);
-		const selectedLeaveType = leaveTypeInput.value;
-
-		// Only validate if all fields are selected/filled
-		if (!fromDateInput.value || !toDateInput.value || !selectedLeaveType) {
-			errorMessageDiv.style.display = "none"; // Hide error message until all fields are filled
-			submitButton.disabled = true;
-			return;
-		}
-
-		// If the selected leave type is LOP, bypass validation
-		if (selectedLeaveType === "LOP") {
-			errorMessageDiv.style.display = "none";
-			submitButton.disabled = false;
-			return;
-		}
-
-		const leaveDaysRequested = Math.round((toDate - fromDate) / (1000 * 60 * 60 * 24)) + 1; // Include the end date
-		let availableLeaveDays = 0;
-
-		// Calculate available leave days based on the selected leave type
-		if (selectedLeaveType === "SL") {
-			availableLeaveDays = leaveBalances.sl;
-		} else if (selectedLeaveType === "CL") {
-			availableLeaveDays = leaveBalances.cl;
-		} else if (selectedLeaveType === "EL") {
-			availableLeaveDays = leaveBalances.el;
-		}
-
-		// Validate financial year boundaries
-		if ((selectedLeaveType !== "ML" && selectedLeaveType !== "EL") && !isSameFinancialYear(fromDate, toDate)) {
-			errorMessageDiv.textContent = "You cannot request leave that crosses into the next financial year. Please select dates within the same financial year.";
-			errorMessageDiv.style.display = "block";
-			submitButton.disabled = true;
-			return;
-		}
-
-		// Validation logic for leave days and available balance
-		if (fromDate > toDate) {
-			// Display error if "From Date" is later than "To Date"
-			errorMessageDiv.textContent = "Invalid Date Range: 'From Date' should not be later than 'To Date'.";
-			errorMessageDiv.style.display = "block";
-			submitButton.disabled = true;
-		} else if (selectedLeaveType !== "ML" && leaveDaysRequested > availableLeaveDays) {
-			// Display error if requested leave days exceed available leave days
-			errorMessageDiv.textContent = `You do not have enough leave balanceww for ${selectedLeaveType}. Available: ${availableLeaveDays}, Requested: ${leaveDaysRequested}`;
-			errorMessageDiv.style.display = "block";
-			submitButton.disabled = true;
-		} else {
-			// Hide error message and enable submit button if validation passes
-			errorMessageDiv.style.display = "none";
-			submitButton.disabled = false;
-		}
+// Function to validate leave including financial year check
+function validateLeave() {
+	//alert("hii");
+	const fromDate = new Date(fromDateInput.value);
+	const toDate = new Date(toDateInput.value);
+	const selectedLeaveType = leaveTypeInput.value;
+	
+	// Only validate if all fields are selected/filled
+	if (!fromDateInput.value || !toDateInput.value || !selectedLeaveType) {
+		errorMessageDiv.style.display = "none"; // Hide error message until all fields are filled
+		submitButton.disabled = true;
+		return;
 	}
+
+	// If the selected leave type is LOP, bypass validation
+	if (selectedLeaveType === "LOP") {
+		errorMessageDiv.style.display = "none";
+		submitButton.disabled = false;
+		return;
+	}
+
+//	const leaveDaysRequested = Math.round((toDate - fromDate) / (1000 * 60 * 60 * 24)) + 1; // Include the end date
+const leaveDaysRequested = calculateLeaveDuration(fromDate, toDate);
+
+	let availableLeaveDays = 0;
+
+	// Calculate available leave days based on the selected leave type
+	// Calculate available leave days based on the selected leave type
+					if (selectedLeaveType === "SL" || selectedLeaveType === "Sick Leave") {
+						availableLeaveDays = leaveBalances.sl;
+						//alert(`Step 7A: Sick Leave balance found: ${availableLeaveDays}`);
+						//alert(`Available Sick Leave (SL): ${availableLeaveDays}`);
+					} else if (selectedLeaveType === "CL" || selectedLeaveType === "Casual Leave") {
+						availableLeaveDays = leaveBalances.cl;
+						//alert(`Step 7B: Casual Leave balance found: ${availableLeaveDays}`);
+					} else if (selectedLeaveType === "EL") {
+						availableLeaveDays = leaveBalances.el;
+					}
+	// Validate financial year boundaries
+	if ((selectedLeaveType !== "ML" && selectedLeaveType !== "EL") && !isSameFinancialYear(fromDate, toDate)) {
+		errorMessageDiv.textContent = "You cannot request leave that crosses into the next financial year. Please select dates within the same financial year.";
+		errorMessageDiv.style.display = "block";
+		submitButton.disabled = true;
+		return;
+	}
+
+	// Validation logic for leave days and available balance
+	if (fromDate > toDate) {
+		// Display error if "From Date" is later than "To Date"
+		errorMessageDiv.textContent = "Invalid Date Range: 'From Date' should not be later than 'To Date'.";
+		errorMessageDiv.style.display = "block";
+		submitButton.disabled = true;
+	} else if (selectedLeaveType !== "ML" && leaveDaysRequested > availableLeaveDays) {
+		// Display error if requested leave days exceed available leave days
+		errorMessageDiv.textContent = `You do not have enough leave balanceww for ${selectedLeaveType}. Available: ${availableLeaveDays}, Requested: ${leaveDaysRequested}`;
+		errorMessageDiv.style.display = "block";
+		submitButton.disabled = true;
+	} else {
+		// Hide error message and enable submit button if validation passes
+		errorMessageDiv.style.display = "none";
+		submitButton.disabled = false;
+	}
+}
 
 	// Add event listeners for real-time validation on date and leave type changes
 	fromDateInput.addEventListener("change", validateLeave);

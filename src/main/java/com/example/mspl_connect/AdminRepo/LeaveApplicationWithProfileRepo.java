@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.example.mspl_connect.AdminEntity.LeaveApplication;
@@ -15,7 +16,11 @@ public interface LeaveApplicationWithProfileRepo {
 	 List<LeaveApplicationWithProfile> getNewleaveRequestWithProfile(String empId);
 	 List<LeaveApplicationWithProfile> getNewleaveRequestWithProfileForSA1();
 	 
-	 List<LeaveApplicationWithProfile> getleaveRequestByEmpID(String empId);
+	// List<LeaveApplicationWithProfile> getleaveRequestByEmpID(String empId);
+	
+	 @Query(value = "SELECT * FROM leave_application WHERE empid = :empId", nativeQuery = true)
+	 List<LeaveApplicationWithProfile> getleaveRequestByEmpID(@Param("empId") String empId);
+
 	 
 	 List<LeaveApplicationWithProfile> findByEmpidNot(String empId);
 	 List<LeaveApplicationWithProfile> getProccessedleaveRequest(String empId);

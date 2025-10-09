@@ -14,47 +14,6 @@ import jakarta.persistence.Id;
 @Entity
 public class LeaveApplicationWithProfile {
 	
-		
-		public LeaveApplicationWithProfile(int id, String empid, String approvedstatus, String approved_by,
-			Integer department, String employee_name, String from_date, String leaveType, String reason,
-			String reporting_to, String to_date, String employeeEmail, Boolean processed, String rejection_reason,
-			Integer way, String previous_status, int notification_status, String timestamp, Integer status_count,
-			Boolean is_date_modified, String old_from_date, String old_to_date, String requested_date,
-			Integer edit_flag, String profile_pic_path, String sender_name, String approved_date_time, String sender_id,
-			String dailyHalves, String leaveDuration, String remarks) {
-		super();
-		this.id = id;
-		this.empid = empid;
-		this.approvedstatus = approvedstatus;
-		this.approved_by = approved_by;
-		this.department = department;
-		this.employee_name = employee_name;
-		this.from_date = from_date;
-		this.leaveType = leaveType;
-		this.reason = reason;
-		this.reporting_to = reporting_to;
-		this.to_date = to_date;
-		this.employeeEmail = employeeEmail;
-		this.processed = processed;
-		this.rejection_reason = rejection_reason;
-		this.way = way;
-		this.previous_status = previous_status;
-		this.notification_status = notification_status;
-		this.timestamp = timestamp;
-		this.status_count = status_count;
-		this.is_date_modified = is_date_modified;
-		this.old_from_date = old_from_date;
-		this.old_to_date = old_to_date;
-		this.requested_date = requested_date;
-		this.edit_flag = edit_flag;
-		this.profile_pic_path = profile_pic_path;
-		this.sender_name = sender_name;
-		this.approved_date_time = approved_date_time;
-		this.sender_id = sender_id;
-		this.dailyHalves = dailyHalves;
-		this.leaveDuration = leaveDuration;
-		this.remarks = remarks;
-	}
 
 		@Id
 		@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -99,8 +58,86 @@ public class LeaveApplicationWithProfile {
         
         private String sender_id;
         
-    	private String dailyHalves;
-        
+    	public String getOut_of_station() {
+			return out_of_station;
+		}
+
+		public void setOut_of_station(String out_of_station) {
+			this.out_of_station = out_of_station;
+		}
+
+		public LeaveApplicationWithProfile(int id, String empid, String approvedstatus, String approved_by,
+				Integer department, String employee_name, String from_date, String leaveType, String reason,
+				String reporting_to, String to_date, String employeeEmail, Boolean processed, String rejection_reason,
+				Integer way, String previous_status, int notification_status, String timestamp, Integer status_count,
+				Boolean is_date_modified, String old_from_date, String old_to_date, String requested_date,
+				Integer edit_flag, String profile_pic_path, String sender_name, String approved_date_time,
+				String sender_id, String dailyHalves, String out_of_station, String available_on_phone,
+				String email_access, String leaveDuration, String remarks) {
+			super();
+			this.id = id;
+			this.empid = empid;
+			this.approvedstatus = approvedstatus;
+			this.approved_by = approved_by;
+			this.department = department;
+			this.employee_name = employee_name;
+			this.from_date = from_date;
+			this.leaveType = leaveType;
+			this.reason = reason;
+			this.reporting_to = reporting_to;
+			this.to_date = to_date;
+			this.employeeEmail = employeeEmail;
+			this.processed = processed;
+			this.rejection_reason = rejection_reason;
+			this.way = way;
+			this.previous_status = previous_status;
+			this.notification_status = notification_status;
+			this.timestamp = timestamp;
+			this.status_count = status_count;
+			this.is_date_modified = is_date_modified;
+			this.old_from_date = old_from_date;
+			this.old_to_date = old_to_date;
+			this.requested_date = requested_date;
+			this.edit_flag = edit_flag;
+			this.profile_pic_path = profile_pic_path;
+			this.sender_name = sender_name;
+			this.approved_date_time = approved_date_time;
+			this.sender_id = sender_id;
+			this.dailyHalves = dailyHalves;
+			this.out_of_station = out_of_station;
+			this.available_on_phone = available_on_phone;
+			this.email_access = email_access;
+			this.leaveDuration = leaveDuration;
+			this.remarks = remarks;
+		}
+
+		public String getAvailable_on_phone() {
+			return available_on_phone;
+		}
+
+		public void setAvailable_on_phone(String available_on_phone) {
+			this.available_on_phone = available_on_phone;
+		}
+
+		public String getEmail_access() {
+			return email_access;
+		}
+
+		public void setEmail_access(String email_access) {
+			this.email_access = email_access;
+		}
+
+		private String dailyHalves;
+    	
+		@Column(name="out_of_station")
+    	 private String out_of_station;
+    	 
+    	 @Column(name="available_on_phone")
+    	  private String available_on_phone;
+    	  
+    		@Column(name="email_access")
+    	  private String email_access;
+    	  
 		public String getSender_id() {
 			return sender_id;
 		}
@@ -332,7 +369,9 @@ public class LeaveApplicationWithProfile {
 						+ ", old_from_date=" + old_from_date + ", old_to_date=" + old_to_date + ", requested_date="
 						+ requested_date + ", edit_flag=" + edit_flag + ", profile_pic_path=" + profile_pic_path
 						+ ", sender_name=" + sender_name + ", approved_date_time=" + approved_date_time + ", sender_id="
-						+ sender_id + ", leaveDuration=" + leaveDuration + ", remarks=" + remarks + "]";
+						+ sender_id + ", dailyHalves=" + dailyHalves + ", out_of_station=" + out_of_station
+						+ ", available_on_phone=" + available_on_phone + ", email_access=" + email_access
+						+ ", leaveDuration=" + leaveDuration + ", remarks=" + remarks + "]";
 			}
 
 			public LeaveApplicationWithProfile(int id, String empid, String approvedstatus, String approved_by,

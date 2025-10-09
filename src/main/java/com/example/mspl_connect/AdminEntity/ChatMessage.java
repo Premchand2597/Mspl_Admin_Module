@@ -80,9 +80,33 @@ public class ChatMessage {
 	    // New fields to track deletion status
 	    private boolean deletedForSender = false;
 	    private boolean deletedForRecipient = false;
-
+	    private LocalDateTime readTimestamp;
 	    
-	    // Getters and Setters
+	    public ChatMessage(Long id, String senderEmail, String recipientEmail, String content, LocalDateTime timestamp,
+				boolean isRead, ChatMessage repliedMessage, boolean deletedForSender, boolean deletedForRecipient,
+				LocalDateTime readTimestamp) {
+			super();
+			this.id = id;
+			this.senderEmail = senderEmail;
+			this.recipientEmail = recipientEmail;
+			this.content = content;
+			this.timestamp = timestamp;
+			this.isRead = isRead;
+			this.repliedMessage = repliedMessage;
+			this.deletedForSender = deletedForSender;
+			this.deletedForRecipient = deletedForRecipient;
+			this.readTimestamp = readTimestamp;
+		}
+
+		public LocalDateTime getReadTimestamp() {
+			return readTimestamp;
+		}
+
+		public void setReadTimestamp(LocalDateTime readTimestamp) {
+			this.readTimestamp = readTimestamp;
+		}
+
+		// Getters and Setters
 	    public Long getId() {
 	        return id;
 	    }

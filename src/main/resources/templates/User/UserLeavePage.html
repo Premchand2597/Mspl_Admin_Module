@@ -1181,10 +1181,21 @@
 																		<th:block th:if="${userlist.sender_id == 'The Melange Team'}">
 																		    <span style="display: inline-block; width: 22px;"></span>  <!-- Keeps alignment -->
 																		</th:block>
+																		<!-- Info icon for hover tooltip (smaller) -->
+																		<i class="bi bi-info-circle text-primary" 
+																		   style="font-size: 16px; cursor: pointer; vertical-align: middle;"
+																		   data-bs-toggle="tooltip"
+																		   data-bs-html="true"
+																		   th:title="'Out of Station: ' + ${userlist.out_of_station} 
+																		             + '<br>Available on Phone: ' + ${userlist.available_on_phone} 
+																		             + '<br>Email Access: ' + ${userlist.email_access}">
+																		</i>
+
 																	</div>
 																</td>
 																<td th:text="${userlist.empid}" th:classappend="${userlist.way==1?'highlight-row':''}"></td>
 																<td th:text="${userlist.employee_name}" th:classappend="${userlist.way==1?'highlight-row':''}"></td>
+																
 																<td th:text="${userlist.leaveType}" th:classappend="${userlist.way==1?'highlight-row':''}"></td>
 																<td th:text="${userlist.from_date}" th:classappend="${userlist.way==1?'highlight-row':''}"></td>
 																
@@ -1213,6 +1224,7 @@
 																<!-- <td th:text="${userlist.rejection_reason}"
 																	th:classappend="${userlist.way==1?'highlight-row':''}"></td> -->
 															</tr>
+															
 														</tbody>	
 													</table>
 											</div>
@@ -1287,7 +1299,7 @@
 											            <tr>
 											                <th>Sl No</th>  
 											                <th>Req Id</th>
-											                <th>Actionn</th>
+											                <th>Action</th>
 											                <th>Employee Id</th>
 											                <th>Employee Name</th>
 											                <th>Leave Type</th>                                               
@@ -1300,7 +1312,8 @@
 											                <th>Status</th>
 											                <th>Approved By</th>
 											                <th>Approved Time</th>
-											                
+															
+
 											                <!-- <th>Rejected Reason</th> -->
 											            </tr>
 											        </thead>
@@ -1358,6 +1371,15 @@
 											                   		<th:block th:if="${adminDeptProccessedLeaveRequest.sender_id == 'The Melange Team'}">
 																		    <span style="display: inline-block; width: 22px;"></span>  <!-- Keeps alignment -->
 																	</th:block>
+																	<!-- Info icon for hover tooltip (smaller) -->
+																																			<i class="bi bi-info-circle text-primary" 
+																																			   style="font-size: 16px; cursor: pointer; vertical-align: middle;"
+																																			   data-bs-toggle="tooltip"
+																																			   data-bs-html="true"
+																																			   th:title="'Out of Station: ' + ${adminDeptProccessedLeaveRequest.out_of_station} 
+																																			             + '<br>Available on Phone: ' + ${adminDeptProccessedLeaveRequest.available_on_phone} 
+																																			             + '<br>Email Access: ' + ${adminDeptProccessedLeaveRequest.email_access}">
+																																			</i>
 											                    </div>
 											                </td>
 											                <td th:text="${adminDeptProccessedLeaveRequest.empid}"></td>
@@ -1382,7 +1404,8 @@
 											                <td th:text="${adminDeptProccessedLeaveRequest.approvedstatus}"></td>
 											                <td th:text="${adminDeptProccessedLeaveRequest.approved_by}"></td>
 											                <td th:text="${adminDeptProccessedLeaveRequest.approved_date_time}"></td>
-											                
+														
+
 											                <!-- <td th:text="${adminDeptProccessedLeaveRequest.sender_name}" th:classappend="${userlist.way==1?'highlight-row':''}"></td> -->
 											                <!-- <td th:text="${adminDeptProccessedLeaveRequest.rejection_reason}"></td> -->
 											            </tr>
@@ -1395,6 +1418,7 @@
 											</div>
 
 										</div>
+			
 										<div class="tab-pane fade" id="bordered-justified-rejected"
 											role="tabpanel" th:if="${empDetailsByEmpId.deptId!=74}"
 											aria-labelledby="profile-tab">
@@ -1468,6 +1492,14 @@
 																	<th:block th:if="${adminDeptRejectedLeaveRequest.sender_id == 'The Melange Team'}">
 																		    <span style="display: inline-block; width: 22px;"></span>  <!-- Keeps alignment -->
 																	</th:block>
+																	<i class="bi bi-info-circle text-primary" 
+																																																			   style="font-size: 16px; cursor: pointer; vertical-align: middle;"
+																																																			   data-bs-toggle="tooltip"
+																																																			   data-bs-html="true"
+																																																			   th:title="'Out of Station: ' + ${adminDeptRejectedLeaveRequest.out_of_station} 
+																																																			             + '<br>Available on Phone: ' + ${adminDeptRejectedLeaveRequest.available_on_phone} 
+																																																			             + '<br>Email Access: ' + ${adminDeptRejectedLeaveRequest.email_access}">
+																																																			</i>
 																</div>
 															</td>
 															<td th:text="${adminDeptRejectedLeaveRequest.empid}"></td>
@@ -1798,6 +1830,24 @@ let currentStatus = null;
     }
 } */
 
+//Save the active tab in localStorage whenever a tab is clicked
+document.querySelectorAll('#borderedTabJustified button[data-bs-toggle="tab"]').forEach(tab => {
+    tab.addEventListener('shown.bs.tab', function (event) {
+        localStorage.setItem('activeLeaveTab', event.target.getAttribute('data-bs-target'));
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const activeTab = localStorage.getItem('activeLeaveTab');
+    if (activeTab) {
+        const tabTriggerEl = document.querySelector(`#borderedTabJustified button[data-bs-target="${activeTab}"]`);
+        if (tabTriggerEl) {
+            const tab = new bootstrap.Tab(tabTriggerEl);
+            tab.show();
+        }
+    }
+});
+
 function approveLeave(requestId, status, reason) {
 	
 	//alert(requestId+" "+status+" "+reason);
@@ -1865,6 +1915,7 @@ function confirmApproval(reason) {
             var errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
             errorModal.show();
         }
+        location.reload();
     })
     .catch(error => {
         console.error('Error:', error);
@@ -2069,18 +2120,17 @@ document.getElementById('confirmRejectButton').addEventListener('click', functio
     })
     .then(response => {
         if (response.ok) {
-       	    
         	// Hide the loading popup
             loadingPopup.style.display = 'none';
             document.getElementById('successAction').innerText = "rejected";
             var successModal = new bootstrap.Modal(document.getElementById('successModal'));
             successModal.show();
-            
         } else {
             document.getElementById('errorAction').innerText = "rejecting";
             var errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
             errorModal.show();
         }
+        location.reload();
     })
     .catch(error => {
         console.error('Error:', error);

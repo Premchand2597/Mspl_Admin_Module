@@ -106,7 +106,88 @@ public class LeaveApplication {
 	   	@Column(name="remarks")
 	   	private String remarks;
 	   	
+	   	
 	   	public LeaveApplication(int id, String empid, String approvedstatus, String approved_by, Integer department,
+				String employee_name, String from_date, String leaveType, String reason, String reporting_to,
+				String to_date, String employeeEmail, Boolean processed, String rejection_reason, Integer way,
+				String previous_status, int notification_status, String timestamp, Integer status_count,
+				Boolean is_date_modified, String old_from_date, String old_to_date, String requested_date,
+				Integer edit_flag, String approvingAuthority, String approved_date_time, String profile_pic_path,
+				String leaveDuration, String remarks, String out_of_station, String available_on_phone,
+				String email_access, String sender_id, String dailyDurations, String dailyHalves) {
+			super();
+			this.id = id;
+			this.empid = empid;
+			this.approvedstatus = approvedstatus;
+			this.approved_by = approved_by;
+			this.department = department;
+			this.employee_name = employee_name;
+			this.from_date = from_date;
+			this.leaveType = leaveType;
+			this.reason = reason;
+			this.reporting_to = reporting_to;
+			this.to_date = to_date;
+			this.employeeEmail = employeeEmail;
+			this.processed = processed;
+			this.rejection_reason = rejection_reason;
+			this.way = way;
+			this.previous_status = previous_status;
+			this.notification_status = notification_status;
+			this.timestamp = timestamp;
+			this.status_count = status_count;
+			this.is_date_modified = is_date_modified;
+			this.old_from_date = old_from_date;
+			this.old_to_date = old_to_date;
+			this.requested_date = requested_date;
+			this.edit_flag = edit_flag;
+			this.approvingAuthority = approvingAuthority;
+			this.approved_date_time = approved_date_time;
+			this.profile_pic_path = profile_pic_path;
+			this.leaveDuration = leaveDuration;
+			this.remarks = remarks;
+			this.out_of_station = out_of_station;
+			this.available_on_phone = available_on_phone;
+			this.email_access = email_access;
+			this.sender_id = sender_id;
+			this.dailyDurations = dailyDurations;
+			this.dailyHalves = dailyHalves;
+		}
+
+		@Column(name="out_of_station")
+	    private String out_of_station;
+		
+		@Column(name="available_on_phone")
+	    private String available_on_phone;
+		
+		@Column(name="email_access")
+	    private String email_access;
+		
+	   	
+	   	public String getOut_of_station() {
+			return out_of_station;
+		}
+
+		public void setOut_of_station(String out_of_station) {
+			this.out_of_station = out_of_station;
+		}
+
+		public String getAvailable_on_phone() {
+			return available_on_phone;
+		}
+
+		public void setAvailable_on_phone(String available_on_phone) {
+			this.available_on_phone = available_on_phone;
+		}
+
+		public String getEmail_access() {
+			return email_access;
+		}
+
+		public void setEmail_access(String email_access) {
+			this.email_access = email_access;
+		}
+
+		public LeaveApplication(int id, String empid, String approvedstatus, String approved_by, Integer department,
 				String employee_name, String from_date, String leaveType, String reason, String reporting_to,
 				String to_date, String employeeEmail, Boolean processed, String rejection_reason, Integer way,
 				String previous_status, int notification_status, String timestamp, Integer status_count,

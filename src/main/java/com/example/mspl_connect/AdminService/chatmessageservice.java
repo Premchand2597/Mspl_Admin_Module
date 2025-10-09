@@ -1,5 +1,6 @@
 package com.example.mspl_connect.AdminService;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -69,8 +70,8 @@ public class chatmessageservice {
 	 @Transactional
 	 public List<ChatMessage> markMessagesAsRead(String recipientEmail, String senderEmail) {
 	     System.out.println("Marking messages as read for: " + recipientEmail + " from: " + senderEmail);
-
-	     int updatedRows = chatMessageRepository.markMessagesAsRead(recipientEmail, senderEmail);
+	     LocalDateTime now = LocalDateTime.now();
+	     int updatedRows = chatMessageRepository.markMessagesAsRead(recipientEmail, senderEmail, now);
 	     System.out.println("Updated rows: " + updatedRows);
 
 	     if (updatedRows > 0) {

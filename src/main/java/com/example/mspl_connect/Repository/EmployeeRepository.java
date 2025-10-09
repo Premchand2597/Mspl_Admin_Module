@@ -51,9 +51,17 @@ p.attendance_link = true;
 //	@Query(value = "select count(*) from employee_details where team_lead_name=:empid or team_co_name=:empid and employee_type = 1",nativeQuery = true)
 //	int totalDeptEmployeCountByEmpId(String  empid);
 	
-	@Query(value = "select count(*) from employee_details where team_lead_name=:empid or team_co_name=:empid and employee_type::int = 1",nativeQuery = true)
-	int totalDeptEmployeCountByEmpId(String  empid);
+	//@Query(value = "select count(*) from employee_details where team_lead_name=:empid or team_co_name=:empid and employee_type::int = 1",nativeQuery = true)
+	//int totalDeptEmployeCountByEmpId(String  empid);
 	
+	@Query(value = """
+		    SELECT COUNT(*) 
+		    FROM employee_details 
+		    WHERE (team_lead_name = :empid OR team_co_name = :empid)
+		      AND employee_type::int = 1
+		""", nativeQuery = true)
+		int totalDeptEmployeCountByEmpId(@Param("empid") String empid);
+
 //	@Query(value = "SELECT count(*) FROM (SELECT a.eid, MIN(a.pt) AS first_punch FROM attendance a inner join employee_details e on a.eid=e.empid where pd = CURDATE() GROUP BY eid) AS first_punches",nativeQuery = true)
 //	int totalPresentCount();
 	

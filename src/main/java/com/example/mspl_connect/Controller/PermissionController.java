@@ -118,5 +118,11 @@ public class PermissionController {
 	public List<PermissionsListsDisplay_Entity> getAllPermissionsData(){
 		return permissionService.getAllPermissionsDetails();
 	}
+	
+	@GetMapping("/getAllPermissionsEnabledCountsForAssetsAdmin")
+	@ResponseBody
+	public int fetchAllPermissionsEnabledCountsForAssetsAdmin(){
+		return permissionService.getAllPermissionsDetailsCountForAssetEnabled();
+	}
 
 }

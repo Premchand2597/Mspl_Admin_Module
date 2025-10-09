@@ -1735,14 +1735,36 @@ function updatePermissionListDetails(data) {
 	
 	function onPermissionToggle(checkbox, emp_id, buttonType) {
 		var toDate;
+		
 		if(buttonType === "main"){
 			toDate = $('#profileAccessDateTextForMain').val();
 		}else{
 			toDate = $('#profileAccessDateTextForSub').val();
 		}
 		
-		//alert(checkbox.id+" "+checkbox.checked+" "+emp_id+" "+buttonType+" "+toDate);
-		
+		if(checkbox.id == "assetAdmin" && checkbox.checked == false){
+			$.ajax({
+		        url: "/getAllPermissionsEnabledCountsForAssetsAdmin",
+		        type: "GET",
+		        success: function (count) {
+		        	if(count === 1) {
+	                    alert("Please ensure that at least one Asset Admin remains enabled to monitor the assets!");
+	                    checkbox.checked = true;
+	                    return;
+	                }else{
+	                	proceedToUpdatePermissions(emp_id, checkbox, toDate);
+	                }
+		        },
+		        error: function () {
+		            alert("An error occurred while fetching assets admin enabled count.");
+		        }
+		    });
+		}else{
+			proceedToUpdatePermissions(emp_id, checkbox, toDate);
+		}
+	}
+	
+	function proceedToUpdatePermissions(emp_id, checkbox, toDate){
 		$.ajax({
 	        url: "/updateDisableOrEnablePermissionsAsAGroupList",
 	        type: "POST",
@@ -1762,7 +1784,6 @@ function updatePermissionListDetails(data) {
 	        }
 	    });
 	}
-	
 	
 	function closeProfileAccessDateFormOuterDiv(buttonType){
 		document.body.style.overflow = "auto";
